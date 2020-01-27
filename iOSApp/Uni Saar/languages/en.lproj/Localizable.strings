@@ -1,0 +1,46 @@
+/* 
+  Localizable.strings
+  Uni Saar
+
+  Created by Ali Al-Hasani on 12/19/19.
+  Copyright © 2019 Ali Al-Hasani. All rights reserved.
+*/
+
+//MARK:- extension UIAlertController
+"AlertTitle" = "Alert";
+"AlertOkActionTitle" = "Ok";
+"AlertYesActionTitle" = "Yes";
+"AlertNoActionTitle" = "No";
+"AlertCancelActionTitle" = "Cancel";
+"AlertContinueActionTitle" = "Continue";
+
+//MARK:- DataClient API
+"UnknownError" = "Sorry, something went wrong. Please try again later.";
+
+//MARK: - Catch general API
+"generalAPIError" = "An error has occurred and we're working to fix it. Please try again later.";
+
+//MARK:- MensaViewController
+"emptyMenu" = "It looks like there's no Mensa menu for today.";
+"HighlightAllergens" = "Highlight selected ingredients and dishes when they appear on menu";
+"MensaLocations" = "Mensa Locations on Campus";
+"WarnMeAbout" = "Warn me about ";
+"contains" = "Contains ";
+
+"EmptyNews" = "There are no news items passing your current filter settings.";
+"EmptyEvents" = "No Events available";
+"StaffSearch" = "University Staff Search";
+"EmptyResults" = "No search results found";
+"BuildingsSearch" = "Search for buildings";
+"ChooseCampus" = "Choose your campus";
+
+
+"newsFilter" = "Select which news categories you want to filter out";
+
+//MARK:- MoreLinksViewModel
+"AboutApp" = "About App";
+"AppSettings" = "App Settings";
+"EmptyLinks" = "No Links available";
+"HelpfulNumbers" = "Helpful Numbers";
+
+

@@ -1,0 +1,6 @@
+framework module Pods_UniSaarTests {
+  umbrella header "Pods-UniSaarTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

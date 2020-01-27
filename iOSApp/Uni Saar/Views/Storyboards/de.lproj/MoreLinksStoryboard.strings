@@ -1,0 +1,30 @@
+
+/* Class = "UINavigationItem"; title = "Einstellungen"; ObjectID = "8WY-mW-Eyi"; */
+"8WY-mW-Eyi.title" = "Einstellungen";
+
+/* Class = "UILabel"; text = "CISPA"; ObjectID = "BDk-JE-12v"; */
+"BDk-JE-12v.text" = "CISPA";
+
+/* Class = "UINavigationItem"; title = "Mehr"; ObjectID = "TbX-3P-1ef"; */
+"TbX-3P-1ef.title" = "Mehr";
+
+/* Class = "UILabel"; text = "Über diese App"; ObjectID = "W8J-oA-waT"; */
+"W8J-oA-waT.text" = "Über diese App";
+
+/* Class = "UILabel"; text = "Welcome Center"; ObjectID = "boI-mc-JCI"; */
+"boI-mc-JCI.text" = "Welcome Center";
+
+/* Class = "UILabel"; text = "Max Planck Institut"; ObjectID = "eQE-E8-uUc"; */
+"eQE-E8-uUc.text" = "Max Planck Institut";
+
+/* Class = "UINavigationItem"; title = "CISPA"; ObjectID = "iFD-ew-CNG"; */
+"iFD-ew-CNG.title" = "CISPA";
+
+/* Class = "UILabel"; text = "App Einstellungen"; ObjectID = "iKo-5g-WM1"; */
+"iKo-5g-WM1.text" = "App Einstellungen";
+
+/* Class = "UINavigationItem"; title = "Über diese App"; ObjectID = "jva-kV-2ke"; */
+"jva-kV-2ke.title" = "Über diese App";
+
+/* Class = "UITableViewSection"; headerTitle = "Nützliche Links"; ObjectID = "qyh-dj-c5m"; */
+"qyh-dj-c5m.headerTitle" = "Nützliche Links";

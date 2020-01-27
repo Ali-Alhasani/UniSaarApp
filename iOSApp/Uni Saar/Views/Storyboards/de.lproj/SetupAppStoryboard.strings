@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; normalTitle = "Homburg"; ObjectID = "58m-CW-pjp"; */
+"58m-CW-pjp.normalTitle" = "Homburg";
+
+/* Class = "UILabel"; text = "Willkommen zur offiziellen App \n der Universität des Saarlandes"; ObjectID = "7ZL-Wl-B7R"; */
+"7ZL-Wl-B7R.text" = "Willkommen zur offiziellen App \n der Universität des Saarlandes";
+
+/* Class = "UILabel"; text = "Lass uns dich einrichten "; ObjectID = "8WH-ck-W3Q"; */
+"8WH-ck-W3Q.text" = "Lass uns dich einrichten ";
+
+/* Class = "UILabel"; text = "Wähle deinen Campus "; ObjectID = "FFc-bu-C6z"; */
+"FFc-bu-C6z.text" = "Wähle deinen Campus ";
+
+/* Class = "UIButton"; normalTitle = "Saarbrücken"; ObjectID = "R1G-xe-eWN"; */
+"R1G-xe-eWN.normalTitle" = "Saarbrücken";
+
+/* Class = "UIButton"; normalTitle = "Weiter"; ObjectID = "dwe-nF-Rc6"; */
+"dwe-nF-Rc6.normalTitle" = "Weiter";
+
+/* Class = "UILabel"; text = "Hallo!  "; ObjectID = "gzx-D5-Uaq"; */
+"gzx-D5-Uaq.text" = "Hallo!  ";

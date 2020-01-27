@@ -1,0 +1,27 @@
+
+/* Class = "UINavigationItem"; title = "Filter Mensa"; ObjectID = "2cY-cR-hHS"; */
+"2cY-cR-hHS.title" = "Filter Mensa";
+
+/* Class = "UILabel"; text = "Description"; ObjectID = "HKv-6W-pQZ"; */
+"HKv-6W-pQZ.text" = "Description";
+
+/* Class = "UIViewController"; title = "Filter Mensa"; ObjectID = "HsP-vz-bvt"; */
+"HsP-vz-bvt.title" = "Filter Mensa";
+
+/* Class = "UINavigationItem"; title = "Mensa"; ObjectID = "Kru-Hd-qRH"; */
+"Kru-Hd-qRH.title" = "Mensa";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "cwU-ej-YjM"; */
+"cwU-ej-YjM.title" = "Item";
+
+/* Class = "UILabel"; text = "Components"; ObjectID = "fjg-KP-0Oi"; */
+"fjg-KP-0Oi.text" = "Components";
+
+/* Class = "UILabel"; text = "Prices"; ObjectID = "mPK-WI-MvO"; */
+"mPK-WI-MvO.text" = "Prices";
+
+/* Class = "UILabel"; text = "General Notices"; ObjectID = "pbE-dP-MaN"; */
+"pbE-dP-MaN.text" = "General Notices";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "yDf-w0-izH"; */
+"yDf-w0-izH.text" = "Label";

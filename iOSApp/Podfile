@@ -1,0 +1,30 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'Uni Saar' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+  inhibit_all_warnings!
+  # Pods for Uni Saar
+
+
+  # ignore all warnings from all dependencies
+ 
+  pod 'Alamofire'
+  pod 'SwiftyJSON'
+  pod 'SwiftLint'
+  pod 'AlamofireImage'
+  pod 'FSCalendar'
+  pod 'PKHUD'
+  target 'UniSaarTests' do
+    inherit! :search_paths
+     inhibit_all_warnings!
+    # Pods for testing
+  end
+
+  target 'UniSaarUITests' do
+     inhibit_all_warnings!
+    # Pods for testing
+  end
+
+end

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dHX-Mi-FbM">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Remembering Tab Bar Controller-->
+        <scene sceneID="CTT-0X-neQ">
+            <objects>
+                <tabBarController storyboardIdentifier="mainTabBar" id="dHX-Mi-FbM" customClass="RememberingTabBarController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="6f5-CA-K6v">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="aHK-qW-aMO" kind="relationship" relationship="viewControllers" id="dhb-fs-eQg"/>
+                        <segue destination="ZTM-2Z-ikJ" kind="relationship" relationship="viewControllers" id="rkG-gA-SYJ"/>
+                        <segue destination="vkt-39-cN8" kind="relationship" relationship="viewControllers" id="fxc-gd-3DJ"/>
+                        <segue destination="jQu-KC-GkI" kind="relationship" relationship="viewControllers" id="x8A-ln-Zfu"/>
+                        <segue destination="TGJ-JX-1MA" kind="relationship" relationship="viewControllers" id="Qd0-zR-f5K"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EjJ-pL-d3q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-14" y="-25"/>
+        </scene>
+        <!--News Feed-->
+        <scene sceneID="ajh-m8-1DI">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2FK-uM-0gH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <navigationController navigationBarHidden="YES" id="aHK-qW-aMO" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="News Feed" image="doc.append" id="Sjq-m0-3LX"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0Ey-sX-tXl">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="oR0-65-zLq" kind="relationship" relationship="rootViewController" id="APV-JD-LX2"/>
+                    </connections>
+                </navigationController>
+            </objects>
+            <point key="canvasLocation" x="1300" y="-293"/>
+        </scene>
+        <!--NewsFeedViewController-->
+        <scene sceneID="bzb-eT-15y">
+            <objects>
+                <viewControllerPlaceholder storyboardName="NewsStoryboard" referencedIdentifier="NewsFeedViewController" id="oR0-65-zLq" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="BwZ-UA-Yux"/>
+                    <navigationItem key="navigationItem" id="iXg-je-0n9"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VnU-NS-ggX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1920" y="-333"/>
+        </scene>
+        <!--Directory-->
+        <scene sceneID="7ca-v2-aE7">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="jQu-KC-GkI" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Directory" image="person.2" id="AvH-7G-yaS"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="LDB-0H-n7E">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="fNB-eA-I7l" kind="relationship" relationship="rootViewController" id="9iQ-Ea-Y1E"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9Oa-QU-sqE" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-130" y="1002"/>
+        </scene>
+        <!--DirectoryViewController-->
+        <scene sceneID="nbo-Cy-wod">
+            <objects>
+                <viewControllerPlaceholder storyboardName="DirectoryStoryboard" referencedIdentifier="DirectoryViewController" id="fNB-eA-I7l" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="7c6-HM-E26"/>
+                    <navigationItem key="navigationItem" id="43l-hK-13P"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ThM-me-Vqg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-130" y="1406"/>
+        </scene>
+        <!--More-->
+        <scene sceneID="lqa-dj-ZVC">
+            <objects>
+                <navigationController id="TGJ-JX-1MA" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="More" image="ellipsis.circle" id="IEC-jU-gfr"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gfl-Mg-nma">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="gzm-61-6PA" kind="relationship" relationship="rootViewController" id="u8Z-6D-77n"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZLA-U0-LcV" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-886" y="1002"/>
+        </scene>
+        <!--MoreViewController-->
+        <scene sceneID="jnq-gk-crF">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MoreLinksStoryboard" referencedIdentifier="MoreViewController" id="gzm-61-6PA" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="S9x-B5-GbH"/>
+                    <navigationItem key="navigationItem" id="PnC-aE-gRl"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ff5-pg-M09" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-943" y="1428"/>
+        </scene>
+        <!--Campus-->
+        <scene sceneID="DcT-Q4-i4h">
+            <objects>
+                <navigationController id="ZTM-2Z-ikJ" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Campus" image="map" id="C7m-ag-ubC"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Bgd-yh-Uy2">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="MKO-3v-nYf" kind="relationship" relationship="rootViewController" id="YMv-pp-DOX"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YED-2O-OMc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="684" y="1041"/>
+        </scene>
+        <!--CampusViewController-->
+        <scene sceneID="5hs-dp-a2H">
+            <objects>
+                <viewControllerPlaceholder storyboardName="CampusStoryboard" referencedIdentifier="CampusViewController" id="MKO-3v-nYf" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="Vrb-82-hOM"/>
+                    <navigationItem key="navigationItem" id="odd-Y9-K4e"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y2M-9S-xPg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1355" y="1041"/>
+        </scene>
+        <!--Mensa-->
+        <scene sceneID="wYv-42-zi4">
+            <objects>
+                <navigationController navigationBarHidden="YES" id="vkt-39-cN8" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Mensa" image="Material_Restaurant_Menu" id="rcZ-kz-qtB"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="poC-sR-iQb">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ksA-gH-sSB" kind="relationship" relationship="rootViewController" id="8Yl-oJ-qxL"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YQS-Uz-K5G" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1299" y="384"/>
+        </scene>
+        <!--MensaViewController-->
+        <scene sceneID="Hrp-nh-LuN">
+            <objects>
+                <viewControllerPlaceholder storyboardName="MensaStoryboard" referencedIdentifier="MensaViewController" id="ksA-gH-sSB" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="lLC-Ri-Ujb"/>
+                    <navigationItem key="navigationItem" id="7yd-n3-4ry"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4PZ-Z7-8uY" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2128" y="385"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Material_Restaurant_Menu" width="30" height="30"/>
+        <image name="doc.append" width="14" height="18"/>
+        <image name="ellipsis.circle" width="17" height="17"/>
+        <image name="map" width="18" height="17"/>
+        <image name="person.2" width="23" height="16"/>
+    </resources>
+</document>

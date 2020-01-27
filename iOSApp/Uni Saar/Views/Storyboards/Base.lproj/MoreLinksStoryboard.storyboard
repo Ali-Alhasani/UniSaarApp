@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VbY-Py-4TU">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="W6E-j6-we3">
+            <objects>
+                <navigationController storyboardIdentifier="MoreUINavigation" id="guM-dV-Hpe" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="HBV-VF-oae">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="VbY-Py-4TU" kind="relationship" relationship="rootViewController" id="fL0-nP-sAg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1JU-AN-Npv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1213" y="106"/>
+        </scene>
+        <!--More-->
+        <scene sceneID="bgQ-AX-33T">
+            <objects>
+                <tableViewController storyboardIdentifier="MoreViewController" id="VbY-Py-4TU" customClass="MoreLinksViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="TmV-dq-chU">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="moreLinksCell" id="eD7-ol-7sB">
+                                <rect key="frame" x="20" y="55.5" width="374" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="eD7-ol-7sB" id="Qju-mF-BKK">
+                                    <rect key="frame" x="0.0" y="0.0" width="343" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <sections/>
+                        <connections>
+                            <outlet property="dataSource" destination="VbY-Py-4TU" id="IHB-ye-Tcz"/>
+                            <outlet property="delegate" destination="VbY-Py-4TU" id="Iup-E7-ZHS"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="More" id="TbX-3P-1ef"/>
+                    <connections>
+                        <segue destination="ntF-0j-UOx" kind="show" identifier="toLinkDetails" id="q37-M4-LvN"/>
+                        <segue destination="wEi-bT-taU" kind="show" identifier="toSettings" id="zyu-4C-H20"/>
+                        <segue destination="6g4-SO-Z4V" kind="show" identifier="toAboutApp" id="Z9b-lk-kX0"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YhM-0M-RS5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-320.28985507246381" y="105.80357142857143"/>
+        </scene>
+        <!--More Links Details View Controller-->
+        <scene sceneID="8kP-ZC-gTH">
+            <objects>
+                <viewController id="ntF-0j-UOx" customClass="MoreLinksDetailsViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xRY-OD-x7S">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="K4h-Tf-B16">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="idV-IZ-Jf7">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="K4h-Tf-B16" firstAttribute="top" secondItem="baD-GA-JaT" secondAttribute="top" id="9gm-gZ-NDq"/>
+                            <constraint firstItem="K4h-Tf-B16" firstAttribute="trailing" secondItem="baD-GA-JaT" secondAttribute="trailing" id="FIm-0d-YBY"/>
+                            <constraint firstItem="idV-IZ-Jf7" firstAttribute="centerX" secondItem="xRY-OD-x7S" secondAttribute="centerX" id="JKy-qv-iV0"/>
+                            <constraint firstItem="K4h-Tf-B16" firstAttribute="bottom" secondItem="baD-GA-JaT" secondAttribute="bottom" id="bUf-gN-ICa"/>
+                            <constraint firstItem="K4h-Tf-B16" firstAttribute="leading" secondItem="baD-GA-JaT" secondAttribute="leading" id="pbQ-DG-fI8"/>
+                            <constraint firstItem="idV-IZ-Jf7" firstAttribute="centerY" secondItem="xRY-OD-x7S" secondAttribute="centerY" id="sYu-bz-mur"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="baD-GA-JaT"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="iFD-ew-CNG">
+                        <barButtonItem key="rightBarButtonItem" image="link.circle" id="jql-GV-CtV">
+                            <connections>
+                                <action selector="openLinkAction:" destination="ntF-0j-UOx" id="6eZ-E6-ZeB"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="activityIndicator" destination="idV-IZ-Jf7" id="oIi-g6-ppW"/>
+                        <outlet property="webView" destination="K4h-Tf-B16" id="l4q-bP-oa1"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9pg-DO-RDO" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="574" y="106"/>
+        </scene>
+        <!--Settings-->
+        <scene sceneID="oCA-vM-iCn">
+            <objects>
+                <viewController id="wEi-bT-taU" customClass="SettingsViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Awn-cU-wmo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="ZnE-jG-ZZb"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Settings" id="8WY-mW-Eyi"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nPh-Gw-74h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-320" y="879"/>
+        </scene>
+        <!--About App-->
+        <scene sceneID="AcD-nI-8Qr">
+            <objects>
+                <viewController id="6g4-SO-Z4V" customClass="AboutAppViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="rji-tO-Bxk">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZj-9e-b4g">
+                                <rect key="frame" x="16" y="104" width="382" height="298"/>
+                                <attributedString key="attributedText">
+                                    <fragment>
+                                        <string key="content">This app was designed and implemented to support iOS, iPadOS and macOS by : 
+
+</string>
+                                        <attributes>
+                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">- Ali Alhasani 
+- Serdar Durdyyev</string>
+                                        <attributes>
+                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" size="20" name=".SFNS-Regular"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">
+
+
+Server Team:   </string>
+                                        <attributes>
+                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+Cg
+</string>
+                                        <attributes>
+                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content" base64-UTF8="YES">
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo
+</string>
+                                        <attributes>
+                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="system" size="17"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">- Matias Klimpel Akahoshi
+- Julien Schanz
+- Anthony Heggen</string>
+                                        <attributes>
+                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                            <font key="NSFont" metaFont="system" size="20"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ZZj-9e-b4g" secondAttribute="bottom" constant="16" id="fpa-Mb-vgH"/>
+                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="top" secondItem="BvF-BI-hCz" secondAttribute="top" constant="16" id="k19-ut-bvK"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="ZZj-9e-b4g" secondAttribute="trailing" constant="16" id="ozV-NU-dyN"/>
+                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="yun-1T-2XU"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="BvF-BI-hCz"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="About App" id="jva-kV-2ke"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="QMo-1S-vot" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="708.69565217391312" y="897.99107142857133"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="link.circle" width="17" height="17"/>
+    </resources>
+</document>

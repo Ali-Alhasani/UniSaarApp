@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Navigation Controller-->
+        <scene sceneID="wdM-bQ-QrU">
+            <objects>
+                <navigationController storyboardIdentifier="NewsUINavigation" useStoryboardIdentifierAsRestorationIdentifier="YES" id="uha-xN-Bfg" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="l7N-K4-KQf">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="LWW-ba-krt" kind="relationship" relationship="rootViewController" id="mBX-HR-bwT"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ikb-ZO-6Qo" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-2049" y="85"/>
+        </scene>
+        <!--News Feed-->
+        <scene sceneID="Rmv-K6-EKE">
+            <objects>
+                <viewController storyboardIdentifier="NewsFeedViewControllerTest" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LWW-ba-krt" customClass="NewsFeedViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="aa1-sw-XyG">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bFE-Ns-mcz">
+                                <rect key="frame" x="0.0" y="89" width="414" height="773"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="V91-Kh-sYA" firstAttribute="trailing" secondItem="bFE-Ns-mcz" secondAttribute="trailing" id="8fU-UH-vA2"/>
+                            <constraint firstItem="V91-Kh-sYA" firstAttribute="bottom" secondItem="bFE-Ns-mcz" secondAttribute="bottom" id="SrN-Nr-KVF"/>
+                            <constraint firstItem="bFE-Ns-mcz" firstAttribute="top" secondItem="V91-Kh-sYA" secondAttribute="top" constant="1" id="lzJ-EU-dTM"/>
+                            <constraint firstItem="bFE-Ns-mcz" firstAttribute="leading" secondItem="V91-Kh-sYA" secondAttribute="leading" id="rmO-VN-HQg"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="V91-Kh-sYA"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="News Feed" id="v77-ev-2pc">
+                        <barButtonItem key="leftBarButtonItem" title="Item" image="calendar" id="e1z-V1-AF7">
+                            <connections>
+                                <segue destination="YfL-wo-B6h" kind="show" id="EGa-gP-iSR"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Item" image="gear" id="MwI-Qs-Uh5">
+                            <connections>
+                                <segue destination="lHN-px-Rt9" kind="presentation" id="wYX-yu-sAf"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="newsTable" destination="bFE-Ns-mcz" id="t5L-ja-pDg"/>
+                        <segue destination="eKG-R9-eMQ" kind="showDetail" identifier="toEventsReader" id="aX4-My-y4l"/>
+                        <segue destination="eKG-R9-eMQ" kind="showDetail" identifier="toNewsReader" id="T7Z-fD-1cr"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xQ5-Rh-Wx6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1133" y="84"/>
+        </scene>
+        <!--Split View Controller-->
+        <scene sceneID="w78-8p-94A">
+            <objects>
+                <splitViewController storyboardIdentifier="NewsFeedViewController" id="Mzg-Tr-uw3" customClass="SplitViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <connections>
+                        <segue destination="uha-xN-Bfg" kind="relationship" relationship="masterViewController" id="hXK-Lk-95r"/>
+                        <segue destination="eKG-R9-eMQ" kind="relationship" relationship="detailViewController" id="D6v-hD-RKQ"/>
+                    </connections>
+                </splitViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ah7-TA-2WD" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-3223" y="249"/>
+        </scene>
+        <!--Events-->
+        <scene sceneID="S3P-NK-gCb">
+            <objects>
+                <viewController storyboardIdentifier="EventCalanderViewController" id="YfL-wo-B6h" customClass="EventCalanderViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2ay-B9-QeY">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="izO-vf-Rnz" customClass="FSCalendar">
+                                <rect key="frame" x="0.0" y="88" width="414" height="358.5"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3Jz-2l-qW9">
+                                <rect key="frame" x="0.0" y="446.5" width="414" height="415.5"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="3Jz-2l-qW9" firstAttribute="top" secondItem="izO-vf-Rnz" secondAttribute="bottom" id="EF9-Zh-axp"/>
+                            <constraint firstItem="3Jz-2l-qW9" firstAttribute="bottom" secondItem="ZkU-8O-VIu" secondAttribute="bottom" id="Kvz-QR-235"/>
+                            <constraint firstItem="izO-vf-Rnz" firstAttribute="top" secondItem="ZkU-8O-VIu" secondAttribute="top" id="LxZ-ax-WMj"/>
+                            <constraint firstItem="3Jz-2l-qW9" firstAttribute="trailing" secondItem="ZkU-8O-VIu" secondAttribute="trailing" id="NtD-0c-7z0"/>
+                            <constraint firstItem="ZkU-8O-VIu" firstAttribute="trailing" secondItem="izO-vf-Rnz" secondAttribute="trailing" id="dE9-gA-saN"/>
+                            <constraint firstItem="izO-vf-Rnz" firstAttribute="leading" secondItem="ZkU-8O-VIu" secondAttribute="leading" id="krF-59-glh"/>
+                            <constraint firstItem="izO-vf-Rnz" firstAttribute="height" secondItem="2ay-B9-QeY" secondAttribute="height" multiplier="0.4" id="rHT-oC-Zil"/>
+                            <constraint firstItem="3Jz-2l-qW9" firstAttribute="leading" secondItem="ZkU-8O-VIu" secondAttribute="leading" id="xia-OD-RUp"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ZkU-8O-VIu"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Events" id="XhN-GG-1CP"/>
+                    <connections>
+                        <outlet property="calendar" destination="izO-vf-Rnz" id="fOr-7y-I3d"/>
+                        <outlet property="tableView" destination="3Jz-2l-qW9" id="xVU-0F-uLW"/>
+                        <segue destination="eKG-R9-eMQ" kind="show" identifier="toEventsReader" id="fQH-NU-FJS"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xTD-um-9hJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="281" y="887"/>
+        </scene>
+        <!--Filter Feed-->
+        <scene sceneID="Wld-Jn-b3f">
+            <objects>
+                <viewController storyboardIdentifier="FilterNewsFeedViewController" id="AcJ-QL-7GT" customClass="FilterNewsFeedViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="jFN-v9-5nd">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="0Is-eg-uQm">
+                                <rect key="frame" x="0.0" y="56" width="414" height="752"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="0Is-eg-uQm" firstAttribute="leading" secondItem="ER6-uq-dDg" secondAttribute="leading" id="DMY-Fp-SDz"/>
+                            <constraint firstItem="ER6-uq-dDg" firstAttribute="bottom" secondItem="0Is-eg-uQm" secondAttribute="bottom" id="bjh-oN-eaQ"/>
+                            <constraint firstItem="ER6-uq-dDg" firstAttribute="trailing" secondItem="0Is-eg-uQm" secondAttribute="trailing" id="sXk-Ee-v4z"/>
+                            <constraint firstItem="0Is-eg-uQm" firstAttribute="top" secondItem="ER6-uq-dDg" secondAttribute="top" id="vhy-Nn-sNm"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ER6-uq-dDg"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Filter Feed" id="dP5-FB-GhC">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="12o-lm-I3b">
+                            <connections>
+                                <action selector="doneButtonAction:" destination="AcJ-QL-7GT" id="TjL-Ls-sQ1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="filterTableView" destination="0Is-eg-uQm" id="oQx-hF-PaJ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gfi-HT-6x7" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1016" y="84"/>
+        </scene>
+        <!--News Reader View Controller-->
+        <scene sceneID="pR0-8A-oWd">
+            <objects>
+                <viewController id="Sr1-rP-snY" customClass="NewsReaderViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="GEd-wM-3wB">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0gD-4A-jW7">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="px5-lC-0lA">
+                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                            </activityIndicatorView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="0gD-4A-jW7" firstAttribute="top" secondItem="JGO-IA-Eyo" secondAttribute="top" id="7Q1-4f-F1p"/>
+                            <constraint firstItem="JGO-IA-Eyo" firstAttribute="trailing" secondItem="0gD-4A-jW7" secondAttribute="trailing" id="IeR-Yg-cVg"/>
+                            <constraint firstItem="JGO-IA-Eyo" firstAttribute="bottom" secondItem="0gD-4A-jW7" secondAttribute="bottom" id="SPh-qA-UyK"/>
+                            <constraint firstItem="px5-lC-0lA" firstAttribute="centerY" secondItem="GEd-wM-3wB" secondAttribute="centerY" id="b2s-QK-xmF"/>
+                            <constraint firstItem="px5-lC-0lA" firstAttribute="centerX" secondItem="GEd-wM-3wB" secondAttribute="centerX" id="hKx-CH-azz"/>
+                            <constraint firstItem="0gD-4A-jW7" firstAttribute="leading" secondItem="JGO-IA-Eyo" secondAttribute="leading" id="hNQ-G7-rKd"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="JGO-IA-Eyo"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="MEz-IX-9uu"/>
+                    <connections>
+                        <outlet property="activityIndicator" destination="px5-lC-0lA" id="jpt-Ns-2bA"/>
+                        <outlet property="webView" destination="0gD-4A-jW7" id="MdH-9G-Us2"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lhg-5C-ZXe" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-777" y="887"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="8Zr-IO-hLi">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lHN-px-Rt9" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="R00-kO-0cN">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="AcJ-QL-7GT" kind="relationship" relationship="rootViewController" id="Ucg-hn-kjf"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HGC-Un-mw6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-99" y="45"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="8FG-cy-MWA">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="eKG-R9-eMQ" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="F2x-X1-lDy"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="yZq-mQ-ndy">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Sr1-rP-snY" kind="relationship" relationship="rootViewController" id="b5v-vJ-AaU"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pPy-fS-OaU" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1881" y="887"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="calendar" width="17" height="16"/>
+        <image name="gear" width="19" height="19"/>
+    </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="fQH-NU-FJS"/>
+    </inferredMetricsTieBreakers>
+</document>

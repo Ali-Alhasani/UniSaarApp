@@ -1,0 +1,23 @@
+/* Class = "UILabel"; text = "Adresse"; ObjectID = "EvC-B6-z3X"; */
+"EvC-B6-z3X.text" = "Adresse";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "FB4-jM-6Uj"; */
+"FB4-jM-6Uj.text" = "Label";
+
+/* Class = "UILabel"; text = "Kontakt"; ObjectID = "GO4-g3-b0C"; */
+"GO4-g3-b0C.text" = "Kontakt";
+
+/* Class = "UILabel"; text = "Tipp: eine Suche benötigt mindestens drei Buchstaben eines Namens"; ObjectID = "JWJ-Z3-jgj"; */
+"JWJ-Z3-jgj.text" = "Tipp: eine Suche benötigt mindestens drei Buchstaben eines Namens";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "bj2-Ih-6lA"; */
+"bj2-Ih-6lA.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "qIz-cN-3Fz"; */
+"qIz-cN-3Fz.text" = "Label";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "vIi-VJ-O12"; */
+"vIi-VJ-O12.text" = "Label";
+
+/* Class = "UINavigationItem"; title = "Personen"; ObjectID = "wrF-LF-pCu"; */
+"wrF-LF-pCu.title" = "Personen";

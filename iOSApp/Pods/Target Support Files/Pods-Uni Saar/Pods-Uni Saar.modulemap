@@ -1,0 +1,6 @@
+framework module Pods_Uni_Saar {
+  umbrella header "Pods-Uni Saar-umbrella.h"
+
+  export *
+  module * { export * }
+}

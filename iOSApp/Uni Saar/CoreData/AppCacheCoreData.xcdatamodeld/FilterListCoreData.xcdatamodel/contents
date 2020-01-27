@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19B88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="FilterLocationsCache" representedClassName="FilterLocationsCache" syncable="YES" codeGenerationType="class">
+        <attribute name="locationID" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="FilterNoticesListCache" representedClassName="FilterNoticesListCache" syncable="YES" codeGenerationType="class">
+        <attribute name="isAllergen" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isNegated" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="noticeID" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="HelpfulNumberCache" representedClassName="HelpfulNumberCache" syncable="YES" codeGenerationType="class">
+        <attribute name="link" optional="YES" attributeType="String"/>
+        <attribute name="mail" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="number" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="MoreLinksCache" representedClassName="MoreLinksCache" syncable="YES" codeGenerationType="class">
+        <attribute name="link" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="NewsCategoriesCache" representedClassName="NewsCategoriesCache" syncable="YES" codeGenerationType="class">
+        <attribute name="categoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isSelected" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="FilterLocationsCache" positionX="-54" positionY="18" width="128" height="73"/>
+        <element name="FilterNoticesListCache" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="MoreLinksCache" positionX="-54" positionY="27" width="128" height="73"/>
+        <element name="NewsCategoriesCache" positionX="-54" positionY="18" width="128" height="88"/>
+        <element name="HelpfulNumberCache" positionX="-54" positionY="27" width="128" height="103"/>
+    </elements>
+</model>

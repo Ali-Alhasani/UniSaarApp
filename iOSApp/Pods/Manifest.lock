@@ -1,0 +1,37 @@
+PODS:
+  - Alamofire (4.9.1)
+  - AlamofireImage (3.6.0):
+    - Alamofire (~> 4.9)
+  - FSCalendar (2.8.1)
+  - PKHUD (5.3.0)
+  - SwiftLint (0.38.2)
+  - SwiftyJSON (5.0.0)
+
+DEPENDENCIES:
+  - Alamofire
+  - AlamofireImage
+  - FSCalendar
+  - PKHUD
+  - SwiftLint
+  - SwiftyJSON
+
+SPEC REPOS:
+  trunk:
+    - Alamofire
+    - AlamofireImage
+    - FSCalendar
+    - PKHUD
+    - SwiftLint
+    - SwiftyJSON
+
+SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  AlamofireImage: be9963c6582d68b39e89191f64c82a7d7bf40fdd
+  FSCalendar: 5245140456fcbcac5824c203b98bd8068bdfee1a
+  PKHUD: 98f3e4bc904b9c916f1c5bb6d765365b5357291b
+  SwiftLint: 8f5d2f903e1c9bcbc832fd16771e80a263ac6cbb
+  SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
+
+PODFILE CHECKSUM: ec6e63de07841753484e40bcabbc802a3a9feaaa
+
+COCOAPODS: 1.8.4
