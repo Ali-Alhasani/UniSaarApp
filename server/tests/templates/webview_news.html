@@ -1,0 +1,112 @@
+<html>
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
+    <style>
+
+        /* Compare https://nandovieira.com/supporting-dark-mode-in-web-content and
+        https://webkit.org/blog/8840/dark-mode-support-in-webkit/ for dark mode stuff */
+        :root {
+            color-scheme: light dark;
+            --background-color: white;
+            --text-color: black;
+            --title-color: black;
+            --border-color: grey;
+            --date-category-color: grey;
+            --link-color: blue;
+        }
+
+/* enables dark mode and assigns different colors to different classes in html*/
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #2e2e2e;
+                --text-color: #fffaf0;
+                --title-color: #fffaf0;
+                --border-color: grey;
+                --date-category-color: grey;
+                --link-color: #519fff;
+            }
+            img {
+                opacity: .75;
+                transition: opacity .5s ease-in-out;
+            }
+            img:hover {
+                opacity: 1;
+            }
+        }
+
+
+        body {
+            background-color: var(--background-color);
+        }
+
+        a {
+            color: var(--link-color);
+        }
+
+        @media only and (max-width: 620px) {
+            .newsitem{
+                width:100%;
+            }
+        }
+        .newsitem{
+            width: auto;
+            height: auto;
+            padding: 2px 5px 5px 10px;
+            margin: 1px;
+        }
+        .publishedDate{
+            float:left;
+            padding-left:10px;
+            font: -apple-system-callout;
+            color: var(--date-category-color);
+        }
+        .category{
+            float:left;
+            font: -apple-system-callout;
+            color: var(--date-category-color);
+        }
+        .title{
+            font: -apple-system-title1;
+            color: var(--title-color);
+        }
+        .newsitem > * {
+            flex: 1 100%;
+        }
+        .content{
+            color: var(--text-color);
+            font: -apple-system-body;
+        }
+        .description{
+            color: var(--text-color);
+            font-size: 14px;
+            font-family: Verdana;
+        }
+
+        .img{
+            display:flex;
+            max-width:100%;
+            object-fit:contain;
+        }
+
+    </style>
+</head>
+<body>
+<div class="newsitem">
+
+    <!--The different data objects are assigned to tags with specific classes and style properties -->
+    <div class="title">{{newsTemplate.title}}</div>
+    <div class="category">{{newsTemplate.category}}</div>
+    <div class="publishedDate">{{newsTemplate.publishedDate}}</div>
+    </br></br></br>
+    <img class="img" src="{{newsTemplate.image}}">
+
+    <!-- If data is not available in the content, then the description is rendered-->
+    {% if newsTemplate.content %}
+    <div class="content">{{newsTemplate.content}}</div>
+    {%else%}
+    <div class="description">{{newsTemplate.description}}</div>
+    {%endif%}
+    <a href="{{newsTemplate.link}}"></a>
+</div>
+</body>
+</html>

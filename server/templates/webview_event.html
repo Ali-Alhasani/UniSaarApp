@@ -1,0 +1,167 @@
+<html>
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+
+<head>
+    <style>
+
+        /* Compare https://nandovieira.com/supporting-dark-mode-in-web-content and
+        https://webkit.org/blog/8840/dark-mode-support-in-webkit/ for dark mode stuff */
+        :root {
+            color-scheme: light dark;
+           --background-color: white;
+            --text-color: black;
+            --title-color: black;
+            --border-color: grey;
+            --date-category-color: grey;
+            --link-color: blue;
+            --button-color: #004776;
+            --button-color-active: #004776;
+        }
+
+        /* enables dark mode and assigns different colors to different classes in html*/
+        @media (prefers-color-scheme: dark) {
+            :root {
+               --background-color: #2e2e2e;
+                --text-color: #fffaf0;
+                --title-color: #fffaf0;
+                --border-color: grey;
+                --date-category-color: grey;
+                --link-color: #519fff;
+                --button-color: #004776;
+                --button-color-active: #777777;
+            }
+            img {
+                opacity: .75;
+                transition: opacity .5s ease-in-out;
+            }
+            img:hover {
+                opacity: 1;
+            }
+        }
+
+        body {
+            background-color: var(--background-color);
+        }
+
+        a {
+            color: var(--link-color);
+        }
+
+        @media only and (max-width: 620px) {
+            .eventitem{
+                width:100%;
+
+            }
+        }
+        .eventitem{
+            width: auto;
+            height: auto;
+            padding: 2px 5px 5px 10px;
+        }
+        .happeningDate{
+            float:left;
+            padding-left:10px;
+            font: -apple-system-callout;
+            font-family:"Roboto", sans-serif;
+            color: var(--date-category-color);
+        }
+        .category{
+            float:left;
+            font: -apple-system-callout;
+            font-family:"Roboto", sans-serif;
+            color: var(--date-category-color);
+        }
+        .title{
+            font: -apple-system-title1;
+            color: var(--title-color),
+            font-family:"Roboto", sans-serif;
+        }
+        .eventitem > * {
+            flex: 1 100%;
+        }
+        .content{
+            color: var(--text-color);
+            font: -apple-system-body;
+            font-family:"Roboto", sans-serif;
+        }
+        .description{
+            color: var(--text-color);
+            font: -apple-system-body;
+            font-family: "Roboto", sans-serif;
+
+        }
+        .img{
+            display:flex;
+            max-width:100%;
+            object-fit:contain;
+        }
+
+        .button{
+            position: relative;
+            display: inline-block;
+            text-align: center;
+            font: -apple-system-body;
+            font-family: "Roboto", sans-serif;
+            padding: 15px 32px 15px 32px;
+            border-radius: 8px;
+            background: var(--button-color);
+            color: white;
+            user-select: none;
+        }
+        .button:active{
+            background-color: var(--button-color-active);
+        }
+        .link{
+         overflow-wrap: break-word;
+         word-wrap: break-word;
+        }
+        .space{
+        margin-right:1em;
+        }
+    </style>
+</head>
+<body>
+<div class="eventitem">
+
+    <script>
+        window.onload = function () {
+            var calButton = document.getElementById()
+        }
+    </script>
+
+    <!--The different data objects are assigned to tags with specific classes and style properties -->
+
+    <div class="title">{{eventTemplate.title}}</div>
+    <div class="category">{{eventTemplate.category}}</div>
+</br>
+    <strong><div class="happeningDate">{{eventTemplate.happeningDate}}</div></strong>
+    </br></br>
+    <img class="img" src="{{eventTemplate.image}}">
+
+    <!-- If data is not available in the content, then the description is rendered-->
+    {% if eventTemplate.content %}
+    <div class="content">{{eventTemplate.content}}</div>
+    {%else%}
+    <div class="description">{{eventTemplate.description}}</div>
+    {%endif%}
+
+    {% if eventTemplate.link %}
+    <a class="link" href="{{eventTemplate.link}}"></a>
+    {% endif %}
+</br>
+</br>
+    <center>
+        <button id="button" type="button" onClick="window.location.href = '{{eventTemplate.ics}}';" class="button">
+            {% if eventTemplate.language == 'de' %}
+              &#128197; <span class="space"></span> Zu Kalendar hinzufügen
+            {% elif eventTemplate.language == 'fr' %}
+            &#128197;<span class="space"></span> Ajouter au calendrier
+            {% else %}
+            &#128197;<span class="space"></span> Add to calendar
+            {% endif %}
+        </button>
+    </center>
+</div>
+
+</body>
+</html>

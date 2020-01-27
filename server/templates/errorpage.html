@@ -1,0 +1,67 @@
+<html>
+<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap" rel="stylesheet"><head>
+<style>
+/* Compare https://nandovieira.com/supporting-dark-mode-in-web-content and
+        https://webkit.org/blog/8840/dark-mode-support-in-webkit/ for dark mode stuff */
+        :root {
+            color-scheme: light dark;
+            --background-color: white;
+            --text-color: black;
+            --title-color: black;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background-color: #2e2e2e;
+                --text-color: #fffaf0;
+                --title-color: #fffaf0;
+            }
+            body {
+            background-color: var(--background-color);
+        }
+        }
+
+.container{
+position:relative;
+left:50%;
+margin-left:-50px;
+top:30%;
+margin-top:-50px;
+float:left
+}
+.errortext{
+font: -apple-system-callout;
+font-family:'Open Sans', sans-serif;
+position:absolute;
+color: var(--text-color);
+}
+.oops{
+font: -apple-system-title1;
+font-family:'Roboto', sans-serif;
+padding-left:5px;
+position:relative;
+color:var(--title-color);
+}
+.img{
+display:flex;
+max-width:50%;
+height:auto;
+object-fit:contain;
+}
+</style>
+</head>
+    <body>
+<div class="container">
+     <img class= "img" src="{{errorpage.errorimage}}"/>
+    <div class="errortext">
+        {% if errorTemplate.language == 'fr' %}
+        <span class="oops">400</span> </br>Quelque chose ne va pas avec cette demande</br>On te ramène
+        {% elif errorTemplate.language == 'de' %}
+        <span class="oops">400</span> </br>Mit dieser Anfrage stimmt etwas nicht</br>Lass uns Sie zurückbringen
+        {%else%}
+        <span class="oops">400</span> </br>Something's wrong with this request</br>Let's take you back
+        {%endif%}
+</div>
+</div>
+</body>
+</html>

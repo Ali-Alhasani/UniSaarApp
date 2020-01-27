@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+    <rss version="2.0"
+         xmlns:content="http://purl.org/rss/1.0/modules/content/"
+         xmlns:atom="http://www.w3.org/2005/Atom">
+        <channel>
+            <title>Universität des Saarlandes - Pressemitteilungen</title>
+            <link>https://www.uni-saarland.de</link>
+            <description></description>
+            <language>de</language>
+            
+                <copyright>Universität des Saarlandes</copyright>
+            
+            <pubDate>Sun, 05 Jan 2020 23:36:12 +0100</pubDate>
+            <lastBuildDate>Sun, 05 Jan 2020 23:36:12 +0100</lastBuildDate>
+            
+            <atom:link href="https://www.uni-saarland.de/universitaet/aktuell/news.html?type=9818" rel="self" type="application/rss+xml" />
+            <generator>TYPO3 EXT:news</generator>
+            
+                
+                    <item>
+                        <guid isPermaLink="false">news-21414</guid>
+                        <pubDate>Thu, 02 Jan 2020 14:18:58 +0100</pubDate>
+                        <title>Item1</title>
+                        <link>Link1</link>
+                        <description>Description1</description>
+                        <content:encoded><![CDATA[Content1]]></content:encoded>
+                        
+                            
+                                <category>Category1</category>
+                            
+                            <enclosure url="imagelink" length="3089513" type="image/jpeg"/>
+                        
+                    </item>
+
+                    <item>
+                        <guid isPermaLink="false">news-21415</guid>
+                        <pubDate>Thu, 02 Jan 2020 14:18:58 +0100</pubDate>
+                        <title>Item2</title>
+                        <link>Link2</link>
+                        <description>Description2</description>
+                        <content:encoded><![CDATA[Content2]]></content:encoded>
+                        
+                            
+                                <category>Category1</category>
+                         
+                            <enclosure url="imagelink" length="3089513" type="image/jpeg"/>
+                        
+                    </item>
+
+          </channel>
+    </rss>
+
