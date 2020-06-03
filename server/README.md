@@ -174,9 +174,8 @@ To run the Server follow these steps:
             month respectively and f1 and f2 are filter ids as obtained by a call to the event categories. 
             Filters are optional and specifying multiple filters is interpreted as (f1 OR f2 OR ...), 
             i.e. events that fit at least one of the filters are returned.
-            negFilter is also optional and specifies items of which categories should not be shown. If an item belongs to at least
-            one category specified by a negFilter, it will not be shown in the return JSON, even if it also belongs to a category
-            that is specified by a filter.\
+            negFilter is also optional and specifies items of which categories should not be shown. If an item has only
+            categories specified by negFilters, it will not be shown in the return JSON, otherwise the item will be shown but without any categories stated in the negFilters.\
             For each additional filter
             you may add another parameter filter=f (respectively negFilter=nf) or can simply
             send a commaseparated list (i.e. `filter=f1,f2` or `negFilter=nf1, nf2`).\

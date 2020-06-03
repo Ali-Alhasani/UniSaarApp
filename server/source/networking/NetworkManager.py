@@ -124,14 +124,20 @@ class NetworkManager:
         """
         urlQuery = self._NEWS_GENERAL_QUERY
         urlQuery['L'] = self.languageCodeToNewsCode(language)
+        try:
 
-        news, contentType = self._fetchExternalData(scheme=self._NEWS_SCHEME, authority=self._NEWS_AUTHORITY,
-                                                    path=self._NEWS_BASE_PATH, query=urlQuery)
+            news, contentType = self._fetchExternalData(scheme=self._NEWS_SCHEME, authority=self._NEWS_AUTHORITY,
+                                                        path=self._NEWS_BASE_PATH, query=urlQuery)
+        except ConnectionError as e:
+            # the news website shows a 404 error if no news in the selected language is available
+            news = ''
 
-        if 'text/xml' not in contentType:
+        #if 'text/xml' not in contentType:
             # we expect to get a data of content-type text/xml in a successful request
+            # this was probably only valid before the website for news changed, s.t. asking for
+            # news in languages where there is none now returns a 404
             #raise ContentTypeError(contentType, 'text/xml')
-            pass
+        #    pass
 
         return news
 
@@ -144,14 +150,17 @@ class NetworkManager:
         urlQuery = self._EVENTS_GENERAL_QUERY
         urlQuery['L'] = self.languageCodeToNewsCode(language)
 
-        events, contentType = self._fetchExternalData(scheme=self._EVENTS_SCHEME, authority=self._EVENTS_AUTHORITY,
+        try:
+            events, contentType = self._fetchExternalData(scheme=self._EVENTS_SCHEME, authority=self._EVENTS_AUTHORITY,
                                                       path=self._EVENTS_BASE_PATH, query=urlQuery)
+        except ConnectionError:
+            events = ''
 
-        if 'text/xml' not in contentType:
+        #if 'text/xml' not in contentType:
             # we expect to get a data of content-type text/xml in a successful request
             # a problem with this is the request for a non-German rss feed which returns a webpage
             #raise ContentTypeError(contentType, 'text/html')
-            pass
+        #    pass
 
         return events
 
