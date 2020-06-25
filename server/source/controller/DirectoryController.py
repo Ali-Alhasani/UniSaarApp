@@ -80,7 +80,8 @@ class DirectoryController:
                                                                                             lastname=lastname,
                                                                                             page=p, pageSize=100)
 
-                        searchResultList, resultCount = self._directoryParser.parseWebpageForPIDs(webpage=searchResultHTML)
+                        searchResultList, resultCount = \
+                            self._directoryParser.parseWebpageForPIDs(webpage=searchResultHTML)
 
                         # Add the results from page p to the searchItem
                         if searchResultList is not None:
@@ -164,7 +165,6 @@ class DirectoryController:
             image = f.read()
 
         return image
-
 
     def readHelpfulNumbersFiles(self, helpfulNumberPath):
         """

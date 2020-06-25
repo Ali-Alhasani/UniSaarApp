@@ -34,7 +34,7 @@ class MoreModel:
     def getLanguage(self):
         self._lock.acquire_read()
         try:
-            if self.language == None:
+            if self.language is None:
                 return ""
             else:
                 return self.language
@@ -44,10 +44,9 @@ class MoreModel:
     def getRaw(self):
         self._lock.acquire_read()
         try:
-            if self.raw == None:
+            if self.raw is None:
                 return {}
             else:
                 return self.raw
         finally:
             self._lock.release()
-    

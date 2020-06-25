@@ -24,10 +24,10 @@ class NewsFeedModel:
         self.categories = {'lastChange': datetime.now(), 'categories': []}
         self.eventCategories = {'lastChange': datetime.now(), 'categories': []}
 
-    def pageExists(self, list, page, pageSize):
+    def pageExists(self, itemList, page, pageSize):
         newsFeedLock.acquire_read()
         try:
-            return (len(list) - 1) >= page * pageSize
+            return (len(itemList) - 1) >= page * pageSize
         finally:
             newsFeedLock.release()
 
@@ -103,7 +103,6 @@ class NewsFeedModel:
                 return filteredNewsAndEvents[page * pageSize:(page + 1) * pageSize], len(filteredNewsAndEvents), hasNextPage
         finally:
             newsFeedLock.release()
-
 
     def getEvents(self, year: int, month: int, language='de', filterIDs=None, negFilterIDs=None):
         newsFeedLock.acquire_read()

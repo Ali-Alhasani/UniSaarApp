@@ -64,7 +64,6 @@ class UpdateHelpfulNumbersThread(threading.Thread):
             time.sleep(HELPFUL_NUMBERS_THRESHOLD.total_seconds())
 
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='UniSaarApp Server. '
                                                  'See the README on the Github for more information.')

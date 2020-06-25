@@ -104,8 +104,8 @@ class NewsAndEventsParser:
             for potentialImageLink in item['links']:
                 if 'image' in potentialImageLink['type']:
                     imageLink = potentialImageLink['href']
-            #link = ""
-            newsItem = NewsModel(title, publishedDate, self.currentNewsAndEventsID, link, categories, description, content, imageLink)
+            newsItem = NewsModel(title, publishedDate, self.currentNewsAndEventsID, link, categories, description,
+                                 content, imageLink)
             newsList.append(newsItem)
             self.currentNewsAndEventsID = self.currentNewsAndEventsID + 1
         return newsList
@@ -172,7 +172,6 @@ class NewsAndEventsParser:
             for potentialImageLink in item['links']:
                 if 'image' in potentialImageLink['type']:
                     imageLink = potentialImageLink['href']
-            #link = ""
             eventItem = EventModel(title, happeningDate, publishedDate, self.currentNewsAndEventsID, link, categories,
                                    description, content, imageLink, happeningTime)
             eventsList.append(eventItem)

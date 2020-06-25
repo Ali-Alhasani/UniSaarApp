@@ -67,14 +67,12 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                             l = s.split(',')
                             for i in l:
                                 filterIDs.append(int(i))
-                        #filterIDs = list(map(lambda x: int(x), q['filter']))
                     if 'negFilter' in q:
                         negFilterIDs = []
                         for s in q['negFilter']:
                             l = s.split(',')
                             for i in l:
                                 negFilterIDs.append(int(i))
-                        #negFilterIDs = list(map(lambda x: int(x), q['negFilter']))
                     self.getNewsFeedMainScreen(page, pageSize, language, filterIDs, negFilterIDs)
                 elif p[1] == 'details':
                     id = int(q['id'][0])

@@ -51,12 +51,13 @@ class NewsFeedController:
     def showNewsFeedMainScreen(self, page, pageSize, language, filterIDs = None, negFilterIDs=None):
         """
         returns a json containing the newsfeed after applying filters
-        @param page: the number of the page to display, starting at 0
-        :param pageSize: the number of items to display per page
-        :param language: the language for which to return the newsfeed. if language != 'de' and there are no items
+        @param negFilterIDs: the category-ids which should be filtered out
+        @param filterIDs: category-ids s.t. only items with at least one of these ids are returned
+        @param language: the language for which to return the newsfeed. if language != 'de' and there are no items
             to return, returns the newsfeed for language = 'de'
+        @param pageSize: number of items per page
+        @param page: the number of the page to display, starting at 0
         """
-        #self.updateNewsFeed()
         try:
             newsFeedPage, item_count, hasNextPage = self.newsFeedModel.getNewsFeed(page, pageSize,
                                                                                    language, filterIDs, negFilterIDs)

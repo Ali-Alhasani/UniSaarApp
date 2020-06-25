@@ -93,7 +93,7 @@ class RequestHandlerUnitTest(unittest.TestCase):
         nm = NetworkManager()
         server = UniAppServer(('localhost', 0), TestableHandler, nm)
         server.updateNewsFeed()
-        res = self._test(MockRequest(b'/events/details?id=951'), server)
+        res = self._test(MockRequest(b'/events/details?id=901'), server)
         self.assertTrue('text/html' in str(res))
 
     def test_requestEventsCategories(self):
@@ -107,7 +107,7 @@ class RequestHandlerUnitTest(unittest.TestCase):
         nm = NetworkManager()
         server = UniAppServer(('localhost', 0), TestableHandler, nm)
         server.updateNewsFeed()
-        res = self._test(MockRequest(b'/events/iCal?id=951'), server)
+        res = self._test(MockRequest(b'/events/iCal?id=901'), server)
         self.assertTrue('text/calendar' in str(res))
         self.assertTrue('BEGIN:VCALENDAR' in str(res))
 

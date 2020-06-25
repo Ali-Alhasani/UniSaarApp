@@ -17,10 +17,6 @@ class UniAppServer(ThreadingHTTPServer):
         self.directoryController = DirectoryController(networkManager)
         self.mapController = MapController()
         self.networkManager = networkManager
-
-#        self.newsFeedController.updateNewsFeed()  this is now happening in the main function
-#        self.mensaController.updateMensa()
-
         super().__init__(serverAddress, RequestHandlerClass)
         print("server is running...")
 

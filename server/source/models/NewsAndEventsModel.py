@@ -1,12 +1,14 @@
 class NewsAndEventsModel:
 
-    def __init__(self, title, publishedDate, id, link="", categories=[], description: str = "", content: str = "",
+    def __init__(self, title, publishedDate, id, link="", categories=None, description: str = "", content: str = "",
                  imageLink=""):
         """
         construct a NewsAndEventsModel object containing the title, the release date, a link to the item,
         the associated categories, a description, the content and optionally a link to an image
         should not need a lock, since it should never be written to except for initialization
         """
+        if categories is None:
+            categories = []
         self.title = title
         self.categories = categories
         self.link = link

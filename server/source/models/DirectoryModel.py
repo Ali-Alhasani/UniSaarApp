@@ -1,4 +1,3 @@
-from os.path import join
 from datetime import datetime, timedelta
 from source.ReadWriteLock import RWLock
 from collections import Counter as collectionCounter
@@ -55,14 +54,21 @@ def createSecretPerson(pid):
     """
     if pid == -1:
         return DetailedPerson(firstname='Ali H. A. H. A.', lastname='Alhasani', academicTitle='The App Guy',
-                              gender='männlich', officeHour='', remarks='don\'t push to the master!, I\'m having merge conflicts and I hate my life', postalCode='', city='but you can always find me in the nearest bar or night club ;)',
-                              street='no roots (XXA)', office='', building='no where.', phone='you can\'t get my number that easily!', mail='I\'m still using MSN',
+                              gender='männlich', officeHour='', remarks='don\'t push to the master!, '
+                                                                        'I\'m having merge conflicts and I hate my life',
+                              postalCode='',
+                              city='but you can always find me in the nearest bar or night club ;)',
+                              street='no roots (XXA)', office='', building='no where.',
+                              phone='you can\'t get my number that easily!', mail='I\'m still using MSN',
                               fax='only when my bank account looks like Fax number', webpage='',
                               imageLink=DIRECTORY_IMAGE_BASE_LINK + 'AAlhasani.jpeg', functions=[])
     elif pid == -2:
         return DetailedPerson(firstname='Anthony', lastname='Heggen', academicTitle='Count', gender='männlich',
-                              officeHour='Dusk - Dawn', remarks='Blood donations optional, but greatly appreciated', postalCode='', city='Cluj', street='', office='Office Dracula', building='Castle Dracula',
-                              phone='Call me for a consultation', mail='', fax='and I\'ll mail you an 18kg crate full of live, loose fruit bats\n I don\'t need fruit bats', webpage='https://www.drk-blutspende.de/', functions=[])
+                              officeHour='Dusk - Dawn', remarks='Blood donations optional, but greatly appreciated',
+                              postalCode='', city='Cluj', street='', office='Office Dracula', building='Castle Dracula',
+                              phone='Call me for a consultation', mail='',
+                              fax='and I\'ll mail you an 18kg crate full of live, loose fruit bats\n I don\'t need fruit bats',
+                              webpage='https://www.drk-blutspende.de/', functions=[])
     elif pid == -3:
         return DetailedPerson(firstname='Julien', lastname='Schanz', academicTitle='Smooth Operator', gender='männlich',
                               officeHour='Never', remarks='The birds work for the bourgeoisie', postalCode='0',
@@ -257,7 +263,6 @@ class DirectoryCache:
         finally:
             directoryLock.release()
         self.update()
-
 
     def findEntry(self, query: str):
         """
@@ -455,6 +460,7 @@ class FunctionDetails:
         """
         return self._webpage
 
+
 class DetailedPerson:
 
     def __init__(self, firstname: str, lastname: str, academicTitle: str, gender: str, officeHour: str, remarks: str,
@@ -531,6 +537,7 @@ class DetailedPerson:
             return self._lastname
         finally:
             self.lock.release()
+
     def getAcademicTitle(self):
         """
         Getter for the academic title.
@@ -541,6 +548,7 @@ class DetailedPerson:
             return self._academicTitle
         finally:
             self.lock.release()
+
     def getGender(self, language: str):
         """
         Getter for the gender

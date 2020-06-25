@@ -35,7 +35,7 @@ def main(args):
         f.write(data)
 
 
-if __name__=='__main__':
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Interactive writer for locationInfo files. '
                                                  'Prompts the user for input.')
     parser.add_argument('-p', '--path', required=True, type=str, help='The path where to store files.')

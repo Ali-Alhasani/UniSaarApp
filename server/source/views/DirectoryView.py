@@ -75,14 +75,14 @@ class DirectoryView:
                       "title": person.getAcademicTitle(), "gender": person.getGender(language=language),
                       "officeHour": person.getOfficeHour(), "remark": person.getRemark(), "office": person.getOffice(),
                       "building": person.getBuilding(), "street": person.getStreet(),
-                      "postalCode": person.getPostalCode(), "city": person.getCity(),
-                      "phone": person.getPhone(), "fax": person.getFax(), "mail": person.getMail(),
-                      "webpage": person.getWebpage(), "imageLink": person.getImageLink()}
-        personDict['functions'] = [self.personFunctionToJSON(func) for func in person.getFunctions()]
+                      "postalCode": person.getPostalCode(), "city": person.getCity(), "phone": person.getPhone(),
+                      "fax": person.getFax(), "mail": person.getMail(), "webpage": person.getWebpage(),
+                      "imageLink": person.getImageLink(),
+                      'functions': [self.personFunctionToJSON(func) for func in person.getFunctions()]}
 
         return json.dumps(personDict, separators=(',', ':'))  # remove ws after separator for compact representation
 
-    def helpfulNumberToJSON(self, helpfulNumber: HelpfulNumber) -> str:
+    def helpfulNumberToJSON(self, helpfulNumber: HelpfulNumber):# -> dict[str, str]:
         """
         Takes a HelpfulNumber and creates a dict to be packed into a JSON
         @param helpfulNumber: HelpfulNumber
@@ -102,6 +102,8 @@ class DirectoryView:
     def showHelpfulNumbers(self, helpfulNumbers: list, numbersLastChanged: datetime) -> str:
         """
         Takes a list of HelpfulNumber and creates a JSON
+        @param numbersLastChanged: timestamp of the last time, the helpful numbers were updated in order to support
+                client side caching
         @param helpfulNumbers: list of HelpfulNumber
         @return: JSON of the form:
             { 'numbersLastChanged': numLastChanged,

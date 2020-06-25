@@ -7,9 +7,7 @@ from datetime import datetime
 from source.Constants import *
 
 
-
 class NewsFeedView:
-
 
     def __init__(self):
         self.loader = jinja2.FileSystemLoader(HTML_TEMPLATE_DIRECTORY)
@@ -22,12 +20,10 @@ class NewsFeedView:
         self.event_template = self.env.get_template(WEBVIEW_EVENTS_TEMPLATE)
         self.error_template = self.env.get_template(WEBVIEW_ERROR_TEMPLATE)
 
-
     def newsModelHeaderToJSON(self, newsModel):
         """
         Places a representation of passed newsAndEventsModel into the dictionary
         @param newsModel: the model to be encoded
-        @param dictionary: the dictionary to be loaded
         """
         categoryDict = {}
         for category in newsModel.getCategories():
@@ -89,9 +85,9 @@ class NewsFeedView:
                    "hasNextPage": hasNextPage,
                    "categoriesLastChanged": str(lastChanged), "items": []}
         for newsItem in news:
-            if (isinstance(newsItem, NewsModel)):
+            if isinstance(newsItem, NewsModel):
                 to_send["items"].append(self.newsModelHeaderToJSON(newsItem))
-            elif (isinstance(newsItem, EventModel)):
+            elif isinstance(newsItem, EventModel):
                 to_send["items"].append(self.eventModelHeaderToJSON_NewsMainScreen(newsItem))
         return json.dumps(to_send)
 
@@ -104,7 +100,8 @@ class NewsFeedView:
         image: if the news item has an attached image,
         description: that has a short description of the news,
         content: that has more information about a particular news,
-        this dictionary is then rendered into a web page using jinja. For more documentation, open https://jinja.palletsprojects.com/en/2.10.x/
+        this dictionary is then rendered into a web page using jinja. For more documentation,
+        open https://jinja.palletsprojects.com/en/2.10.x/
         @param newsItem: to be encoded as HTML
         """
         newsTemplate = dict(title=newsItem.getTitle(),
@@ -151,7 +148,7 @@ class NewsFeedView:
         """
         Returns the JSON format of a set of events
         @param events: the events to be encoded as JSON
-        @:param lastChanged: the last time the categories of the events changed
+        @param lastChanged: the last time the categories of the events changed
         """
         to_send = {"eventCategoriesLastChanged": str(lastChanged), "items": []}
         # check to make sure events contains only EventModels, then encode
