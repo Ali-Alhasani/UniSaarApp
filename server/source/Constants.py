@@ -53,3 +53,6 @@ MENSA_UPDATE_THRESHOLD = timedelta(minutes=15)
 NEWSFEED_UPDATE_THRESHOLD = timedelta(hours=12)
 MAP_UPDATE_THRESHOLD = timedelta(hours=24)
 HELPFUL_NUMBERS_THRESHOLD = timedelta(hours=24)
+
+# sleep interval in seconds in case of errors
+ERROR_SLEEP_INT = 5

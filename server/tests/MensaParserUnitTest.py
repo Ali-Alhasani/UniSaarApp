@@ -458,6 +458,79 @@ class MensaParserUnitTest(unittest.TestCase):
         self.assertTrue(testLocation.getDescription() == "this is a description")
         self.assertTrue(testLocation.getID() == "testID")
 
+    def test_mealID(self):
+        menuData = {
+            "days": [{
+                "date": str(datetime.today()),
+                "isPast": True,
+                "counters": [{
+                    "id": "komplett",
+                    "displayName": "Komplett Menü",
+                    "description": "a test counter",
+                    "openingHours": {
+                        "start": str(datetime.now()),
+                        "end": str(datetime.now())
+                    },
+                    "color": {
+                        "r": 123,
+                        "g": 123,
+                        "b": 123
+                    },
+                    "feedback": {
+                        "start": str(datetime.now()),
+                        "end": str(datetime.now())
+                    },
+                    "meals": [
+                        {
+                            "knownMealId": "Gebackener Fleischkäse",
+                            "name": "Gebackener Fleischkäs",
+                            "notices": [],
+                            "components": [
+                                {
+                                    "name": "Fleischkäs",
+                                    "notices": []
+                                }
+                            ],
+                            "prices": {
+                                "s": "2,85"
+                            },
+                            "pricingNotice": "This is a price",
+                        }
+                    ]
+                }]
+            }]
+        }
+        testMealDict = {
+                            "knownMealId": "Gebackener Fleischkäse",
+                            "name": "Gebackener Fleischkäs",
+                            "notices": [],
+                            "components": [
+                                {
+                                    "name": "Fleischkäs",
+                                    "notices": []
+                                }
+                            ],
+                            "prices": {
+                                "s": "2,85"
+                            },
+                            "pricingNotice": "This is a price",
+                        }
+        menuDataJSON = json.dumps(menuData)
+        parsedMenuData = self.mensaParser.parseMenuData(menuDataJSON)
+        menuDict = dict()
+        menuDict['sb'] = parsedMenuData
+        menuDict['hom'] = parsedMenuData
+        menuDict['musiksb'] = parsedMenuData
+        menuDict['htwgtb'] = parsedMenuData
+        menuDict['mensagarten'] = parsedMenuData
+        menuDict['htwcas'] = parsedMenuData
+        menuDict['htwcrb'] = parsedMenuData
+
+        self.mensaParser._mensaModel.update(self.baseData, menuDict, 'de')
+        fleischkäsID = parsedMenuData[0]._counters[0]._meals[0].getID()
+        fleischkäs2 = self.mensaParser.dictToMeal(testMealDict)
+        self.assertEqual(fleischkäsID, fleischkäs2.getID())
+
 
 if __name__ == '__main__':
     unittest.main()
