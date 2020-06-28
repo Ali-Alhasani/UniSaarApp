@@ -1,0 +1,12 @@
+
+/* Class = "UILabel"; text = "Address"; ObjectID = "EvC-B6-z3X"; */
+"EvC-B6-z3X.text" = "Adresse";
+
+/* Class = "UILabel"; text = "Contact"; ObjectID = "GO4-g3-b0C"; */
+"GO4-g3-b0C.text" = "Contact";
+
+/* Class = "UILabel"; text = "Tip: a basic search requires atleast three characters of a person's name"; ObjectID = "JWJ-Z3-jgj"; */
+"JWJ-Z3-jgj.text" = "Astuce : saisis au moins les trois premières lettres du nom de la personne recherchée pour obtenir des résultats.";
+
+/* Class = "UINavigationItem"; title = "Directory"; ObjectID = "wrF-LF-pCu"; */
+"wrF-LF-pCu.title" = "Annuaire";

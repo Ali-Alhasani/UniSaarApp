@@ -1,0 +1,15 @@
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "9am-Al-rfR"; */
+"9am-Al-rfR.title" = "Item";
+
+/* Class = "UINavigationItem"; title = "Choose Campus"; ObjectID = "Dtd-ih-lYp"; */
+"Dtd-ih-lYp.title" = "Sélectionne ton campus";
+
+/* Class = "UILabel"; text = "Title"; ObjectID = "kiS-wx-8eo"; */
+"kiS-wx-8eo.text" = "Title";
+
+/* Class = "UILabel"; text = "Subtitle"; ObjectID = "oTh-jo-v0w"; */
+"oTh-jo-v0w.text" = "Untertitel";
+
+/* Class = "UINavigationItem"; title = "Campus"; ObjectID = "rXA-CU-pRL"; */
+"rXA-CU-pRL.title" = "Campus";

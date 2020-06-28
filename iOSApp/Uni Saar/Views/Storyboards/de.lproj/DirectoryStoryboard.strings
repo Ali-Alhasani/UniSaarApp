@@ -8,7 +8,7 @@
 "GO4-g3-b0C.text" = "Kontakt";
 
 /* Class = "UILabel"; text = "Tipp: eine Suche benötigt mindestens drei Buchstaben eines Namens"; ObjectID = "JWJ-Z3-jgj"; */
-"JWJ-Z3-jgj.text" = "Tipp: eine Suche benötigt mindestens drei Buchstaben eines Namens";
+"JWJ-Z3-jgj.text" = "Tipp: Bitte geben Sie mindestens die ersten drei Buchstaben des Namens ein, den Sie suchen.";
 
 /* Class = "UILabel"; text = "Label"; ObjectID = "bj2-Ih-6lA"; */
 "bj2-Ih-6lA.text" = "Label";

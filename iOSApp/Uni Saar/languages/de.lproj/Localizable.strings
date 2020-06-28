@@ -7,7 +7,7 @@
 */
 
 //MARK:- extension UIAlertController
-"AlertTitle" = "Alert";
+"AlertTitle" = "Achtung";
 "AlertOkActionTitle" = "Ok";
 "AlertYesActionTitle" = "Ja";
 "AlertNoActionTitle" = "Nein";
@@ -27,7 +27,7 @@
 "WarnMeAbout" = "Warn mich über";
 "contains" = "Enthält ";
 
-"EmptyNews" = "Keine Neuigkeiten verfügbar";
+"EmptyNews" = "Keine Neuigkeiten in den ausgewählten Kategorien verfügbar.";
 "EmptyEvents" = "Keine Veranstaltungen verfügbar";
 "StaffSearch" = "Personen";
 "EmptyResults" = "Keine Suchergebnisse gefunden";
