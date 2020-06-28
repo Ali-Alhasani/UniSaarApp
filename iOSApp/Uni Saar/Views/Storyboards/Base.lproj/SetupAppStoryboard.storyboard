@@ -136,7 +136,7 @@ Saarland University App</string>
     </scenes>
     <resources>
         <image name="Checked" width="22" height="22"/>
-        <image name="Logo-Universität_des_Saarlandes" width="520" height="210"/>
+        <image name="Logo-Universität_des_Saarlandes" width="1713" height="697"/>
         <namedColor name="uniColorTint">
             <color red="0.0" green="0.27843137254901962" blue="0.46274509803921571" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

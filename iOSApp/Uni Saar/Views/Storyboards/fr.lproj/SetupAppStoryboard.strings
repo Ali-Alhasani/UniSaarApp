@@ -1,0 +1,21 @@
+
+/* Class = "UIButton"; normalTitle = "Homburg"; ObjectID = "58m-CW-pjp"; */
+"58m-CW-pjp.normalTitle" = "Homburg";
+
+/* Class = "UILabel"; text = "Welcome to the Official \nSaarland University App"; ObjectID = "7ZL-Wl-B7R"; */
+"7ZL-Wl-B7R.text" = "Bienvenue sur l’appli officielle \n de l’Université de la Sarre";
+
+/* Class = "UILabel"; text = "Let's get you set up  "; ObjectID = "8WH-ck-W3Q"; */
+"8WH-ck-W3Q.text" = "Choisis tes paramètres  ";
+
+/* Class = "UILabel"; text = "Choose your Campus "; ObjectID = "FFc-bu-C6z"; */
+"FFc-bu-C6z.text" = "Sélectionne ton campus ";
+
+/* Class = "UIButton"; normalTitle = "Saarbrücken"; ObjectID = "R1G-xe-eWN"; */
+"R1G-xe-eWN.normalTitle" = "Saarbrücken";
+
+/* Class = "UIButton"; normalTitle = "Next"; ObjectID = "dwe-nF-Rc6"; */
+"dwe-nF-Rc6.normalTitle" = "Continuer";
+
+/* Class = "UILabel"; text = "Hallo!  "; ObjectID = "gzx-D5-Uaq"; */
+"gzx-D5-Uaq.text" = "Bonjour!  ";
