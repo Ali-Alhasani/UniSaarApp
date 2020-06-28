@@ -30,7 +30,7 @@ class AppSessionManager {
     static let skipWelcomeScreenKey = "skipWelcomeScreen"
     static let mensafiltersLastChangedKey = "mensafiltersLastChanged"
     static let newsFiltersLastChangedKey = "newsFiltersLastChanged"
-    static let linksLastChangedKey = "skipWelcomeScreen"
+    static let linksLastChangedKey = "linksLastChangedKey"
     static let helpfulNumbersLastChangedKey = "helpfulNumbersLastChanged"
 
 }
@@ -71,8 +71,8 @@ extension AppSessionManager {
     }
 
     class func saveHelpfulNumberStatus() {
-          let helpfulNumbersLastChanged =  AppSessionManager.shared.helpfulNumbersLastChanged
-          UserDefaults.standard.set(helpfulNumbersLastChanged, forKey: helpfulNumbersLastChangedKey)
+          let helpfulNumbersLastChange =  AppSessionManager.shared.helpfulNumbersLastChanged
+          UserDefaults.standard.set(helpfulNumbersLastChange, forKey: helpfulNumbersLastChangedKey)
       }
       class func loadHelpfulNumberStatus() {
           guard let tempType = UserDefaults.standard.value(forKey: helpfulNumbersLastChangedKey) as? String else {return}
