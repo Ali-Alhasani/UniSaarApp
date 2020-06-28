@@ -1,7 +1,10 @@
 from source.networking.UniAppServer import UniAppServer
 from source.networking.RequestHandler import RequestHandler
 from source.networking.NetworkManager import NetworkManager
+from datetime import datetime
 import threading
+import smtplib
+from email.message import EmailMessage
 from source.Constants import MENSA_UPDATE_THRESHOLD, MAP_UPDATE_THRESHOLD, NEWSFEED_UPDATE_THRESHOLD, \
     HELPFUL_NUMBERS_THRESHOLD, SERVER_ADDRESS, SERVER_PORT, ERROR_SLEEP_INT
 import time
@@ -9,7 +12,17 @@ import argparse
 
 
 def reportError(e, loc):
-    pass
+    print("there was an error while updating " + loc + ": " + str(e) + "\nRetrying...")
+    #msg = EmailMessage()
+    #msg.set_content("there was an error while updating " + loc + ": " + str(e) + "\nRetrying...")
+    #msg['Subject'] = "Error in Uni Saar App Server"
+    #msg['From'] = 'julien@schanz-stade.de'
+    #msg['To'] = 'julien@schanz-stade.de'
+
+    #s = smtplib.SMTP('localhost')
+    #s.send_message(msg)
+    #s.quit()
+
 
 class UpdateMensaThread(threading.Thread):
     def __init__(self, server: UniAppServer, verbose: bool):
@@ -26,7 +39,8 @@ class UpdateMensaThread(threading.Thread):
                 time.sleep(ERROR_SLEEP_INT)
                 continue
             if self.verbose:
-                print('updated mensa')
+                now = datetime.now()
+                print(str(now) + ': updated mensa')
             time.sleep(MENSA_UPDATE_THRESHOLD.total_seconds())
 
 
@@ -45,7 +59,8 @@ class UpdateNewsFeedThread(threading.Thread):
                 time.sleep(ERROR_SLEEP_INT)
                 continue
             if self.verbose:
-                print('updated newsfeed')
+                now = datetime.now()
+                print(str(now) + ': updated newsfeed')
             time.sleep(NEWSFEED_UPDATE_THRESHOLD.total_seconds())
 
 
@@ -64,7 +79,8 @@ class UpdateMapThread(threading.Thread):
                 time.sleep(ERROR_SLEEP_INT)
                 continue
             if self.verbose:
-                print('updated map')
+                now = datetime.now()
+                print(str(now) + ': updated map')
             time.sleep(MAP_UPDATE_THRESHOLD.total_seconds())
 
 
@@ -83,7 +99,8 @@ class UpdateHelpfulNumbersThread(threading.Thread):
                 time.sleep(ERROR_SLEEP_INT)
                 continue
             if self.verbose:
-                print('updated helpful numbers')
+                now = datetime.now()
+                print(str(now) + ': updated helpful numbers')
             time.sleep(HELPFUL_NUMBERS_THRESHOLD.total_seconds())
 
 
