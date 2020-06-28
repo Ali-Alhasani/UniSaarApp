@@ -24,7 +24,7 @@ class BuildingSearchTableViewController: UITableViewController {
 extension BuildingSearchTableViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard var searchBarText = searchController.searchBar.text else { return }
-        searchBarText = searchBarText.replacingOccurrences(of: "Gebäude", with: "")
+        searchBarText = searchBarText.replacingOccurrences(of: "Gebäude ", with: "")
         self.matchingItems = campusCoordinates.filter { (item) -> Bool in
             if item.name.range(of: searchBarText, options: .caseInsensitive) != nil {
                 return true

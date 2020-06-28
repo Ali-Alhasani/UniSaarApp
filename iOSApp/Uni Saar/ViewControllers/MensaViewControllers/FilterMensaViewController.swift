@@ -63,14 +63,11 @@ class FilterMensaViewController: UIViewController {
     @objc private func refershLoad() {
         // refresh the notices list from the server
         filterMensaViewModel.isFilterdCacheUpdated = false
-         filterMensaViewModel.loadGetFilterList()
+        filterMensaViewModel.loadGetFilterList()
     }
 
     @IBAction func doneButtonAction(_ sender: Any) {
-        if filterMensaViewModel.mensaLocation != AppSessionManager.shared.selectedMensaLocation {
-            AppSessionManager.shared.selectedMensaLocation = filterMensaViewModel.mensaLocation
-            self.delegate?.didChangeLocationFilter()
-        }
+        actionAfterChangeCampus()
         saveContext()
         if filterMensaViewModel.isFilterdCacheUpdated {
             self.delegate?.didUpdateNoticesData()
@@ -78,6 +75,13 @@ class FilterMensaViewController: UIViewController {
         dismissView()
     }
 
+    func actionAfterChangeCampus() {
+        if filterMensaViewModel.mensaLocation != AppSessionManager.shared.selectedMensaLocation {
+            AppSessionManager.shared.selectedMensaLocation = filterMensaViewModel.mensaLocation
+            self.delegate?.didChangeLocationFilter()
+            dismissView()
+        }
+    }
     func saveContext () {
         let context =  CoreDataStack.sharedInstance.persistentContainer.viewContext
         if context.hasChanges {
@@ -175,6 +179,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
                 DispatchQueue.main.async {
                     self.filterTableView.reloadSections(IndexSet(integer: indexPath.section), with: .automatic)
                 }
+                actionAfterChangeCampus()
             }
         }
     }
