@@ -32,7 +32,11 @@ class DirectoryViewController: UIViewController {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = NSLocalizedString("StaffSearch", comment: "")
-        searchController.searchBar.searchTextField.backgroundColor = UIColor.appSystemBackgroundColor
+        if #available(iOS 13.0, *) {
+            searchController.searchBar.searchTextField.backgroundColor = UIColor.appSystemBackgroundColor
+        } else {
+            // Fallback on earlier versions
+        }
         navigationItem.searchController = searchController
         definesPresentationContext = true
         searchController.searchBar.delegate = self

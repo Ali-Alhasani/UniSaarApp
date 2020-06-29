@@ -64,14 +64,14 @@ class DirectoryViewModel: ParentViewModel {
                 if list.numbers.count > 0 {
                     self?.helpfulNumbersCells.value = list.numbers.map { .normal(cellViewModel: $0) }
                     AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged
-                    self?.dataClient.clearMoreLinksCache()
+                    self?.dataClient.clearHelpfulNumbersCache()
                     self?.dataClient.saveInCoreDataWith(model: list.numbers)
                 }
                 self?.showLoadingIndicator.value = false
             case .failure(let error):
                 self?.showLoadingIndicator.value = false
                 // we need to show the error message only if is the first time
-                if AppSessionManager.shared.morelinksLastChanged == "never" {
+                if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
                     self?.helpfulNumbersCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
                 }
                 self?.showError(error: error)

@@ -11,7 +11,7 @@ import Alamofire
 //All App API's
 public enum URLRouter: URLRequestConvertible {
     enum Constants {
-        static let baseURLPath = "http://localhost:3000"
+        static let baseURLPath = "http://unisaar-test.cs.uni-saarland.de:3000"
     }
     case directorySearch(Int, Int, String)
     case mensa(String)

@@ -1,0 +1,9 @@
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "8WY-mW-Eyi"; */
+"8WY-mW-Eyi.title" = "Paramètres";
+
+/* Class = "UINavigationItem"; title = "More"; ObjectID = "TbX-3P-1ef"; */
+"TbX-3P-1ef.title" = "Plus";
+
+/* Class = "UINavigationItem"; title = "About App"; ObjectID = "jva-kV-2ke"; */
+"jva-kV-2ke.title" = "À propos de cette appli";

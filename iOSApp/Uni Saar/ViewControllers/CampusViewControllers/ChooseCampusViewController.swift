@@ -26,11 +26,15 @@ class ChooseCampusViewController: UIViewController {
         filterTableView.layoutTableView()
     }
     @IBAction func doneButtonAction(_ sender: Any) {
+        actionAfterSelection()
+    }
+
+    func actionAfterSelection() {
         if selctedLocation != AppSessionManager.shared.selectedCampus {
-            AppSessionManager.shared.selectedCampus = selctedLocation
-            self.delegate?.didChangeLocationFilter(selectedCampus: selctedLocation, regionNeedUpdate: true)
-        }
-        dismissView()
+                   AppSessionManager.shared.selectedCampus = selctedLocation
+                   self.delegate?.didChangeLocationFilter(selectedCampus: selctedLocation, regionNeedUpdate: true)
+               }
+               dismissView()
     }
 
     func dismissView() {
@@ -82,6 +86,7 @@ extension ChooseCampusViewController: UITableViewDelegate, UITableViewDataSource
                 selctedLocation = Campus.homburg
             }
             self.filterTableView.reloadData()
+            actionAfterSelection()
         }
     }
 }

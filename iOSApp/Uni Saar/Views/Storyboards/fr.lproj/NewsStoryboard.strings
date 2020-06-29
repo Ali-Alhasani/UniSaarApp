@@ -1,0 +1,15 @@
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "MwI-Qs-Uh5"; */
+"MwI-Qs-Uh5.title" = "Item";
+
+/* Class = "UINavigationItem"; title = "Events"; ObjectID = "XhN-GG-1CP"; */
+"XhN-GG-1CP.title" = "Événements";
+
+/* Class = "UINavigationItem"; title = "Filter Feed"; ObjectID = "dP5-FB-GhC"; */
+"dP5-FB-GhC.title" = "Filtrer";
+
+/* Class = "UIBarButtonItem"; title = "Item"; ObjectID = "e1z-V1-AF7"; */
+"e1z-V1-AF7.title" = "Item";
+
+/* Class = "UINavigationItem"; title = "News Feed"; ObjectID = "v77-ev-2pc"; */
+"v77-ev-2pc.title" = "Actualités";

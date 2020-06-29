@@ -144,7 +144,7 @@ class DataClient {
     typealias GetHelpfulNumbersResult = CustomResult<HelpfulNumbersModel, Error>
     typealias GetHelpfulNumbersCompletion = (_ result: GetHelpfulNumbersResult) -> Void
     func getDirectoryHelpfulNumbers(completion: @escaping GetHelpfulNumbersCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.helpfulNumbers( AppSessionManager.shared.morelinksLastChanged), success: { (response) in
+        APIClient.sendRequest(requestURL: URLRouter.helpfulNumbers( AppSessionManager.shared.helpfulNumbersLastChanged), success: { (response) in
             if let responseData = response as? JSON {
                 let helpfulNumbers =  HelpfulNumbersModel(json: responseData.dictionaryValue)
                 completion(.success(payload: helpfulNumbers))

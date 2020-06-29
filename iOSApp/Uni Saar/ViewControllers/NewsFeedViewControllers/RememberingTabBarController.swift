@@ -16,8 +16,8 @@ class RememberingTabBarController: UITabBarController, UITabBarControllerDelegat
         self.delegate = self
 
         // Load the last selected tab if the key exists in the UserDefaults
-        if UserDefaults.standard.object(forKey: self.lastOpenTabScreen) != nil {
-            self.selectedIndex = UserDefaults.standard.integer(forKey: self.lastOpenTabScreen)
+        if let lastOpenTab = UserDefaults.standard.object(forKey: self.lastOpenTabScreen) as? Int {
+            self.selectedIndex = lastOpenTab
         }
     }
 

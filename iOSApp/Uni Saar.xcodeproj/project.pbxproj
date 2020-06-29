@@ -291,6 +291,15 @@
 		6BFB586F23D8BA0100B69C4A /* MoreLinksViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLinksViewModel.swift; sourceTree = "<group>"; };
 		6BFB587223D8F4D700B69C4A /* CampusHomCoor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CampusHomCoor.plist; sourceTree = "<group>"; };
 		6BFB587423D9022D00B69C4A /* RememberingTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RememberingTabBarController.swift; sourceTree = "<group>"; };
+		6BFBF2E324A946F1005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
+		6BFBF2E424A946F1005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/NewsStoryboard.strings; sourceTree = "<group>"; };
+		6BFBF2E524A946F1005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MensaStoryboard.strings; sourceTree = "<group>"; };
+		6BFBF2E624A946F1005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MoreLinksStoryboard.strings; sourceTree = "<group>"; };
+		6BFBF2E724A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/DirectoryStoryboard.strings; sourceTree = "<group>"; };
+		6BFBF2E824A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/CampusStoryboard.strings; sourceTree = "<group>"; };
+		6BFBF2E924A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAppStoryboard.strings; sourceTree = "<group>"; };
+		6BFBF2EA24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
+		6BFBF2EB24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; indentWidth = 5; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6F448B7270EB50BE27D8CCB7 /* Pods_Uni_Saar_UniSaarUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uni_Saar_UniSaarUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		841037AC90EEFA53A5C26914 /* Pods-Uni Saar-Uni SaarUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar-Uni SaarUITests.debug.xcconfig"; path = "Target Support Files/Pods-Uni Saar-Uni SaarUITests/Pods-Uni Saar-Uni SaarUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9E6D804B943286509EE8A9C0 /* Pods-Uni Saar-Uni SaarUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar-Uni SaarUITests.release.xcconfig"; path = "Target Support Files/Pods-Uni Saar-Uni SaarUITests/Pods-Uni Saar-Uni SaarUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -380,8 +389,8 @@
 				6B0F26252396D224002E587E /* NetworkingAndSessionManager */,
 				6B0F25DF2396974F002E587E /* Assets.xcassets */,
 				6B0F25E12396974F002E587E /* LaunchScreen.storyboard */,
-				6B0F25E42396974F002E587E /* Info.plist */,
 				6BA5770E23DF0B3300D24F74 /* CampusData */,
+				6B0F25E42396974F002E587E /* Info.plist */,
 				6B0F262C2396D889002E587E /* Supportive */,
 				6B21431F239BB2BA00E8958F /* Style */,
 				6B4E6AF223ABA22800A85C47 /* languages */,
@@ -770,6 +779,7 @@
 				en,
 				Base,
 				de,
+				fr,
 			);
 			mainGroup = 6B0F25CA2396974E002E587E;
 			productRefGroup = 6B0F25D42396974E002E587E /* Products */;
@@ -1083,6 +1093,7 @@
 				6B0F25DD2396974E002E587E /* Base */,
 				6BFB583923D64EC400B69C4A /* de */,
 				6BFB583C23D64F1300B69C4A /* en */,
+				6BFBF2E324A946F1005C6FE8 /* fr */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -1092,6 +1103,7 @@
 			children = (
 				6B0F25E22396974F002E587E /* Base */,
 				6BFB583A23D64EC400B69C4A /* de */,
+				6BFBF2EA24A946F2005C6FE8 /* fr */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1102,6 +1114,7 @@
 				6BFB583E23D64F2000B69C4A /* Base */,
 				6BFB584123D64F2600B69C4A /* en */,
 				6BFB584323D64F2A00B69C4A /* de */,
+				6BFBF2E424A946F1005C6FE8 /* fr */,
 			);
 			name = NewsStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -1112,6 +1125,7 @@
 				6BFB584523D64F2E00B69C4A /* Base */,
 				6BFB584823D64F3200B69C4A /* en */,
 				6BFB584A23D64F3300B69C4A /* de */,
+				6BFBF2E524A946F1005C6FE8 /* fr */,
 			);
 			name = MensaStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -1122,6 +1136,7 @@
 				6BFB584C23D64F3800B69C4A /* Base */,
 				6BFB584F23D64F3F00B69C4A /* en */,
 				6BFB585123D64F4400B69C4A /* de */,
+				6BFBF2E624A946F1005C6FE8 /* fr */,
 			);
 			name = MoreLinksStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -1132,6 +1147,7 @@
 				6BFB585323D64F4A00B69C4A /* Base */,
 				6BFB585623D64F4F00B69C4A /* en */,
 				6BFB585823D64F5000B69C4A /* de */,
+				6BFBF2E724A946F2005C6FE8 /* fr */,
 			);
 			name = DirectoryStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -1142,6 +1158,7 @@
 				6BFB585A23D64F5500B69C4A /* Base */,
 				6BFB585D23D64F5900B69C4A /* en */,
 				6BFB585F23D64F5A00B69C4A /* de */,
+				6BFBF2E824A946F2005C6FE8 /* fr */,
 			);
 			name = CampusStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -1152,6 +1169,7 @@
 				6BFB586123D64F6600B69C4A /* Base */,
 				6BFB586423D64F6900B69C4A /* en */,
 				6BFB586623D64F6B00B69C4A /* de */,
+				6BFBF2E924A946F2005C6FE8 /* fr */,
 			);
 			name = SetupAppStoryboard.storyboard;
 			sourceTree = "<group>";
@@ -1161,6 +1179,7 @@
 			children = (
 				6BFB586823D64FD200B69C4A /* en */,
 				6BFB586A23D64FD400B69C4A /* de */,
+				6BFBF2EB24A946F2005C6FE8 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

@@ -1,0 +1,46 @@
+/* 
+  Localizable.strings
+  Uni Saar
+
+  Created by Ali Al-Hasani on 12/19/19.
+  Copyright © 2019 Ali Al-Hasani. All rights reserved.
+*/
+
+//MARK:- extension UIAlertController
+"AlertTitle" = "Erreur";
+"AlertOkActionTitle" = "Ok";
+"AlertYesActionTitle" = "Oui";
+"AlertNoActionTitle" = "Non";
+"AlertCancelActionTitle" = "Annuler";
+"AlertContinueActionTitle" = "Continuer";
+
+//MARK:- DataClient API
+"UnknownError" = "Une erreur est survenue. Merci de réessayer plus tard.";
+
+//MARK: - Catch general API
+"generalAPIError" = "Une erreur est survenue. Nous mettons tout en œuvre pour remédier à ce problème. Merci de réessayer plus tard.";
+
+//MARK:- MensaViewController
+"emptyMenu" = "Il semble qu’il n’y ait aucun menu pour aujourd’hui.";
+"HighlightAllergens" = "Marquer les produits sélectionnés en rouge sur le menu";
+"MensaLocations" = "Mensa sur le campus de";
+"WarnMeAbout" = "Je souhaite être averti-e ";
+"contains" = "Contient ";
+
+"EmptyNews" = "Pas de nouvelles actualités à signaler dans la/les catégorie(s) sélectionnée(s)";
+"EmptyEvents" = "Aucun événement disponible";
+"StaffSearch" = "Annuaire";
+"EmptyResults" = "Aucun résultat trouvé";
+"BuildingsSearch" = "Rechercher un bâtiment";
+"ChooseCampus" = "Sélectionne ton campus";
+
+
+"newsFilter" = "Sélectionne les catégories dans lesquelles tu souhaites effectuer une recherche";
+
+//MARK:- MoreLinksViewModel
+"AboutApp" = "À propos de cette appli";
+"AppSettings" = "Paramètres";
+"EmptyLinks" = "Pas de liens disponibles";
+"HelpfulNumbers" = "Contacts utiles";
+
+
