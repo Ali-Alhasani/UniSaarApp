@@ -110,8 +110,8 @@ class DirectoryView:
               'numbers': [ {"name": name, "number": number, "link": link, "mail": mail}, ... ] }
         where link and mail are optional or "still up to date" if the client's helpful numbers are still up to date
         """
+        helpfulNumbers = sorted(helpfulNumbers, key=(lambda x: x.getName().lower()))
         helpfulNumbers = [self.helpfulNumberToJSON(hn) for hn in helpfulNumbers]
-
         # remove ws after separator for compact representation
         return json.dumps({'numbersLastChanged': str(numbersLastChanged), 'numbers': helpfulNumbers},
                           separators=(',', ':'))

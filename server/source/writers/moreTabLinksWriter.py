@@ -22,7 +22,9 @@ def edit_links(data):
                 continue
 
         link = input('Enter link location \n')
-        data = data.append({'name': name, 'link': link}, ignore_index=True)
+        importance = input('Enter the link importance (lower means more important)\n')
+        data = data.append({'name': name, 'link': link, 'importance': importance}, ignore_index=True)
+
 
         again = input("Do you want to add another link? [y/n] \n")
         if again in no:
