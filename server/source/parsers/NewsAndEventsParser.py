@@ -122,9 +122,10 @@ class NewsAndEventsParser:
         items = rss['items']
         for item in items:
             title = item['title']
-            publishedDate = datetime.now().date()
             happeningTime = dateParser.parse(item['published'])
             happeningDate = happeningTime.date()
+            diffTime = timedelta(days=30)
+            publishedDate = happeningDate - diffTime
             link = item['link']  # this seems to be empty in all of the uni events
             categories = set()
             category = None
