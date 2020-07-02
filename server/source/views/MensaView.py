@@ -267,11 +267,12 @@ class MensaView:
         # Since Prof Zeller only wants to see the locations "sb" and "hom",
         # the mensa filter only returns these locations. To change this, remove the conditional in the following list
         # comprehension
+        notices = sorted(mensaModel.getNotices(language=language), key=lambda x: x.getName())
         locationList = [{"locationID": location.getID(), "name": location.getName()}
                         for location in mensaModel.getLocations(language=language) if location.getID() in ["sb", "hom"]]
         filterJSON = {"locations": locationList,
                       "notices": [{"noticeID": notice.getID(), "name": notice.getName(),
                                    "isAllergen": notice.getIsAllergen(), "isNegated": notice.getIsNegated()}
-                                  for notice in mensaModel.getNotices(language=language)]}
+                                  for notice in notices]}
 
         return json.dumps(filterJSON, separators=(',', ':'))  # remove ws after separator for compact representation
