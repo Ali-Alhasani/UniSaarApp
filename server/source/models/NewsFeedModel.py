@@ -5,6 +5,7 @@ from typing import List
 from source.ReadWriteLock import RWLock
 from source.Constants import SEMESTER_TERMINE_CATEGORY_STRING, NEWSFEED_UPDATE_INTERVAL_IN_SECONDS
 import copy
+from CategoryModel import Category
 
 newsFeedLock = RWLock()
 
@@ -288,24 +289,6 @@ class NewsFeedModel:
         finally:
             newsFeedLock.release()
 
-
-class Category:
-    # does not have to be locked, since it is never written to, only when creating
-    def __init__(self, name, categoryID):
-        self.name = name
-        self.categoryID = categoryID
-
-    def getName(self):
-        return self.name
-
-    def getID(self):
-        return self.categoryID
-
-    def __eq__(self, other):
-        return self.name == other.name
-
-    def __hash__(self):
-        return hash(self.name)
 
 
 class NonexistentIDError(Exception):

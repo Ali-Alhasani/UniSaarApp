@@ -2,7 +2,7 @@ from datetime import timedelta
 from os.path import abspath, join
 
 
-SERVER_ADDRESS = 'unisaar-test.cs.uni-saarland.de'
+SERVER_ADDRESS = 'localhost'
 SERVER_PORT = 3000
 
 # News and Events
@@ -17,6 +17,21 @@ FRENCH_EVENT_STRING = 'Événements Français'
 
 NEWSFEED_LANGUAGES = ['de', 'en', 'fr']
 ACADEMIC_CALENDAR_FOLDER = 'academic_calendar/'
+
+
+def getCachedEventsLocation(language: str):
+    if language == 'de':
+        return CACHED_EVENTS_LOCATION_DE
+    elif language == 'en':
+        return CACHED_EVENTS_LOCATION_EN
+    elif language == 'fr':
+        return CACHED_EVENTS_LOCATION_FR
+
+
+CACHED_EVENTS_LOCATION_DE = abspath(join('.', 'cached_events/events_de.cache'))
+CACHED_EVENTS_LOCATION_EN = abspath(join('.', 'cached_events/events_en.cache'))
+CACHED_EVENTS_LOCATION_FR = abspath(join('.', 'cached_events/events_fr.cache'))
+
 
 HTML_TEMPLATE_DIRECTORY = abspath(join('.', 'templates'))
 WEBVIEW_NEWS_TEMPLATE = 'webview_news.html'

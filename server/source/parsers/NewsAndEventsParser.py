@@ -8,6 +8,8 @@ from source.models.EventModel import EventModel
 from time import mktime
 from source.models.NewsFeedModel import Category
 from source.Constants import *
+import json
+from source.models.EventModel import eventFromCache
 
 
 class NewsAndEventsParser:
@@ -117,6 +119,14 @@ class NewsAndEventsParser:
         :param dataRSS: an rss string containing university events
         :return a list of events items
         """
+        cachedEvents = []
+        with open(getCachedEventsLocation(language), 'r') as f:
+            cacheString = f.read()
+            try:
+                eventCacheList = json.loads(cacheString)
+                cachedEvents = [eventFromCache(eventCache) for eventCache in eventCacheList]
+            except json.decoder.JSONDecodeError:
+                pass
         eventsList = []
         rss = fp.parse(dataRSS)
         items = rss['items']
@@ -124,8 +134,7 @@ class NewsAndEventsParser:
             title = item['title']
             happeningTime = dateParser.parse(item['published'])
             happeningDate = happeningTime.date()
-            diffTime = timedelta(days=30)
-            publishedDate = happeningDate - diffTime
+            publishedDate = datetime.now().date()
             link = item['link']  # this seems to be empty in all of the uni events
             categories = set()
             category = None
@@ -175,8 +184,16 @@ class NewsAndEventsParser:
                     imageLink = potentialImageLink['href']
             eventItem = EventModel(title, happeningDate, publishedDate, self.currentNewsAndEventsID, link, categories,
                                    description, content, imageLink, happeningTime)
+            for cachedEvent in cachedEvents:
+                if cachedEvent == eventItem:
+                    eventItem = cachedEvent #TODO test if this works as planned
             eventsList.append(eventItem)
             self.currentNewsAndEventsID = self.currentNewsAndEventsID + 1
+        newEventsCache = [event.toCache() for event in eventsList]
+        cacheString = json.dumps(newEventsCache)
+        if language == 'de':
+            with open(getCachedEventsLocation(language), 'w') as f:
+                f.write(cacheString)
         return eventsList
 
     def parseAcademicCalendarPDF(self, filePath):

@@ -1,4 +1,26 @@
 from source.models.NewsAndEventsModel import NewsAndEventsModel
+from CategoryModel import categoryFromCache
+from datetime import datetime
+from dateutil import parser as dateParser
+
+def eventFromCache(eventCache):
+    """
+    @param eventCache: a dictionary as returned by Event.toCache()
+    @return: an Event that has the same attributes as the original event that was cached
+    """
+    if eventCache['happeningTime'] is not None:
+        return EventModel(eventCache['title'], datetime.strptime(eventCache['happeningDate'], "%Y-%m-%d").date(),
+                          datetime.strptime(eventCache['publishedDate'], "%Y-%m-%d").date(),
+                          int(eventCache['id']), eventCache['link'],
+                          set([categoryFromCache(catCache) for catCache in eventCache['categories']]),
+                          eventCache['description'], eventCache['content'], eventCache['imageLink'],
+                          dateParser.parse(eventCache['happeningTime']))
+    else:
+        return EventModel(eventCache['title'], datetime.strptime(eventCache['happeningDate'], "%Y-%m-%d"),
+                          datetime.strptime(eventCache['publishedDate'], "%Y-%m-%d"),
+                          eventCache['id'], eventCache['link'],
+                          set([categoryFromCache(catCache) for catCache in eventCache['categories']]),
+                          eventCache['description'], eventCache['content'], eventCache['imageLink'])
 
 
 class EventModel (NewsAndEventsModel):
@@ -14,6 +36,21 @@ class EventModel (NewsAndEventsModel):
 
     def getHappeningTime(self):
         return self.happeningTime
+
+    def toCache(self):
+        eventDict = {
+            'title': self.title,
+            'happeningDate': str(self.happeningDate),
+            'publishedDate': str(self.publishedDate),
+            'id': self.id,
+            'link': self.link,
+            'categories': [cat.toCache() for cat in self.categories],
+            'description': self.description,
+            'content': self.content,
+            'imageLink': self.imageLink,
+            'happeningTime': str(self.happeningTime)
+        }
+        return eventDict
 
     def __eq__(self, other):
         if isinstance(other, EventModel):
