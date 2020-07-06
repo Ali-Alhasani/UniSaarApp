@@ -5,7 +5,7 @@ from typing import List
 from source.ReadWriteLock import RWLock
 from source.Constants import SEMESTER_TERMINE_CATEGORY_STRING, NEWSFEED_UPDATE_INTERVAL_IN_SECONDS
 import copy
-from CategoryModel import Category
+from source.models.CategoryModel import Category
 
 newsFeedLock = RWLock()
 
