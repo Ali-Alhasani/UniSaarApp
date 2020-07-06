@@ -1,5 +1,5 @@
 from source.models.NewsAndEventsModel import NewsAndEventsModel
-from CategoryModel import categoryFromCache
+from source.models.CategoryModel import categoryFromCache
 from datetime import datetime
 from dateutil import parser as dateParser
 

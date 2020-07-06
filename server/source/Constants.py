@@ -2,7 +2,7 @@ from datetime import timedelta
 from os.path import abspath, join
 
 
-SERVER_ADDRESS = 'localhost'
+SERVER_ADDRESS = 'unisaar-test.cs.uni-saarland.de'
 SERVER_PORT = 3000
 
 # News and Events
@@ -65,9 +65,9 @@ MORE_LINKS_LOCATION = abspath(join('source', 'links_for_more_tab'))
 # Update intervals
 NEWSFEED_UPDATE_INTERVAL_IN_SECONDS = timedelta(hours=1)
 MENSA_UPDATE_THRESHOLD = timedelta(minutes=15)
-NEWSFEED_UPDATE_THRESHOLD = timedelta(hours=12)
-MAP_UPDATE_THRESHOLD = timedelta(hours=24)
-HELPFUL_NUMBERS_THRESHOLD = timedelta(hours=24)
+NEWSFEED_UPDATE_THRESHOLD = timedelta(hours=1)
+MAP_UPDATE_THRESHOLD = timedelta(hours=1)
+HELPFUL_NUMBERS_THRESHOLD = timedelta(hours=1)
 
 # sleep interval in seconds in case of errors
 ERROR_SLEEP_INT = 5
