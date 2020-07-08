@@ -212,10 +212,15 @@ class NetworkManager:
         """
         soup = BeautifulSoup(webpage, features="html.parser")
 
-        maincontent = soup.find(name='div', class_='maincontent maincontent--white')
-        linkContainers = maincontent.find_all(name='a')
-
-        return [lc['href'] for lc in linkContainers]
+        links = []
+        for link in soup.find_all('a'):
+            url = link.get('href')
+            try:
+                if url is not None and 'semester' in url.lower() and '.pdf' in url.lower():
+                    links.append(url)
+            except AttributeError:
+                pass
+        return links
 
     def getAcademicCalendarPDFFiles(self):
         """
