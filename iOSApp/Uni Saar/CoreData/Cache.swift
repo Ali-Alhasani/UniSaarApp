@@ -13,7 +13,7 @@ class Cache {
 
     lazy var fetchedResultsController: NSFetchedResultsController<FilterNoticesListCache> = {
         let fetchRequest = NSFetchRequest<FilterNoticesListCache>(entityName: String(describing: FilterNoticesListCache.self))
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(FilterNoticesListCache.isSelected), ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(FilterNoticesListCache.name), ascending: true)]
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
                                              sectionNameKeyPath: nil, cacheName: nil)
         return frc

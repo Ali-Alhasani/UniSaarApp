@@ -52,6 +52,7 @@ extension DataClient {
         if let linksEntity = NSEntityDescription.insertNewObject(forEntityName: FilterCacheKeys.moreLinksEntityName, into: context) as? MoreLinksCache {
             linksEntity.name = model.displayName
             linksEntity.link = model.url
+            linksEntity.orderIndex = Int16(model.index)
             return linksEntity
         }
         return nil
