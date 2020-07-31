@@ -15,17 +15,23 @@ class MoreModel {
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.linksLastChanged = jsonFromated["linksLastChanged"].stringValue
-        self.links = jsonFromated["links"].arrayValue.map {MoreLinksModel(json: $0)}
+        let arrayLinks = jsonFromated["links"].arrayValue
+        links = []
+        for (index, link) in arrayLinks.enumerated() {
+            self.links.append(MoreLinksModel(json: link, index: index))
+        }
     }
 }
 
 class MoreLinksModel {
     var displayName: String
     var url: String
-    init(json: JSON) {
+    var index: Int
+    init(json: JSON, index: Int) {
         let jsonFromated = JSON(json)
         self.displayName = jsonFromated["name"].stringValue
         self.url = jsonFromated["link"].stringValue
+        self.index = index
     }
 }
 

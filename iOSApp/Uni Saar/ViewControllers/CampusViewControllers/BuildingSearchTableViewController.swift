@@ -25,9 +25,14 @@ extension BuildingSearchTableViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard var searchBarText = searchController.searchBar.text else { return }
         searchBarText = searchBarText.replacingOccurrences(of: "Gebäude ", with: "")
+        let withoutSpeace = searchBarText.replacingOccurrences(of: " ", with: "")
         self.matchingItems = campusCoordinates.filter { (item) -> Bool in
             if item.name.range(of: searchBarText, options: .caseInsensitive) != nil {
                 return true
+            } else {
+                if item.name.range(of: withoutSpeace, options: .caseInsensitive) != nil {
+                    return true
+                }
             }
             if item.function.range(of: searchBarText, options: .caseInsensitive) != nil {
                 return true

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="J5I-hb-aZS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="J5I-hb-aZS">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,24 +45,81 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tip: a basic search requires atleast three characters of a person's name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JWJ-Z3-jgj">
-                                <rect key="frame" x="16" y="96" width="382" height="13.5"/>
-                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
+                                <rect key="frame" x="16" y="96" width="382" height="34"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                 <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="KQf-S9-So4">
-                                <rect key="frame" x="0.0" y="113.5" width="414" height="748.5"/>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="KQf-S9-So4">
+                                <rect key="frame" x="0.0" y="130" width="414" height="732"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="R0J-7w-JBE">
+                                <rect key="frame" x="0.0" y="130" width="414" height="732"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Saarland University has 278 professors, ~1500 scientific assistants and ~1300 employees. Find them all here!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XwC-qa-Dqo">
+                                        <rect key="frame" x="16" y="20" width="382" height="30.5"/>
+                                        <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nFy-Vv-iQx">
+                                        <rect key="frame" x="16" y="95.5" width="382" height="50"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2rI-A5-ObZ">
+                                                <rect key="frame" x="16" y="0.0" width="360" height="50"/>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                <state key="normal" title="Helpful Contacts">
+                                                    <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                </state>
+                                                <connections>
+                                                    <segue destination="Huv-Uk-8pV" kind="show" id="HkQ-NV-NXy"/>
+                                                </connections>
+                                            </button>
+                                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="dropdown" translatesAutoresizingMaskIntoConstraints="NO" id="MR9-an-1nt">
+                                                <rect key="frame" x="354.5" y="19.5" width="11.5" height="11.5"/>
+                                                <color key="tintColor" systemColor="systemGray2Color" red="0.68235294120000001" green="0.68235294120000001" blue="0.69803921570000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="MR9-an-1nt" secondAttribute="height" multiplier="1:1" id="HPE-pU-6oO"/>
+                                                </constraints>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="2rI-A5-ObZ" secondAttribute="bottom" id="Spi-yy-uhM"/>
+                                            <constraint firstItem="2rI-A5-ObZ" firstAttribute="top" secondItem="nFy-Vv-iQx" secondAttribute="top" id="YbO-3S-ANx"/>
+                                            <constraint firstItem="MR9-an-1nt" firstAttribute="centerY" secondItem="nFy-Vv-iQx" secondAttribute="centerY" id="dhE-QY-4g1"/>
+                                            <constraint firstAttribute="trailing" secondItem="MR9-an-1nt" secondAttribute="trailing" constant="16" id="eac-Po-HA6"/>
+                                            <constraint firstItem="2rI-A5-ObZ" firstAttribute="leading" secondItem="nFy-Vv-iQx" secondAttribute="leading" constant="16" id="jFq-ll-PAu"/>
+                                            <constraint firstAttribute="trailing" secondItem="2rI-A5-ObZ" secondAttribute="trailing" constant="6" id="rDa-mf-Oza"/>
+                                            <constraint firstAttribute="height" constant="50" id="yQj-uF-X8f"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="nFy-Vv-iQx" firstAttribute="leading" secondItem="R0J-7w-JBE" secondAttribute="leading" constant="16" id="1ij-gf-bOc"/>
+                                    <constraint firstAttribute="trailing" secondItem="XwC-qa-Dqo" secondAttribute="trailing" constant="16" id="4ao-sW-0ot"/>
+                                    <constraint firstItem="XwC-qa-Dqo" firstAttribute="top" secondItem="R0J-7w-JBE" secondAttribute="top" constant="20" id="D1L-GV-DUL"/>
+                                    <constraint firstItem="XwC-qa-Dqo" firstAttribute="leading" secondItem="R0J-7w-JBE" secondAttribute="leading" constant="16" id="VMv-xa-XdJ"/>
+                                    <constraint firstItem="nFy-Vv-iQx" firstAttribute="top" secondItem="XwC-qa-Dqo" secondAttribute="bottom" constant="45" id="mlU-Fl-mwQ"/>
+                                    <constraint firstAttribute="trailing" secondItem="nFy-Vv-iQx" secondAttribute="trailing" constant="16" id="xDE-ND-zIy"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="JWJ-Z3-jgj" firstAttribute="top" secondItem="dAo-Yr-IYY" secondAttribute="top" constant="8" id="5L8-jK-080"/>
+                            <constraint firstItem="R0J-7w-JBE" firstAttribute="top" secondItem="JWJ-Z3-jgj" secondAttribute="bottom" id="J6b-qm-Z2B"/>
+                            <constraint firstItem="dAo-Yr-IYY" firstAttribute="trailing" secondItem="R0J-7w-JBE" secondAttribute="trailing" id="X5Z-B2-h9Y"/>
                             <constraint firstItem="KQf-S9-So4" firstAttribute="trailing" secondItem="dAo-Yr-IYY" secondAttribute="trailing" id="hkG-gz-Q6M"/>
+                            <constraint firstItem="dAo-Yr-IYY" firstAttribute="bottom" secondItem="R0J-7w-JBE" secondAttribute="bottom" id="i7m-Qm-WVE"/>
                             <constraint firstItem="KQf-S9-So4" firstAttribute="leading" secondItem="dAo-Yr-IYY" secondAttribute="leading" id="irb-RB-di9"/>
                             <constraint firstItem="JWJ-Z3-jgj" firstAttribute="leading" secondItem="dAo-Yr-IYY" secondAttribute="leading" constant="16" id="kNu-JG-gHc"/>
                             <constraint firstItem="dAo-Yr-IYY" firstAttribute="trailing" secondItem="JWJ-Z3-jgj" secondAttribute="trailing" constant="16" id="kjd-sl-o0B"/>
-                            <constraint firstItem="KQf-S9-So4" firstAttribute="top" secondItem="JWJ-Z3-jgj" secondAttribute="bottom" constant="4" id="uPN-gV-ja0"/>
+                            <constraint firstItem="R0J-7w-JBE" firstAttribute="leading" secondItem="dAo-Yr-IYY" secondAttribute="leading" id="ol7-G3-skv"/>
+                            <constraint firstItem="KQf-S9-So4" firstAttribute="top" secondItem="JWJ-Z3-jgj" secondAttribute="bottom" id="uPN-gV-ja0"/>
                             <constraint firstItem="KQf-S9-So4" firstAttribute="bottom" secondItem="dAo-Yr-IYY" secondAttribute="bottom" id="vDX-mm-Vlo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="dAo-Yr-IYY"/>
@@ -71,6 +127,8 @@
                     <navigationItem key="navigationItem" title="Directory" id="wrF-LF-pCu"/>
                     <connections>
                         <outlet property="directoryTableView" destination="KQf-S9-So4" id="goC-kQ-Ufq"/>
+                        <outlet property="helpfulContactsView" destination="nFy-Vv-iQx" id="7IK-MY-vsj"/>
+                        <outlet property="outerView" destination="R0J-7w-JBE" id="jg2-O2-hCN"/>
                         <segue destination="wRe-ct-ztD" kind="show" identifier="toStaffDetails" id="ebw-3U-bZT"/>
                     </connections>
                 </viewController>
@@ -275,12 +333,44 @@
             </objects>
             <point key="canvasLocation" x="-930.43478260869574" y="878.57142857142856"/>
         </scene>
+        <!--Helpful Contacts-->
+        <scene sceneID="oLO-1q-uIE">
+            <objects>
+                <viewController storyboardIdentifier="HelpfulContactsViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="Huv-Uk-8pV" customClass="HelpfulContactsViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="TCA-Iy-fDd">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="adA-tI-reI">
+                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="adA-tI-reI" firstAttribute="top" secondItem="8J1-92-ETD" secondAttribute="top" id="2OZ-Ut-5Ve"/>
+                            <constraint firstItem="adA-tI-reI" firstAttribute="trailing" secondItem="8J1-92-ETD" secondAttribute="trailing" id="T4I-PY-2Vv"/>
+                            <constraint firstItem="adA-tI-reI" firstAttribute="leading" secondItem="8J1-92-ETD" secondAttribute="leading" id="Tij-TV-VBI"/>
+                            <constraint firstItem="adA-tI-reI" firstAttribute="bottom" secondItem="8J1-92-ETD" secondAttribute="bottom" id="dnE-SX-h2Z"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="8J1-92-ETD"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Helpful Contacts" id="lvo-1B-W7Z"/>
+                    <connections>
+                        <outlet property="directoryTableView" destination="adA-tI-reI" id="ndR-px-kin"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Kb1-tx-55h" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="599" y="118"/>
+        </scene>
     </scenes>
-    <resources>
-        <image name="paperplane.fill" width="18" height="18"/>
-        <image name="rectangle.stack.person.crop.fill" width="18" height="19"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="ebw-3U-bZT"/>
     </inferredMetricsTieBreakers>
+    <resources>
+        <image name="dropdown" width="7" height="11.5"/>
+        <image name="paperplane.fill" width="18" height="18"/>
+        <image name="rectangle.stack.person.crop.fill" width="18" height="19"/>
+    </resources>
 </document>

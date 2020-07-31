@@ -12,7 +12,7 @@ class FilterNewsViewModel: ParentViewModel {
     // MARK: - Object Lifecycle
     let didUpdatefilterList: Bindable = Bindable(false)
     var isFilterdCacheUpdated: Bool = false
-    lazy var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
+    var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(FilterNoticesListCache.isSelected), ascending: false)]
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
