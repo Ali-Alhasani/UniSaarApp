@@ -18,7 +18,7 @@ struct SingleButtonAlert {
     let message: String?
     let action: AlertAction
 }
-extension UIAlertController {
+extension UIViewController {
 
     func errorAlert(_ errorMessage: String) -> UIAlertController {
         let alert = UIAlertController(title: NSLocalizedString("AlertTitle", comment: ""), message: errorMessage, preferredStyle: .alert)
@@ -28,6 +28,7 @@ extension UIAlertController {
     func succesAlertWithHandler(_ errorMessage: String, _ handler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(title: NSLocalizedString("AlertTitle", comment: ""), message: errorMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("AlertOkActionTitle", comment: ""), style: .default, handler: handler))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("AlertCancelActionTitle", comment: ""), style: .cancel, handler: nil))
         return alert
     }
 }
