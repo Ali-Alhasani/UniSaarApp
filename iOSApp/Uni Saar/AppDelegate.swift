@@ -33,6 +33,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         UINavigationBar.appearance().tintColor = AppStyle.backNavgationTintColor
         UINavigationBar.appearance().standardAppearance = coloredAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = AppStyle.appGlobalTintColor
+
     }
 
     func setupNavigationBarColor2() {
@@ -41,6 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationBarAppearace.tintColor = AppStyle.backNavgationTintColor
         navigationBarAppearace.isTranslucent = false
         navigationBarAppearace.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = AppStyle.appGlobalTintColor
+
     }
     // MARK: UISceneSession Lifecycle
     @available(iOS 13.0, *)

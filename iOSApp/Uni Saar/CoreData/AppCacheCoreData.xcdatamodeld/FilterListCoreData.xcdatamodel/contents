@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="15702" systemVersion="19B88" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="16119" systemVersion="19E287" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="FilterLocationsCache" representedClassName="FilterLocationsCache" syncable="YES" codeGenerationType="class">
         <attribute name="locationID" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
@@ -20,6 +20,7 @@
     <entity name="MoreLinksCache" representedClassName="MoreLinksCache" syncable="YES" codeGenerationType="class">
         <attribute name="link" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="orderIndex" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" spotlightIndexingEnabled="YES"/>
     </entity>
     <entity name="NewsCategoriesCache" representedClassName="NewsCategoriesCache" syncable="YES" codeGenerationType="class">
         <attribute name="categoryID" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
@@ -29,8 +30,8 @@
     <elements>
         <element name="FilterLocationsCache" positionX="-54" positionY="18" width="128" height="73"/>
         <element name="FilterNoticesListCache" positionX="-63" positionY="-18" width="128" height="118"/>
-        <element name="MoreLinksCache" positionX="-54" positionY="27" width="128" height="73"/>
-        <element name="NewsCategoriesCache" positionX="-54" positionY="18" width="128" height="88"/>
         <element name="HelpfulNumberCache" positionX="-54" positionY="27" width="128" height="103"/>
+        <element name="MoreLinksCache" positionX="-54" positionY="27" width="128" height="88"/>
+        <element name="NewsCategoriesCache" positionX="-54" positionY="18" width="128" height="88"/>
     </elements>
 </model>

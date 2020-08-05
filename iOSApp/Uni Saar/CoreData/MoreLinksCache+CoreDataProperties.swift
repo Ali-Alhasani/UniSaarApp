@@ -1,14 +1,14 @@
 //
 //  MoreLinksCache+CoreDataProperties.swift
-//  Uni Saar
+//  
 //
-//  Created by Ali Al-Hasani on 1/22/20.
-//  Copyright © 2020 Ali Al-Hasani. All rights reserved.
+//  Created by Ali Al-Hasani on 7/27/20.
 //
 //
 
 import Foundation
 import CoreData
+
 
 extension MoreLinksCache {
 
@@ -16,7 +16,8 @@ extension MoreLinksCache {
         return NSFetchRequest<MoreLinksCache>(entityName: "MoreLinksCache")
     }
 
-    @NSManaged public var name: String?
     @NSManaged public var link: String?
+    @NSManaged public var name: String?
+    @NSManaged public var orderIndex: Int16
 
 }

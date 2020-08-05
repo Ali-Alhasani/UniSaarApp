@@ -12,7 +12,7 @@ class MoreLinksViewModel: ParentViewModel {
     let linksCells = Bindable([TableViewCellType<MoreLinksCellViewModel>]())
     lazy var fetchedResultsController: NSFetchedResultsController<MoreLinksCache> = {
         let fetchRequest = NSFetchRequest<MoreLinksCache>(entityName: String(describing: MoreLinksCache.self))
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "orderIndex", ascending: true)]
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
                                              sectionNameKeyPath: nil, cacheName: nil)
         return frc

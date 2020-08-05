@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 class DirectoryViewController: UIViewController {
     @IBOutlet weak var directoryTableView: UITableView! {
         didSet {
@@ -16,6 +15,8 @@ class DirectoryViewController: UIViewController {
             self.directoryTableView.refreshControl = refreshControl
         }
     }
+    @IBOutlet weak var helpfulContactsView: UIView!
+    @IBOutlet weak var outerView: UIView!
     // MARK: - Instance Properties
     lazy var directoryViewModel: DirectoryViewModel = DirectoryViewModel()
     let searchController = UISearchController(searchResultsController: nil)
@@ -25,7 +26,12 @@ class DirectoryViewController: UIViewController {
         setupTableView()
         bindViewModel()
         refershLoad()
+        observeKeyboardEvents()
         // Do any additional setup after loading the view.
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
     }
 
     func setupSearchBar() {
@@ -47,6 +53,7 @@ class DirectoryViewController: UIViewController {
         directoryTableView.delegate = self
         directoryTableView.dataSource = self
         directoryTableView.layoutTableView(withOutSeparator: false)
+        helpfulContactsView.setAsCircle(cornerRadius: 8)
     }
     func bindViewModel() {
         directoryViewModel.searchResutlsCells.bind { [weak self] _ in
@@ -99,14 +106,15 @@ class DirectoryViewController: UIViewController {
 extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearching {
+            self.directoryTableView.isHidden = false
+            self.outerView.isHidden = true
             return directoryViewModel.searchResutlsCells.value.count
         }
-        return directoryViewModel.helpfulNumbersCells.value.count
+        return 1
 
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
-        if isSearching {
             switch directoryViewModel.searchResutlsCells.value[safe: indexPath.row] {
             case .normal(let viewModel):
                 guard let cell = tableView.dequeueReusableCell(withIdentifier: StaffSearchResultTableViewCell.identifier, for: indexPath) as? StaffSearchResultTableViewCell else {
@@ -121,9 +129,6 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
             case .none:
                 return defaultCell
             }
-        } else {
-            return getHelpfulNumbersCell(indexPath: indexPath)
-        }
     }
     // move helpful numbers cell out to reduce function complexity
     func getHelpfulNumbersCell(indexPath: IndexPath) -> UITableViewCell {
@@ -164,12 +169,15 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
 extension DirectoryViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let searchBar = searchController.searchBar
+        self.outerView.isHidden = true
         if let searchText = searchBar.text, searchText.count >= 3 {
             directoryViewModel.loadGetSearchResults(searchQuery: searchText)
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         DispatchQueue.main.async {
+            self.directoryTableView.isHidden = true
+            self.outerView.isHidden = false
             self.directoryTableView.reloadData()
         }
     }
@@ -184,3 +192,18 @@ extension DirectoryViewController: UISearchBarDelegate {
 }
 
 extension DirectoryViewController: SingleButtonDialogPresenter { }
+extension DirectoryViewController {
+    private func observeKeyboardEvents() {
+        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil) { [weak self] (notification) in
+            guard let keyboardHeight = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+            print("Keyboard height in KeyboardWillShow method: \(keyboardHeight.height)")
+            self?.directoryTableView.contentInset.bottom = keyboardHeight.height
+            self?.directoryTableView.verticalScrollIndicatorInsets.bottom = keyboardHeight.height
+            }
+
+         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil) { [weak self] (notification) in
+             self?.directoryTableView.verticalScrollIndicatorInsets.bottom = 0
+             self?.directoryTableView.contentInset.bottom = 0
+         }
+    }
+}
