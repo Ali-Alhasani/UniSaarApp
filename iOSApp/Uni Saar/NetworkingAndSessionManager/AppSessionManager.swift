@@ -18,6 +18,8 @@ class AppSessionManager {
     var newsFiltersLastChanged: String?
     var morelinksLastChanged: String = "never"
     var helpfulNumbersLastChanged: String = "never"
+    var isFoodAlarmEnabled: Bool = false
+    var foodAlarmTime: Date?
     // to avoid fetchFilterListFromStorage more than one time in the run app run time
     var isMensaFiltersCacheFetched = false
     class var shared: AppSessionManager {
@@ -32,11 +34,13 @@ class AppSessionManager {
     static let newsFiltersLastChangedKey = "newsFiltersLastChanged"
     static let linksLastChangedKey = "linksLastChangedKey"
     static let helpfulNumbersLastChangedKey = "helpfulNumbersLastChanged"
+    static let foodAlarmStatusKey = "foodAlarmStatusKey"
+    static let foodAlarmTimeKey = "foodAlarmTimeKey"
 
 }
 // cache functions
 extension AppSessionManager {
-   class func saveWelcomeScreenStatus() {
+    class func saveWelcomeScreenStatus() {
         let skipWelcomeScreen =  AppSessionManager.shared.dismissWelcomeScreen
         UserDefaults.standard.set(skipWelcomeScreen, forKey: skipWelcomeScreenKey)
     }
@@ -71,11 +75,26 @@ extension AppSessionManager {
     }
 
     class func saveHelpfulNumberStatus() {
-          let helpfulNumbersLastChange =  AppSessionManager.shared.helpfulNumbersLastChanged
-          UserDefaults.standard.set(helpfulNumbersLastChange, forKey: helpfulNumbersLastChangedKey)
-      }
-      class func loadHelpfulNumberStatus() {
-          guard let tempType = UserDefaults.standard.value(forKey: helpfulNumbersLastChangedKey) as? String else {return}
-          AppSessionManager.shared.helpfulNumbersLastChanged = tempType
-      }
+        let helpfulNumbersLastChange =  AppSessionManager.shared.helpfulNumbersLastChanged
+        UserDefaults.standard.set(helpfulNumbersLastChange, forKey: helpfulNumbersLastChangedKey)
+    }
+    class func loadHelpfulNumberStatus() {
+        guard let tempType = UserDefaults.standard.value(forKey: helpfulNumbersLastChangedKey) as? String else {return}
+        AppSessionManager.shared.helpfulNumbersLastChanged = tempType
+    }
+    class func saveFoodAlarmStatus() {
+        let foodAlarmStatus =  AppSessionManager.shared.isFoodAlarmEnabled
+        UserDefaults.standard.set(foodAlarmStatus, forKey: foodAlarmStatusKey)
+
+        let foodAlarmTime =  AppSessionManager.shared.foodAlarmTime
+        UserDefaults.standard.set(foodAlarmTime, forKey: foodAlarmTimeKey)
+    }
+
+    class func loadFoodAlarmTime() {
+        let foodAlarmStatus =  UserDefaults.standard.value(forKey: foodAlarmStatusKey) as? Bool ?? false
+        AppSessionManager.shared.isFoodAlarmEnabled = foodAlarmStatus
+
+        let foodAlarmTime =  UserDefaults.standard.value(forKey: foodAlarmTimeKey) as? Date
+        AppSessionManager.shared.foodAlarmTime = foodAlarmTime
+    }
 }

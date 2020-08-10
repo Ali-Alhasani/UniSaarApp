@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import UserNotifications
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
@@ -21,6 +23,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // do iOS 12 specific window setup
             MediatorDelegate.configureRootViewController(window: window)
         }
+        UNUserNotificationCenter.current().delegate = self
+
         return true
     }
     @available(iOS 13.0, *)
@@ -69,5 +73,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppSessionManager.saveNewsfiltersStatus()
         AppSessionManager.saveMoreLinksStatus()
         AppSessionManager.saveHelpfulNumberStatus()
+        AppSessionManager.saveFoodAlarmStatus()
     }
+
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+          if let window = UIApplication.shared.keyWindow {
+              MediatorDelegate.navigateToMensaScreen(window: window)
+          }
+          // you must call the completion handler when you're done
+          completionHandler()
+      }
+
+      func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
+                                  withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+          NSLog("userNotificationCenter:willPresent")
+          //...
+          completionHandler([.alert])
+      }
 }

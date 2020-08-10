@@ -20,6 +20,7 @@ class CampusViewController: UIViewController {
         // Do any additional setup after loading the view.
         setUpSearchBar()
         mapRegion()
+        setupNotification()
     }
     // MARK: - Add methods
     func addOverlay() {
@@ -60,6 +61,10 @@ class CampusViewController: UIViewController {
         }
 
     }
+    func setupNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
+
+    }
     func loadCoordinates() -> [MapInfoModel] {
         if let data = dataFromFile("Campus_Map_Coord") {
             return CampusCoordinatesModel(data: data).mapInfo
@@ -73,6 +78,12 @@ class CampusViewController: UIViewController {
         //let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking]
         mapItem.name = selectedPin.title
         mapItem.openInMaps(launchOptions: nil)
+    }
+
+    @objc func updateCampus() {
+        DispatchQueue.main.async {
+            self.didChangeLocationFilter(selectedCampus: AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
+        }
     }
 
     // MARK: - Navigation
