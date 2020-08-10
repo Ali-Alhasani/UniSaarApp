@@ -11,12 +11,63 @@ import UIKit
 class SettingsViewController: UITableViewController {
 
     @IBOutlet weak var toggleSwitch: UISwitch!
-    @IBOutlet weak var timerPicker: UIDatePicker!
+    @IBOutlet weak var notificationTimeLabel: UILabel!
+    var selectedTime: Date? {
+        didSet {
+            AppSessionManager.shared.foodAlarmTime = selectedTime
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
-        setTheAlertTime()
-        timerPicker.addTarget(self, action: #selector(handleDatePicker), for: .valueChanged)
+        loadFoodAlarmStatus()
+
+        //setTheAlertTime()
         // Do any additional setup after loading the view.
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if AppSessionManager.shared.selectedCampus == Campus.saarbruken {
+            tableView.selectRow(at: IndexPath.init(row: 0, section: 1), animated: false, scrollPosition: .none)
+            if let cell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 1)) {
+                cell.accessoryType = .checkmark
+            }
+        } else {
+            tableView.selectRow(at: IndexPath.init(row: 1, section: 1), animated: false, scrollPosition: .none)
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        AppSessionManager.shared.isFoodAlarmEnabled = toggleSwitch?.isOn ?? false
+        AppSessionManager.saveFoodAlarmStatus()
+    }
+
+    func updateView() {
+        if let selectedTime = selectedTime {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "HH:mm"
+            let timeSting = dateFormatter.string(from: selectedTime)
+            notificationTimeLabel.text = "the daily notification time is " + timeSting
+        } else {
+            notificationTimeLabel.text = "the daily notification time is " + "11:15 AM"
+        }
+    }
+
+    func loadFoodAlarmStatus() {
+        AppSessionManager.loadFoodAlarmTime()
+        DispatchQueue.main.async {
+            self.toggleSwitch.isOn = AppSessionManager.shared.isFoodAlarmEnabled
+            self.updateTableView()
+            if let alarmSavedTime = AppSessionManager.shared.foodAlarmTime {
+                self.selectedTime = alarmSavedTime
+            }
+            self.updateView()
+        }
+    }
+
+    func saveFoodAlarmStatus() {
+        AppSessionManager.saveFoodAlarmStatus()
     }
     /*
      // MARK: - Navigation
@@ -37,50 +88,74 @@ class SettingsViewController: UITableViewController {
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
 
-    func setTheAlertTime() {
-        var components = DateComponents()
-        components.timeZone = TimeZone.current
-        components.hour = 11
-        components.minute = 0
-
-        //        let date = Date()
-        var calendar = Calendar.current
-        calendar.locale = Locale.current
-        calendar.timeZone = TimeZone.current
-        //        let monthInterval = calendar.dateInterval(of: .month, for: date)!
-        //        calendar.dateInterval(of: .month, for: date)!
-        //
-        //        calendar.dateComponents([.hour],
-        //                        from: monthInterval.start,
-        //                        to: monthInterval.end)
-        //        .hour // 744
-        let dateComponents = DateComponents(calendar: calendar, timeZone: .current, hour: 11, minute: 15, second: 0)
-        let formatedDate = calendar.date(from: dateComponents)
-        let string = "20:32 Wed, 30 Oct 2019"
-        let formatter4 = DateFormatter()
-        formatter4.dateFormat = "HH:mm E, d MMM y"
-        formatter4.timeZone = TimeZone.current
-        formatter4.locale = Locale.current
-        print(formatter4.date(from: string) ?? "Unknown date")
-
-        //        let dateString = "May 2, 2018 at 3:31 PM"
-        //
-        //        let dateFormatter = DateFormatter()
-        //        dateFormatter.dateFormat = "MMM dd, yyyy 'at' hh:mm a"
-        //        dateFormatter.timeZone = TimeZone(identifier: "UTC")
-        //        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        let date = formatter4.date(from: string)
-        if let date = date {
-            timerPicker.date = date
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) {
+            if indexPath.section == 1 && indexPath.row == 0 {
+                cell.accessoryType = .checkmark
+                AppSessionManager.shared.selectedCampus = Campus.saarbruken
+                notifyCampusView()
+            } else if indexPath.section == 1 && indexPath.row == 1 {
+                cell.accessoryType = .checkmark
+                AppSessionManager.shared.selectedCampus = Campus.homburg
+                notifyCampusView()
+            }
         }
     }
 
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        if let cell = tableView.cellForRow(at: indexPath) {
+            cell.accessoryType = .none
+        }
+    }
+
+    func notifyCampusView() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
+    }
+
+    //    func setTheAlertTime() {
+    //        var components = DateComponents()
+    //        components.timeZone = TimeZone.current
+    //        components.hour = 11
+    //        components.minute = 0
+    //
+    //        //        let date = Date()
+    //        var calendar = Calendar.current
+    //        calendar.locale = Locale.current
+    //        calendar.timeZone = TimeZone.current
+    //        //        let monthInterval = calendar.dateInterval(of: .month, for: date)!
+    //        //        calendar.dateInterval(of: .month, for: date)!
+    //        //
+    //        //        calendar.dateComponents([.hour],
+    //        //                        from: monthInterval.start,
+    //        //                        to: monthInterval.end)
+    //        //        .hour // 744
+    //        let dateComponents = DateComponents(calendar: calendar, timeZone: .current, hour: 11, minute: 15, second: 0)
+    //        let formatedDate = calendar.date(from: dateComponents)
+    //        let string = "20:32 Wed, 30 Oct 2019"
+    //        let formatter4 = DateFormatter()
+    //        formatter4.dateFormat = "HH:mm E, d MMM y"
+    //        formatter4.timeZone = TimeZone.current
+    //        formatter4.locale = Locale.current
+    //        print(formatter4.date(from: string) ?? "Unknown date")
+    //
+    //        //        let dateString = "May 2, 2018 at 3:31 PM"
+    //        //
+    //        //        let dateFormatter = DateFormatter()
+    //        //        dateFormatter.dateFormat = "MMM dd, yyyy 'at' hh:mm a"
+    //        //        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+    //        //        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+    //        let date = formatter4.date(from: string)
+    //        if let date = date {
+    //            timerPicker.date = date
+    //        }
+    //    }
+
     @IBAction func foodAlarmSwitch(_ sender: UISwitch) {
-        // to initiate smooth animation
-        updateTableView()
+        checkNotificationStatus()
     }
 
     func updateTableView() {
+        // to initiate smooth animation
         tableView.beginUpdates()
         tableView.endUpdates()
     }
@@ -92,6 +167,8 @@ class SettingsViewController: UITableViewController {
             } else if settings.authorizationStatus != .authorized {
                 self.updateSwitchButton()
                 self.notificationAlert()
+            } else {
+                self.updateSwitchButton(switchOn: true)
             }
         }
     }
@@ -100,6 +177,11 @@ class SettingsViewController: UITableViewController {
         DispatchQueue.main.async {
             self.toggleSwitch.isOn = switchOn
             self.updateTableView()
+            if switchOn {
+                self.scheduleNotification()
+            } else {
+                self.cancelNotification()
+            }
         }
     }
 
@@ -137,26 +219,53 @@ class SettingsViewController: UITableViewController {
         }
     }
 
-    @objc func handleDatePicker(_ datePicker: UIDatePicker) {
-        print("time ", datePicker.date)
-    }
-
     func scheduleNotification() {
         let center = UNUserNotificationCenter.current()
 
         let content = UNMutableNotificationContent()
-        content.title = "Late wake up call"
-        content.body = "The early bird catches the worm, but the second mouse gets the cheese."
+        content.title = "Today in Mensa"
+        content.body = "A complete meal and vegetarian meal and variety of free flow meals, check now.."
         content.categoryIdentifier = "alarm"
-        content.userInfo = ["customData": "fizzbuzz"]
         content.sound = UNNotificationSound.default
 
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        let someDateTime = formatter.date(from: "11:15")
+
+        let date = selectedTime ?? someDateTime ?? Date()
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
         var dateComponents = DateComponents()
-        dateComponents.hour = 10
-        dateComponents.minute = 30
+        dateComponents.hour = components.hour ?? 11
+        dateComponents.minute = components.minute ?? 15
+        dateComponents.timeZone = TimeZone.current
+        dateComponents.calendar = Calendar.current
         let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
 
-        let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+        let request = UNNotificationRequest(identifier: "MensaNotifcation", content: content, trigger: trigger)
         center.add(request)
+    }
+
+    func cancelNotification() {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: ["MensaNotifcation"])
+    }
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "toNotificationTime", let destinationViewController = segue.destination as? UINavigationController,
+            let topView = destinationViewController.topViewController as? NotificationTimeViewController {
+            topView.delegate = self
+            topView.selectedTime = selectedTime
+        }
+    }
+}
+
+extension SettingsViewController: NotificationTimeDelegate {
+    func selectedTime(time: Date) {
+        self.selectedTime = time
+        updateView()
+        cancelNotification()
+        scheduleNotification()
     }
 }

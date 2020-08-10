@@ -104,6 +104,60 @@
             </objects>
             <point key="canvasLocation" x="574" y="106"/>
         </scene>
+        <!--Notification time-->
+        <scene sceneID="M9x-yp-zDS">
+            <objects>
+                <viewController id="AWw-ma-Py4" customClass="NotificationTimeViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="y2I-F6-aJH">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="z3y-Rm-TjJ">
+                                <rect key="frame" x="8" y="134" width="414" height="216"/>
+                                <date key="date" timeIntervalSinceReferenceDate="618398100.849599">
+                                    <!--2020-08-06 09:15:00 +0000-->
+                                </date>
+                                <date key="minimumDate" timeIntervalSinceReferenceDate="-978289200">
+                                    <!--1970-01-01 05:00:00 +0000-->
+                                </date>
+                                <date key="maximumDate" timeIntervalSinceReferenceDate="1167602400">
+                                    <!--2037-12-31 22:00:00 +0000-->
+                                </date>
+                            </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick the notification time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="beV-wN-FBh">
+                                <rect key="frame" x="16" y="85" width="382" height="19.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="z3y-Rm-TjJ" firstAttribute="trailing" secondItem="OBe-MK-bWN" secondAttribute="trailing" constant="8" id="8Tt-r1-Xor"/>
+                            <constraint firstItem="beV-wN-FBh" firstAttribute="leading" secondItem="OBe-MK-bWN" secondAttribute="leading" constant="16" id="9p8-0l-7JS"/>
+                            <constraint firstItem="beV-wN-FBh" firstAttribute="top" secondItem="OBe-MK-bWN" secondAttribute="top" constant="29" id="Nwm-bE-V9P"/>
+                            <constraint firstItem="z3y-Rm-TjJ" firstAttribute="leading" secondItem="OBe-MK-bWN" secondAttribute="leading" constant="8" id="Rzl-Sl-5Rv"/>
+                            <constraint firstItem="OBe-MK-bWN" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="z3y-Rm-TjJ" secondAttribute="bottom" constant="16" id="Uqa-MJ-bUb"/>
+                            <constraint firstItem="OBe-MK-bWN" firstAttribute="trailing" secondItem="beV-wN-FBh" secondAttribute="trailing" constant="16" id="pD4-hQ-9Jb"/>
+                            <constraint firstItem="z3y-Rm-TjJ" firstAttribute="top" secondItem="beV-wN-FBh" secondAttribute="bottom" constant="29" id="pJ3-c8-erX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="OBe-MK-bWN"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Notification time" id="Vjm-je-jpL">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="h4F-GB-we5">
+                            <connections>
+                                <action selector="doneAction:" destination="AWw-ma-Py4" id="cmW-cO-dcH"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="timerPicker" destination="z3y-Rm-TjJ" id="Pyi-2q-PKW"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UlC-i2-fvA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-339.13043478260875" y="952.90178571428567"/>
+        </scene>
         <!--Settings-->
         <scene sceneID="3v1-zb-zru">
             <objects>
@@ -155,53 +209,47 @@
                                             <outlet property="valueSwitch" destination="zpf-IT-qkA" id="OyE-eY-KZS"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="140" id="FuO-Ud-2kt" customClass="FilterUISwitchTableViewCell" customModule="Uni_Saar" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="119.5" width="374" height="140"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="97" id="FuO-Ud-2kt" customClass="FilterUISwitchTableViewCell" customModule="Uni_Saar" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="119.5" width="374" height="97"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="FuO-Ud-2kt" id="7ni-yM-GQ6">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="140"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="343" height="97"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose the time of the daily notification" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibX-zX-xen">
-                                                    <rect key="frame" x="20" y="11" width="334" height="19.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="the daily notification is " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ibX-zX-xen">
+                                                    <rect key="frame" x="20" y="11" width="315" height="19.5"/>
                                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                                     <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1Su-BS-gQx">
-                                                    <rect key="frame" x="0.0" y="38.5" width="374" height="100"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="100" id="LPB-0w-Xei"/>
-                                                    </constraints>
-                                                    <date key="date" timeIntervalSinceReferenceDate="617879700.99126303">
-                                                        <!--2020-07-31 09:15:00 +0000-->
-                                                    </date>
-                                                    <date key="minimumDate" timeIntervalSinceReferenceDate="-978289200">
-                                                        <!--1970-01-01 05:00:00 +0000-->
-                                                    </date>
-                                                    <date key="maximumDate" timeIntervalSinceReferenceDate="1167519600">
-                                                        <!--2037-12-30 23:00:00 +0000-->
-                                                    </date>
-                                                </datePicker>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change Notification time" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PBn-yQ-Zfm">
+                                                    <rect key="frame" x="20" y="46.5" width="315" height="20.5"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="ibX-zX-xen" firstAttribute="top" secondItem="7ni-yM-GQ6" secondAttribute="topMargin" id="0wd-PR-ITv"/>
-                                                <constraint firstItem="1Su-BS-gQx" firstAttribute="leading" secondItem="7ni-yM-GQ6" secondAttribute="leading" id="90a-X5-YuT"/>
-                                                <constraint firstItem="1Su-BS-gQx" firstAttribute="top" secondItem="ibX-zX-xen" secondAttribute="bottom" constant="8" id="Apm-zH-Eqk"/>
-                                                <constraint firstAttribute="bottom" secondItem="1Su-BS-gQx" secondAttribute="bottom" constant="1.5" id="KRw-hv-9I0"/>
+                                                <constraint firstItem="PBn-yQ-Zfm" firstAttribute="trailing" secondItem="7ni-yM-GQ6" secondAttribute="trailingMargin" id="IGz-nl-3V0"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="ibX-zX-xen" secondAttribute="trailing" id="Nwa-OZ-hSx"/>
-                                                <constraint firstAttribute="trailing" secondItem="1Su-BS-gQx" secondAttribute="trailing" id="cIE-dB-gQY"/>
+                                                <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="PBn-yQ-Zfm" secondAttribute="bottom" constant="16" id="Tta-xL-yOO"/>
+                                                <constraint firstItem="PBn-yQ-Zfm" firstAttribute="top" secondItem="ibX-zX-xen" secondAttribute="bottom" constant="16" id="fdC-y8-8iN"/>
+                                                <constraint firstItem="PBn-yQ-Zfm" firstAttribute="leading" secondItem="7ni-yM-GQ6" secondAttribute="leadingMargin" id="pLH-mu-KCU"/>
                                                 <constraint firstItem="ibX-zX-xen" firstAttribute="leading" secondItem="7ni-yM-GQ6" secondAttribute="leadingMargin" id="u8z-Sc-R18"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <viewLayoutGuide key="safeArea" id="CA9-n9-hf9"/>
+                                        <connections>
+                                            <segue destination="Gqf-Cs-a3x" kind="presentation" identifier="toNotificationTime" id="afq-95-swG"/>
+                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
                             <tableViewSection headerTitle="Campus Location" id="37I-ew-bj2">
                                 <cells>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="gdx-oF-70Z">
-                                        <rect key="frame" x="20" y="315.5" width="374" height="43.5"/>
+                                        <rect key="frame" x="20" y="272.5" width="374" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gdx-oF-70Z" id="dem-q3-mnb">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
@@ -223,7 +271,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="NUA-f7-l7w">
-                                        <rect key="frame" x="20" y="359" width="374" height="43.5"/>
+                                        <rect key="frame" x="20" y="316" width="374" height="43.5"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="NUA-f7-l7w" id="4EI-OL-3Ah">
                                             <rect key="frame" x="0.0" y="0.0" width="374" height="43.5"/>
@@ -254,13 +302,13 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Settings" id="Ihi-Xt-X88"/>
                     <connections>
-                        <outlet property="timerPicker" destination="1Su-BS-gQx" id="Bwf-xl-fhp"/>
+                        <outlet property="notificationTimeLabel" destination="ibX-zX-xen" id="dDd-c4-3y1"/>
                         <outlet property="toggleSwitch" destination="zpf-IT-qkA" id="S4X-2I-aiP"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qHh-Tj-LTd" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-320.28985507246381" y="938.83928571428567"/>
+            <point key="canvasLocation" x="705.79710144927537" y="869.86607142857144"/>
         </scene>
         <!--About App-->
         <scene sceneID="AcD-nI-8Qr">
@@ -344,7 +392,25 @@ ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QMo-1S-vot" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="708.69565217391312" y="897.99107142857133"/>
+            <point key="canvasLocation" x="1618.840579710145" y="897.99107142857133"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="XX3-pu-SgB">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Gqf-Cs-a3x" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="MFL-LT-PHF">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="AWw-ma-Py4" kind="relationship" relationship="rootViewController" id="Hgy-yT-fBI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mNv-pg-fcR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1249.2753623188407" y="952.90178571428567"/>
         </scene>
     </scenes>
     <resources>
