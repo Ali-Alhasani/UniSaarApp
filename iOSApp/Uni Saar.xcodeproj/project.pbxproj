@@ -58,6 +58,7 @@
 		6B2818B8239F3DDB008389D6 /* MensaDateHeaderSectionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818B6239F3DDB008389D6 /* MensaDateHeaderSectionTableViewCell.swift */; };
 		6B2818B9239F3DDB008389D6 /* MensaDateHeaderSectionTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B2818B7239F3DDB008389D6 /* MensaDateHeaderSectionTableViewCell.xib */; };
 		6B2818C123A05647008389D6 /* MensaLocationsInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818C023A05646008389D6 /* MensaLocationsInfoViewController.swift */; };
+		6B4091CB24DC2F310049C851 /* NotificationTimeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4091CA24DC2F310049C851 /* NotificationTimeViewController.swift */; };
 		6B4302ED23D9216700D21877 /* HelpfulNumbersModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4302EC23D9216700D21877 /* HelpfulNumbersModel.swift */; };
 		6B4302F023D92A9B00D21877 /* HelpfulNumbersTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4302EE23D92A9B00D21877 /* HelpfulNumbersTableViewCell.swift */; };
 		6B4302F123D92A9B00D21877 /* HelpfulNumbersTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B4302EF23D92A9B00D21877 /* HelpfulNumbersTableViewCell.xib */; };
@@ -70,6 +71,7 @@
 		6B7B618823A060D700A77F90 /* FilterMensaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7B618723A060D700A77F90 /* FilterMensaViewController.swift */; };
 		6B7CFE0823AAE5B0002613D3 /* FilterMensaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7CFE0723AAE5B0002613D3 /* FilterMensaViewModel.swift */; };
 		6B80BDD924AE104100553484 /* HelpfulContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B80BDD824AE104100553484 /* HelpfulContactsViewController.swift */; };
+		6B908BE324D576C2000EE5AF /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B908BE224D576C2000EE5AF /* UIApplication.swift */; };
 		6BA48E1723C8A102009D32F8 /* DirectoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA48E1623C8A102009D32F8 /* DirectoryViewModel.swift */; };
 		6BA48E1A23C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA48E1823C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift */; };
 		6BA48E1B23C8AD2A009D32F8 /* StaffSearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BA48E1923C8AD2A009D32F8 /* StaffSearchResultTableViewCell.xib */; };
@@ -200,6 +202,7 @@
 		6B2818B6239F3DDB008389D6 /* MensaDateHeaderSectionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaDateHeaderSectionTableViewCell.swift; sourceTree = "<group>"; };
 		6B2818B7239F3DDB008389D6 /* MensaDateHeaderSectionTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MensaDateHeaderSectionTableViewCell.xib; sourceTree = "<group>"; };
 		6B2818C023A05646008389D6 /* MensaLocationsInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaLocationsInfoViewController.swift; sourceTree = "<group>"; };
+		6B4091CA24DC2F310049C851 /* NotificationTimeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTimeViewController.swift; sourceTree = "<group>"; };
 		6B4302EC23D9216700D21877 /* HelpfulNumbersModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpfulNumbersModel.swift; sourceTree = "<group>"; };
 		6B4302EE23D92A9B00D21877 /* HelpfulNumbersTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpfulNumbersTableViewCell.swift; sourceTree = "<group>"; };
 		6B4302EF23D92A9B00D21877 /* HelpfulNumbersTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HelpfulNumbersTableViewCell.xib; sourceTree = "<group>"; };
@@ -216,6 +219,7 @@
 		6B7B618723A060D700A77F90 /* FilterMensaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMensaViewController.swift; sourceTree = "<group>"; };
 		6B7CFE0723AAE5B0002613D3 /* FilterMensaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMensaViewModel.swift; sourceTree = "<group>"; };
 		6B80BDD824AE104100553484 /* HelpfulContactsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpfulContactsViewController.swift; sourceTree = "<group>"; };
+		6B908BE224D576C2000EE5AF /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		6BA48E1623C8A102009D32F8 /* DirectoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewModel.swift; sourceTree = "<group>"; };
 		6BA48E1823C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		6BA48E1923C8AD2A009D32F8 /* StaffSearchResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StaffSearchResultTableViewCell.xib; sourceTree = "<group>"; };
@@ -450,6 +454,7 @@
 				6B2818A1239DCF4E008389D6 /* SingleButtonAlert.swift */,
 				6B2818B4239F10CE008389D6 /* UICollectionView.swift */,
 				6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */,
+				6B908BE224D576C2000EE5AF /* UIApplication.swift */,
 			);
 			path = Supportive;
 			sourceTree = "<group>";
@@ -643,6 +648,7 @@
 				6BF1CA2023A3F31100A514CB /* MoreLinksDetailsViewController.swift */,
 				6BF1CA1C23A3F2D700A514CB /* SettingsViewController.swift */,
 				6BF1CA1E23A3F2F100A514CB /* AboutAppViewController.swift */,
+				6B4091CA24DC2F310049C851 /* NotificationTimeViewController.swift */,
 			);
 			path = MoreViewControllers;
 			sourceTree = "<group>";
@@ -1003,6 +1009,7 @@
 				6BF1CA1D23A3F2D700A514CB /* SettingsViewController.swift in Sources */,
 				6B06D6FC239C47F800A0F02F /* UIViewController.swift in Sources */,
 				6B0F261C2396A417002E587E /* DirectoryViewController.swift in Sources */,
+				6B908BE324D576C2000EE5AF /* UIApplication.swift in Sources */,
 				6BA48E1723C8A102009D32F8 /* DirectoryViewModel.swift in Sources */,
 				6BFB587523D9022D00B69C4A /* RememberingTabBarController.swift in Sources */,
 				6BBC9D6E23AA4ADD009CD435 /* UIButton.swift in Sources */,
@@ -1036,6 +1043,7 @@
 				6B0F26222396D20E002E587E /* DataClient.swift in Sources */,
 				6B4302F023D92A9B00D21877 /* HelpfulNumbersTableViewCell.swift in Sources */,
 				6B0F26202396D1E2002E587E /* APIClient.swift in Sources */,
+				6B4091CB24DC2F310049C851 /* NotificationTimeViewController.swift in Sources */,
 				6B214322239BC2D800E8958F /* NewsFeedTableViewCell.swift in Sources */,
 				6BBC9D7223AA5D52009CD435 /* SetupPrivacyViewController.swift in Sources */,
 				6BACBA68239B1C80003A532B /* NewsFeedModel.swift in Sources */,

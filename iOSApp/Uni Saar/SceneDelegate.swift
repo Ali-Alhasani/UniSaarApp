@@ -51,6 +51,31 @@ class MediatorDelegate: UIResponder {
         window?.makeKeyAndVisible()
     }
 
+    static func navigateToMensaScreen(window: UIWindow?) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let mainTabBarController = storyboard.instantiateViewController(withIdentifier: "mainTabBar") as? UITabBarController
+        mainTabBarController?.selectedIndex = 2
+        // custom customization for macOs by replacing the bottom tab bar with top toolbar
+        #if targetEnvironment(macCatalyst)
+        if let windowScene =  window?.windowScene {
+            MediatorDelegate.window = window
+            if let titlebar = windowScene.titlebar {
+                let toolbar = NSToolbar(identifier: "testToolbar")
+                //hide tab bar in macOs app
+                mainTabBarController?.tabBar.isHidden = true
+                toolbar.delegate = MediatorDelegate.sceneDelegate
+                toolbar.allowsUserCustomization = true
+                toolbar.centeredItemIdentifier = NSToolbarItem.Identifier(rawValue: "tabBarReplacement")
+                titlebar.titleVisibility = .hidden
+
+                titlebar.toolbar = toolbar
+            }
+        }
+        #endif
+        window?.rootViewController = mainTabBarController
+        window?.makeKeyAndVisible()
+    }
+
 }
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
