@@ -5,8 +5,9 @@ from datetime import datetime
 import threading
 import smtplib
 from email.message import EmailMessage
-from source.Constants import MENSA_UPDATE_THRESHOLD, MAP_UPDATE_THRESHOLD, NEWSFEED_UPDATE_THRESHOLD, \
-    HELPFUL_NUMBERS_THRESHOLD, SERVER_ADDRESS, SERVER_PORT, ERROR_SLEEP_INT
+from source.Constants import MENSA_UPDATE_THRESHOLD_WORKING_HOURS, MAP_UPDATE_THRESHOLD, NEWSFEED_UPDATE_THRESHOLD, \
+    HELPFUL_NUMBERS_THRESHOLD, SERVER_ADDRESS, SERVER_PORT, ERROR_SLEEP_INT, MAX_RETRY_BEFORE_LONG_WAIT, \
+    ERROR_LONG_SLEEP, MENSA_UPDATE_THRESHOLD_NIGHT
 import time
 import argparse
 
@@ -31,17 +32,27 @@ class UpdateMensaThread(threading.Thread):
         self.verbose = verbose
 
     def run(self):
+        unsuccesfulTries = 0
         while True:
             try:
                 self.server.updateMensa()
             except Exception as e:
+                unsuccesfulTries = unsuccesfulTries + 1
                 reportError(e, "mensa")
-                time.sleep(ERROR_SLEEP_INT)
+                if unsuccesfulTries > MAX_RETRY_BEFORE_LONG_WAIT:
+                    time.sleep(ERROR_LONG_SLEEP)
+                else:
+                    time.sleep(ERROR_SLEEP_INT)
                 continue
+            unsuccesfulTries = 0
             if self.verbose:
                 now = datetime.now()
                 print(str(now) + ': updated mensa')
-            time.sleep(MENSA_UPDATE_THRESHOLD.total_seconds())
+            h = datetime.now().hour
+            if h < 8 or h > 20:
+                time.sleep(MENSA_UPDATE_THRESHOLD_NIGHT.total_seconds())
+            else:
+                time.sleep(MENSA_UPDATE_THRESHOLD_WORKING_HOURS.total_seconds())
 
 
 class UpdateNewsFeedThread(threading.Thread):
@@ -51,12 +62,17 @@ class UpdateNewsFeedThread(threading.Thread):
         self.verbose = verbose
 
     def run(self):
+        unsuccesfulTries = 0
         while True:
             try:
                 self.server.updateNewsFeed()
             except Exception as e:
+                unsuccesfulTries = unsuccesfulTries + 1
                 reportError(e, "newsfeed")
-                time.sleep(ERROR_SLEEP_INT)
+                if unsuccesfulTries > MAX_RETRY_BEFORE_LONG_WAIT:
+                    time.sleep(ERROR_LONG_SLEEP)
+                else:
+                    time.sleep(ERROR_SLEEP_INT)
                 continue
             if self.verbose:
                 now = datetime.now()

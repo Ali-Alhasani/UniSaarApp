@@ -63,11 +63,14 @@ DIRECTORY_IMAGE_BASE_LINK = 'http://' + SERVER_ADDRESS + ':' + str(SERVER_PORT) 
 MORE_LINKS_LOCATION = abspath(join('source', 'links_for_more_tab'))
 
 # Update intervals
-NEWSFEED_UPDATE_INTERVAL_IN_SECONDS = timedelta(minutes=30)
-MENSA_UPDATE_THRESHOLD = timedelta(minutes=15)
-NEWSFEED_UPDATE_THRESHOLD = timedelta(minutes=30)
+NEWSFEED_UPDATE_INTERVAL_IN_SECONDS = timedelta(minutes=60)
+MENSA_UPDATE_THRESHOLD_WORKING_HOURS = timedelta(minutes=15)
+MENSA_UPDATE_THRESHOLD_NIGHT = timedelta(minutes=90)
+NEWSFEED_UPDATE_THRESHOLD = timedelta(minutes=60)
 MAP_UPDATE_THRESHOLD = timedelta(hours=1)
 HELPFUL_NUMBERS_THRESHOLD = timedelta(hours=1)
 
 # sleep interval in seconds in case of errors
-ERROR_SLEEP_INT = 5
+ERROR_SLEEP_INT = 10
+MAX_RETRY_BEFORE_LONG_WAIT = 5
+ERROR_LONG_SLEEP = 30*60
