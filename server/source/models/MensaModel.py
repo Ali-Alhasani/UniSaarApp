@@ -1,7 +1,7 @@
 from datetime import datetime
 from collections import Counter as CollectionCounter
 from source.ReadWriteLock import RWLock
-from source.Constants import MENSA_UPDATE_THRESHOLD
+from source.Constants import MENSA_UPDATE_THRESHOLD_WORKING_HOURS
 
 mensaLock = RWLock()
 
@@ -25,7 +25,7 @@ class MensaModel:
         self.mealDictionary = {}
         self.locationInfoDictionary = {}
         self.lastUpdated = None
-        self.UPDATE_THRESHOLD = MENSA_UPDATE_THRESHOLD
+        self.UPDATE_THRESHOLD = MENSA_UPDATE_THRESHOLD_WORKING_HOURS
         self.filtersLastChanged = {}
 
     def update(self, baseData: dict, menuData: dict, language: str, updateTime: datetime = None):
