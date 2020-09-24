@@ -237,11 +237,11 @@ class NetworkManager:
             splitLink = link.split('/')
             name = splitLink[len(splitLink) - 1]
             names.append(folder + name)
-            if not path.exists(folder + name):
-                pdf, _ = self._fetchExternalData(scheme=self._AC_SCHEME, authority=self._AC_AUTHORITY,
-                                                 path=link, byte=True)
-                with open(folder + name, 'wb') as f:
-                    f.write(pdf)
+            #if not path.exists(folder + name):
+            pdf, _ = self._fetchExternalData(scheme=self._AC_SCHEME, authority=self._AC_AUTHORITY,
+                                            path=link, byte=True)
+            with open(folder + name, 'wb') as f:
+                f.write(pdf)
         return names
 
 
