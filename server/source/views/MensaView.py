@@ -40,7 +40,21 @@ def weekdayToString(day: int, language: str) -> str:
             return 'Saturday'
         elif day == 6:
             return 'Sunday'
-
+    elif language == 'fr':
+        if day == 0:
+            return 'Lundi'
+        elif day == 1:
+            return 'Mardi'
+        elif day == 2:
+            return 'Mercredi'
+        elif day == 3:
+            return 'Jeudi'
+        elif day == 4:
+            return 'Vendredi'
+        elif day == 5:
+            return 'Samedi'
+        elif day == 6:
+            return 'Dimanche'
 
 class MensaView:
 
