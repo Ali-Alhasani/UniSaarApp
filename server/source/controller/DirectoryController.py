@@ -2,7 +2,7 @@ from os.path import isfile, join
 from os import listdir
 from datetime import datetime
 from source.networking.NetworkManager import NetworkManager
-from source.parsers.DirectoryParser import DirectoryParser
+from source.parsers.DirectoryParser import DirectoryParser, UnspecificSearchQueryException
 from source.views.DirectoryView import DirectoryView
 from source.models.DirectoryModel import DirectoryCache, SearchItem, hasPage, createSecretPerson, HelpfulNumberModel
 from source.Constants import HELPFUL_NUMBERS_PATH, DIRECTORY_IMAGE_PATH
@@ -71,27 +71,32 @@ class DirectoryController:
 
                 # get all combinations of search queries, request and parse the results and add them to the search item
                 comb = splitSearchQuery(searchQuery)
+                try:
+                    for firstname, lastname in comb:
+                        p = 0
+                        while(True):
+                            # Get results from page p
+                            searchResultHTML = self._networkManager.fetchDirectorySearchResults(firstname=firstname,
+                                                                                                lastname=lastname,
+                                                                                                page=p, pageSize=100)
 
-                for firstname, lastname in comb:
-                    p = 0
-                    while(True):
-                        # Get results from page p
-                        searchResultHTML = self._networkManager.fetchDirectorySearchResults(firstname=firstname,
-                                                                                            lastname=lastname,
-                                                                                            page=p, pageSize=100)
+                            searchResultList, resultCount = \
+                                self._directoryParser.parseWebpageForPIDs(webpage=searchResultHTML)
 
-                        searchResultList, resultCount = \
-                            self._directoryParser.parseWebpageForPIDs(webpage=searchResultHTML)
+                            # Add the results from page p to the searchItem
+                            if searchResultList is not None:
+                                searchItem.update(results=searchResultList)
 
-                        # Add the results from page p to the searchItem
-                        if searchResultList is not None:
-                            searchItem.update(results=searchResultList)
+                            # Increase p and check if there is a next page. If not, break
+                            p += 1
 
-                        # Increase p and check if there is a next page. If not, break
-                        p += 1
-
-                        if not hasPage(page=p, pageSize=100, itemCount=resultCount):
-                            break
+                            if not hasPage(page=p, pageSize=100, itemCount=resultCount):
+                                break
+                except UnspecificSearchQueryException as e:
+                    e.query = searchQuery
+                    return self._directoryView.showSearchResults(searchResultList=None,
+                                                             itemCount=0,
+                                                             hasNextPage=False)
 
                 # sort the search item
                 searchItem.sortResults()

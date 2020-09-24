@@ -112,7 +112,8 @@ class DirectoryParser:
         # to distinguish this case, look for the h1 tag's content
         if soup.find(name='h1').string in ['Bitte geben Sie mehr Suchbegriffe ein',
                                            'Bitte spezifizieren Sie Ihre Suchanfrage']:
-            return None, 0
+            raise UnspecificSearchQueryException('')
+            #return None, 0
 
         # Get the number of search results
         # We assume that there is only one div tag with css-class 'InfoLeiste'
@@ -239,3 +240,7 @@ class DirectoryParser:
 
         return helpfulNumbersData['language'], helpfulNumbers
 
+
+class UnspecificSearchQueryException(Exception):
+    def __init__(self, query):
+        self.query = query
