@@ -11,6 +11,7 @@ import MapKit
 
 protocol HandleMapSearch: class {
     func dropPinZoomIn(placemark: MapPin)
+    func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool)
 }
 class BuildingSearchTableViewController: UITableViewController {
     weak var handleMapSearchDelegate: HandleMapSearch?
@@ -60,6 +61,9 @@ extension BuildingSearchTableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedItem = matchingItems[indexPath.row]
+        if selectedItem.campus !=  AppSessionManager.shared.selectedCampus {
+            handleMapSearchDelegate?.didChangeLocationFilter(selectedCampus: selectedItem.campus ??  AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
+        }
         if let latitude = CLLocationDegrees(selectedItem.latitude), let longitude = CLLocationDegrees(selectedItem.longitude) {
             let coordinate2D = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
             let annotation = MapPin(coordinate: coordinate2D, title: selectedItem.name, subtitle: selectedItem.function, campus: selectedItem.campus)

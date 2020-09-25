@@ -8,14 +8,27 @@
 
 import Foundation
 import CoreData
+import NotificationCenter
 class FilterMensaViewModel: ParentViewModel {
     // MARK: - Object Lifecycle
     let didUpdatefilterList: Bindable = Bindable(false)
+    let didUpdateFoodAlarmStatus: Bindable = Bindable(false)
     var isFilterdCacheUpdated: Bool = false
-
-    enum Filter: Int, CaseIterable {
-        case location, empty, allergenList
+    var isFoodAlarmEnabled: Bool = false {
+        didSet {
+            AppSessionManager.shared.isFoodAlarmEnabled = isFoodAlarmEnabled
+        }
     }
+    var selectedAlramTime: Bindable = Bindable<Date?>(nil) {
+        didSet {
+            AppSessionManager.shared.foodAlarmTime = selectedAlramTime.value
+        }
+    }
+    enum Filter: Int, CaseIterable {
+        case location, foodAlram, empty, allergenList
+    }
+    // value 7 and 1 for Saturday and Sunday.
+    let workingDays = [2, 3, 4, 5, 6]
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
@@ -24,6 +37,7 @@ class FilterMensaViewModel: ParentViewModel {
     //private var fetchedRC: NSFetchedResultsController<FilterNoticesListCache>!
     func loadGetFilterList() {
         showLoadingIndicator.value = true
+        loadFoodAlarmStatus()
         if isFilterdCacheUpdated { // check if the filter date has not been updated from the server
             if !AppSessionManager.shared.isMensaFiltersCacheFetched { //  check if the cache date has not been fetched yet from the core date in this session
                 //
@@ -69,6 +83,9 @@ class FilterMensaViewModel: ParentViewModel {
                 FilterElement(filterName: $0.name ?? "", filterID: $0.noticeID ?? "", isSelected: $0.isSelected) } ?? []
         case .empty:
             return []
+        case .foodAlram:
+            return [FilterElement(filterName: NSLocalizedString("EnableFoodAlarm", comment: "") ,
+                                  filterID: "1", isSelected: isFoodAlarmEnabled), FilterElement(filterName: "", filterID: "2", isSelected: false)]
         }
     }
 
@@ -90,7 +107,92 @@ class FilterMensaViewModel: ParentViewModel {
         return intersectionNotices
     }
 }
+extension FilterMensaViewModel {
+    func scheduleNotification() {
+        let center = UNUserNotificationCenter.current()
 
+        let content = UNMutableNotificationContent()
+        content.title = NSLocalizedString("TodayMensa", comment: "")
+        content.body = NSLocalizedString("NotificationBody", comment: "")
+        content.categoryIdentifier = "alarm"
+        content.sound = UNNotificationSound.default
+
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        let someDateTime = formatter.date(from: "11:15")
+
+        for dayValue in workingDays {
+            let date = selectedAlramTime.value ?? someDateTime ?? Date()
+            let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+            var dateComponents = DateComponents()
+            dateComponents.hour = components.hour ?? 11
+            dateComponents.minute = components.minute ?? 15
+            dateComponents.timeZone = TimeZone.current
+            dateComponents.weekday = dayValue
+            dateComponents.calendar = Calendar.current
+            let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
+            let request = UNNotificationRequest(identifier: "MensaNotifcation\(dayValue)", content: content, trigger: trigger)
+            center.add(request)
+        }
+
+    }
+
+    func cancelNotification() {
+        let center = UNUserNotificationCenter.current()
+        var notificationNames = ["MensaNotifcation"]
+        for dayValue in workingDays {
+            notificationNames.append("MensaNotifcation\(dayValue)")
+        }
+        center.removePendingNotificationRequests(withIdentifiers: notificationNames)
+    }
+
+    func checkNotificationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            if settings.authorizationStatus == .notDetermined {
+                self.enableNotification()
+                self.updateSwitchButton()
+            } else if settings.authorizationStatus != .authorized {
+                self.updateSwitchButton()
+                self.notificationAlert()
+            } else {
+                self.updateSwitchButton(switchOn: true)
+            }
+        }
+    }
+
+    func updateSwitchButton(switchOn: Bool = false) {
+        DispatchQueue.main.async {
+            self.didUpdateFoodAlarmStatus.value = switchOn
+            self.isFoodAlarmEnabled = switchOn
+            if switchOn {
+                self.scheduleNotification()
+            } else {
+                self.cancelNotification()
+            }
+        }
+    }
+
+    func enableNotification() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+            if success {
+                self.updateSwitchButton(switchOn: true)
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func notificationAlert() {
+        self.showError(error: LLError(status: true, message: NSLocalizedString("enableNotification", comment: "")))
+    }
+
+    func loadFoodAlarmStatus() {
+        self.isFoodAlarmEnabled = AppSessionManager.shared.isFoodAlarmEnabled
+        if let alarmSavedTime = AppSessionManager.shared.foodAlarmTime {
+            self.selectedAlramTime.value = alarmSavedTime
+        }
+    }
+}
 class FilterLocationCellViewModel {
     // MARK: - Instance Properties
     var locationsText = [FilterElement]()

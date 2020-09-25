@@ -37,27 +37,63 @@ class FilterMensaViewController: UIViewController {
         filterMensaViewModel.loadGetFilterList()
 
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+           super.viewWillDisappear(animated)
+           AppSessionManager.shared.foodAlarmTime = filterMensaViewModel.selectedAlramTime.value
+           AppSessionManager.saveFoodAlarmStatus()
+    }
     func setupTableView() {
         filterTableView.register(FilterUISwitchTableViewCell.nib, forCellReuseIdentifier: FilterUISwitchTableViewCell.identifier)
+        filterTableView.register(MensaNotificationTableViewCell.nib, forCellReuseIdentifier: MensaNotificationTableViewCell.identifier)
         filterTableView.delegate = self
         filterTableView.dataSource = self
         filterTableView.layoutTableView()
         self.view.backgroundColor = UIColor.flatGray
     }
     func bindViewModel() {
+        AppSessionManager.loadFoodAlarmTime()
 
         filterMensaViewModel.didUpdatefilterList.bind { [weak self] _ in
             if let `self` = self {
-                self.filterTableView.reloadData()
+                DispatchQueue.main.async {
+                    self.filterTableView.reloadData()
+                }
             }
         }
         filterMensaViewModel.onShowError = { [weak self] alert in
-            self?.presentSingleButtonDialog(alert: alert)
+            DispatchQueue.main.async {
+                self?.presentSingleButtonDialog(alert: alert)
+            }
         }
         filterMensaViewModel.showLoadingIndicator.bind { [weak self] visible in
             if let `self` = self {
+
                 visible ? self.filterTableView.showingLoadingView() : self.filterTableView.hideLoadingView()
             }
+        }
+        filterMensaViewModel.didUpdateFoodAlarmStatus.bind { [weak self] _ in
+            if let `self` = self {
+                if self.filterMensaViewModel.didUpdateFoodAlarmStatus.value {
+                    DispatchQueue.main.async {
+                        self.updateTableView()
+                    }
+                } else {
+                    self.reloadFoodAlramSection()
+                }
+            }
+        }
+        filterMensaViewModel.selectedAlramTime.bind {[weak self] _ in
+            if let `self` = self {
+                self.reloadFoodAlramSection()
+            }
+        }
+
+    }
+
+    func reloadFoodAlramSection() {
+        DispatchQueue.main.async {
+            self.filterTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
         }
     }
     @objc private func refershLoad() {
@@ -96,6 +132,20 @@ class FilterMensaViewController: UIViewController {
     func dismissView() {
         self.dismiss(animated: true, completion: nil)
     }
+    // MARK: - Navigation
+    internal struct SegueIdentifiers {
+        static let toNotificationTime = "NotificationTime"
+    }
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == SegueIdentifiers.toNotificationTime,
+            let destinationViewController = segue.destination as? NotificationTimeViewController {
+            destinationViewController.selectedTime = filterMensaViewModel.selectedAlramTime.value
+            destinationViewController.delegate = self
+        }
+    }
 }
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource {
@@ -122,7 +172,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
                 let items = filterMensaViewModel.filterList(for: priority)
                 let item = items[safe: indexPath.row]
                 allergenCell?.cellTitle = item?.filterName
-                allergenCell?.indexPath = indexPath.row
+                allergenCell?.indexPath = indexPath
                 allergenCell?.switchValue = item?.isSelected
                 allergenCell?.mensaDelegate = self
                 // the default cell selection is cancelled, to avoid conflicts touch interaction with the switch button
@@ -130,6 +180,21 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
                 return allergenCell ?? cell
             case .empty:
                 return cell
+            case .foodAlram:
+                let items = filterMensaViewModel.filterList(for: priority)
+                let item = items[safe: indexPath.row]
+                if item?.filterID == "1" {
+                    let alramCell = tableView.dequeueReusableCell(withIdentifier: FilterUISwitchTableViewCell.identifier, for: indexPath) as?  FilterUISwitchTableViewCell
+                    alramCell?.cellTitle = item?.filterName
+                    alramCell?.indexPath = indexPath
+                    alramCell?.switchValue = item?.isSelected
+                    alramCell?.mensaDelegate = self
+                    return alramCell ?? cell
+                } else {
+                    let alramCell = tableView.dequeueReusableCell(withIdentifier: MensaNotificationTableViewCell.identifier, for: indexPath) as?  MensaNotificationTableViewCell
+                    alramCell?.notificationSelectedTime = filterMensaViewModel.selectedAlramTime.value
+                    return alramCell ?? cell
+                }
             }
         }
         return cell
@@ -147,6 +212,8 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
                 title = NSLocalizedString("WarnMeAbout", comment: "")
             case .allergenList:
                 break
+            case .foodAlram:
+                title = NSLocalizedString("MensaNotifications", comment: "")
             }
         }
         return title
@@ -160,6 +227,8 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
             case .empty:
                 title = NSLocalizedString("HighlightAllergens", comment: "")
             case .allergenList:
+                break
+            case .foodAlram:
                 break
             }
         }
@@ -181,25 +250,68 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
                 }
                 actionAfterChangeCampus()
             }
-        }
-    }
-}
-extension FilterMensaViewController: SingleButtonDialogPresenter { }
-extension FilterMensaViewController: MensaFilterCellDelegate {
-    func didSwitchOnFilter(indexPath: Int?) {
-        if let indexPath = indexPath {
-            //filterMensaViewModel.filterList.value.noticesText[indexPath].isSelected = true
-            let noticeEntry = Cache.shared.fetchedResultsController.object(at: IndexPath(item: indexPath, section: 0))
-            let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: noticeEntry.objectID) as? FilterNoticesListCache
-            childEntry?.isSelected = true
+        } else if indexPath.section == 1, indexPath.row == 1 {
+            self.performSegue(withIdentifier: SegueIdentifiers.toNotificationTime, sender: self)
         }
     }
 
-    func didSwitchOffFilter(indexPath: Int?) {
-        if let indexPath = indexPath {
-            let noticeEntry = Cache.shared.fetchedResultsController.object(at: IndexPath(item: indexPath, section: 0))
-            let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: noticeEntry.objectID) as? FilterNoticesListCache
-            childEntry?.isSelected = false
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+
+        if indexPath.section == 1 && indexPath.row == 1 && filterMensaViewModel.isFoodAlarmEnabled == false {
+            return 0.0  // collapsed
         }
+        // expanded with row height of parent
+        //return tableView(filterTableView, heightForRowAt: indexPath)
+        return getDefultHieght(indexPath, tableview: tableView)
+    }
+
+    func getDefultHieght(_ indexPath: IndexPath, tableview: UITableView) -> CGFloat {
+        return tableview.rowHeight
+    }
+
+}
+extension FilterMensaViewController: SingleButtonDialogPresenter { }
+extension FilterMensaViewController: MensaFilterCellDelegate {
+    func didSwitchOnFilter(indexPath: IndexPath?) {
+        if let indexPath = indexPath {
+            if indexPath.section == 1 {
+                filterMensaViewModel.checkNotificationStatus()
+            } else {
+                //filterMensaViewModel.filterList.value.noticesText[indexPath].isSelected = true
+                let noticeEntry = Cache.shared.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
+                let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: noticeEntry.objectID) as? FilterNoticesListCache
+                childEntry?.isSelected = true
+            }
+        }
+    }
+
+    func didSwitchOffFilter(indexPath: IndexPath?) {
+        if let indexPath = indexPath {
+            if indexPath.section == 1 {
+                filterMensaViewModel.isFoodAlarmEnabled = false
+                updateTableView()
+            } else {
+                let noticeEntry = Cache.shared.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
+                let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: noticeEntry.objectID) as? FilterNoticesListCache
+                childEntry?.isSelected = false
+            }
+        }
+    }
+}
+
+extension FilterMensaViewController: NotificationTimeDelegate {
+    func updateTableView() {
+        // to initiate smooth animation
+        DispatchQueue.main.async {
+            self.filterTableView.beginUpdates()
+            self.filterTableView.endUpdates()
+        }
+
+    }
+    func selectedTime(time: Date) {
+        self.filterMensaViewModel.selectedAlramTime.value = time
+        self.updateTableView()
+        self.filterMensaViewModel.cancelNotification()
+        self.filterMensaViewModel.scheduleNotification()
     }
 }

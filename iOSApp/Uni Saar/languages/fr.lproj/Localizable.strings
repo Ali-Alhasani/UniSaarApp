@@ -44,3 +44,10 @@
 "HelpfulNumbers" = "Contacts utiles";
 
 
+
+"MensaNotifications" = "Mensa Benachrichtigungen";
+"EnableFoodAlarm" = "Mensa Benachrichtigungen einschalten";
+"TodayMensa" = "Aujourd'hui dans le Mensa";
+"NotificationBody" = "Un repas complet, un repas végétarien et une variété des repas Free Flow, explorer maintenant...";
+"enableNotification" = "Prière de permettre la notification dans les paramètres de l'app";
+"dailyTime" = "L'heure de la notification quotidienne est ";

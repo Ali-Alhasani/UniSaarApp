@@ -178,7 +178,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "78C66597-E776-482D-86BC-F9C008758434 - ee8fe24a433b210d"
+                  uuid = "78C66597-E776-482D-86BC-F9C008758434 - c4934d3d0d6534c4"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -193,7 +193,7 @@
                   offsetFromSymbolStart = "31">
                </Location>
                <Location
-                  uuid = "78C66597-E776-482D-86BC-F9C008758434 - 9f48d2d2df18eca7"
+                  uuid = "78C66597-E776-482D-86BC-F9C008758434 - b5547da59146f96e"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -290,7 +290,7 @@
             landmarkType = "24">
             <Locations>
                <Location
-                  uuid = "8379AC3F-539F-4BBE-B04F-16B19CAAF6D2 - ae436b77a8c3ec61"
+                  uuid = "8379AC3F-539F-4BBE-B04F-16B19CAAF6D2 - 72ae92acb1d7f58c"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -305,7 +305,7 @@
                   offsetFromSymbolStart = "31">
                </Location>
                <Location
-                  uuid = "8379AC3F-539F-4BBE-B04F-16B19CAAF6D2 - 32984fe7ba0398a0"
+                  uuid = "8379AC3F-539F-4BBE-B04F-16B19CAAF6D2 - ee75b63ca317814d"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -354,7 +354,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "DADD11BA-565F-41BB-8B5F-C8BF7B23ED33 - b7e2b391ac79fe11"
+                  uuid = "DADD11BA-565F-41BB-8B5F-C8BF7B23ED33 - 23cea97ae76cf98b"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -369,7 +369,7 @@
                   offsetFromSymbolStart = "98">
                </Location>
                <Location
-                  uuid = "DADD11BA-565F-41BB-8B5F-C8BF7B23ED33 - 5831e598ad713b00"
+                  uuid = "DADD11BA-565F-41BB-8B5F-C8BF7B23ED33 - cc1dff73e6643c9a"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -402,7 +402,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "4A943E1F-10D9-4671-9507-3FE2654D8851 - 76ce1ef9007841db"
+                  uuid = "4A943E1F-10D9-4671-9507-3FE2654D8851 - 59c472397bec2c50"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -417,7 +417,7 @@
                   offsetFromSymbolStart = "49">
                </Location>
                <Location
-                  uuid = "4A943E1F-10D9-4671-9507-3FE2654D8851 - f5ec356fb1520505"
+                  uuid = "4A943E1F-10D9-4671-9507-3FE2654D8851 - dae659afcac668a1"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -562,7 +562,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "B1B48F4B-6A59-45EA-98B2-3BBC1129ADB9 - edebe9e8e2130b85"
+                  uuid = "B1B48F4B-6A59-45EA-98B2-3BBC1129ADB9 - 9a411058c85eaf7a"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -577,7 +577,7 @@
                   offsetFromSymbolStart = "708">
                </Location>
                <Location
-                  uuid = "B1B48F4B-6A59-45EA-98B2-3BBC1129ADB9 - b7bad903c6d685f2"
+                  uuid = "B1B48F4B-6A59-45EA-98B2-3BBC1129ADB9 - c01020b3ec9b210d"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -610,7 +610,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "BC057D80-FDAA-4C40-B854-5560C54BCC08 - 8f2f76ae1e993131"
+                  uuid = "BC057D80-FDAA-4C40-B854-5560C54BCC08 - 53c28f75078d2499"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -625,7 +625,7 @@
                   offsetFromSymbolStart = "467">
                </Location>
                <Location
-                  uuid = "BC057D80-FDAA-4C40-B854-5560C54BCC08 - 8f2f76ae1e993131"
+                  uuid = "BC057D80-FDAA-4C40-B854-5560C54BCC08 - 53c28f75078d2499"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -674,7 +674,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "3DCFA6D4-AE1E-40F8-965E-F8FCD67F6926 - edebe9e8e2130b85"
+                  uuid = "3DCFA6D4-AE1E-40F8-965E-F8FCD67F6926 - 9a411058c85eafe5"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -689,7 +689,7 @@
                   offsetFromSymbolStart = "83">
                </Location>
                <Location
-                  uuid = "3DCFA6D4-AE1E-40F8-965E-F8FCD67F6926 - b7bad903c6d685f2"
+                  uuid = "3DCFA6D4-AE1E-40F8-965E-F8FCD67F6926 - c01020b3ec9b2192"
                   shouldBeEnabled = "No"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -754,7 +754,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "3A91C093-9FF1-4784-8C33-9DC39FA41B2E - 3c58d45e64bd14a3"
+                  uuid = "3A91C093-9FF1-4784-8C33-9DC39FA41B2E - c784beb5486b6a01"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -769,7 +769,7 @@
                   offsetFromSymbolStart = "769">
                </Location>
                <Location
-                  uuid = "3A91C093-9FF1-4784-8C33-9DC39FA41B2E - da01fff555399048"
+                  uuid = "3A91C093-9FF1-4784-8C33-9DC39FA41B2E - 21dd951e79efeeea"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -914,7 +914,7 @@
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "3CE54CAE-9820-47BA-A15C-377E5C88B2B2 - b5fab812fd0c0ac9"
+                  uuid = "3CE54CAE-9820-47BA-A15C-377E5C88B2B2 - 69dbea5d29e90dec"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -929,7 +929,7 @@
                   offsetFromSymbolStart = "1241">
                </Location>
                <Location
-                  uuid = "3CE54CAE-9820-47BA-A15C-377E5C88B2B2 - 9127b23c80af4822"
+                  uuid = "3CE54CAE-9820-47BA-A15C-377E5C88B2B2 - 4d06e073544a4f07"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -1116,8 +1116,8 @@
             filePath = "Uni Saar/ViewControllers/CampusViewControllers/BuildingSearchTableViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
             landmarkName = "updateSearchResults(for:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -1180,8 +1180,8 @@
             filePath = "Uni Saar/ViewModels/FilterMensaViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "26"
-            endingLineNumber = "26"
+            startingLineNumber = "39"
+            endingLineNumber = "39"
             landmarkName = "loadGetFilterList()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1196,41 +1196,9 @@
             filePath = "Uni Saar/ViewModels/FilterMensaViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "27"
-            endingLineNumber = "27"
+            startingLineNumber = "41"
+            endingLineNumber = "41"
             landmarkName = "loadGetFilterList()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "FE69A03B-48E2-4870-BB88-126CA0C93568"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MensaViewControllers/FilterMensaViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "103"
-            endingLineNumber = "103"
-            landmarkName = "tableView(_:numberOfRowsInSection:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "BE2DE128-BDF6-4D23-BC88-C8F6324CBDEF"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MensaViewControllers/FilterMensaViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "110"
-            endingLineNumber = "110"
-            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1244,13 +1212,13 @@
             filePath = "Uni Saar/ViewModels/FilterMensaViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "68"
-            endingLineNumber = "68"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "filterList(for:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "41D2DD7B-AD05-4849-BC86-FAFD2D28638E - 2f59229da7c4863e"
+                  uuid = "41D2DD7B-AD05-4849-BC86-FAFD2D28638E - fe655e4ec4cd34ba"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -1265,7 +1233,7 @@
                   offsetFromSymbolStart = "841">
                </Location>
                <Location
-                  uuid = "41D2DD7B-AD05-4849-BC86-FAFD2D28638E - b381c77aeaae8734"
+                  uuid = "41D2DD7B-AD05-4849-BC86-FAFD2D28638E - 62bdbba989a735b0"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -1292,13 +1260,13 @@
             filePath = "Uni Saar/ViewModels/FilterMensaViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "69"
-            endingLineNumber = "69"
+            startingLineNumber = "83"
+            endingLineNumber = "83"
             landmarkName = "filterList(for:)"
             landmarkType = "7">
             <Locations>
                <Location
-                  uuid = "1F77D14A-5386-4059-AE34-DC8EB311B397 - 2f59229da7c4863e"
+                  uuid = "1F77D14A-5386-4059-AE34-DC8EB311B397 - fe655e4ec4cd3455"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -1313,7 +1281,7 @@
                   offsetFromSymbolStart = "1404">
                </Location>
                <Location
-                  uuid = "1F77D14A-5386-4059-AE34-DC8EB311B397 - b381c77aeaae8734"
+                  uuid = "1F77D14A-5386-4059-AE34-DC8EB311B397 - 62bdbba989a7355f"
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
@@ -1359,38 +1327,6 @@
             startingLineNumber = "29"
             endingLineNumber = "29"
             landmarkName = "loadGetMensaMenu()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "0FB3D96F-F126-444D-8A4C-DA4F7ACCCCC5"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MensaViewControllers/FilterMensaViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "104"
-            endingLineNumber = "104"
-            landmarkName = "tableView(_:numberOfRowsInSection:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "B1964F28-6DBA-400B-9882-7DBB8994816E"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MensaViewControllers/FilterMensaViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "51"
-            endingLineNumber = "51"
-            landmarkName = "bindViewModel()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -1589,79 +1525,47 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "FDD3A431-B9FE-420E-B58F-3199A78A43D1"
+            uuid = "E809B4A5-47EA-42B6-9F67-FC77D57890E8"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MoreViewControllers/SettingsViewController.swift"
+            filePath = "Uni Saar/ViewControllers/MensaViewControllers/FilterMensaViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "SettingsViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "8731E26C-C7FE-4CF5-81C5-5B6AA86991E0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MoreViewControllers/SettingsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "148"
-            endingLineNumber = "148"
-            landmarkName = "SettingsViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "F5F5D167-86CC-4EF6-BD14-12A6FF7FD1FF"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MoreViewControllers/SettingsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
-            landmarkName = "SettingsViewController"
-            landmarkType = "3">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "6595AB86-1F2B-4824-9902-956D173A60B0"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MoreViewControllers/SettingsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "245"
-            endingLineNumber = "245"
-            landmarkName = "scheduleNotification()"
+            startingLineNumber = "66"
+            endingLineNumber = "66"
+            landmarkName = "bindViewModel()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "78E1A063-1DF8-4B69-9115-14584213E27D"
+            uuid = "6CC517BC-4687-4811-948E-7B546A81A98D"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MoreViewControllers/SettingsViewController.swift"
+            filePath = "Uni Saar/ViewModels/ParentViewModel.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "60"
-            endingLineNumber = "60"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "showError(error:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "A4FB944E-FC4E-4F60-A428-8ABB39D98B8C"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewModels/FilterMensaViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "loadFoodAlarmStatus()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1669,16 +1573,160 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "3D579D56-A00A-43F3-B85A-20DB09F22A3F"
+            uuid = "F360D410-46D8-4B64-A300-DC1016F25C4C"
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MoreViewControllers/SettingsViewController.swift"
+            filePath = "Uni Saar/Views/Cells/MensaNotificationTableViewCell.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "viewWillDisappear(_:)"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
+            landmarkName = "updateView()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "54BA328F-73D8-43CD-B1DA-C8D40358EEA1"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewModels/FilterMensaViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "125"
+            endingLineNumber = "125"
+            landmarkName = "scheduleNotification()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "7BB1038A-96F3-4256-A438-65396772EB7D"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewModels/FilterMensaViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "191"
+            endingLineNumber = "191"
+            landmarkName = "loadFoodAlarmStatus()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "CAA660F4-F5B4-4EAD-9F51-C0A01B31FAEB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/NetworkingAndSessionManager/AppSessionManager.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "loadFoodAlarmTime()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E17C3E2C-B826-4070-9445-414D94FB0570"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewControllers/DirectoryViewControllers/StaffDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "navigateAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "FAB44F95-8D99-41A6-A679-C42A01CF32FD"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewControllers/CampusViewControllers/BuildingSearchTableViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "65"
+            endingLineNumber = "65"
+            landmarkName = "tableView(_:didSelectRowAt:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "19446CB9-B742-4C0B-96E0-802A13083FE3"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewControllers/DirectoryViewControllers/StaffDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "navigateAction(_:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9977017F-F2DA-46E9-AA01-0E31CB02D5B8"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewControllers/DirectoryViewControllers/StaffDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "101"
+            endingLineNumber = "101"
+            landmarkName = "prepare(for:sender:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "9C5AED75-D9E9-4AF3-A12B-8A71035852CA"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewControllers/DirectoryViewControllers/StaffDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "47"
+            endingLineNumber = "47"
+            landmarkName = "bindViewModel()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "E187FAEC-8280-468D-9585-50A3A51A8286"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/Models/StaffModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "62"
+            endingLineNumber = "62"
+            landmarkName = "init(json:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

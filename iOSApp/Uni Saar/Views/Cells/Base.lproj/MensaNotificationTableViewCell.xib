@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="none" accessoryType="disclosureIndicator" indentationWidth="10" rowHeight="83" id="AyL-pY-Nrp" customClass="MensaNotificationTableViewCell" customModule="Uni_Saar" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="374" height="75"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AyL-pY-Nrp" id="RDp-g8-3Sz">
+                <rect key="frame" x="0.0" y="0.0" width="343" height="75"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="the daily notification is " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9JT-U9-BSa">
+                        <rect key="frame" x="20" y="10" width="315" height="16"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change Notification time" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1fS-Za-VAE">
+                        <rect key="frame" x="20" y="38" width="315" height="20.5"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="1fS-Za-VAE" firstAttribute="leading" secondItem="RDp-g8-3Sz" secondAttribute="leadingMargin" id="49c-Xw-PBR"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="9JT-U9-BSa" secondAttribute="trailing" id="UOl-2t-3HG"/>
+                    <constraint firstItem="1fS-Za-VAE" firstAttribute="trailing" secondItem="RDp-g8-3Sz" secondAttribute="trailingMargin" id="VKK-vv-4Ju"/>
+                    <constraint firstItem="1fS-Za-VAE" firstAttribute="top" secondItem="9JT-U9-BSa" secondAttribute="bottom" constant="12" id="WQb-wj-eal"/>
+                    <constraint firstAttribute="bottom" secondItem="1fS-Za-VAE" secondAttribute="bottom" constant="16.5" id="WiB-DI-PuQ"/>
+                    <constraint firstItem="9JT-U9-BSa" firstAttribute="leading" secondItem="RDp-g8-3Sz" secondAttribute="leadingMargin" id="fX5-lE-udp"/>
+                    <constraint firstItem="9JT-U9-BSa" firstAttribute="top" secondItem="RDp-g8-3Sz" secondAttribute="top" constant="10" id="sNP-50-MP6"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="wTP-M2-aJH"/>
+            <connections>
+                <outlet property="notificationTimeLabel" destination="9JT-U9-BSa" id="cQ0-Sm-Cqe"/>
+            </connections>
+            <point key="canvasLocation" x="131.8840579710145" y="58.59375"/>
+        </tableViewCell>
+    </objects>
+</document>

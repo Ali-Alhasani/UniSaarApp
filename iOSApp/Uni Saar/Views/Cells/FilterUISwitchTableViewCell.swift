@@ -8,8 +8,8 @@
 
 import UIKit
 protocol FilterCellDelegate: class {
-    func didSwitchOnFilter(indexPath: Int?)
-    func didSwitchOffFilter(indexPath: Int?)
+    func didSwitchOnFilter(indexPath: IndexPath?)
+    func didSwitchOffFilter(indexPath: IndexPath?)
 }
 protocol NewsFilterViewCellDelegate: FilterCellDelegate {
 
@@ -23,7 +23,7 @@ class FilterUISwitchTableViewCell: UITableViewCell {
     var isAlCategories: Bool = false
     weak var delegate: NewsFilterViewCellDelegate?
     weak var mensaDelegate: MensaFilterCellDelegate?
-    var indexPath: Int?
+    var indexPath: IndexPath?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

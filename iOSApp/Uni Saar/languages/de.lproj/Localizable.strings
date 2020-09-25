@@ -41,3 +41,10 @@
 "AppSettings" = "App Einstellungen";
 "EmptyLinks" = "Keine links verfügbar";
 "HelpfulNumbers" = "Nützliche Kontakte";
+
+"MensaNotifications" = "Mensa Benachrichtigungen";
+"EnableFoodAlarm" = "Essensalarm einschalten";
+"TodayMensa" = "Heute in der Mensa";
+"NotificationBody" = "Ein vollständiges Menü, ein vegetarisches Menü und eine Anzahl an Free Flow Gerichten, jetzt ansehen...";
+"enableNotification" = "Bitte erlauben die Benachrichtigung in den App-Einstellungen";;
+"dailyTime" = "Die tägliche Benachrichtigungszeit ist ";
