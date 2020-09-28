@@ -18,6 +18,8 @@ class CampusViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        selectedCampus = AppSessionManager.shared.selectedCampus
+        campusCoor = CampusModel(filename: AppSessionManager.shared.selectedCampus.mapCoorFileName)
         setUpSearchBar()
         mapRegion()
         setupNotification()
@@ -65,6 +67,7 @@ class CampusViewController: UIViewController {
                }
     }
     func setupNotification() {
+
         NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
 
     }
@@ -156,7 +159,10 @@ extension CampusViewController: HandleMapSearch {
         }
         mapView.addAnnotation(placemark)
         let latDelta = campusCoor.overlayTopLeftCoordinate.latitude - campusCoor.overlayBottomRightCoordinate.latitude
-        let span = MKCoordinateSpan(latitudeDelta: fabs(1.8*latDelta), longitudeDelta: 0.0)
+        var span = MKCoordinateSpan(latitudeDelta: fabs(1*latDelta), longitudeDelta: 0.0)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            span = MKCoordinateSpan(latitudeDelta: fabs(0.5*latDelta), longitudeDelta: 0.0)
+        }
         let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
         mapView.setRegion(region, animated: true)
     }

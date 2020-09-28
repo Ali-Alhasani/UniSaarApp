@@ -11,7 +11,7 @@ import Foundation
 //maybye it will need more testing
 class ParentViewModel {
     var dataClient: DataClient
-    let showLoadingIndicator: Bindable = Bindable(false)
+    let showLoadingIndicator: Bindable = Bindable(true)
     var onShowError: ((_ alert: SingleButtonAlert) -> Void)?
 
     init(dataClient: DataClient = DataClient()) {

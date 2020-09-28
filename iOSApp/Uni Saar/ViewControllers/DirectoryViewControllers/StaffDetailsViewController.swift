@@ -27,6 +27,8 @@ class StaffDetailsViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     func bindViewModel() {
+        PKHUD.sharedHUD.contentView = PKHUDSystemActivityIndicatorView()
+        PKHUD.sharedHUD.show(onView: self.view)
         staff.staffDetails.bind { [weak self] staff in
             self?.staffTitleLabel.text = staff.titleText
             self?.nameLabel.text = staff.fullName
@@ -54,7 +56,6 @@ class StaffDetailsViewController: UIViewController {
         }
         staff.showLoadingIndicator.bind {  [weak self] visible in
             if let `self` = self {
-                PKHUD.sharedHUD.contentView = PKHUDSystemActivityIndicatorView()
                 visible ? PKHUD.sharedHUD.show(onView: self.view) : PKHUD.sharedHUD.hide()
             }
         }

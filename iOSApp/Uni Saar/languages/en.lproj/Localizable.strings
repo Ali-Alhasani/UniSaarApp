@@ -50,3 +50,8 @@
 "NotificationBody" = "A complete meal and vegetarian meal and variety of free flow meals, check now..";
 "enableNotification" = "Please enable the notification permission in the app settings";
 "dailyTime" = "the daily notification time is ";
+
+
+
+"GitHubLinkText" = "Check the code of this open-source project on GitHub";
+"GitHub" = "GitHub";
