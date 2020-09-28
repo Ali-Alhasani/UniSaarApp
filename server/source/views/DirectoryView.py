@@ -1,6 +1,7 @@
 import json
 from datetime import datetime
 from source.models.DirectoryModel import DetailedPerson, GeneralPerson, HelpfulNumber, FunctionDetails
+from source.parsers.DirectoryParser import UnspecificSearchQueryException
 
 
 def generalPersonToJSON(generalPerson: GeneralPerson) -> dict:
@@ -33,7 +34,7 @@ class DirectoryView:
                     "Too many results"
         """
         if searchResultList is None:
-            return json.dumps("Too many results")
+            raise UnspecificSearchQueryException('')
 
         # remove ws after separator for compact representation
         return json.dumps({"itemCount": itemCount, "hasNextPage": hasNextPage,

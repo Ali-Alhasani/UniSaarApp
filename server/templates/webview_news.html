@@ -108,7 +108,7 @@
 
     <!-- If data is not available in the content, then the description is rendered-->
     {% if newsTemplate.content %}
-    <div class="content">{{newsTemplate.content}}</div>
+        <div class="content"><p>{{newsTemplate.content}}</p></div>
     {%else%}
     <div class="description">{{newsTemplate.description}}</div>
     {%endif%}

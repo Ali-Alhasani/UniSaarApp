@@ -3,6 +3,7 @@ import json
 from urllib.parse import urlparse, parse_qs
 from datetime import datetime
 from dateutil import parser as dateParser
+from source.parsers.DirectoryParser import UnspecificSearchQueryException
 
 
 class PathError(Exception):
@@ -216,6 +217,9 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         except WebViewError as e:
             # show error webpage
             self.errorWebview()
+        except UnspecificSearchQueryException as e:
+            # show an error that the search query was not specific enough
+            self.errorUnspecificSearchQuery(e.language)
         except Exception as e:
             # server error
             self.error500()
@@ -396,3 +400,19 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
         self.wfile.write(responseHTML.encode())
+
+    def errorUnspecificSearchQuery(self, language='en'):
+        if language == 'fr':
+            responseJSON = json.dumps("Il y avait trop r&eacute;sultats avec cette demande. Pri&egrave;re d' essayer encore une fois avec une demande plus specifique.")
+        elif language == 'de':
+            responseJSON = json.dumps("Für diese Suchanfrage gab es zu viele Ergebnisse. Bitte versuch es noch einmal mit einer genaueren Anfrage.")
+        else:
+            responseJSON = json.dumps("There were too many results for this query. Please try again with a more precise query.")
+
+
+        self.send_response(code=400)
+        self.send_header('Connection', 'close')
+        self.send_header('content-type', 'text/html; charset=utf-8')
+        self.end_headers()
+
+        self.wfile.write(responseJSON.encode())

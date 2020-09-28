@@ -242,5 +242,6 @@ class DirectoryParser:
 
 
 class UnspecificSearchQueryException(Exception):
-    def __init__(self, query):
+    def __init__(self, query, language='en'):
         self.query = query
+        self.language = language
