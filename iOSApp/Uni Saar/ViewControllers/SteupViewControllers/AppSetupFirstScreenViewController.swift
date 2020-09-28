@@ -64,8 +64,7 @@ class AppSetupFirstScreenViewController: UIViewController {
             if success {
                 print("All set!")
                 self.navigateToMainHomeScreen()
-            } else if let error = error {
-                print(error.localizedDescription)
+            } else {
                 self.navigateToMainHomeScreen()
             }
         }

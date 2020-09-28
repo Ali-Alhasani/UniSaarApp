@@ -23,4 +23,9 @@ class ParentViewModel {
         let okAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil))
         onShowError?(okAlert)
     }
+
+    func showError(error: LLError?) {
+        let okAlert = SingleButtonAlert(message: error?.message, action: AlertAction(handler: nil))
+        onShowError?(okAlert)
+    }
 }

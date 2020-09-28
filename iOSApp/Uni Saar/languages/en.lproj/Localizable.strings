@@ -44,3 +44,9 @@
 "HelpfulNumbers" = "Helpful Contacts";
 
 
+"MensaNotifications" = "Mensa Notifications";
+"EnableFoodAlarm" = "Enable Food Alarm";
+"TodayMensa" = "Today in Mensa";
+"NotificationBody" = "A complete meal and vegetarian meal and variety of free flow meals, check now..";
+"enableNotification" = "Please enable the notification permission in the app settings";
+"dailyTime" = "the daily notification time is ";

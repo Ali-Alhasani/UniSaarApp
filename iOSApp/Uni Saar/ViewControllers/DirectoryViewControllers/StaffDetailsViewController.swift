@@ -34,7 +34,9 @@ class StaffDetailsViewController: UIViewController {
                 self?.emailTextView.text = email
             }
             if staff.address != " - \n\n" {
-                self?.navigateButton.isHidden = false
+                if (staff.staffDetailsModel?.building != "") || staff.staffDetailsModel?.city != "" {
+                    self?.navigateButton.isHidden = false
+                }
             }
             self?.addressLabel.text = staff.address
             self?.contactTextView.text = staff.contactText
@@ -63,7 +65,31 @@ class StaffDetailsViewController: UIViewController {
         static let toStaffAddress = "toAddress"
     }
     @IBAction func navigateAction(_ sender: Any) {
-        self.performSegue(withIdentifier: SegueIdentifiers.toStaffAddress, sender: self)
+        //self.performSegue(withIdentifier: SegueIdentifiers.toStaffAddress, sender: self)
+        if let tabbar = self.tabBarController {
+            if let topViewNavgation = tabbar.viewControllers?[safe: 1] as? UINavigationController ,
+            let campusView = topViewNavgation.topViewController as? CampusViewController {
+                var address: String?
+                if let building = staff.staffDetails.value.staffDetailsModel?.building, building != "" {
+                    address = building
+                } else {
+                    if let city = staff.staffDetails.value.staffDetailsModel?.city, city != "" {
+                        address = city
+                    }
+                }
+                if let address = address {
+                    campusView.staffAddress = address
+                                   tabbar.selectedIndex = 1
+                                   campusView.activateSearchBar()
+                }
+
+            }
+//            tabbar.selectedIndex = 1
+//            if let topView = UIApplication.topViewController(), let topViewNavgation = topView as? UINavigationController ,
+//                let campusView = topViewNavgation.topViewController as? CampusViewController {
+//                campusView.staffAddress = staff.staffDetails.value.staffDetailsModel?.building ?? staff.staffDetails.value.staffDetailsModel?.city
+//            }
+        }
     }
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation

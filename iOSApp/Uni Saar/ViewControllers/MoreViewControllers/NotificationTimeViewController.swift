@@ -27,7 +27,7 @@ class NotificationTimeViewController: UIViewController {
         delegate?.selectedTime(time: timerPicker.date)
     }
     @IBAction func doneAction(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        self.navigationController?.popViewController(animated: true)
     }
 
     /*

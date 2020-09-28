@@ -52,14 +52,17 @@ class CampusViewController: UIViewController {
             self.searchController.searchBar.searchTextField.backgroundColor = .systemBackground
         }
         navigationItem.searchController = self.searchController
+        activateSearchBar()
+
+    }
+    func activateSearchBar() {
         DispatchQueue.main.async {
-            if let staffAddress = self.staffAddress {
-                self.searchController.isActive = true
-                self.searchController.searchBar.text = staffAddress
+                   if let staffAddress = self.staffAddress {
+                       self.searchController?.isActive = true
+                       self.searchController?.searchBar.text = staffAddress
 
-            }
-        }
-
+                   }
+               }
     }
     func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)

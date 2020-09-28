@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hd8-ei-ecY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hd8-ei-ecY">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -34,8 +36,8 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" pagingEnabled="YES" bouncesZoom="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="QB2-zF-PEk">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="jdM-lL-zbc">
                                     <size key="itemSize" width="196" height="108"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -45,12 +47,13 @@
                                 <cells/>
                             </collectionView>
                             <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="uGA-ge-Ha6">
-                                <rect key="frame" x="187.5" y="825" width="39" height="37"/>
-                                <color key="pageIndicatorTintColor" systemColor="opaqueSeparatorColor" red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="146" y="868.5" width="122.5" height="27.5"/>
+                                <color key="pageIndicatorTintColor" systemColor="opaqueSeparatorColor"/>
                                 <color key="currentPageIndicatorTintColor" name="uniColorTint"/>
                             </pageControl>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="vxd-4g-ePi"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="QB2-zF-PEk" firstAttribute="bottom" secondItem="vxd-4g-ePi" secondAttribute="bottom" id="0rl-on-yVv"/>
                             <constraint firstItem="QB2-zF-PEk" firstAttribute="top" secondItem="vxd-4g-ePi" secondAttribute="top" id="HgO-gs-9SL"/>
@@ -59,7 +62,6 @@
                             <constraint firstItem="vxd-4g-ePi" firstAttribute="trailing" secondItem="QB2-zF-PEk" secondAttribute="trailing" id="qVc-jq-biI"/>
                             <constraint firstItem="uGA-ge-Ha6" firstAttribute="centerX" secondItem="bIk-yI-Ipv" secondAttribute="centerX" id="uEP-tb-jpL"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="vxd-4g-ePi"/>
                     </view>
                     <navigationItem key="navigationItem" title="Mensa" id="Kru-Hd-qRH">
                         <barButtonItem key="leftBarButtonItem" image="info.circle" id="P3t-hm-8cY">
@@ -120,7 +122,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="J4d-qv-KLJ"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="J4d-qv-KLJ" firstAttribute="trailing" secondItem="7aa-Mc-9IX" secondAttribute="trailing" constant="16" id="3Jb-va-fHL"/>
                             <constraint firstItem="7aa-Mc-9IX" firstAttribute="top" secondItem="J4d-qv-KLJ" secondAttribute="top" constant="16" id="HSK-HL-JlU"/>
@@ -136,7 +139,6 @@
                             <constraint firstItem="7aa-Mc-9IX" firstAttribute="leading" secondItem="J4d-qv-KLJ" secondAttribute="leading" constant="16" id="sha-bo-j7N"/>
                             <constraint firstItem="yDf-w0-izH" firstAttribute="top" secondItem="HKv-6W-pQZ" secondAttribute="bottom" constant="8" id="t2S-L8-gml"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="J4d-qv-KLJ"/>
                     </view>
                     <navigationItem key="navigationItem" id="mHw-0F-n68"/>
                     <connections>
@@ -160,14 +162,14 @@
                                 <rect key="frame" x="0.0" y="56" width="414" height="752"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="Swp-fO-qe5"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Swp-fO-qe5" firstAttribute="bottom" secondItem="SEA-Ve-VdL" secondAttribute="bottom" id="As1-p5-nGD"/>
                             <constraint firstItem="SEA-Ve-VdL" firstAttribute="top" secondItem="Swp-fO-qe5" secondAttribute="top" id="CP5-Wp-fDN"/>
                             <constraint firstItem="SEA-Ve-VdL" firstAttribute="leading" secondItem="Swp-fO-qe5" secondAttribute="leading" id="bb2-r6-PqN"/>
                             <constraint firstItem="Swp-fO-qe5" firstAttribute="trailing" secondItem="SEA-Ve-VdL" secondAttribute="trailing" id="yIp-W8-Tba"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="Swp-fO-qe5"/>
                     </view>
                     <navigationItem key="navigationItem" title="Filter Mensa" id="2cY-cR-hHS">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="wg9-Te-8Qr">
@@ -178,6 +180,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="filterTableView" destination="SEA-Ve-VdL" id="zhU-nm-UTa"/>
+                        <segue destination="gaT-xL-fIc" kind="show" identifier="NotificationTime" id="8gw-ec-sDD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8QS-sN-XC6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -193,7 +196,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TCV-Lx-CL4">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c8l-WY-bCe">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="211.5"/>
@@ -215,14 +218,14 @@
                                                     </label>
                                                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="18Z-hT-631">
                                                         <rect key="frame" x="368" y="2" width="30" height="30"/>
-                                                        <color key="backgroundColor" systemColor="systemPinkColor" red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="backgroundColor" systemColor="systemPinkColor"/>
                                                         <constraints>
                                                             <constraint firstAttribute="height" constant="30" id="C31-uL-0Ti"/>
                                                             <constraint firstAttribute="width" secondItem="18Z-hT-631" secondAttribute="height" multiplier="1:1" id="drb-GO-3aT"/>
                                                         </constraints>
                                                     </view>
                                                 </subviews>
-                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
                                                     <constraint firstItem="18Z-hT-631" firstAttribute="centerY" secondItem="3dg-wG-ppU" secondAttribute="centerY" id="8lG-G2-EP4"/>
                                                     <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="18Z-hT-631" secondAttribute="bottom" constant="2" id="KCA-Pm-eE3"/>
@@ -243,16 +246,16 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <stackView opaque="NO" contentMode="scaleToFill" spacingType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="HTK-5j-xXM">
-                                                <rect key="frame" x="20" y="62" width="152.5" height="20.5"/>
+                                                <rect key="frame" x="20" y="62" width="148" height="20.5"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="General Notices" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pbE-dP-MaN">
-                                                        <rect key="frame" x="0.0" y="0.0" width="127.5" height="20.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="127" height="20.5"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="flag.circle" translatesAutoresizingMaskIntoConstraints="NO" id="pze-YG-Eyl">
-                                                        <rect key="frame" x="135.5" y="0.0" width="17" height="20.5"/>
+                                                        <rect key="frame" x="135" y="0.0" width="13" height="20.5"/>
                                                     </imageView>
                                                 </subviews>
                                             </stackView>
@@ -285,13 +288,13 @@
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ET8-zo-85z">
                                                         <rect key="frame" x="50" y="0.0" width="0.0" height="0.0"/>
                                                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
-                                                        <color key="textColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                 </subviews>
                                             </stackView>
                                         </subviews>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstItem="mPK-WI-MvO" firstAttribute="leading" secondItem="fjg-KP-0Oi" secondAttribute="leading" id="0Xf-iH-Xai"/>
                                             <constraint firstItem="MPs-7v-qdw" firstAttribute="leading" secondItem="pbE-dP-MaN" secondAttribute="leading" id="1DN-Rn-dbx"/>
@@ -333,14 +336,14 @@
                                 </constraints>
                             </scrollView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="omR-vB-WyP"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="TCV-Lx-CL4" firstAttribute="trailing" secondItem="omR-vB-WyP" secondAttribute="trailing" id="Gzs-Bg-CqV"/>
                             <constraint firstItem="TCV-Lx-CL4" firstAttribute="leading" secondItem="omR-vB-WyP" secondAttribute="leading" id="K6Y-yc-X5C"/>
                             <constraint firstItem="TCV-Lx-CL4" firstAttribute="bottom" secondItem="omR-vB-WyP" secondAttribute="bottom" id="Lb1-n9-DZB"/>
                             <constraint firstItem="TCV-Lx-CL4" firstAttribute="top" secondItem="omR-vB-WyP" secondAttribute="top" id="oES-AH-LLu"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="omR-vB-WyP"/>
                     </view>
                     <navigationItem key="navigationItem" id="cs2-pm-a7m"/>
                     <connections>
@@ -399,19 +402,85 @@
             </objects>
             <point key="canvasLocation" x="-1288.4057971014495" y="855.80357142857144"/>
         </scene>
+        <!--Notification time-->
+        <scene sceneID="pL2-4J-ZFM">
+            <objects>
+                <viewController id="gaT-xL-fIc" customClass="NotificationTimeViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CXv-9Z-d9y">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="time" minuteInterval="1" useCurrentDate="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p2K-15-VrO">
+                                <rect key="frame" x="8" y="133.5" width="414" height="216"/>
+                                <date key="date" timeIntervalSinceReferenceDate="618398100.849599">
+                                    <!--2020-08-06 09:15:00 +0000-->
+                                </date>
+                                <date key="minimumDate" timeIntervalSinceReferenceDate="-978289200">
+                                    <!--1970-01-01 05:00:00 +0000-->
+                                </date>
+                                <date key="maximumDate" timeIntervalSinceReferenceDate="1167602400">
+                                    <!--2037-12-31 22:00:00 +0000-->
+                                </date>
+                            </datePicker>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pick the notification time" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wez-G8-Sto">
+                                <rect key="frame" x="16" y="85" width="382" height="19.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="U45-wR-9On"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Wez-G8-Sto" firstAttribute="top" secondItem="U45-wR-9On" secondAttribute="top" constant="29" id="AUp-lc-0jL"/>
+                            <constraint firstItem="p2K-15-VrO" firstAttribute="top" secondItem="Wez-G8-Sto" secondAttribute="bottom" constant="29" id="E1a-sH-Zcx"/>
+                            <constraint firstItem="Wez-G8-Sto" firstAttribute="leading" secondItem="U45-wR-9On" secondAttribute="leading" constant="16" id="NUM-yk-Gn3"/>
+                            <constraint firstItem="p2K-15-VrO" firstAttribute="leading" secondItem="U45-wR-9On" secondAttribute="leading" constant="8" id="PBV-fF-4mn"/>
+                            <constraint firstItem="U45-wR-9On" firstAttribute="trailing" secondItem="Wez-G8-Sto" secondAttribute="trailing" constant="16" id="Qt5-GD-e10"/>
+                            <constraint firstItem="p2K-15-VrO" firstAttribute="trailing" secondItem="U45-wR-9On" secondAttribute="trailing" constant="8" id="W7K-D8-EQj"/>
+                            <constraint firstItem="U45-wR-9On" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="p2K-15-VrO" secondAttribute="bottom" constant="16" id="qLK-Kd-sHm"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Notification time" id="EdD-HH-ufz">
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="6oQ-QB-VrO">
+                            <connections>
+                                <action selector="doneAction:" destination="gaT-xL-fIc" id="H7r-mm-1UX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="timerPicker" destination="p2K-15-VrO" id="UEw-uM-M9c"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="A3W-Do-XDt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1559" y="1671"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="yU9-p7-nt6"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <image name="flag.circle" width="17" height="17"/>
-        <image name="gear" width="19" height="19"/>
-        <image name="info.circle" width="17" height="17"/>
+        <image name="flag.circle" width="13" height="13"/>
+        <image name="gear" width="15" height="15"/>
+        <image name="info.circle" width="13" height="13"/>
         <namedColor name="uniColorTint">
             <color red="0.0" green="0.27843137254901962" blue="0.46274509803921571" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="uniHeadlineColor">
             <color red="0.030999999493360519" green="0.11400000005960464" blue="0.21199999749660492" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="opaqueSeparatorColor">
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemPinkColor">
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

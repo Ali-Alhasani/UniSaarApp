@@ -96,7 +96,7 @@ extension FilterNewsFeedViewController: UITableViewDelegate, UITableViewDataSour
         if let item = filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: indexPath.row] {
             cell?.cellTitle = item.name
             cell?.delegate = self
-            cell?.indexPath = indexPath.row
+            cell?.indexPath = indexPath
             cell?.switchValue = item.isSelected
         }
         return cell ?? UITableViewCell()
@@ -106,20 +106,20 @@ extension FilterNewsFeedViewController: SingleButtonDialogPresenter { }
 
 // MARK: - NewsFilterViewCellDelegate
 extension FilterNewsFeedViewController: NewsFilterViewCellDelegate {
-    func didSwitchOnFilter(indexPath: Int?) {
+    func didSwitchOnFilter(indexPath: IndexPath?) {
         if let indexPath = indexPath {
             //update the cached news filter value
-            let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath, section: 0))
+            let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
             if let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: categoryEntry.objectID) as? NewsCategoriesCache {
                 childEntry.isSelected = true
             }
         }
     }
 
-    func didSwitchOffFilter(indexPath: Int?) {
+    func didSwitchOffFilter(indexPath: IndexPath?) {
         if let indexPath = indexPath {
             // update the cached news filter value
-            let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath, section: 0))
+            let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
             if let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: categoryEntry.objectID) as? NewsCategoriesCache {
                 childEntry.isSelected = false
             }

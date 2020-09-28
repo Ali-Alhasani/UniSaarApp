@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="J5I-hb-aZS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="J5I-hb-aZS">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -64,7 +64,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nFy-Vv-iQx">
-                                        <rect key="frame" x="16" y="95.5" width="382" height="50"/>
+                                        <rect key="frame" x="16" y="642" width="382" height="50"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2rI-A5-ObZ">
                                                 <rect key="frame" x="16" y="0.0" width="360" height="50"/>
@@ -101,9 +101,10 @@
                                 <constraints>
                                     <constraint firstItem="nFy-Vv-iQx" firstAttribute="leading" secondItem="R0J-7w-JBE" secondAttribute="leading" constant="16" id="1ij-gf-bOc"/>
                                     <constraint firstAttribute="trailing" secondItem="XwC-qa-Dqo" secondAttribute="trailing" constant="16" id="4ao-sW-0ot"/>
+                                    <constraint firstAttribute="bottom" secondItem="nFy-Vv-iQx" secondAttribute="bottom" constant="40" id="AXe-bt-pdm"/>
                                     <constraint firstItem="XwC-qa-Dqo" firstAttribute="top" secondItem="R0J-7w-JBE" secondAttribute="top" constant="20" id="D1L-GV-DUL"/>
                                     <constraint firstItem="XwC-qa-Dqo" firstAttribute="leading" secondItem="R0J-7w-JBE" secondAttribute="leading" constant="16" id="VMv-xa-XdJ"/>
-                                    <constraint firstItem="nFy-Vv-iQx" firstAttribute="top" secondItem="XwC-qa-Dqo" secondAttribute="bottom" constant="45" id="mlU-Fl-mwQ"/>
+                                    <constraint firstItem="nFy-Vv-iQx" firstAttribute="top" relation="greaterThanOrEqual" secondItem="XwC-qa-Dqo" secondAttribute="bottom" constant="16" id="mlU-Fl-mwQ"/>
                                     <constraint firstAttribute="trailing" secondItem="nFy-Vv-iQx" secondAttribute="trailing" constant="16" id="xDE-ND-zIy"/>
                                 </constraints>
                             </view>
