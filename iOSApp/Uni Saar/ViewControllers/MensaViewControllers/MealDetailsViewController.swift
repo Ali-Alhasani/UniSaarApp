@@ -29,6 +29,8 @@ class MealDetailsViewController: UIViewController {
     }
 
     func bindViewModel() {
+        PKHUD.sharedHUD.contentView = PKHUDSystemActivityIndicatorView()
+        PKHUD.sharedHUD.show(onView: self.view)
 
         meal.mealDetails.bind { [weak self] meal in
             self?.mealDispalyNameLabel.text = meal.mealName
@@ -37,6 +39,7 @@ class MealDetailsViewController: UIViewController {
             self?.componentsLabel.attributedText = meal.mealComponetsText
             self?.priceTagNamesLabel.text = meal.priceTagNamesText
             self?.pricesLabel.text = meal.priceValuesText
+            PKHUD.sharedHUD.hide()
         }
         meal.onShowError = { [weak self] alert in
             self?.presentSingleButtonDialog(alert: alert)
@@ -48,7 +51,6 @@ class MealDetailsViewController: UIViewController {
 
         meal.showLoadingIndicator.bind {  [weak self] visible in
             if let `self` = self {
-                PKHUD.sharedHUD.contentView = PKHUDSystemActivityIndicatorView()
                 visible ? PKHUD.sharedHUD.show(onView: self.view) : PKHUD.sharedHUD.hide()
             }
         }

@@ -51,3 +51,8 @@
 "NotificationBody" = "Un repas complet, un repas végétarien et une variété des repas Free Flow, explorer maintenant...";
 "enableNotification" = "Prière de permettre la notification dans les paramètres de l'app";
 "dailyTime" = "L'heure de la notification quotidienne est ";
+
+
+
+"GitHubLinkText" = "Check the open-source code of this project in GitHub";
+"GitHub" = "GitHub";

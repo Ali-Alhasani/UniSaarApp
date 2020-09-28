@@ -46,5 +46,9 @@
 "EnableFoodAlarm" = "Essensalarm einschalten";
 "TodayMensa" = "Heute in der Mensa";
 "NotificationBody" = "Ein vollständiges Menü, ein vegetarisches Menü und eine Anzahl an Free Flow Gerichten, jetzt ansehen...";
-"enableNotification" = "Bitte erlauben die Benachrichtigung in den App-Einstellungen";;
+"enableNotification" = "Bitte erlauben die Benachrichtigung in den App-Einstellungen";
 "dailyTime" = "Die tägliche Benachrichtigungszeit ist ";
+
+
+"GitHubLinkText" = "Finde den Code zu diesem open-source Projekt auf GitHub";
+"GitHub" = "GitHub";
