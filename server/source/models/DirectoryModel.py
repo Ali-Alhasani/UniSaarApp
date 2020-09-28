@@ -53,7 +53,7 @@ def createSecretPerson(pid):
     @return: Ali
     """
     if pid == -1:
-        return DetailedPerson(firstname='Ali H. A. H. A.', lastname='Alhasani', academicTitle='The App Guy',
+        return DetailedPerson(firstname='Ali', lastname='Alhasani', academicTitle='The App Guy',
                               gender='männlich', officeHour='', remarks='don\'t push to the master!, '
                                                                         'I\'m having merge conflicts and I hate my life',
                               postalCode='',
