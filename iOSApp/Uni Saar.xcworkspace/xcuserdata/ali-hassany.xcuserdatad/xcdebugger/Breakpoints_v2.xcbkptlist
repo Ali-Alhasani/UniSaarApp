@@ -645,70 +645,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "CD806129-77F8-4E0B-B927-7A5D831EA6B3"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MensaViewControllers/MealDetailsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "43"
-            endingLineNumber = "43"
-            landmarkName = "bindViewModel()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "3DCFA6D4-AE1E-40F8-965E-F8FCD67F6926"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Uni Saar/ViewControllers/MensaViewControllers/MealDetailsViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "32"
-            endingLineNumber = "32"
-            landmarkName = "bindViewModel()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "3DCFA6D4-AE1E-40F8-965E-F8FCD67F6926 - 9a411058c85eafe5"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Uni_Saar.MealDetailsViewController.bindViewModel() -&gt; ()"
-                  moduleName = "Uni Saar"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ali-hassany/project02/UniSaarApp/Uni%20Saar/ViewControllers/MensaViewControllers/MealDetailsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "32"
-                  endingLineNumber = "32"
-                  offsetFromSymbolStart = "83">
-               </Location>
-               <Location
-                  uuid = "3DCFA6D4-AE1E-40F8-965E-F8FCD67F6926 - c01020b3ec9b2192"
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Uni_Saar.MealViewModel) -&gt; () in Uni_Saar.MealDetailsViewController.bindViewModel() -&gt; ()"
-                  moduleName = "Uni Saar"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/ali-hassany/project02/UniSaarApp/Uni%20Saar/ViewControllers/MensaViewControllers/MealDetailsViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "32"
-                  endingLineNumber = "32"
-                  offsetFromSymbolStart = "115">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "E3EA31FC-4B86-4FB6-9377-EF7536E141E8"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -716,8 +652,8 @@
             filePath = "Uni Saar/ViewControllers/MensaViewControllers/MealDetailsViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
+            startingLineNumber = "36"
+            endingLineNumber = "36"
             landmarkName = "bindViewModel()"
             landmarkType = "7">
          </BreakpointContent>
@@ -1995,6 +1931,38 @@
             startingLineNumber = "18"
             endingLineNumber = "18"
             landmarkName = "showingLoadingView()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F3E74B8D-D837-46BB-A00D-DCAF8574DD76"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewControllers/MensaViewControllers/MealDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "bindViewModel()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "F4AED56A-5970-4547-9237-2761C0FC46CB"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Uni Saar/ViewControllers/DirectoryViewControllers/StaffDetailsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "32"
+            endingLineNumber = "32"
+            landmarkName = "bindViewModel()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

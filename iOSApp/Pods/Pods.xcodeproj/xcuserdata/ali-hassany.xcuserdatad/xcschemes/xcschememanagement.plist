@@ -19,12 +19,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>PKHUD-PKHUDResources.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>PKHUD.xcscheme</key>
+		<key>NVActivityIndicatorView.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

@@ -51,7 +51,7 @@ class MensaViewController: UIViewController {
         mensaCollectionView.layoutCollectionView()
     }
     func bindViewModel() {
-        self.mensaCollectionView.showingLoadingView()
+        //self.showLoadingActivity()
         mensaMenuViewModel.daysMenus.bind { [weak self] _ in
             if let `self` = self {
                 DispatchQueue.main.async {
@@ -67,7 +67,7 @@ class MensaViewController: UIViewController {
         }
         mensaMenuViewModel.showLoadingIndicator.bind { [weak self] visible in
             if let `self` = self {
-                visible ? self.mensaCollectionView.showingLoadingView() : self.mensaCollectionView.hideLoadingView()
+                //visible ? self.showLoadingActivity() : self.hideLoadingActivity()
             }
         }
     }

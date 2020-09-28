@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import PKHUD
+import NVActivityIndicatorView
+
 class MealDetailsViewController: UIViewController {
 
     @IBOutlet weak var mealDispalyNameLabel: UILabel!
@@ -29,9 +30,9 @@ class MealDetailsViewController: UIViewController {
     }
 
     func bindViewModel() {
-        PKHUD.sharedHUD.contentView = PKHUDSystemActivityIndicatorView()
-        PKHUD.sharedHUD.show(onView: self.view)
-
+        if mealItemViewModel != nil {
+              self.showLoadingActivity()
+        }
         meal.mealDetails.bind { [weak self] meal in
             self?.mealDispalyNameLabel.text = meal.mealName
             self?.counterEntranceLabel.text = meal.mealCounterDescription
@@ -39,7 +40,6 @@ class MealDetailsViewController: UIViewController {
             self?.componentsLabel.attributedText = meal.mealComponetsText
             self?.priceTagNamesLabel.text = meal.priceTagNamesText
             self?.pricesLabel.text = meal.priceValuesText
-            PKHUD.sharedHUD.hide()
         }
         meal.onShowError = { [weak self] alert in
             self?.presentSingleButtonDialog(alert: alert)
@@ -51,12 +51,19 @@ class MealDetailsViewController: UIViewController {
 
         meal.showLoadingIndicator.bind {  [weak self] visible in
             if let `self` = self {
-                visible ? PKHUD.sharedHUD.show(onView: self.view) : PKHUD.sharedHUD.hide()
+                visible ? self.showLoadingActivity() : self.hideLoadingActivity()
             }
         }
 
         //meal.loadGetMockMenu()
     }
+
+//    func showActivityLoad() {
+//        DispatchQueue.main.async {
+//            self.startAnimating(CGSize(width: 50, height: 50), message: NSLocalizedString("Removing MDM Profile", comment: ""), type: .ballClipRotateMultiple,
+//                                fadeInAnimation: nil)
+//        }
+//    }
     /*
      // MARK: - Navigation
 
