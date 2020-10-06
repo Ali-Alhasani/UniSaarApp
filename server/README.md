@@ -207,10 +207,11 @@ To run the Server follow these steps:
 		-   Events iCalendar `events/iCal?id=ID` where ID is an events id returned from the events
 			main screen. Returns a ics file to add the event to a calendar.
 	*  Directory:
-        -   Directory search `directory/search?page=p&pageSize=ps&query=q`
+        -   Directory search `directory/search?page=p&pageSize=ps&query=q&language=lang`
 			where p is the page number (starts at 0), ps denotes the maximum 
-            number of elements per page and q is the search query. q is allowed
-			to contain whitespaces. The server will try all ordered combinations
+		        number of elements per page, q is the search query and lang is a language code. The language parameter is optional and only needed
+			for the error messages. If omitted, defaults to german.
+			q is allowed to contain whitespaces. The server will try all ordered combinations
 			of the names as first and last name (i.e. `query=example` would look
 			for people with first or last name `example` and `query=first second`
 			would look for people with either first name `first second` first name

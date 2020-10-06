@@ -167,7 +167,11 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                     page = int(q['page'][0])
                     pageSize = int(q['pageSize'][0])
                     searchQuery = q['query'][0]
-                    self.searchDirectory(searchQuery=searchQuery, page=page, pageSize=pageSize)
+                    if 'language' in q.keys():
+                        lang = q['language'][0]
+                    else:
+                        lang = 'de'
+                    self.searchDirectory(searchQuery=searchQuery, page=page, pageSize=pageSize, lang=lang)
                 elif p[1] == 'personDetails':
                     pID = int(q['pid'][0])
                     language = q['language'][0]
@@ -326,8 +330,8 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
 
         self.wfile.write(responseJSON.encode())
 
-    def searchDirectory(self, searchQuery: str, page: int, pageSize: int):
-        responseJSON = self.server.searchDirectory(searchQuery=searchQuery, page=page, pageSize=pageSize)
+    def searchDirectory(self, searchQuery: str, page: int, pageSize: int, lang):
+        responseJSON = self.server.searchDirectory(searchQuery=searchQuery, page=page, pageSize=pageSize, lang=lang)
 
         self.send_response(code=200)
         self.send_header('content-type', 'application/json')

@@ -15,7 +15,7 @@ def generalPersonToJSON(generalPerson: GeneralPerson) -> dict:
 
 class DirectoryView:
 
-    def showSearchResults(self, searchResultList: list, itemCount: int, hasNextPage: bool) -> str:
+    def showSearchResults(self, searchResultList: list, itemCount: int, hasNextPage: bool, lang) -> str:
         """
         Takes a list of GeneralPerson [gp1, gp2, ...] and creates a JSON of the form:
        { "itemCount": itemCount, "hasNextPage": hasNextPage,
@@ -24,6 +24,7 @@ class DirectoryView:
         If searchResultList is None, the user hasn't narrowed down the search enough, i.e. there are still too many
         results. In this case, the return value will be a JSON of the form:
         "Too many results"
+        @param lang:
         @param searchResultList: list of GeneralPerson
         @param itemCount: int, number of results
         @param hasNextPage: bool
@@ -34,7 +35,7 @@ class DirectoryView:
                     "Too many results"
         """
         if searchResultList is None:
-            raise UnspecificSearchQueryException('')
+            raise UnspecificSearchQueryException('', language=lang)
 
         # remove ws after separator for compact representation
         return json.dumps({"itemCount": itemCount, "hasNextPage": hasNextPage,

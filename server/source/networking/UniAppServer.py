@@ -68,9 +68,9 @@ class UniAppServer(ThreadingHTTPServer):
     def requestEventCategories(self, language):
         return self.newsFeedController.showEventCategories(language)
 
-    def searchDirectory(self, searchQuery: str, page: int, pageSize: int):
-        return self.directoryController.searchDirectory(searchQuery=searchQuery,
-                                                        page=page, pageSize=pageSize)
+    def searchDirectory(self, searchQuery: str, page: int, pageSize: int, lang):
+        return self.directoryController.searchDirectory(searchQuery=searchQuery, page=page, pageSize=pageSize,
+                                                        lang=lang)
 
     def requestPersonDetails(self, pID: int, language: str):
         return self.directoryController.showPersonDetails(pID=pID, language=language)

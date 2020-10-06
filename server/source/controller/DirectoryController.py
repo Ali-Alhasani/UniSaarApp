@@ -39,13 +39,14 @@ class DirectoryController:
         # These files have to be provided manually. The tool 'helpfulNumberWriter.py' can help with that.
         self._HELPFUL_NUMBERS_PATH = HELPFUL_NUMBERS_PATH
 
-    def searchDirectory(self, searchQuery: str, page: int, pageSize: int):
+    def searchDirectory(self, searchQuery: str, page: int, pageSize: int, lang):
         """
         Search the directory for the searchQuery. Returns found elements on page page of size pageSize.
         If the user hasn't narrowed down his search enough i.e. there are still too many
         results, the return value will be a JSON of the form:
         "Too many results"
         Caches valid
+        @param lang:
         @param searchQuery: str
         @param page: int
         @param pageSize: int
@@ -63,9 +64,8 @@ class DirectoryController:
                 itemCount = cachedItem.getItemCount()
                 resultList = cachedItem.getSearchResults(page=page, pageSize=pageSize)
                 hasNextPage = hasPage(page=page + 1, pageSize=pageSize, itemCount=itemCount)
-                return self._directoryView.showSearchResults(searchResultList=resultList,
-                                                             itemCount=itemCount,
-                                                             hasNextPage=hasNextPage)
+                return self._directoryView.showSearchResults(searchResultList=resultList, itemCount=itemCount,
+                                                             hasNextPage=hasNextPage, lang=lang)
             else:
                 searchItem = SearchItem(query=searchQuery)
 
@@ -94,9 +94,8 @@ class DirectoryController:
                                 break
                 except UnspecificSearchQueryException as e:
                     e.query = searchQuery
-                    return self._directoryView.showSearchResults(searchResultList=None,
-                                                             itemCount=0,
-                                                             hasNextPage=False)
+                    return self._directoryView.showSearchResults(searchResultList=None, itemCount=0, hasNextPage=False,
+                                                                 lang=lang)
 
                 # sort the search item
                 searchItem.sortResults()
@@ -116,9 +115,8 @@ class DirectoryController:
                 resultList = searchItem.getSearchResults(page=page, pageSize=pageSize)
                 hasNextPage = hasPage(page=page + 1, pageSize=pageSize, itemCount=itemCount)
 
-                return self._directoryView.showSearchResults(searchResultList=resultList,
-                                                             itemCount=itemCount,
-                                                             hasNextPage=hasNextPage)
+                return self._directoryView.showSearchResults(searchResultList=resultList, itemCount=itemCount,
+                                                             hasNextPage=hasNextPage, lang=lang)
 
         except Exception as e:
             raise e
