@@ -15,7 +15,7 @@ target 'Uni Saar' do
   pod 'SwiftLint'
   pod 'AlamofireImage'
   pod 'FSCalendar'
-  pod 'PKHUD'
+  pod 'NVActivityIndicatorView', '~> 4.8.0'
   target 'UniSaarTests' do
     inherit! :search_paths
      inhibit_all_warnings!

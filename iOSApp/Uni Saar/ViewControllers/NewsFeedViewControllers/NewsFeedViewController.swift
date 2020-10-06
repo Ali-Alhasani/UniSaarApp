@@ -45,6 +45,7 @@ class NewsFeedViewController: UIViewController {
         newsViewModel.newsCells.bind { [weak self] _ in
             if let `self` = self {
                 self.newsTable.reloadData()
+                self.initialSelection()
             }
         }
         newsViewModel.onShowError = { [weak self] alert in
@@ -53,6 +54,23 @@ class NewsFeedViewController: UIViewController {
         newsViewModel.showLoadingIndicator.bind { [weak self] visible in
             if let `self` = self {
                 visible ? self.newsTable.showingLoadingView() : self.newsTable.hideLoadingView()
+            }
+        }
+    }
+
+    // select default item in detail view for iPad in SplitViewController
+    func initialSelection() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            DispatchQueue.main.async {
+                let initialIndexPath = IndexPath(row: 0, section: 0)
+                switch self.newsViewModel.newsCells.value[safe: initialIndexPath.row] {
+                case .normal(let viewModel):
+                    self.performSegue(withIdentifier: SegueIdentifiers.toNewsDetails, sender: viewModel)
+                    self.newsTable.selectRow(at: initialIndexPath, animated: true, scrollPosition: .none)
+                case .empty, .error, .none:
+                    // nop no click action should be done for empty cell's
+                    break
+                }
             }
         }
     }

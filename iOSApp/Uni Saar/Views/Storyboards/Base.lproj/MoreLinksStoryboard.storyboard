@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097.3" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VbY-Py-4TU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VbY-Py-4TU">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -77,7 +80,8 @@
                                 <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="baD-GA-JaT"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="K4h-Tf-B16" firstAttribute="top" secondItem="baD-GA-JaT" secondAttribute="top" id="9gm-gZ-NDq"/>
                             <constraint firstItem="K4h-Tf-B16" firstAttribute="trailing" secondItem="baD-GA-JaT" secondAttribute="trailing" id="FIm-0d-YBY"/>
@@ -86,7 +90,6 @@
                             <constraint firstItem="K4h-Tf-B16" firstAttribute="leading" secondItem="baD-GA-JaT" secondAttribute="leading" id="pbQ-DG-fI8"/>
                             <constraint firstItem="idV-IZ-Jf7" firstAttribute="centerY" secondItem="xRY-OD-x7S" secondAttribute="centerY" id="sYu-bz-mur"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="baD-GA-JaT"/>
                     </view>
                     <navigationItem key="navigationItem" id="iFD-ew-CNG">
                         <barButtonItem key="rightBarButtonItem" image="link.circle" id="jql-GV-CtV">
@@ -111,7 +114,7 @@
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="jcy-O3-jSw">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemGroupedBackgroundColor"/>
                         <sections>
                             <tableViewSection headerTitle="Campus Location" id="37I-ew-bj2">
                                 <cells>
@@ -181,77 +184,98 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZj-9e-b4g">
-                                <rect key="frame" x="16" y="104" width="382" height="298"/>
-                                <attributedString key="attributedText">
-                                    <fragment>
-                                        <string key="content">This app was designed and implemented to support iOS, iPadOS and macOS by : 
-
-</string>
-                                        <attributes>
-                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <font key="NSFont" metaFont="system" size="17"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">- Ali Alhasani 
-- Serdar Durdyyev</string>
-                                        <attributes>
-                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <font key="NSFont" metaFont="system" size="20"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">
-
-
-Server Team:   </string>
-                                        <attributes>
-                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <font key="NSFont" metaFont="system" size="17"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-Cg
-</string>
-                                        <attributes>
-                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <font key="NSFont" size="17" name="HelveticaNeue"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content" base64-UTF8="YES">
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo
-</string>
-                                        <attributes>
-                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <font key="NSFont" metaFont="system" size="17"/>
-                                        </attributes>
-                                    </fragment>
-                                    <fragment>
-                                        <string key="content">- Matias Klimpel Akahoshi
-- Julien Schanz
-- Anthony Heggen</string>
-                                        <attributes>
-                                            <color key="NSColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                                            <font key="NSFont" metaFont="system" size="20"/>
-                                        </attributes>
-                                    </fragment>
-                                </attributedString>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="◉ Ali Alhasani " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZj-9e-b4g">
+                                <rect key="frame" x="30" y="334.5" width="368" height="20.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo-Universität_des_Saarlandes" translatesAutoresizingMaskIntoConstraints="NO" id="y9Q-Hb-a4j">
+                                <rect key="frame" x="103.5" y="88" width="207" height="179"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Development Team" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4cH-uB-8r3">
+                                <rect key="frame" x="16" y="267" width="382" height="24"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <color key="textColor" name="uniHeadlineColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Get to know more about us by searching &quot;Cool guys&quot; in the directory" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SKb-6X-sKa">
+                                <rect key="frame" x="20" y="530" width="378" height="30.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Learn more about us" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uWa-EK-c84">
+                                <rect key="frame" x="16" y="493" width="382" height="21"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                <color key="textColor" name="uniHeadlineColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="iOS, iPadOS and macOS design and implementation:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7rI-kA-VZ8">
+                                <rect key="frame" x="16" y="307" width="382" height="19.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Server Team:    " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nbz-wZ-ggh">
+                                <rect key="frame" x="16" y="363" width="382" height="19.5"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fps-xj-wpp">
+                                <rect key="frame" x="35" y="390.5" width="363" height="86.5"/>
+                                <string key="text">◉ Matias Klimpel Akahoshi
+◉ Julien Schanz
+◉ Anthony Heggen
+◉ Serdar Durdyyev  </string>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" text="Check the open-source code of this project in GitHub" textAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="q8C-qs-jhj">
+                                <rect key="frame" x="16" y="592.5" width="382" height="60"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <color key="textColor" systemColor="labelColor"/>
+                                <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                        <constraints>
-                            <constraint firstItem="BvF-BI-hCz" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ZZj-9e-b4g" secondAttribute="bottom" constant="16" id="fpa-Mb-vgH"/>
-                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="top" secondItem="BvF-BI-hCz" secondAttribute="top" constant="16" id="k19-ut-bvK"/>
-                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="ZZj-9e-b4g" secondAttribute="trailing" constant="16" id="ozV-NU-dyN"/>
-                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="yun-1T-2XU"/>
-                        </constraints>
                         <viewLayoutGuide key="safeArea" id="BvF-BI-hCz"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="y9Q-Hb-a4j" firstAttribute="top" secondItem="BvF-BI-hCz" secondAttribute="top" id="17g-17-oZp"/>
+                            <constraint firstItem="4cH-uB-8r3" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="71K-qb-Lis"/>
+                            <constraint firstItem="4cH-uB-8r3" firstAttribute="top" secondItem="y9Q-Hb-a4j" secondAttribute="bottom" id="8SG-sz-vs2"/>
+                            <constraint firstItem="q8C-qs-jhj" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="DoK-Cu-IU5"/>
+                            <constraint firstItem="y9Q-Hb-a4j" firstAttribute="height" secondItem="rji-tO-Bxk" secondAttribute="height" multiplier="0.2" id="Dre-7Z-Pbm"/>
+                            <constraint firstItem="fps-xj-wpp" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="35" id="EBv-bi-FZX"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="fps-xj-wpp" secondAttribute="trailing" constant="16" id="Ewp-tW-3ll"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="q8C-qs-jhj" secondAttribute="bottom" constant="16" id="Far-RD-CRN"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="4cH-uB-8r3" secondAttribute="trailing" constant="16" id="G21-P4-pWw"/>
+                            <constraint firstItem="fps-xj-wpp" firstAttribute="top" secondItem="Nbz-wZ-ggh" secondAttribute="bottom" constant="8" id="Iit-0s-6Me"/>
+                            <constraint firstItem="7rI-kA-VZ8" firstAttribute="top" secondItem="4cH-uB-8r3" secondAttribute="bottom" constant="16" id="JfG-lk-ghP"/>
+                            <constraint firstItem="SKb-6X-sKa" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="20" id="Oag-o8-cAC"/>
+                            <constraint firstItem="Nbz-wZ-ggh" firstAttribute="top" secondItem="ZZj-9e-b4g" secondAttribute="bottom" constant="8" id="Q9c-EU-bNq"/>
+                            <constraint firstItem="uWa-EK-c84" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="Qbb-91-yEh"/>
+                            <constraint firstItem="Nbz-wZ-ggh" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="SGB-bp-T8x"/>
+                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="top" secondItem="7rI-kA-VZ8" secondAttribute="bottom" constant="8" id="WFI-io-Cg5"/>
+                            <constraint firstItem="7rI-kA-VZ8" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="cLV-Q0-7kB"/>
+                            <constraint firstItem="y9Q-Hb-a4j" firstAttribute="width" secondItem="rji-tO-Bxk" secondAttribute="width" multiplier="0.5" id="hpH-pk-b3u"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="q8C-qs-jhj" secondAttribute="trailing" constant="16" id="i1N-OW-T4j"/>
+                            <constraint firstItem="uWa-EK-c84" firstAttribute="top" secondItem="fps-xj-wpp" secondAttribute="bottom" constant="16" id="isc-nF-CiS"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="uWa-EK-c84" secondAttribute="trailing" constant="16" id="jqV-s1-VIO"/>
+                            <constraint firstItem="q8C-qs-jhj" firstAttribute="top" secondItem="SKb-6X-sKa" secondAttribute="bottom" constant="32" id="mGi-rX-Hom"/>
+                            <constraint firstItem="y9Q-Hb-a4j" firstAttribute="centerX" secondItem="rji-tO-Bxk" secondAttribute="centerX" id="nFC-0Y-LpL"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="Nbz-wZ-ggh" secondAttribute="trailing" constant="16" id="nn4-Si-rhW"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="ZZj-9e-b4g" secondAttribute="trailing" constant="16" id="ozV-NU-dyN"/>
+                            <constraint firstItem="SKb-6X-sKa" firstAttribute="top" secondItem="uWa-EK-c84" secondAttribute="bottom" constant="16" id="qZd-Ec-fsC"/>
+                            <constraint firstAttribute="trailing" secondItem="SKb-6X-sKa" secondAttribute="trailing" constant="16" id="ugm-MM-tg8"/>
+                            <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="7rI-kA-VZ8" secondAttribute="trailing" constant="16" id="xgG-Di-KDO"/>
+                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="30" id="yun-1T-2XU"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About App" id="jva-kV-2ke"/>
+                    <connections>
+                        <outlet property="gitHubText" destination="q8C-qs-jhj" id="fIG-42-ZCm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QMo-1S-vot" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -259,6 +283,19 @@ ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAo
         </scene>
     </scenes>
     <resources>
-        <image name="link.circle" width="17" height="17"/>
+        <image name="Logo-Universität_des_Saarlandes" width="520" height="210"/>
+        <image name="link.circle" width="13" height="13"/>
+        <namedColor name="uniHeadlineColor">
+            <color red="0.030999999493360519" green="0.11400000005960464" blue="0.21199999749660492" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGroupedBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
     </resources>
 </document>

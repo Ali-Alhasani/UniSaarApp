@@ -51,12 +51,14 @@ class MensaViewController: UIViewController {
         mensaCollectionView.layoutCollectionView()
     }
     func bindViewModel() {
+        //self.showLoadingActivity()
         mensaMenuViewModel.daysMenus.bind { [weak self] _ in
             if let `self` = self {
                 DispatchQueue.main.async {
                     self.mensaCollectionView.reloadData()
                     let numberOfPages = self.mensaMenuViewModel.daysMenus.value.count
                     self.pageControl.numberOfPages = numberOfPages
+                    self.initialSelection()
                 }
             }
         }
@@ -65,7 +67,22 @@ class MensaViewController: UIViewController {
         }
         mensaMenuViewModel.showLoadingIndicator.bind { [weak self] visible in
             if let `self` = self {
-                visible ? self.mensaCollectionView.showingLoadingView() : self.mensaCollectionView.hideLoadingView()
+                //visible ? self.showLoadingActivity() : self.hideLoadingActivity()
+            }
+        }
+    }
+    // select default item in detail view for iPad in SplitViewController
+    func initialSelection() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            DispatchQueue.main.async {
+                let initialIndexPath = IndexPath(row: 0, section: 0)
+                switch self.mensaMenuViewModel.daysMenus.value[safe: initialIndexPath.row] {
+                case .normal(let viewModel):
+                    self.performSegue(withIdentifier: SegueIdentifiers.toMealDetails, sender: viewModel.mealsCells[0])
+                case .empty, .error, .none:
+                    // nop no click action should be done for empty cell's
+                    break
+                }
             }
         }
     }
