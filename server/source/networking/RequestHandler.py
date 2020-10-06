@@ -409,7 +409,7 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
         if language == 'fr':
             responseJSON = json.dumps("Il y avait trop r&eacute;sultats avec cette demande. Pri&egrave;re d' essayer encore une fois avec une demande plus specifique.")
         elif language == 'de':
-            responseJSON = json.dumps("Für diese Suchanfrage gab es zu viele Ergebnisse. Bitte versuch es noch einmal mit einer genaueren Anfrage.")
+            responseJSON = json.dumps("F&uuml;r diese Suchanfrage gab es zu viele Ergebnisse. Bitte versuch es noch einmal mit einer genaueren Anfrage.")
         else:
             responseJSON = json.dumps("There were too many results for this query. Please try again with a more precise query.")
 
