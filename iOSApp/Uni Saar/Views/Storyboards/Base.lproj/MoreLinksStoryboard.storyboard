@@ -185,7 +185,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="◉ Ali Alhasani " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZZj-9e-b4g">
-                                <rect key="frame" x="30" y="334.5" width="368" height="20.5"/>
+                                <rect key="frame" x="35" y="334.5" width="363" height="20.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -269,7 +269,7 @@
                             <constraint firstItem="SKb-6X-sKa" firstAttribute="top" secondItem="uWa-EK-c84" secondAttribute="bottom" constant="16" id="qZd-Ec-fsC"/>
                             <constraint firstAttribute="trailing" secondItem="SKb-6X-sKa" secondAttribute="trailing" constant="16" id="ugm-MM-tg8"/>
                             <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="7rI-kA-VZ8" secondAttribute="trailing" constant="16" id="xgG-Di-KDO"/>
-                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="30" id="yun-1T-2XU"/>
+                            <constraint firstItem="ZZj-9e-b4g" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="35" id="yun-1T-2XU"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About App" id="jva-kV-2ke"/>
