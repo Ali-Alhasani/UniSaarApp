@@ -17,6 +17,9 @@ class LLError: NSObject, Error {
         self.message = message
     }
 }
+extension LLError: LocalizedError {
+    var errorDescription: String? { return message }
+}
 
 public enum MyError: Error {
     case customError
