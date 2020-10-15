@@ -32,6 +32,7 @@ class MensaViewController: UIViewController {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        isMenuUpdated()
     }
     // refresh UICollectionView layout after rotation of the device (iPad)
     override func viewWillLayoutSubviews() {
@@ -67,9 +68,13 @@ class MensaViewController: UIViewController {
         }
         mensaMenuViewModel.showLoadingIndicator.bind { [weak self] visible in
             if let `self` = self {
-                //visible ? self.showLoadingActivity() : self.hideLoadingActivity()
+                visible ? self.mensaCollectionView.showingLoadingView() : self.mensaCollectionView.hideLoadingView()
             }
         }
+    }
+
+    func isMenuUpdated() {
+        mensaMenuViewModel.isMenuUpdated()
     }
     // select default item in detail view for iPad in SplitViewController
     func initialSelection() {
