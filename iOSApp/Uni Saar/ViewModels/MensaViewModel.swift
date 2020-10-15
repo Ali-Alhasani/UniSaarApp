@@ -44,19 +44,39 @@ class MensaMenuViewModel: ParentViewModel {
     func loadGetMockMenu() {
         self.daysMenus.value = MensaMenuModel.menuDemoData.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0))}
     }
+
+    func isMenuUpdated() {
+        let firstMenuDay = self.daysMenus.value.first
+        switch firstMenuDay {
+        case .normal(let viewModel):
+            // if the view model date is outdate we fire the api call again
+            if viewModel.dateValue != getDateFormater(date: Date()) {
+                loadGetMensaMenu()
+            }
+        default :
+            loadGetMensaMenu()
+        }
+    }
+
+    func getDateFormater(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d.MM."
+        return formatter.string(from: date)
+    }
 }
 
 class MensaDayMenuViewModel {
     // MARK: - Instance Properties
     var dateText: NSMutableAttributedString
+    var dateValue: String
     var mealsCells: [MensaMealCellViewModel]
     init(mensaDayModel: MensaDayModel) {
         let splitedDate = mensaDayModel.date.split {$0 == " "}
         let mutableAttributedString = NSMutableAttributedString()
         let dayText = String(splitedDate.first ?? "")
-        let dateText = String(splitedDate.last ?? "")
+        dateValue = String(splitedDate.last ?? "")
         let dayName =  NSMutableAttributedString(string: dayText + " ", attributes: AppStyle.largeTitleAttributes)
-        let date = NSMutableAttributedString(string: dateText, attributes: AppStyle.calloutAttributes)
+        let date = NSMutableAttributedString(string: dateValue, attributes: AppStyle.calloutAttributes)
         mutableAttributedString.append(dayName)
         mutableAttributedString.append(date)
         self.dateText = mutableAttributedString

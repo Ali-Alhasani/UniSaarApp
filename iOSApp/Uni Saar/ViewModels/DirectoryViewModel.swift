@@ -44,7 +44,9 @@ class DirectoryViewModel: ParentViewModel {
             case .failure(let error):
                 self?.showLoadingIndicator.value = false
                 self?.searchResutlsCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                self?.showError(error: error)
+                if !(error is LLError) {
+                    self?.showError(error: error)
+                }
             }
         }
     }

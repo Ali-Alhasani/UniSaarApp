@@ -24,24 +24,29 @@ class APIClient {
     }
     class func sendRequest(requestURL: URLRouter, success: @escaping (_ response: Any?) -> Void, failure: @escaping (_ error: Error?) -> Void) {
         APIClient.printL("base url: \(requestURL)", type: .note)
-        APIClient.sessionManager.request(requestURL).responseJSON { response in
+        APIClient.sessionManager.request(requestURL).validate().responseJSON { response in
             APIClient.printL("request fired", type: .note)
             APIClient.printL("request: \(response.request!)", type: .note)
             APIClient.printL("Response Recieved : \(Date())", type: .note)
             APIClient.printL("response: \(String(describing: response.result.value))", type: .note)
             guard response.result.isSuccess,
-                let value = response.result.value else {
-                    APIClient.printL("Error while fetching data: \(String(describing: response.result.error))", type: .error)
-                    //checking the error, to show a custom friendly error for the user 
-                    if let overriddenError = response.result.error as? AFError {
-                        if overriddenError.isResponseSerializationError || overriddenError.isInvalidURLError ||
-                            overriddenError.isParameterEncodingError ||  overriddenError.isMultipartEncodingError ||   overriddenError.isResponseValidationError {
-                            failure(MyError.customError)
-                            return
-                        }
-                    }
-                    failure(response.result.error)
+                  let value = response.result.value else {
+                APIClient.printL("Error while fetching data: \(String(describing: response.result.error))", type: .error)
+                // check for custum server error message
+                if let responseData = response.data, let jsonMessage = String(data: responseData, encoding: String.Encoding.utf8), jsonMessage != "" {
+                    failure(LLError(status: false, message: jsonMessage))
                     return
+                }
+                //checking the error, to show a custom friendly error for the user
+                if let overriddenError = response.result.error as? AFError {
+                    if overriddenError.isResponseSerializationError || overriddenError.isInvalidURLError ||
+                        overriddenError.isParameterEncodingError ||  overriddenError.isMultipartEncodingError ||   overriddenError.isResponseValidationError {
+                        failure(MyError.customError)
+                        return
+                    }
+                }
+                failure(response.result.error)
+                return
             }
             success(JSON(value))
         }
