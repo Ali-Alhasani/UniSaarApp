@@ -33,7 +33,7 @@ class APIClient {
                   let value = response.result.value else {
                 APIClient.printL("Error while fetching data: \(String(describing: response.result.error))", type: .error)
                 // check for custum server error message
-                if let responseData = response.data, let jsonMessage = String(data: responseData, encoding: String.Encoding.utf8) {
+                if let responseData = response.data, let jsonMessage = String(data: responseData, encoding: String.Encoding.utf8), jsonMessage != "" {
                     failure(LLError(status: false, message: jsonMessage))
                     return
                 }
