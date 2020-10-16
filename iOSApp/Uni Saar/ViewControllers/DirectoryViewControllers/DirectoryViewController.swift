@@ -78,6 +78,9 @@ class DirectoryViewController: UIViewController {
     @objc private func refershLoad() {
         directoryViewModel.loadGetHelpHelpfulNumbers()
     }
+    @objc func load(isFirstTime: Bool = true, searchText: String) {
+        directoryViewModel.loadGetSearchResults(isFirstTime, searchQuery: searchText)
+    }
     var isSearchBarEmpty: Bool {
         return searchController.searchBar.text?.isEmpty ?? true
     }
@@ -186,11 +189,27 @@ extension DirectoryViewController: UISearchResultsUpdating {
 extension DirectoryViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
         if let searchText = searchBar.text, searchText.count >= 3 {
-            directoryViewModel.loadGetSearchResults(searchQuery: searchText)
+            self.load(searchText: searchText)
         }
     }
 }
 
+// load more news if the user reach the bottom of the screen
+extension DirectoryViewController {
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+
+        // UITableView only moves in one direction, y axis
+        let currentOffset = scrollView.contentOffset.y
+        let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
+
+        // the distance from bottom
+        if maximumOffset - currentOffset <= 25.0 {
+            if let searchText = self.searchController.searchBar.text, searchText.count >= 3 {
+                self.load(isFirstTime: false, searchText: searchText)
+            }
+        }
+    }
+}
 extension DirectoryViewController: SingleButtonDialogPresenter { }
 extension DirectoryViewController {
     private func observeKeyboardEvents() {
