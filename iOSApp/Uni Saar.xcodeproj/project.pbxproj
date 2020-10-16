@@ -407,7 +407,6 @@
 				6B214328239BD40000E8958F /* ViewModels */,
 				6B0F26252396D224002E587E /* NetworkingAndSessionManager */,
 				6B0F25DF2396974F002E587E /* Assets.xcassets */,
-				6B0F25E12396974F002E587E /* LaunchScreen.storyboard */,
 				6BA5770E23DF0B3300D24F74 /* CampusData */,
 				6B0F25E42396974F002E587E /* Info.plist */,
 				6B0F262C2396D889002E587E /* Supportive */,
@@ -517,6 +516,7 @@
 				6BFB585423D64F4A00B69C4A /* DirectoryStoryboard.storyboard */,
 				6BFB585B23D64F5500B69C4A /* CampusStoryboard.storyboard */,
 				6BFB586223D64F6600B69C4A /* SetupAppStoryboard.storyboard */,
+				6B0F25E12396974F002E587E /* LaunchScreen.storyboard */,
 			);
 			path = Storyboards;
 			sourceTree = "<group>";
@@ -1356,8 +1356,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1384,8 +1383,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1474,8 +1472,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 13;
-				DERIVE_MACCATALYST_PRODUCT_BUNDLE_IDENTIFIER = YES;
+				CURRENT_PROJECT_VERSION = 15;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
