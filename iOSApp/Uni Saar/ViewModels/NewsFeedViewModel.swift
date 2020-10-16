@@ -16,6 +16,7 @@ class NewsFeedViewModel: ParentViewModel {
     var apiPageNumber = 0
     let numberOfItemPerPage = 10
     var isFilterdCacheUpdated = true
+    var isFreshLoad = Bindable(true)
     // fetch news categories form coredata
     lazy var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
@@ -51,6 +52,7 @@ class NewsFeedViewModel: ParentViewModel {
                         self?.isFilterdCacheUpdated = false
                     }
                     self?.newsCells.value = news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel )}
+                    self?.isFreshLoad.value = true
                 } else {
                     self?.newsCells.value.append(contentsOf: news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel)})
                 }

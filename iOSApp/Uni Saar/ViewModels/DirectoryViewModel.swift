@@ -8,6 +8,8 @@
 
 import Foundation
 import CoreData
+import UIKit
+
 class DirectoryViewModel: ParentViewModel {
     // MARK: - Object Lifecycle
     let searchResutlsCells = Bindable([TableViewCellType<DirectorySearchResutlsCellViewModel>]())
@@ -20,11 +22,16 @@ class DirectoryViewModel: ParentViewModel {
         return frc
     }()
     var apiPageNumber = 0
-    let numberOfItemPerPage = 10
+    let numberOfItemPerPage = UIDevice.current.userInterfaceIdiom == .pad ? 16 : 10
+    var hasNextPage = false
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
     func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) {
+
+        if !hasNextPage && isFirstTime == false {
+            return
+        }
         showLoadingIndicator.value = true
         dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery) { [weak self] result in
             self?.showLoadingIndicator.value = false
@@ -36,10 +43,11 @@ class DirectoryViewModel: ParentViewModel {
                         return
                     }
                     self?.searchResutlsCells.value = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel )}
-
+                    self?.apiPageNumber = 0
                 } else {
                     self?.searchResutlsCells.value.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel)})
                 }
+                self?.hasNextPage = results.hasNextPage
                 self?.apiPageNumber += 1
             case .failure(let error):
                 self?.showLoadingIndicator.value = false
