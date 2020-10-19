@@ -38,6 +38,7 @@ WEBVIEW_NEWS_TEMPLATE = 'webview_news.html'
 WEBVIEW_EVENTS_TEMPLATE = 'webview_event.html'
 WEBVIEW_ERROR_TEMPLATE = 'errorpage.html'
 IMAGE_ERROR_DIRECTORY = abspath(join('.', 'images'))+'/'
+IMAGE_ERROR_URL = '/error_image'
 
 PRODID_CORP = 'Uni_Saar'
 PRODID_PROD = 'Uni_Saar_App_2.0'

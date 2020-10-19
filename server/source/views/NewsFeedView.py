@@ -213,7 +213,7 @@ class NewsFeedView:
         return cal.to_ical()
 
     def toWebViewError(self, language):
-        errorimage = IMAGE_ERROR_DIRECTORY + 'owl_error.png'
+        errorimage = IMAGE_ERROR_URL
         errorTemplate = dict(language=language,
                              errorimage=errorimage)
         renderedTemplate = self.error_template.render(errorTemplate=errorTemplate)

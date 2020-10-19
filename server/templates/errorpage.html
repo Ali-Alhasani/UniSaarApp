@@ -22,10 +22,12 @@
         }
 
 .container{
+    vertical-align: top;
+    display: inline-block;
+    text-align: center;
 position:relative;
 left:50%;
-top:30%;
-float:left
+float: left;
 }
 .errortext{
 font: -apple-system-callout;
@@ -38,13 +40,16 @@ font: -apple-system-title1;
 font-family:'Roboto', sans-serif;
 padding-left:5px;
 position:relative;
+    display: block;
 color:var(--title-color);
 }
 .img{
-display:flex;
-max-width:50%;
-height:auto;
-object-fit:contain;
+    display:flex;
+    max-width:75%;
+    max-height: 50%;
+    margin-left: fill;
+    margin-right: auto;
+    object-fit:contain;
 }
 </style>
 </head>

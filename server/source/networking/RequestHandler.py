@@ -4,6 +4,7 @@ from urllib.parse import urlparse, parse_qs
 from datetime import datetime
 from dateutil import parser as dateParser
 from source.parsers.DirectoryParser import UnspecificSearchQueryException
+from source.Constants import IMAGE_ERROR_DIRECTORY
 
 
 class PathError(Exception):
@@ -210,8 +211,16 @@ class RequestHandler(http.server.BaseHTTPRequestHandler):
                 else:
                     lastUpdated = None
                 self.getMore(language, lastUpdated)
+            elif p[0] == 'error_image':
+                with open(IMAGE_ERROR_DIRECTORY + 'owl_error.png', 'rb') as f:
+                    img = f.read()
+                    self.send_response(code=200)
+                    self.send_header('content-type', 'image/png')
+                    self.end_headers()
+                    self.wfile.write(img)
             else:
                 raise PathError
+
         # Any exception that is thrown at lower levels with a specific error attributed to it
         # should be caught here in its own except block. For these cases, individual error messages
         # may be sent
