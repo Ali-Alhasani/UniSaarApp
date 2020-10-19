@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import NotificationCenter
+import UserNotifications
 class FilterMensaViewModel: ParentViewModel {
     // MARK: - Object Lifecycle
     let didUpdatefilterList: Bindable = Bindable(false)

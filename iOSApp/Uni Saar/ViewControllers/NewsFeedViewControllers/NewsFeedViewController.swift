@@ -45,7 +45,6 @@ class NewsFeedViewController: UIViewController {
         newsViewModel.newsCells.bind { [weak self] _ in
             if let `self` = self {
                 self.newsTable.reloadData()
-                self.initialSelection()
             }
         }
         newsViewModel.onShowError = { [weak self] alert in
@@ -54,6 +53,11 @@ class NewsFeedViewController: UIViewController {
         newsViewModel.showLoadingIndicator.bind { [weak self] visible in
             if let `self` = self {
                 visible ? self.newsTable.showingLoadingView() : self.newsTable.hideLoadingView()
+            }
+        }
+        newsViewModel.isFreshLoad.bind { [weak self] _ in
+            if let `self` = self {
+                self.initialSelection()
             }
         }
     }

@@ -53,7 +53,7 @@ class APIClient {
     }
     class func printL(_ text: String, type: LogType) {
         // change this to change what gets logged
-        let logType: LogType = .all
+        let logType: LogType = .none
         if(logType == .all || type == logType) && (type != .none) {
             debugPrint("APIClient-\(type.printCase()) \(text)")
         }
