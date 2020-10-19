@@ -80,7 +80,7 @@ class MensaController:
                     # the dictionary of locationID to locationInfo exists already, add another key-value-pair
                     locationInfoDict[language][locationInfo.getID()] = locationInfo
                 else:
-                    # this is the first time, a locationInfo is added in this language, hence create the dictionary
+                    # this is the first time a locationInfo is added in this language, hence create the dictionary
                     locationInfoDict[language] = {locationInfo.getID(): locationInfo}
 
         return locationInfoDict

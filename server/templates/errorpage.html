@@ -24,9 +24,7 @@
 .container{
 position:relative;
 left:50%;
-margin-left:-50px;
 top:30%;
-margin-top:-50px;
 float:left
 }
 .errortext{
@@ -52,14 +50,14 @@ object-fit:contain;
 </head>
     <body>
 <div class="container">
-     <img class= "img" src="{{errorpage.errorimage}}"/>
+     <!-- <img class= "img" src="{{errorTemplate.errorimage}}"/> -->
     <div class="errortext">
         {% if errorTemplate.language == 'fr' %}
-        <span class="oops">400</span> </br>Quelque chose ne va pas avec cette demande</br>On te ramène
+        <span class="oops">400</span> <p>Quelque chose ne va pas avec cette demande</p>On te ramène
         {% elif errorTemplate.language == 'de' %}
-        <span class="oops">400</span> </br>Mit dieser Anfrage stimmt etwas nicht</br>Lass uns Sie zurückbringen
+        <span class="oops">400</span> <p>Mit dieser Anfrage stimmt etwas nicht</p>Lass uns Dich zurückbringen
         {%else%}
-        <span class="oops">400</span> </br>Something's wrong with this request</br>Let's take you back
+        <span class="oops">400</span> <p>Something's wrong with this request</p>Let's take you back
         {%endif%}
 </div>
 </div>

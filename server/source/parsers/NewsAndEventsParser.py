@@ -72,7 +72,7 @@ class NewsAndEventsParser:
         for item in items:
             title = item['title']
             publishedDate = datetime.fromtimestamp(mktime(item['published_parsed'])).date()
-            link = item['link']  # this seems to be empty in all of the uni news
+            link = item['link']
             categories = set()
             category = None
             if language == 'de':
@@ -135,7 +135,7 @@ class NewsAndEventsParser:
             happeningTime = dateParser.parse(item['published'])
             happeningDate = happeningTime.date()
             publishedDate = datetime.now().date()
-            link = item['link']  # this seems to be empty in all of the uni events
+            link = item['link']
             categories = set()
             category = None
             if language == 'de':
@@ -186,7 +186,7 @@ class NewsAndEventsParser:
                                    description, content, imageLink, happeningTime)
             for cachedEvent in cachedEvents:
                 if cachedEvent == eventItem:
-                    eventItem = cachedEvent #TODO test if this works as planned
+                    eventItem = cachedEvent
             eventsList.append(eventItem)
             self.currentNewsAndEventsID = self.currentNewsAndEventsID + 1
         newEventsCache = [event.toCache() for event in eventsList]

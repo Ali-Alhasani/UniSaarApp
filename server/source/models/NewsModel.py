@@ -8,10 +8,6 @@ class NewsModel (NewsAndEventsModel):
 
     def __eq__(self, other):
         if isinstance(other, NewsModel):
-#            b = (self.title == other.title and self.publishedDate == other.publishedDate
-#                    and self.link == other.link and self.categories == other.categories
-#                    and self.description == other.description and self.content == other.content
-#                    and self.imageLink == other.imageLink)
             b = (self.title == other.title and self.publishedDate == other.publishedDate)
             return b
         else:

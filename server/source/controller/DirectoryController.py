@@ -195,7 +195,6 @@ class DirectoryController:
         """
         helpfulNumbers = {}
 
-        # read the helpfulNumberFiles
         helpfulNumberFiles = self.readHelpfulNumbersFiles(self._HELPFUL_NUMBERS_PATH)
 
         # parse each helpful number file to get the language used and the HelpfulNumber lists

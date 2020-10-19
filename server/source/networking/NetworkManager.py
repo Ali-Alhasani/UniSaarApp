@@ -132,13 +132,6 @@ class NetworkManager:
             # the news website shows a 404 error if no news in the selected language is available
             news = ''
 
-        #if 'text/xml' not in contentType:
-            # we expect to get a data of content-type text/xml in a successful request
-            # this was probably only valid before the website for news changed, s.t. asking for
-            # news in languages where there is none now returns a 404
-            #raise ContentTypeError(contentType, 'text/xml')
-        #    pass
-
         return news
 
     def fetchEvents(self, language: str) -> str:
@@ -155,12 +148,6 @@ class NetworkManager:
                                                       path=self._EVENTS_BASE_PATH, query=urlQuery)
         except ConnectionError:
             events = ''
-
-        #if 'text/xml' not in contentType:
-            # we expect to get a data of content-type text/xml in a successful request
-            # a problem with this is the request for a non-German rss feed which returns a webpage
-            #raise ContentTypeError(contentType, 'text/html')
-        #    pass
 
         return events
 
@@ -237,7 +224,6 @@ class NetworkManager:
             splitLink = link.split('/')
             name = splitLink[len(splitLink) - 1]
             names.append(folder + name)
-            #if not path.exists(folder + name):
             pdf, _ = self._fetchExternalData(scheme=self._AC_SCHEME, authority=self._AC_AUTHORITY,
                                             path=link, byte=True)
             with open(folder + name, 'wb') as f:

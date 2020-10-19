@@ -113,8 +113,6 @@ class DirectoryParser:
         if soup.find(name='h1').string in ['Bitte geben Sie mehr Suchbegriffe ein',
                                            'Bitte spezifizieren Sie Ihre Suchanfrage']:
             raise UnspecificSearchQueryException('')
-            #return None, 0
-
         # Get the number of search results
         # We assume that there is only one div tag with css-class 'InfoLeiste'
         # This tag contains a string whose first word is the number of hits

@@ -26,7 +26,7 @@ def hasWordBeginningWith(sentence: str, query: str) -> bool:
             for word in words:
                 newWords += word.split(char)
 
-            words = newWords # replace the previous list of words by the new one
+            words = newWords  # replace the previous list of words by the new one
 
     # Check if one of the words begins with the query, ignore casing
     for word in words:

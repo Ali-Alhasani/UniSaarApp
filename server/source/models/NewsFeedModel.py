@@ -60,8 +60,6 @@ class NewsFeedModel:
         try:
             if (filterIDs is None) and (negFilterIDs is None):
                 if not self.pageExists(self.newsAndEvents, page, pageSize):
-                    # raise PageIndexOutOfRangeError(page, pageSize, self, language)
-                    # return empty list instead of raising an exception
                     return [], len(self.newsAndEvents), False
                 hasNextPage = self.pageExists(self.newsAndEvents, (page+1), pageSize)
                 return self.newsAndEvents[page * pageSize:(page + 1) * pageSize],\
@@ -97,8 +95,6 @@ class NewsFeedModel:
                 else:
                     filteredNewsAndEvents = preFilteredNewsAndEvents
                 if not self.pageExists(filteredNewsAndEvents, page, pageSize):
-                    # raise PageIndexOutOfRangeError(page, pageSize, self, language, filterIDs, negFilterIDs)
-                    # return empty list instead of raising an exception
                     return [], len(filteredNewsAndEvents), False
                 hasNextPage = self.pageExists(filteredNewsAndEvents, page+1, pageSize)
                 return filteredNewsAndEvents[page * pageSize:(page + 1) * pageSize], len(filteredNewsAndEvents), hasNextPage
@@ -197,6 +193,9 @@ class NewsFeedModel:
             for newsItem in news:
                 if newsItem not in self.newsAndEvents:
                     self.newsAndEvents.append(newsItem)
+                else:
+                    i = self.newsAndEvents.index(newsItem)
+                    self.newsAndEvents[i] = newsItem
             for event in events:
                 semTemCat = Category(SEMESTER_TERMINE_CATEGORY_STRING, -1)
                 if event not in self.newsAndEvents and (semTemCat not in event.getCategories()):

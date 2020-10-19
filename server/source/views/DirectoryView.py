@@ -84,7 +84,7 @@ class DirectoryView:
 
         return json.dumps(personDict, separators=(',', ':'))  # remove ws after separator for compact representation
 
-    def helpfulNumberToJSON(self, helpfulNumber: HelpfulNumber):# -> dict[str, str]:
+    def helpfulNumberToJSON(self, helpfulNumber: HelpfulNumber):
         """
         Takes a HelpfulNumber and creates a dict to be packed into a JSON
         @param helpfulNumber: HelpfulNumber
