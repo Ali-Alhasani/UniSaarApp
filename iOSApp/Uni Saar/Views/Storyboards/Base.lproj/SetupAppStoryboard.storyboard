@@ -48,7 +48,7 @@ Saarland University App</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R1G-xe-eWN" customClass="ButtonWithCheckedImageText" customModule="Uni_Saar" customModuleProvider="target">
-                                <rect key="frame" x="32" y="841.5" width="960" height="60"/>
+                                <rect key="frame" x="100" y="841.5" width="824" height="60"/>
                                 <color key="backgroundColor" name="uniColorTint"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="CMV-HJ-RQ1"/>
@@ -62,7 +62,7 @@ Saarland University App</string>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58m-CW-pjp" customClass="ButtonWithCheckedImageText" customModule="Uni_Saar" customModuleProvider="target">
-                                <rect key="frame" x="32" y="927.5" width="960" height="60"/>
+                                <rect key="frame" x="100" y="927.5" width="824" height="60"/>
                                 <color key="backgroundColor" name="uniColorTint"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="ZFH-g8-ccf"/>
@@ -99,7 +99,7 @@ Saarland University App</string>
                         <viewLayoutGuide key="safeArea" id="tlm-gQ-QzG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="58m-CW-pjp" secondAttribute="trailing" constant="32" id="0Ax-Wg-wio"/>
+                            <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="58m-CW-pjp" secondAttribute="trailing" constant="100" id="0Ax-Wg-wio"/>
                             <constraint firstItem="aTC-Sj-4G8" firstAttribute="height" relation="lessThanOrEqual" secondItem="Dkm-J4-Nwc" secondAttribute="height" multiplier="0.18" id="28m-ZK-bax">
                                 <variation key="heightClass=regular-widthClass=regular" constant="1.3"/>
                             </constraint>
@@ -117,7 +117,7 @@ Saarland University App</string>
                                 <variation key="heightClass=regular-widthClass=regular" constant="50"/>
                             </constraint>
                             <constraint firstItem="FFc-bu-C6z" firstAttribute="top" relation="greaterThanOrEqual" secondItem="7ZL-Wl-B7R" secondAttribute="bottom" constant="16" id="Gnw-BS-i7f">
-                                <variation key="heightClass=regular-widthClass=regular" constant="80"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="120"/>
                             </constraint>
                             <constraint firstItem="FFc-bu-C6z" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="16" id="OK4-ZO-Mhs"/>
                             <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="7ZL-Wl-B7R" secondAttribute="trailing" constant="16" id="PEJ-Y3-dgt"/>
@@ -126,15 +126,15 @@ Saarland University App</string>
                             </constraint>
                             <constraint firstItem="aTC-Sj-4G8" firstAttribute="centerX" secondItem="Dkm-J4-Nwc" secondAttribute="centerX" id="SSx-ne-sdv"/>
                             <constraint firstItem="8WH-ck-W3Q" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="8" id="Sgm-KW-DTq"/>
-                            <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="R1G-xe-eWN" secondAttribute="trailing" constant="32" id="Sqc-sz-gi5"/>
+                            <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="R1G-xe-eWN" secondAttribute="trailing" constant="100" id="Sqc-sz-gi5"/>
                             <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="dwe-nF-Rc6" secondAttribute="trailing" constant="32" id="VMu-CB-4pP"/>
                             <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="gzx-D5-Uaq" secondAttribute="trailing" constant="16" id="WuN-4v-fpA"/>
-                            <constraint firstItem="R1G-xe-eWN" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="32" id="XaZ-Oa-32f"/>
+                            <constraint firstItem="R1G-xe-eWN" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="100" id="XaZ-Oa-32f"/>
                             <constraint firstItem="7ZL-Wl-B7R" firstAttribute="top" secondItem="gzx-D5-Uaq" secondAttribute="bottom" constant="16" id="aTF-df-MuU"/>
                             <constraint firstItem="FFc-bu-C6z" firstAttribute="centerY" secondItem="tlm-gQ-QzG" secondAttribute="centerY" multiplier="1.17" priority="600" id="b8Y-QO-Fgr"/>
                             <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="FFc-bu-C6z" secondAttribute="trailing" constant="16" id="bA6-Hx-DNx"/>
                             <constraint firstItem="R1G-xe-eWN" firstAttribute="top" secondItem="FFc-bu-C6z" secondAttribute="bottom" constant="32" id="c0C-xM-0H2"/>
-                            <constraint firstItem="58m-CW-pjp" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="32" id="dQZ-RO-lsF"/>
+                            <constraint firstItem="58m-CW-pjp" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="100" id="dQZ-RO-lsF"/>
                             <constraint firstItem="aTC-Sj-4G8" firstAttribute="top" secondItem="8WH-ck-W3Q" secondAttribute="bottom" priority="300" constant="40" id="iy9-NL-A35">
                                 <variation key="heightClass=regular-widthClass=regular" constant="60"/>
                             </constraint>
