@@ -1,0 +1,9 @@
+theme: jekyll-theme-minimal
+title: Uni Saar App
+
+include:
+    - README.md
+
+description: Home Page for the Uni Saar App 2.0
+
+logo: assets/uni-saar-app.gif
