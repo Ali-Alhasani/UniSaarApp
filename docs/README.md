@@ -2,7 +2,7 @@
 
 This is the home page of the Uni Saar App 2.0.
 
-* Download the app for iPhone, iPad, and Mac on the [App Store](https://apps.apple.com/app/uni-saar/id736099223]).
+* Download the app for iPhone, iPad, and Mac on the [App Store](https://apps.apple.com/app/uni-saar/id736099223).
 * Get the source code on the [project page](https://github.com/AliHassany/UniSaarApp/).
 
 If you have comments or suggestions, report a [New Issue](https://github.com/AliHassany/UniSaarApp/issues) on the
