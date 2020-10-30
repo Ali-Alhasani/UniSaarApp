@@ -20,6 +20,8 @@ class DirectoryViewController: UIViewController {
     // MARK: - Instance Properties
     lazy var directoryViewModel: DirectoryViewModel = DirectoryViewModel()
     let searchController = UISearchController(searchResultsController: nil)
+    private var keyboardNotification: NSObjectProtocol?
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchBar()
@@ -213,14 +215,14 @@ extension DirectoryViewController {
 extension DirectoryViewController: SingleButtonDialogPresenter { }
 extension DirectoryViewController {
     private func observeKeyboardEvents() {
-        NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil) { [weak self] (notification) in
+        keyboardNotification = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil) { [weak self] (notification) in
             guard let keyboardHeight = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
             print("Keyboard height in KeyboardWillShow method: \(keyboardHeight.height)")
             self?.directoryTableView.contentInset.bottom = keyboardHeight.height
             self?.directoryTableView.verticalScrollIndicatorInsets.bottom = keyboardHeight.height
             }
 
-         NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil) { [weak self] (notification) in
+        keyboardNotification = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil) { [weak self]  _ in
              self?.directoryTableView.verticalScrollIndicatorInsets.bottom = 0
              self?.directoryTableView.contentInset.bottom = 0
          }

@@ -9,7 +9,6 @@
 import Foundation
 import CoreData
 
-
 extension MoreLinksCache {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<MoreLinksCache> {

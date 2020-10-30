@@ -60,13 +60,13 @@ extension AFError {
                  return "multipartEncodingFailed, bodyPartFilenameInvalid , \(url)"
              case .bodyPartFileNotReachable(let url):
                  return "multipartEncodingFailed, bodyPartFileNotReachable , \(url)"
-             case .bodyPartFileNotReachableWithError(let atURL):
+             case .bodyPartFileNotReachableWithError(let atURL, _):
                   return "multipartEncodingFailed, bodyPartFileNotReachableWithError , \(atURL)"
              case .bodyPartFileIsDirectory(let url):
                 return "multipartEncodingFailed, bodyPartFileIsDirectory , \(url)"
              case .bodyPartFileSizeNotAvailable(let url):
                  return "multipartEncodingFailed, bodyPartFileSizeNotAvailable , \(url)"
-             case .bodyPartFileSizeQueryFailedWithError(let forURL):
+             case .bodyPartFileSizeQueryFailedWithError(let forURL, _):
                  return "multipartEncodingFailed, bodyPartFileSizeQueryFailedWithError , \(forURL)"
              case .bodyPartInputStreamCreationFailed(let url):
                  return "multipartEncodingFailed, bodyPartInputStreamCreationFailed , \(url)"
@@ -108,7 +108,7 @@ extension AFError {
                 return "responseValidationFailed, dataFileReadFailed. , \(atLocation)"
             case .missingContentType(let acceptableContentTypes):
                  return "responseValidationFailed, missingContentType. , \(acceptableContentTypes)"
-            case .unacceptableContentType(let acceptableContentTypes):
+            case .unacceptableContentType(let acceptableContentTypes, _):
                  return "responseValidationFailed, unacceptableContentType. , \(acceptableContentTypes)"
             case .unacceptableStatusCode(let code):
                 return "responseValidationFailed, unacceptableStatusCode. , \(code)"

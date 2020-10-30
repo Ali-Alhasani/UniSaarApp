@@ -60,7 +60,7 @@ class AppSetupFirstScreenViewController: UIViewController {
 
     }
     @IBAction func nextButtonAction(_ sender: Any) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, error in
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, _ in
             if success {
                 print("All set!")
                 self.navigateToMainHomeScreen()

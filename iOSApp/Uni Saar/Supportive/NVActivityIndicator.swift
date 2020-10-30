@@ -9,7 +9,6 @@
 import Foundation
 import NVActivityIndicatorView
 
-
 extension UIViewController: NVActivityIndicatorViewable {
     func showLoadingActivity(message: String? = "") {
         DispatchQueue.main.async {
