@@ -1,6 +1,7 @@
 import json
 from source.models.MensaModel import MensaModel, Meal, Counter, ServingDay
 from datetime import datetime
+from source.Constants import MENSA_LOCATIONS
 
 
 def weekdayToString(day: int, language: str) -> str:
@@ -283,7 +284,7 @@ class MensaView:
         # comprehension
         notices = sorted(mensaModel.getNotices(language=language), key=lambda x: x.getName())
         locationList = [{"locationID": location.getID(), "name": location.getName()}
-                        for location in mensaModel.getLocations(language=language) if location.getID() in ["sb", "hom"]]
+                        for location in mensaModel.getLocations(language=language) if location.getID() in MENSA_LOCATIONS and len(location.getMenu()) != 0]
         filterJSON = {"locations": locationList,
                       "notices": [{"noticeID": notice.getID(), "name": notice.getName(),
                                    "isAllergen": notice.getIsAllergen(), "isNegated": notice.getIsNegated()}

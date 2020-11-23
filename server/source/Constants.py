@@ -49,6 +49,8 @@ ICS_BASE_LINK = 'http://' + SERVER_ADDRESS + ':' + str(SERVER_PORT) + '/events/i
 # Mensa
 LOCATION_INFO_PATH = abspath(join('source', 'location_info_files'))
 MENSA_LANGUAGES = ['de', 'en', 'fr']
+# in order to add more locations to the mensa screen, add the appropriate location id here
+MENSA_LOCATIONS = ['sb', 'hom', 'forum', 'mensagarten']
 
 # Map
 MAP_FOLDER = abspath(join('.', 'source', 'map_data'))
