@@ -62,17 +62,23 @@ class MensaModel:
             tempDays = []
             for location in self.locations[language]:
                 # TODO this is a hopefully temporary workaround to add the contents of the forum international and the
-                # mensagarten to the sb menu
+                # mensagarten to the sb menu, to remove it, uncomment the following line and remove the rest
+                # location.setMenu(menuData[location.getID()])
                 if location.getID() not in ['sb', 'forum', 'mensagarten']:
                     location.setMenu(menuData[location.getID()])
                 elif location.getID() in ['forum', 'mensagarten']:
                     tempDays = tempDays + menuData[location.getID()]
                     location.setMenu([])
-            sbMenu = menuData['sb'] + tempDays
+            sbMenu = menuData['sb']
             for location in self.locations[language]:
                 if location.getID() == 'sb':
+                    for servingDay in sbMenu:
+                        for servingDay2 in tempDays:
+                            if servingDay.getDate() == servingDay2.getDate():
+                                tempCounters = servingDay.getCounters() + servingDay2.getCounters()
+                                servingDay.setCounters(tempCounters)
                     location.setMenu(sbMenu)
-
+            # END WORKAROUND
                 # gather the meals and counters of each location and add them to mealDictionary
                 for servingDay in location.getMenu():
                     for counter in servingDay.getCounters():
