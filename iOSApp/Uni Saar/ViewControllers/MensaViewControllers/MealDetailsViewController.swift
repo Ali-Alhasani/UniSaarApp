@@ -40,6 +40,7 @@ class MealDetailsViewController: UIViewController {
             self?.componentsLabel.attributedText = meal.mealComponetsText
             self?.priceTagNamesLabel.text = meal.priceTagNamesText
             self?.pricesLabel.text = meal.priceValuesText
+            self?.requestReview()
         }
         meal.onShowError = { [weak self] alert in
             self?.presentSingleButtonDialog(alert: alert)
@@ -56,6 +57,10 @@ class MealDetailsViewController: UIViewController {
         }
 
         //meal.loadGetMockMenu()
+    }
+
+    func requestReview() {
+        AppStoreReviewManager.requestReviewIfAppropriate(presentedView: self)
     }
 
 //    func showActivityLoad() {
