@@ -36,6 +36,8 @@ class AppSessionManager {
     static let helpfulNumbersLastChangedKey = "helpfulNumbersLastChanged"
     static let foodAlarmStatusKey = "foodAlarmStatusKey"
     static let foodAlarmTimeKey = "foodAlarmTimeKey"
+    static let selectedCampusKey = "selectedCampusKey"
+    static let selectedMensaLocationKey = "selectedMensaLocationKey"
 
 }
 // cache functions
@@ -96,5 +98,25 @@ extension AppSessionManager {
 
         let foodAlarmTime =  UserDefaults.standard.value(forKey: foodAlarmTimeKey) as? Date
         AppSessionManager.shared.foodAlarmTime = foodAlarmTime
+    }
+
+    class func saveCampuslocation() {
+        let campuslocation =  AppSessionManager.shared.selectedCampus.locationKey
+        UserDefaults.standard.set(campuslocation, forKey: selectedCampusKey)
+
+        let mensaLocation =  AppSessionManager.shared.selectedMensaLocation.locationKey
+        UserDefaults.standard.set(mensaLocation, forKey: selectedMensaLocationKey)
+    }
+    class func loadCampuslocation() {
+        guard let campuslocation = UserDefaults.standard.value(forKey: selectedCampusKey) as? String else {return}
+        AppSessionManager.shared.selectedCampus = Campus.init(rawValue: campuslocation) ?? .saarbruken
+
+        guard let mensaLocation = UserDefaults.standard.value(forKey: selectedMensaLocationKey) as? String else {return}
+        AppSessionManager.shared.selectedMensaLocation = Campus.init(rawValue: mensaLocation) ?? .saarbruken
+        self.notifyCampusView()
+    }
+
+    class func notifyCampusView() {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
     }
 }

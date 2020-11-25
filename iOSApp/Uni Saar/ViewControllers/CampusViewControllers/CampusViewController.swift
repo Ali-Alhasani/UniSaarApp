@@ -59,12 +59,12 @@ class CampusViewController: UIViewController {
     }
     func activateSearchBar() {
         DispatchQueue.main.async {
-                   if let staffAddress = self.staffAddress {
-                       self.searchController?.isActive = true
-                       self.searchController?.searchBar.text = staffAddress
+            if let staffAddress = self.staffAddress {
+                self.searchController?.isActive = true
+                self.searchController?.searchBar.text = staffAddress
 
-                   }
-               }
+            }
+        }
     }
     func setupNotification() {
 
@@ -90,6 +90,11 @@ class CampusViewController: UIViewController {
         DispatchQueue.main.async {
             self.didChangeLocationFilter(selectedCampus: AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
         }
+    }
+
+    func saveLocation() {
+        AppSessionManager.shared.selectedCampus = selectedCampus
+        AppSessionManager.saveCampuslocation()
     }
 
     // MARK: - Navigation
@@ -139,6 +144,7 @@ extension CampusViewController: ChooseCampusDelegate {
         self.selectedCampus = selectedCampus
         if regionNeedUpdate {
             mapRegion()
+            saveLocation()
         }
 
     }
