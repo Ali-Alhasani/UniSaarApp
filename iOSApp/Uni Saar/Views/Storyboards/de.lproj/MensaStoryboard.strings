@@ -29,3 +29,30 @@
 
 "Wez-G8-Sto.text" = "Wähle die Benachrichtigungsuhrzeit";
 
+/* Class = "UIButton"; normalTitle = "Scan Card"; ObjectID = "NgR-KZ-hYs"; */
+"NgR-KZ-hYs.normalTitle" = "Karte einlesen";
+
+/* Class = "UILabel"; text = "Current Balance"; ObjectID = "RuN-VN-0eI"; */
+"RuN-VN-0eI.text" = "Aktuelles Guthaben";
+
+/* Class = "UILabel"; text = "Card ID"; ObjectID = "QMO-qx-nne"; */
+"QMO-qx-nne.text" = "Karten-ID";
+
+/* Class = "UILabel"; text = "Last Transaction"; ObjectID = "NTn-HR-HN2"; */
+"NTn-HR-HN2.text" = "Letzte Transaktion";
+
+/* Class = "UIBarButtonItem"; title = "Scan"; ObjectID = "YIv-e8-S3i"; */
+"YIv-e8-S3i.title" = "Einlesen";
+
+/* Class = "UINavigationItem"; title = "Mensa Balance"; ObjectID = "Iu7-9h-C0R"; */
+"Iu7-9h-C0R.title" = "Mensa-Guthaben";
+
+/* Class = "UILabel"; text = "Mensa Balance"; ObjectID = "DqX-Vk-3IT"; */
+"DqX-Vk-3ITf.text" = "Mensa-Guthaben";
+
+/* Class = "UILabel"; text = "No Card Scanned"; ObjectID = "xBT-I3-5F2"; */
+"xBT-I3-5F2.text" = "Noch keine Karte eingelesen";
+
+/* Class = "UILabel"; text = "No Card Scanned"; ObjectID = "4SL-YJ-b6J"; */
+"4SL-YJ-b6J.text" = "Noch keine Karte eingelesen";
+

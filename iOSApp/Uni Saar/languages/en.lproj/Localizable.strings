@@ -55,3 +55,10 @@
 
 "GitHubLinkText" = "Check the code of this open-source project on GitHub";
 "GitHub" = "GitHub";
+
+
+
+"RateTitle" =  "Rate The App";
+"EnjoyingAPP" = "Are you enjoying using the new Uni app?";
+"RateYesActionTitle" = "Yes, review the app";
+"RateNoActionTitle" = "No, thanks";

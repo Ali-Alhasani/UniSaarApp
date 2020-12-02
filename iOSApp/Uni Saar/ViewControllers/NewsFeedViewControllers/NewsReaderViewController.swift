@@ -77,6 +77,10 @@ class NewsReaderViewController: UIViewController {
         documentsURL.appendPathComponent("yourFileName."+"ics")
         return (documentsURL, [.removePreviousFile])
     }
+
+    func requestReview() {
+        AppStoreReviewManager.requestReviewIfAppropriate(presentedView: self)
+    }
 }
 extension NewsReaderViewController: WKNavigationDelegate, WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -86,6 +90,7 @@ extension NewsReaderViewController: WKNavigationDelegate, WKScriptMessageHandler
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()
+            self.requestReview()
         }
     }
 

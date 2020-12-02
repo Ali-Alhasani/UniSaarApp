@@ -13,6 +13,7 @@
 		5211AF3923C7B89B006D1F9A /* CampusSaarCoor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5211AF3723C7B89B006D1F9A /* CampusSaarCoor.plist */; };
 		553C61C6C4068133FDDEE542 /* Pods_Uni_Saar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282354A5D46394A81BD55318 /* Pods_Uni_Saar.framework */; };
 		64518BBF995A3CEED39948D3 /* Pods_UniSaarTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 198A752EBD2FAD76121B0C94 /* Pods_UniSaarTests.framework */; };
+		6B00FECF256EACB5002F85CA /* AppStoreReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */; };
 		6B06D6FC239C47F800A0F02F /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FB239C47F800A0F02F /* UIViewController.swift */; };
 		6B06D6FF239C4AD700A0F02F /* MensaMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FD239C4AD700A0F02F /* MensaMenuTableViewCell.swift */; };
 		6B06D700239C4AD700A0F02F /* MensaMenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B06D6FE239C4AD700A0F02F /* MensaMenuTableViewCell.xib */; };
@@ -159,6 +160,7 @@
 		5211AF3523C7B76A006D1F9A /* Campus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
 		5211AF3723C7B89B006D1F9A /* CampusSaarCoor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CampusSaarCoor.plist; sourceTree = "<group>"; };
 		5211AF3B23C7BFE8006D1F9A /* Campus_Map_Coord.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Campus_Map_Coord.json; sourceTree = "<group>"; };
+		6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewManager.swift; sourceTree = "<group>"; };
 		6B06D6FB239C47F800A0F02F /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		6B06D6FD239C4AD700A0F02F /* MensaMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaMenuTableViewCell.swift; sourceTree = "<group>"; };
 		6B06D6FE239C4AD700A0F02F /* MensaMenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MensaMenuTableViewCell.xib; sourceTree = "<group>"; };
@@ -450,6 +452,7 @@
 				6B0F26262396D2FD002E587E /* URLRouter.swift */,
 				6B0F262A2396D855002E587E /* LLError.swift */,
 				6B28189A239DAED7008389D6 /* Result.swift */,
+				6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */,
 			);
 			path = NetworkingAndSessionManager;
 			sourceTree = "<group>";
@@ -1006,6 +1009,7 @@
 				6BA48E1A23C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift in Sources */,
 				6BACBA69239B1C80003A532B /* MensaModel.swift in Sources */,
 				6B2818A0239DBEBD008389D6 /* DynamicValue.swift in Sources */,
+				6B00FECF256EACB5002F85CA /* AppStoreReviewManager.swift in Sources */,
 				6B4E6AED23AB9D5300A85C47 /* ParentViewModel.swift in Sources */,
 				6B2818AB239EF699008389D6 /* MealDetailsViewController.swift in Sources */,
 				6B2818A2239DCF4E008389D6 /* SingleButtonAlert.swift in Sources */,
@@ -1368,7 +1372,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1395,7 +1399,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1484,7 +1488,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
