@@ -16,16 +16,20 @@ class NewsAndEventsParser:
     def __init__(self, networkManager):
         self.networkManager = networkManager
         self.currentNewsAndEventsID = 0
-        self.currentCategoryID = 6
+        self.currentCategoryID = 0
+        self.languageCategories = set()
+        self.allCategories = set()
+        self.eventCategories = set()
+        """
+        # remove the language news categories for now since they will not be implemented soon
+
         deEventCat = Category(GERMAN_NEWS_STRING, 0)
         enEventCat = Category(ENGLISH_NEWS_STRING, 1)
         frEventCat = Category(FRENCH_NEWS_STRING, 2)
         deNewsCat = Category(GERMAN_EVENT_STRING, 3)
         enNewsCat = Category(ENGLISH_EVENT_STRING, 4)
         frNewsCat = Category(FRENCH_EVENT_STRING, 5)
-        self.languageCategories = set()
-        self.allCategories = set()
-        self.eventCategories = set()
+        
         self.languageCategories.add(deNewsCat)
         self.languageCategories.add(enNewsCat)
         self.languageCategories.add(frNewsCat)
@@ -41,6 +45,7 @@ class NewsAndEventsParser:
         self.allCategories.add(deEventCat)
         self.allCategories.add(enEventCat)
         self.allCategories.add(frEventCat)
+        """
         self.academicCalendarParsedNames = []
 
     def getLanguageCategories(self):
@@ -75,18 +80,22 @@ class NewsAndEventsParser:
             link = item['link']
             categories = set()
             category = None
+            """
+            # remove the language news categories for now since they will not be implemented soon
             if language == 'de':
                 category = Category(GERMAN_NEWS_STRING, self.currentCategoryID)
             elif language == 'en':
                 category = Category(ENGLISH_NEWS_STRING, self.currentCategoryID)
             elif language == 'fr':
                 category = Category(FRENCH_NEWS_STRING, self.currentCategoryID)
+            
             if category is not None:
                 for cat in self.allCategories:
                     if cat == category:
                         categories.add(cat)
                 if category not in categories:
                     categories.add(category)
+            """
             for tag in item['tags']:
                 category = Category(tag['term'], self.currentCategoryID)
                 # Category.__eq__ is implemented via equality of the name string
@@ -138,6 +147,9 @@ class NewsAndEventsParser:
             link = item['link']
             categories = set()
             category = None
+            """
+            # remove the language news categories for now since they will not be implemented soon
+
             if language == 'de':
                 category = Category(GERMAN_EVENT_STRING, self.currentCategoryID)
             elif language == 'en':
@@ -158,6 +170,7 @@ class NewsAndEventsParser:
                 if category not in self.eventCategories:
                     self.eventCategories.add(category)
                     self.currentCategoryID += 1
+            """
             for tag in item['tags']:
                 category = Category(tag['term'], self.currentCategoryID)
                 # Category.__eq__ is implemented via equality of the name string
