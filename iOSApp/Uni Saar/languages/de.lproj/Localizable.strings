@@ -52,3 +52,15 @@
 
 "GitHubLinkText" = "Finde den Code zu diesem open-source Projekt auf GitHub";
 "GitHub" = "GitHub";
+
+
+"Please hold your Mensa card near the NFC sensor." = "Bitte die Mensakarte an den NFC-Sensor halten.";
+"NFC Not Supported" = "Keine NFC-Unterstützung";
+"This device doesn't support NFC tag scanning." = "NFC wird auf diesem Gerät nicht unterstützt.";
+"With this app you can scan your mensa card to get it's balance instantly! Get it now: Search for 'Mensa Balance' on the App Store!" = "Mit dieser App kannst du das aktuelle Guthaben deiner Mensakarte auslesen! Lade sie dir gleich herunter: suche nach 'Mensa-Guthaben' im App Store.";
+
+
+"Rate The App" = "Bewerte die App";
+"Are you enjoying using the new Uni app?" = "Gefällt dir die neue Uni App?";
+"Yes, review the app" = "Ja, bewerte die App";
+"No, thanks" = "Nein, danke";

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hd8-ei-ecY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="hd8-ei-ecY">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="Stack View standard spacing" minToolsVersion="9.0"/>
@@ -64,11 +64,18 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Mensa" id="Kru-Hd-qRH">
-                        <barButtonItem key="leftBarButtonItem" image="info.circle" id="P3t-hm-8cY">
-                            <connections>
-                                <segue destination="V4z-45-fAk" kind="show" id="Jxn-mo-Pua"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem image="info.circle" id="P3t-hm-8cY">
+                                <connections>
+                                    <segue destination="V4z-45-fAk" kind="show" id="38H-9A-EW2"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem image="eurosign.circle" catalog="system" id="uD1-bv-n92">
+                                <connections>
+                                    <segue destination="6Iv-Vh-QnH" kind="presentation" id="2EI-lr-H0b"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <barButtonItem key="rightBarButtonItem" title="Item" image="gear" id="cwU-ej-YjM">
                             <connections>
                                 <segue destination="tJV-fH-t78" kind="presentation" id="5E8-8W-vTr"/>
@@ -181,6 +188,7 @@
                     <connections>
                         <outlet property="filterTableView" destination="SEA-Ve-VdL" id="zhU-nm-UTa"/>
                         <segue destination="gaT-xL-fIc" kind="show" identifier="NotificationTime" id="8gw-ec-sDD"/>
+                        <segue destination="6Iv-Vh-QnH" kind="show" identifier="toMensaCard" id="aFV-tO-Xfq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8QS-sN-XC6" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -454,13 +462,190 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="A3W-Do-XDt" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1559" y="1671"/>
+            <point key="canvasLocation" x="2468.1159420289855" y="1670.7589285714284"/>
+        </scene>
+        <!--Mensa Balance-->
+        <scene sceneID="KUp-DS-Ai8">
+            <objects>
+                <viewController id="XlV-of-oju" customClass="MainViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="YJR-Ax-yzM">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="DAK-tN-Wpf">
+                                <rect key="frame" x="20" y="673" width="374" height="50"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NgR-KZ-hYs">
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="50"/>
+                                        <color key="backgroundColor" name="uniColorTint"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="t1V-WD-JJH"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="16"/>
+                                        <color key="tintColor" systemColor="linkColor"/>
+                                        <state key="normal" title="Scan Card">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="10"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="scanCardAction" destination="XlV-of-oju" eventType="touchUpInside" id="DVb-7Y-pOo"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="NgR-KZ-hYs" firstAttribute="width" secondItem="DAK-tN-Wpf" secondAttribute="width" id="Rxi-JE-MNQ"/>
+                                </constraints>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Sp-rK-PYJ">
+                                <rect key="frame" x="20" y="82" width="374" height="241"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="cTO-QS-JT8">
+                                        <rect key="frame" x="16" y="16" width="342" height="209"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Vta-mP-c7g">
+                                                <rect key="frame" x="0.0" y="0.0" width="342" height="69.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Current Balance" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RuN-VN-0eI">
+                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="20.5"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00 €" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OqR-9V-fus">
+                                                        <rect key="frame" x="0.0" y="28.5" width="342" height="41"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                                        <color key="highlightedColor" systemColor="labelColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="RJF-hZ-cYc">
+                                                <rect key="frame" x="0.0" y="77.5" width="342" height="38.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Transaction" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NTn-HR-HN2">
+                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="18"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0.00 €" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hW9-eG-zd0">
+                                                        <rect key="frame" x="0.0" y="18" width="342" height="20.5"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Cn8-dm-pQs">
+                                                <rect key="frame" x="0.0" y="124" width="342" height="38.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DqX-Vk-3IT">
+                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="18"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Card Scanned" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4SL-YJ-b6J">
+                                                        <rect key="frame" x="0.0" y="18" width="342" height="20.5"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="xiL-Ht-ueO">
+                                                <rect key="frame" x="0.0" y="170.5" width="342" height="38.5"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Card ID" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QMO-qx-nne">
+                                                        <rect key="frame" x="0.0" y="0.0" width="342" height="18"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
+                                                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Card Scanned" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xBT-I3-5F2">
+                                                        <rect key="frame" x="0.0" y="18" width="342" height="20.5"/>
+                                                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="cTO-QS-JT8" secondAttribute="bottom" constant="16" id="JnH-gn-rgX"/>
+                                    <constraint firstItem="cTO-QS-JT8" firstAttribute="leading" secondItem="4Sp-rK-PYJ" secondAttribute="leading" constant="16" id="P8r-md-NYq"/>
+                                    <constraint firstItem="cTO-QS-JT8" firstAttribute="top" secondItem="4Sp-rK-PYJ" secondAttribute="top" constant="16" id="YoS-Yh-zLH"/>
+                                    <constraint firstAttribute="trailing" secondItem="cTO-QS-JT8" secondAttribute="trailing" constant="16" id="rSo-2h-sCE"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="10"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="jsQ-nk-4tP"/>
+                        <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="jsQ-nk-4tP" firstAttribute="trailing" secondItem="DAK-tN-Wpf" secondAttribute="trailing" constant="20" id="1E9-Tp-CO6"/>
+                            <constraint firstItem="4Sp-rK-PYJ" firstAttribute="leading" secondItem="jsQ-nk-4tP" secondAttribute="leading" constant="20" id="4aI-SV-NNh"/>
+                            <constraint firstItem="jsQ-nk-4tP" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="DAK-tN-Wpf" secondAttribute="bottom" constant="20" id="CVV-Ie-Mca"/>
+                            <constraint firstItem="jsQ-nk-4tP" firstAttribute="trailing" secondItem="4Sp-rK-PYJ" secondAttribute="trailing" constant="20" id="FeP-OD-4PP"/>
+                            <constraint firstItem="NgR-KZ-hYs" firstAttribute="centerY" secondItem="jsQ-nk-4tP" secondAttribute="centerY" priority="500" id="Zhm-5G-dRx"/>
+                            <constraint firstItem="NgR-KZ-hYs" firstAttribute="top" relation="greaterThanOrEqual" secondItem="4Sp-rK-PYJ" secondAttribute="bottom" priority="600" constant="350" id="Zhw-eK-XCO"/>
+                            <constraint firstItem="DAK-tN-Wpf" firstAttribute="leading" secondItem="jsQ-nk-4tP" secondAttribute="leading" constant="20" id="g6V-tx-7kw"/>
+                            <constraint firstItem="4Sp-rK-PYJ" firstAttribute="top" secondItem="jsQ-nk-4tP" secondAttribute="top" constant="26" id="paT-AW-SW1"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Mensa Balance" id="Iu7-9h-C0R">
+                        <barButtonItem key="backBarButtonItem" title="Scan" id="hfW-qd-WwE"/>
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="OLA-fh-0ga">
+                            <connections>
+                                <action selector="doneAction:" destination="XlV-of-oju" id="pDT-Yb-MVE"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="labelCardID" destination="xBT-I3-5F2" id="aXR-AV-IeG"/>
+                        <outlet property="labelCurrentBalance" destination="OqR-9V-fus" id="CvV-lB-NWk"/>
+                        <outlet property="labelDate" destination="4SL-YJ-b6J" id="ab4-1G-ZLJ"/>
+                        <outlet property="labelLastTransaction" destination="hW9-eG-zd0" id="RZd-Gu-tjf"/>
+                        <outlet property="viewCardBackground" destination="4Sp-rK-PYJ" id="dCj-m3-Atu"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4mR-33-MdY" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1226.0869565217392" y="1757.8125"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Oon-zH-lC7">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6Iv-Vh-QnH" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="04m-sM-in7"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="C9t-Qi-PNG">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="XlV-of-oju" kind="relationship" relationship="rootViewController" id="j50-1S-4cc"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zEH-XZ-ns9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="345" y="1822"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
+        <segue reference="2EI-lr-H0b"/>
         <segue reference="yU9-p7-nt6"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="eurosign.circle" catalog="system" width="128" height="121"/>
         <image name="flag.circle" width="13" height="13"/>
         <image name="gear" width="15" height="15"/>
         <image name="info.circle" width="13" height="13"/>
@@ -470,11 +655,20 @@
         <namedColor name="uniHeadlineColor">
             <color red="0.030999999493360519" green="0.11400000005960464" blue="0.21199999749660492" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="linkColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="opaqueSeparatorColor">
             <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -15,6 +15,7 @@ class MediatorDelegate: UIResponder {
         AppSessionManager.loadWelcomeScreenStatus()
         MediatorDelegate.sceneDelegate = sceneDelegate
          //DispatchQueue.main.async {
+             AppSessionManager.loadCampuslocation()
              AppSessionManager.loadMensafiltersStatus()
              AppSessionManager.loadNewsfiltersStatus()
              AppSessionManager.loadMoreLinksStatus()

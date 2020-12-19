@@ -13,6 +13,7 @@
 		5211AF3923C7B89B006D1F9A /* CampusSaarCoor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5211AF3723C7B89B006D1F9A /* CampusSaarCoor.plist */; };
 		553C61C6C4068133FDDEE542 /* Pods_Uni_Saar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282354A5D46394A81BD55318 /* Pods_Uni_Saar.framework */; };
 		64518BBF995A3CEED39948D3 /* Pods_UniSaarTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 198A752EBD2FAD76121B0C94 /* Pods_UniSaarTests.framework */; };
+		6B00FECF256EACB5002F85CA /* AppStoreReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */; };
 		6B06D6FC239C47F800A0F02F /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FB239C47F800A0F02F /* UIViewController.swift */; };
 		6B06D6FF239C4AD700A0F02F /* MensaMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FD239C4AD700A0F02F /* MensaMenuTableViewCell.swift */; };
 		6B06D700239C4AD700A0F02F /* MensaMenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B06D6FE239C4AD700A0F02F /* MensaMenuTableViewCell.xib */; };
@@ -102,6 +103,7 @@
 		6BBC9D6E23AA4ADD009CD435 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */; };
 		6BBC9D7023AA4E07009CD435 /* AppSetupFirstScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */; };
 		6BBC9D7223AA5D52009CD435 /* SetupPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */; };
+		6BC6F41D256834BB00D701AA /* MensaCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC6F418256834BB00D701AA /* MensaCardViewController.swift */; };
 		6BCDAF5423AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5223AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld */; };
 		6BCDAF5F23AC13BD00DDB464 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5E23AC13BD00DDB464 /* CoreDataStack.swift */; };
 		6BCDAF6723AC16F100DDB464 /* DataClientCacheExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF6623AC16F100DDB464 /* DataClientCacheExtension.swift */; };
@@ -158,6 +160,7 @@
 		5211AF3523C7B76A006D1F9A /* Campus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
 		5211AF3723C7B89B006D1F9A /* CampusSaarCoor.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = CampusSaarCoor.plist; sourceTree = "<group>"; };
 		5211AF3B23C7BFE8006D1F9A /* Campus_Map_Coord.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = Campus_Map_Coord.json; sourceTree = "<group>"; };
+		6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreReviewManager.swift; sourceTree = "<group>"; };
 		6B06D6FB239C47F800A0F02F /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		6B06D6FD239C4AD700A0F02F /* MensaMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaMenuTableViewCell.swift; sourceTree = "<group>"; };
 		6B06D6FE239C4AD700A0F02F /* MensaMenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MensaMenuTableViewCell.xib; sourceTree = "<group>"; };
@@ -258,6 +261,7 @@
 		6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupFirstScreenViewController.swift; sourceTree = "<group>"; };
 		6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPrivacyViewController.swift; sourceTree = "<group>"; };
+		6BC6F418256834BB00D701AA /* MensaCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MensaCardViewController.swift; sourceTree = "<group>"; };
 		6BCDAF5323AC11F800DDB464 /* FilterListCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FilterListCoreData.xcdatamodel; sourceTree = "<group>"; };
 		6BCDAF5E23AC13BD00DDB464 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		6BCDAF6023AC14D100DDB464 /* FilterNoticesListCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterNoticesListCache+CoreDataProperties.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterNoticesListCache+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
@@ -448,6 +452,7 @@
 				6B0F26262396D2FD002E587E /* URLRouter.swift */,
 				6B0F262A2396D855002E587E /* LLError.swift */,
 				6B28189A239DAED7008389D6 /* Result.swift */,
+				6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */,
 			);
 			path = NetworkingAndSessionManager;
 			sourceTree = "<group>";
@@ -584,6 +589,7 @@
 				6B2818AA239EF699008389D6 /* MealDetailsViewController.swift */,
 				6B2818C023A05646008389D6 /* MensaLocationsInfoViewController.swift */,
 				6B7B618723A060D700A77F90 /* FilterMensaViewController.swift */,
+				6BC6F423256834C500D701AA /* MensaCard */,
 			);
 			path = MensaViewControllers;
 			sourceTree = "<group>";
@@ -621,6 +627,14 @@
 				6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */,
 			);
 			path = SteupViewControllers;
+			sourceTree = "<group>";
+		};
+		6BC6F423256834C500D701AA /* MensaCard */ = {
+			isa = PBXGroup;
+			children = (
+				6BC6F418256834BB00D701AA /* MensaCardViewController.swift */,
+			);
+			path = MensaCard;
 			sourceTree = "<group>";
 		};
 		6BCDAF5D23AC138E00DDB464 /* CoreData */ = {
@@ -995,6 +1009,7 @@
 				6BA48E1A23C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift in Sources */,
 				6BACBA69239B1C80003A532B /* MensaModel.swift in Sources */,
 				6B2818A0239DBEBD008389D6 /* DynamicValue.swift in Sources */,
+				6B00FECF256EACB5002F85CA /* AppStoreReviewManager.swift in Sources */,
 				6B4E6AED23AB9D5300A85C47 /* ParentViewModel.swift in Sources */,
 				6B2818AB239EF699008389D6 /* MealDetailsViewController.swift in Sources */,
 				6B2818A2239DCF4E008389D6 /* SingleButtonAlert.swift in Sources */,
@@ -1042,6 +1057,7 @@
 				6BA48E1F23C8EA6C009D32F8 /* StaffDetailsViewModel.swift in Sources */,
 				6B8DBCB225222BD50019BA4D /* NVActivityIndicator.swift in Sources */,
 				6B0F26272396D2FD002E587E /* URLRouter.swift in Sources */,
+				6BC6F41D256834BB00D701AA /* MensaCardViewController.swift in Sources */,
 				5211AF3423C7B738006D1F9A /* CampusMapOverlayView.swift in Sources */,
 				6BF1CA2123A3F31100A514CB /* MoreLinksDetailsViewController.swift in Sources */,
 				6B2818B0239EFFEA008389D6 /* MensaCollectionViewCell.swift in Sources */,
@@ -1356,15 +1372,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.uni-saarland.UniApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1384,15 +1399,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.uni-saarland.UniApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1474,15 +1488,14 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 15;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.0;
+				MARKETING_VERSION = 2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "de.uni-saarland.UniApp";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
