@@ -76,6 +76,8 @@
 		6B8E446C250A260D0045260E /* MensaNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E446A250A260D0045260E /* MensaNotificationTableViewCell.swift */; };
 		6B8E446E250A68D80045260E /* MensaNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E4470250A68D80045260E /* MensaNotificationTableViewCell.xib */; };
 		6B908BE324D576C2000EE5AF /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B908BE224D576C2000EE5AF /* UIApplication.swift */; };
+		6B9541082590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B9541062590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib */; };
+		6B9541162590C6DC00B67DA9 /* NewMensaNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */; };
 		6BA48E1723C8A102009D32F8 /* DirectoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA48E1623C8A102009D32F8 /* DirectoryViewModel.swift */; };
 		6BA48E1A23C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA48E1823C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift */; };
 		6BA48E1B23C8AD2A009D32F8 /* StaffSearchResultTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6BA48E1923C8AD2A009D32F8 /* StaffSearchResultTableViewCell.xib */; };
@@ -234,6 +236,10 @@
 		6B8E4474250A68E20045260E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
 		6B8E4476250A68E50045260E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
 		6B908BE224D576C2000EE5AF /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		6B9541072590C3CC00B67DA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/NewMensaNotificationTableViewCell.xib; sourceTree = "<group>"; };
+		6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMensaNotificationTableViewCell.swift; sourceTree = "<group>"; };
+		6B95411B2590D9AE00B67DA9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/NewMensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
+		6B95411D2590D9DC00B67DA9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/NewMensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
 		6BA48E1623C8A102009D32F8 /* DirectoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewModel.swift; sourceTree = "<group>"; };
 		6BA48E1823C8AD2A009D32F8 /* StaffSearchResultTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffSearchResultTableViewCell.swift; sourceTree = "<group>"; };
 		6BA48E1923C8AD2A009D32F8 /* StaffSearchResultTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = StaffSearchResultTableViewCell.xib; sourceTree = "<group>"; };
@@ -505,6 +511,8 @@
 				6BA48E1923C8AD2A009D32F8 /* StaffSearchResultTableViewCell.xib */,
 				6B4302EE23D92A9B00D21877 /* HelpfulNumbersTableViewCell.swift */,
 				6B4302EF23D92A9B00D21877 /* HelpfulNumbersTableViewCell.xib */,
+				6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */,
+				6B9541062590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib */,
 				6B8E446A250A260D0045260E /* MensaNotificationTableViewCell.swift */,
 				6B8E4470250A68D80045260E /* MensaNotificationTableViewCell.xib */,
 			);
@@ -844,6 +852,7 @@
 				6B4E6AEB23AAFFA600A85C47 /* ErrorCellCollectionViewCell.xib in Resources */,
 				6B06D700239C4AD700A0F02F /* MensaMenuTableViewCell.xib in Resources */,
 				6B0F25E32396974F002E587E /* LaunchScreen.storyboard in Resources */,
+				6B9541082590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib in Resources */,
 				6B8E446E250A68D80045260E /* MensaNotificationTableViewCell.xib in Resources */,
 				5211AF3923C7B89B006D1F9A /* CampusSaarCoor.plist in Resources */,
 				6BFB584423D64F2E00B69C4A /* MensaStoryboard.storyboard in Resources */,
@@ -1030,6 +1039,7 @@
 				6B214327239BD3F400E8958F /* NewsFeedViewModel.swift in Sources */,
 				6BF1CA1623A1DBEA00A514CB /* MensaFilterList.swift in Sources */,
 				6B21431E239BB10200E8958F /* UIColor.swift in Sources */,
+				6B9541162590C6DC00B67DA9 /* NewMensaNotificationTableViewCell.swift in Sources */,
 				6BA670EC239BDF8800857DB7 /* Array.swift in Sources */,
 				6B0F25D72396974E002E587E /* AppDelegate.swift in Sources */,
 				6B63C16423AD68C400A2E090 /* FilterNewsViewModel.swift in Sources */,
@@ -1164,6 +1174,16 @@
 				6B8E4476250A68E50045260E /* de */,
 			);
 			name = MensaNotificationTableViewCell.xib;
+			sourceTree = "<group>";
+		};
+		6B9541062590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6B9541072590C3CC00B67DA9 /* Base */,
+				6B95411B2590D9AE00B67DA9 /* fr */,
+				6B95411D2590D9DC00B67DA9 /* de */,
+			);
+			name = NewMensaNotificationTableViewCell.xib;
 			sourceTree = "<group>";
 		};
 		6BFB583F23D64F2000B69C4A /* NewsStoryboard.storyboard */ = {
@@ -1375,6 +1395,7 @@
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1402,6 +1423,7 @@
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1491,6 +1513,7 @@
 				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

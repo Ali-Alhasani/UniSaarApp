@@ -57,8 +57,13 @@
 "GitHub" = "GitHub";
 
 
+"Please hold your Mensa card near the NFC sensor." = "Please hold your Mensa card near the NFC sensor.";
+"NFC Not Supported" = "NFC Not Supported";
+"This device doesn't support NFC tag scanning." = "This device doesn't support NFC tag scanning.";
+
+
 
 "RateTitle" =  "Rate The App";
-"EnjoyingAPP" = "Are you enjoying using the new Uni app?";
+"EnjoyingAPP" = "Do you enjoy using the new Uni app?";
 "RateYesActionTitle" = "Yes, review the app";
 "RateNoActionTitle" = "No, thanks";

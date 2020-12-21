@@ -27,3 +27,33 @@
 "yDf-w0-izH.text" = "Label";
 
 "Wez-G8-Sto.text" = "Choisis l'heure des notifications";
+
+
+
+/* Class = "UIButton"; normalTitle = "Scan Card"; ObjectID = "NgR-KZ-hYs"; */
+"NgR-KZ-hYs.normalTitle" = "Lire la carte";
+
+/* Class = "UILabel"; text = "Current Balance"; ObjectID = "RuN-VN-0eI"; */
+"RuN-VN-0eI.text" = "Solde actuel";
+
+/* Class = "UILabel"; text = "Card ID"; ObjectID = "QMO-qx-nne"; */
+"QMO-qx-nne.text" = "ID de la carte";
+
+/* Class = "UILabel"; text = "Last Transaction"; ObjectID = "NTn-HR-HN2"; */
+"NTn-HR-HN2.text" = "Dernière transaction";
+
+/* Class = "UIBarButtonItem"; title = "Scan"; ObjectID = "YIv-e8-S3i"; */
+"YIv-e8-S3i.title" = "Lecture";
+
+/* Class = "UINavigationItem"; title = "Mensa Balance"; ObjectID = "Iu7-9h-C0R"; */
+"Iu7-9h-C0R.title" = "Solde de la carte de Mensa";
+
+/* Class = "UILabel"; text = "Mensa Balance"; ObjectID = "DqX-Vk-3IT"; */
+"DqX-Vk-3ITf.text" = "Solde de la carte de Mensa";
+
+/* Class = "UILabel"; text = "No Card Scanned"; ObjectID = "xBT-I3-5F2"; */
+"xBT-I3-5F2.text" = "Pas encore de carte lue";
+
+/* Class = "UILabel"; text = "No Card Scanned"; ObjectID = "4SL-YJ-b6J"; */
+"4SL-YJ-b6J.text" = "Pas encore de carte lue";
+

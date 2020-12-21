@@ -45,7 +45,11 @@ class FilterMensaViewController: UIViewController {
     }
     func setupTableView() {
         filterTableView.register(FilterUISwitchTableViewCell.nib, forCellReuseIdentifier: FilterUISwitchTableViewCell.identifier)
-        filterTableView.register(MensaNotificationTableViewCell.nib, forCellReuseIdentifier: MensaNotificationTableViewCell.identifier)
+        if #available(iOS 14.0, *) {
+            filterTableView.register(NewMensaNotificationTableViewCell.nib, forCellReuseIdentifier: NewMensaNotificationTableViewCell.identifier)
+        } else {
+            filterTableView.register(MensaNotificationTableViewCell.nib, forCellReuseIdentifier: MensaNotificationTableViewCell.identifier)
+        }
         filterTableView.delegate = self
         filterTableView.dataSource = self
         filterTableView.layoutTableView()
@@ -105,6 +109,7 @@ class FilterMensaViewController: UIViewController {
     @IBAction func doneButtonAction(_ sender: Any) {
         actionAfterChangeCampus()
         saveContext()
+        saveFoodAlramTime()
         if filterMensaViewModel.isFilterdCacheUpdated {
             self.delegate?.didUpdateNoticesData()
         }
@@ -126,6 +131,15 @@ class FilterMensaViewController: UIViewController {
                 self.delegate?.didUpdateNoticesFilter()
             } catch {
                 // Replace this implementation with code to handle the error appropriately.
+            }
+        }
+    }
+
+    // only needed for inline timepicker
+    func saveFoodAlramTime() {
+        if #available(iOS 14.0, *) {
+            if filterMensaViewModel.isFoodAlarmEnabled {
+                saveUserSelctedTime()
             }
         }
     }
@@ -191,13 +205,25 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
                     alramCell?.mensaDelegate = self
                     return alramCell ?? cell
                 } else {
-                    let alramCell = tableView.dequeueReusableCell(withIdentifier: MensaNotificationTableViewCell.identifier, for: indexPath) as?  MensaNotificationTableViewCell
-                    alramCell?.notificationSelectedTime = filterMensaViewModel.selectedAlramTime.value
-                    return alramCell ?? cell
+                    return setFoodAlramCell(tableView, indexPath, cell)
                 }
             }
         }
         return cell
+    }
+
+    func setFoodAlramCell(_ tableView: UITableView, _ indexPath: IndexPath, _ cell: UITableViewCell) -> UITableViewCell {
+        if #available(iOS 14.0, *) {
+            let alramCell = tableView.dequeueReusableCell(withIdentifier: NewMensaNotificationTableViewCell.identifier, for: indexPath)
+                as? NewMensaNotificationTableViewCell
+            alramCell?.notificationSelectedTime = filterMensaViewModel.selectedAlramTime.value
+            alramCell?.delegate = self
+            return alramCell ?? cell
+        } else {
+            let alramCell = tableView.dequeueReusableCell(withIdentifier: MensaNotificationTableViewCell.identifier, for: indexPath) as?  MensaNotificationTableViewCell
+            alramCell?.notificationSelectedTime = filterMensaViewModel.selectedAlramTime.value
+            return alramCell ?? cell
+        }
     }
     func numberOfSections(in tableView: UITableView) -> Int {
         return FilterMensaViewModel.Filter.allCases.count
@@ -250,7 +276,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
                 }
                 actionAfterChangeCampus()
             }
-        } else if indexPath.section == 1, indexPath.row == 1 {
+        } else if indexPath.section == 1, indexPath.row == 1, tableView.cellForRow(at: indexPath) is MensaNotificationTableViewCell {
             self.performSegue(withIdentifier: SegueIdentifiers.toNotificationTime, sender: self)
         }
     }
@@ -300,6 +326,17 @@ extension FilterMensaViewController: MensaFilterCellDelegate {
 }
 
 extension FilterMensaViewController: NotificationTimeDelegate {
+    func tmpSelectedTime(time: Date) {
+        filterMensaViewModel.tmpSelectedAlramTime = time
+    }
+
+    func saveUserSelctedTime() {
+        filterMensaViewModel.selectedAlramTime.value = filterMensaViewModel.tmpSelectedAlramTime
+        filterMensaViewModel.cancelNotification()
+        filterMensaViewModel.scheduleNotification()
+        filterMensaViewModel.tmpSelectedAlramTime = nil
+    }
+
     func updateTableView() {
         // to initiate smooth animation
         DispatchQueue.main.async {

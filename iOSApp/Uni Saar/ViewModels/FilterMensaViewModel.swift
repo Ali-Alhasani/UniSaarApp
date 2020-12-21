@@ -20,6 +20,7 @@ class FilterMensaViewModel: ParentViewModel {
             AppSessionManager.shared.isFoodAlarmEnabled = isFoodAlarmEnabled
         }
     }
+    var tmpSelectedAlramTime: Date?
     var selectedAlramTime: Bindable = Bindable<Date?>(nil) {
         didSet {
             AppSessionManager.shared.foodAlarmTime = selectedAlramTime.value
@@ -72,7 +73,6 @@ class FilterMensaViewModel: ParentViewModel {
                 }
             })
         }
-
     }
     func filterList(for fliter: Filter) -> [FilterElement] {
         switch fliter {
@@ -86,7 +86,8 @@ class FilterMensaViewModel: ParentViewModel {
             return []
         case .foodAlram:
             return [FilterElement(filterName: NSLocalizedString("EnableFoodAlarm", comment: "") ,
-                                  filterID: "1", isSelected: isFoodAlarmEnabled), FilterElement(filterName: "", filterID: "2", isSelected: false)]
+                                  filterID: "1", isSelected: isFoodAlarmEnabled), FilterElement(filterName: "", filterID: "2",
+                                                                                                isSelected: false)]
         }
     }
 
