@@ -67,14 +67,15 @@ class CampusViewController: UIViewController {
         }
     }
     func setupNotification() {
-
         NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
-
     }
     func loadCoordinates() -> [MapInfoModel] {
         if let data = dataFromFile("Campus_Map_Coord") {
-            return CampusCoordinatesModel(data: data).mapInfo
+            let campusCoordinatesModel = CampusCoordinatesModel(data: data)
+            updateCoordinateCache(lastChangedDate: campusCoordinatesModel.updateTime)
+            return campusCoordinatesModel.mapInfo
         }
+
         return []
     }
 
@@ -95,6 +96,13 @@ class CampusViewController: UIViewController {
     func saveLocation() {
         AppSessionManager.shared.selectedCampus = selectedCampus
         AppSessionManager.saveCampuslocation()
+    }
+    func updateCoordinateCache(lastChangedDate: String) {
+        DispatchQueue.global(qos: .utility).async {
+            let mapViewModel = MapViewModel()
+            mapViewModel.coordinatesLastChanged = lastChangedDate
+            mapViewModel.loadGetMapData()
+        }
     }
 
     // MARK: - Navigation

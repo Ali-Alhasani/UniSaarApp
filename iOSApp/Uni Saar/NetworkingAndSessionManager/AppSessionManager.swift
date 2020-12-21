@@ -18,6 +18,7 @@ class AppSessionManager {
     var newsFiltersLastChanged: String?
     var morelinksLastChanged: String = "never"
     var helpfulNumbersLastChanged: String = "never"
+    var coordinateLastChanged: String = ""
     var isFoodAlarmEnabled: Bool = false
     var foodAlarmTime: Date?
     // to avoid fetchFilterListFromStorage more than one time in the run app run time

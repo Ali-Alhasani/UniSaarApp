@@ -17,16 +17,28 @@ public func dataFromFile(_ filename: String) -> Data? {
 }
 class CampusCoordinatesModel {
     var mapInfo = [MapInfoModel]()
+    var updateTime: String
     init(data: Data) {
         do {
             let json = try JSON(data: data)
             let root = json["mapInfo"].arrayValue
+            updateTime = json["updateTime"].stringValue
             mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue)}
         } catch {
-
+            updateTime = ""
         }
     }
 }
+
+class CoordinatesCacheModel {
+    var mapInfo: JSON
+    var updateTime: String
+    init(json: JSON) {
+        mapInfo = json
+        updateTime = json["updateTime"].stringValue
+    }
+}
+
 class MapInfoModel {
     var campus: Campus?
     var name: String
