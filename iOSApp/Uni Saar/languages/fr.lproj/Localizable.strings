@@ -56,3 +56,13 @@
 
 "GitHubLinkText" = "Check the open-source code of this project in GitHub";
 "GitHub" = "GitHub";
+
+"Please hold your Mensa card near the NFC sensor." = "Approcher la carte de Mensa du capteur NFC.";
+"NFC Not Supported" = "NFC non pris en charge";
+"This device doesn't support NFC tag scanning." = "Le NFC n'est pas pris en charge sur cet appareil.";
+
+
+"RateTitle" =  "Noter l'appli";
+"EnjoyingAPP" = "Do you enjoy using the new Uni app?";
+"RateYesActionTitle" = "Oui, noter maintenant";
+"RateNoActionTitle" = "Non, merci";
