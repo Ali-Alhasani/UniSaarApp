@@ -8,6 +8,10 @@
 
 import UIKit
 import MapKit
+
+protocol CampusViewControllerDelegate: class {
+    func didUpdateCoordinatesCache(coordinates: [MapInfoModel])
+}
 class CampusViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var searchController: UISearchController!
@@ -15,6 +19,7 @@ class CampusViewController: UIViewController {
     var selectedPin: MapPin?
     var selectedCampus: Campus = AppSessionManager.shared.selectedCampus
     var staffAddress: String?
+    weak var campusDelegate: CampusViewControllerDelegate?
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -47,6 +52,7 @@ class CampusViewController: UIViewController {
             self.searchController.searchResultsUpdater = buildingSearchTable
             buildingSearchTable.handleMapSearchDelegate = self
             buildingSearchTable.campusCoordinates = self.loadCoordinates()
+            self.campusDelegate = buildingSearchTable
         }
         self.searchController.obscuresBackgroundDuringPresentation = false
         self.searchController.searchBar.placeholder = NSLocalizedString("BuildingsSearch", comment: "")
@@ -67,14 +73,15 @@ class CampusViewController: UIViewController {
         }
     }
     func setupNotification() {
-
         NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
-
     }
-    func loadCoordinates() -> [MapInfoModel] {
-        if let data = dataFromFile("Campus_Map_Coord") {
-            return CampusCoordinatesModel(data: data).mapInfo
+    func loadCoordinates(checkForUpdate: Bool = true) -> [MapInfoModel] {
+        if let data = Data.dataFromFile(withFilename: "Campus_Map_Coord") {
+            let campusCoordinatesModel = CampusCoordinatesModel(data: data)
+            updateCoordinateCache(lastChangedDate: campusCoordinatesModel.updateTime)
+            return campusCoordinatesModel.mapInfo
         }
+
         return []
     }
 
@@ -95,6 +102,17 @@ class CampusViewController: UIViewController {
     func saveLocation() {
         AppSessionManager.shared.selectedCampus = selectedCampus
         AppSessionManager.saveCampuslocation()
+    }
+    func updateCoordinateCache(lastChangedDate: String) {
+        DispatchQueue.global(qos: .utility).async {
+            let mapViewModel = MapViewModel()
+            mapViewModel.coordinatesLastChanged = lastChangedDate
+            mapViewModel.loadGetMapData()
+            mapViewModel.didUpdateCoordinates.bind { (updatedCoor) in
+                let campusCoordinatesModel = CampusCoordinatesModel(json: updatedCoor)
+                self.campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
+            }
+        }
     }
 
     // MARK: - Navigation
