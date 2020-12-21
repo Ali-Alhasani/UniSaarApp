@@ -28,6 +28,12 @@ class CampusCoordinatesModel {
             updateTime = ""
         }
     }
+
+    init(json: JSON) {
+        let root = json["mapInfo"].arrayValue
+        updateTime = json["updateTime"].stringValue
+        mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue)}
+    }
 }
 
 class CoordinatesCacheModel {

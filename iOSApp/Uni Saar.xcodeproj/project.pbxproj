@@ -19,6 +19,7 @@
 		6B06D700239C4AD700A0F02F /* MensaMenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B06D6FE239C4AD700A0F02F /* MensaMenuTableViewCell.xib */; };
 		6B06D702239C4F5500A0F02F /* MensaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D701239C4F5500A0F02F /* MensaViewModel.swift */; };
 		6B0893BD25913F050021F566 /* MapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0893BC25913F050021F566 /* MapViewModel.swift */; };
+		6B0893C225915C9F0021F566 /* JSONSaveLoad.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0893C125915C9F0021F566 /* JSONSaveLoad.swift */; };
 		6B0F25D72396974E002E587E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0F25D62396974E002E587E /* AppDelegate.swift */; };
 		6B0F25D92396974E002E587E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B0F25D82396974E002E587E /* SceneDelegate.swift */; };
 		6B0F25DE2396974E002E587E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6B0F25DC2396974E002E587E /* Main.storyboard */; };
@@ -169,6 +170,7 @@
 		6B06D6FE239C4AD700A0F02F /* MensaMenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MensaMenuTableViewCell.xib; sourceTree = "<group>"; };
 		6B06D701239C4F5500A0F02F /* MensaViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaViewModel.swift; sourceTree = "<group>"; };
 		6B0893BC25913F050021F566 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewModel.swift; sourceTree = "<group>"; };
+		6B0893C125915C9F0021F566 /* JSONSaveLoad.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSaveLoad.swift; sourceTree = "<group>"; };
 		6B0F25D32396974E002E587E /* Uni Saar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Uni Saar.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B0F25D62396974E002E587E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B0F25D82396974E002E587E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 				6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */,
 				6B908BE224D576C2000EE5AF /* UIApplication.swift */,
 				6B8DBCB125222BD50019BA4D /* NVActivityIndicator.swift */,
+				6B0893C125915C9F0021F566 /* JSONSaveLoad.swift */,
 			);
 			path = Supportive;
 			sourceTree = "<group>";
@@ -1061,6 +1064,7 @@
 				6BFB587523D9022D00B69C4A /* RememberingTabBarController.swift in Sources */,
 				6BBC9D6E23AA4ADD009CD435 /* UIButton.swift in Sources */,
 				6B0F25D92396974E002E587E /* SceneDelegate.swift in Sources */,
+				6B0893C225915C9F0021F566 /* JSONSaveLoad.swift in Sources */,
 				6B0F26292396D83C002E587E /* Enums.swift in Sources */,
 				6B0F261E2396A423002E587E /* CampusViewController.swift in Sources */,
 				6B4302ED23D9216700D21877 /* HelpfulNumbersModel.swift in Sources */,

@@ -18,6 +18,7 @@ class AppSetupFirstScreenViewController: UIViewController {
         super.viewDidLoad()
         setUpLayout()
         // Do any additional setup after loading the view.
+        cacheCampusCoorFile()
     }
     func setUpLayout() {
         //Saarbrucken campus is always the default
@@ -78,6 +79,13 @@ class AppSetupFirstScreenViewController: UIViewController {
     func nextSessionWelcomeScreen() {
         AppSessionManager.shared.dismissWelcomeScreen = true
         AppSessionManager.saveWelcomeScreenStatus()
+    }
+
+    func cacheCampusCoorFile() {
+        DispatchQueue.global(qos: .utility).async {
+            Data.copyFileFromBundleToDocumentsFolder(sourceFile: "Campus_Map_Coord.json")
+
+        }
     }
     /*
      // MARK: - Navigation

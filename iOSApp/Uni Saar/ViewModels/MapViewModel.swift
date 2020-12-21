@@ -10,6 +10,8 @@ import Foundation
 import SwiftyJSON
 class MapViewModel: ParentViewModel {
     var coordinatesLastChanged = ""
+    let didUpdateCoordinates: Bindable = Bindable(JSON())
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
@@ -20,7 +22,7 @@ class MapViewModel: ParentViewModel {
             switch result {
             case .success(let coordinates):
                 // only update the cache if the api update time is more recent
-                if coordinates.updateTime != self.coordinatesLastChanged {
+                if coordinates.updateTime != "", coordinates.updateTime != self.coordinatesLastChanged {
                     self.updateCoordinateCache(newCoordinates: coordinates.mapInfo)
                 }
             case .failure:
@@ -31,13 +33,11 @@ class MapViewModel: ParentViewModel {
     }
     func updateCoordinateCache(newCoordinates: JSON) {
         DispatchQueue.main.async {
-            if let  filePath = Bundle.main.url(forResource: "Campus_Map_Coord", withExtension: "json") {
-                do {
-                    let data = try newCoordinates.rawData()
-                    try data.write(to: filePath, options: [])
-                } catch {
-                    print(error)
-                }
+            do {
+                try Data.saveJson(data: newCoordinates.rawData(), toFilename: "Campus_Map_Coord")
+                self.didUpdateCoordinates.value = newCoordinates
+            } catch {
+                print(error)
             }
         }
     }
