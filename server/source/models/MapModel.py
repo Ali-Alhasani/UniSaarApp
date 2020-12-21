@@ -27,8 +27,8 @@ class MapModel:
             with open(self.filepath, 'r') as f:
                 mapJSONString = f.read()
                 mapJSONDict = json.loads(mapJSONString)
-                mapData = mapJSONDict['mapInfo']
-                return mapData
+                #mapData = mapJSONDict['mapInfo']
+                return mapJSONDict
         finally:
             mapLock.release()
 
