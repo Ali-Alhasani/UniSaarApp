@@ -48,7 +48,7 @@ extension AboutAppViewController: UITextViewDelegate {
     }
 
     func openLink() {
-        guard let url = URL(string: "https://github.com/AliHassany/UniSaarApp") else { return }
+        guard let url = URL(string: "https://github.com/Ali-Alhasani/UniSaarApp") else { return }
         UIApplication.shared.open(url)
     }
 }
