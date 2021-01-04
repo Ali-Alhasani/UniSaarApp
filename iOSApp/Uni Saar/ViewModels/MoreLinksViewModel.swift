@@ -49,9 +49,15 @@ class MoreLinksViewModel: ParentViewModel {
                 if AppSessionManager.shared.morelinksLastChanged == "never" {
                 self?.linksCells.value = [.error(message: error?.localizedDescription ?? "Loading failed, check network connection")]
                 }
-                self?.showError(error: error)
+                self?.showError(error: error, tryAgainHandler: {
+                    self?.reloadGetApi()
+                })
             }
         }
+    }
+
+    func reloadGetApi() {
+        loadGetMoreLinks()
     }
     func fetchMoreLinksFromStorage() {
         do {

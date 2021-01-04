@@ -33,6 +33,7 @@ class FilterMensaViewModel: ParentViewModel {
     let workingDays = [2, 3, 4, 5, 6]
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
+        Cache.shared.fetchMensaFilterFromStorage()
     }
     var mensaLocation = AppSessionManager.shared.selectedMensaLocation
     var selectedNotices = [FilterElement]()
@@ -69,10 +70,16 @@ class FilterMensaViewModel: ParentViewModel {
                     }
                 case .failure(let error):
                     self?.showLoadingIndicator.value = false
-                    self?.showError(error: error)
+                    self?.didUpdatefilterList.value = false
+                    self?.showError(error: error, tryAgainHandler: {
+                        self?.reloadGetApi()
+                    })
                 }
             })
         }
+    }
+    func reloadGetApi() {
+        loadGetFilterList()
     }
     func filterList(for fliter: Filter) -> [FilterElement] {
         switch fliter {

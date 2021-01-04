@@ -1400,7 +1400,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1428,7 +1428,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -1518,7 +1518,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

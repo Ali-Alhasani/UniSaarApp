@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 class MensaMenuViewModel: ParentViewModel {
     let daysMenus = Bindable([TableViewCellType<MensaDayMenuViewModel>]())
-    var isFilterdCacheUpdated = true
+    var isFilterdCacheUpdated = false
     // MARK: - Object Lifecycle
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
@@ -37,9 +37,14 @@ class MensaMenuViewModel: ParentViewModel {
             case .failure(let error):
                 self?.showLoadingIndicator.value = false
                 self?.daysMenus.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                self?.showError(error: error)
+                self?.showError(error: error, tryAgainHandler: {
+                    self?.realodGetApi()
+                })
             }
         })
+    }
+    func realodGetApi() {
+        loadGetMensaMenu()
     }
     func loadGetMockMenu() {
         self.daysMenus.value = MensaMenuModel.menuDemoData.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0))}

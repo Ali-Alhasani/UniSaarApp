@@ -84,9 +84,14 @@ class DirectoryViewModel: ParentViewModel {
                 if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
                     self?.helpfulNumbersCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
                 }
-                self?.showError(error: error)
+                self?.showError(error: error, tryAgainHandler: {
+                    self?.reloadGetApi()
+                })
             }
         }
+    }
+    func reloadGetApi() {
+        loadGetHelpHelpfulNumbers()
     }
     func loadGetMockSearchResults() {
         //self?.searchResutlsCells.value = results.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel )}

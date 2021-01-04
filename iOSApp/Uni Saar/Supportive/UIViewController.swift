@@ -21,6 +21,11 @@ extension SingleButtonDialogPresenter where Self: UIViewController {
         alertController.addAction(UIAlertAction(title: alert.action.buttonTitle,
                                                 style: .default,
                                                 handler: { _ in alert.action.handler?() }))
+        if let tryAgainHandler = alert.action.tryAgainHandler {
+            alertController.addAction(UIAlertAction(title: alert.action.tryAgainButtonTitle,
+                                                    style: .default,
+                                                    handler: { _ in tryAgainHandler() }))
+        }
         self.present(alertController, animated: true, completion: nil)
     }
 }

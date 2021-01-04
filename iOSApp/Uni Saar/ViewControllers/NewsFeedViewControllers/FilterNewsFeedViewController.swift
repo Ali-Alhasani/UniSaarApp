@@ -45,7 +45,7 @@ class FilterNewsFeedViewController: UIViewController {
     func bindViewModel() {
         filterNewsViewModel.didUpdatefilterList.bind { [weak self] _ in
             if let `self` = self {
-                self.filterTableView.reloadData()
+                self.relaodTableView()
             }
         }
         filterNewsViewModel.onShowError = { [weak self] alert in
@@ -56,6 +56,10 @@ class FilterNewsFeedViewController: UIViewController {
                 visible ? self.filterTableView.showingLoadingView() : self.filterTableView.hideLoadingView()
             }
         }
+    }
+
+    func relaodTableView() {
+        self.filterTableView.reloadData()
     }
     @objc private func refershLoad() {
         // refresh the Categories list from the server

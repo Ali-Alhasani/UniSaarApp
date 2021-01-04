@@ -10,7 +10,10 @@ import Foundation
 import UIKit
 struct AlertAction {
     let buttonTitle: String = NSLocalizedString("AlertOkActionTitle", comment: "")
+    let tryAgainButtonTitle: String = NSLocalizedString("tryAgain", comment: "")
     let handler: (() -> Void)?
+    let tryAgainHandler: (() -> Void)?
+
 }
 
 struct SingleButtonAlert {
