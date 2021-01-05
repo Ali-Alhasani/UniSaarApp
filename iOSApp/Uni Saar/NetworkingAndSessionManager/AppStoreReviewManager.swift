@@ -11,7 +11,7 @@ import StoreKit
 
 enum AppStoreReviewManager {
     static let minimumReviewWorthyActionCount = 5
-    static let appVersion = "1.2.1"
+    static let appVersion = "2.1"
 
     static func requestReviewIfAppropriate(presentedView: UIViewController) {
 
@@ -44,11 +44,8 @@ enum AppStoreReviewManager {
             return
         }
 
-        let alert = ratingDialogHandler { (_ YESAlertAction) in
+        let alert = ratingDialogHandler { _ in
             SKStoreReviewController.requestReview()
-
-        } cancelHandler: { (_) in
-            presentedView.motionEnded(.motionShake, with: nil)
         }
 
         presentedView.present(alert, animated: true)
@@ -58,10 +55,10 @@ enum AppStoreReviewManager {
 
     }
 
-    static func ratingDialogHandler(_ succesHandler: @escaping (UIAlertAction) -> Void, cancelHandler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
+    static func ratingDialogHandler(_ succesHandler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(title: NSLocalizedString("RateTitle", comment: ""), message: NSLocalizedString("EnjoyingAPP", comment: ""), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("RateYesActionTitle", comment: ""), style: .default, handler: succesHandler))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("RateNoActionTitle", comment: ""), style: .cancel, handler: cancelHandler))
+        alert.addAction(UIAlertAction(title: NSLocalizedString("RateNoActionTitle", comment: ""), style: .cancel, handler: nil))
         return alert
     }
 }

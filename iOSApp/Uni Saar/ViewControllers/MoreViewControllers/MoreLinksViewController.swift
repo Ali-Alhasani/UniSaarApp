@@ -15,6 +15,7 @@ class MoreLinksViewController: UITableViewController {
         bindViewModel()
         moreLinksViewModel.loadGetMoreLinks()
         setRefreshControl()
+
         // Do any additional setup after loading the view.
     }
 
@@ -22,6 +23,7 @@ class MoreLinksViewController: UITableViewController {
         moreLinksViewModel.linksCells.bind { [weak self] _ in
             if let `self` = self {
                 self.tableView.reloadData()
+                self.requestReview()
             }
         }
         moreLinksViewModel.onShowError = { [weak self] alert in
@@ -41,6 +43,9 @@ class MoreLinksViewController: UITableViewController {
     @objc private func refershLoad() {
         moreLinksViewModel.loadGetMoreLinks()
     }
+    func requestReview() {
+        AppStoreReviewManager.requestReviewIfAppropriate(presentedView: self)
+    }
     // MARK: - Navigation
     internal struct SegueIdentifiers {
         static let toLinkDetails = "toLinkDetails"
@@ -52,8 +57,8 @@ class MoreLinksViewController: UITableViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if segue.identifier == SegueIdentifiers.toLinkDetails,
-            let destinationViewController = segue.destination as? MoreLinksDetailsViewController,
-            let viewModel = sender as? MoreLinksCellViewModel {
+           let destinationViewController = segue.destination as? MoreLinksDetailsViewController,
+           let viewModel = sender as? MoreLinksCellViewModel {
             destinationViewController.linkItem = viewModel
         }
     }
