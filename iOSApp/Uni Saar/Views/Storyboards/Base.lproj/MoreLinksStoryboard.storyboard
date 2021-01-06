@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VbY-Py-4TU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="VbY-Py-4TU">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -260,6 +260,7 @@
                             <constraint firstItem="7rI-kA-VZ8" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="16" id="cLV-Q0-7kB"/>
                             <constraint firstItem="y9Q-Hb-a4j" firstAttribute="width" secondItem="rji-tO-Bxk" secondAttribute="width" multiplier="0.5" id="hpH-pk-b3u"/>
                             <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="q8C-qs-jhj" secondAttribute="trailing" constant="16" id="i1N-OW-T4j"/>
+                            <constraint firstItem="y9Q-Hb-a4j" firstAttribute="top" secondItem="BvF-BI-hCz" secondAttribute="top" constant="16" id="iRo-WU-JUo"/>
                             <constraint firstItem="uWa-EK-c84" firstAttribute="top" secondItem="fps-xj-wpp" secondAttribute="bottom" constant="16" id="isc-nF-CiS"/>
                             <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="uWa-EK-c84" secondAttribute="trailing" constant="16" id="jqV-s1-VIO"/>
                             <constraint firstItem="q8C-qs-jhj" firstAttribute="top" secondItem="SKb-6X-sKa" secondAttribute="bottom" constant="32" id="mGi-rX-Hom"/>
@@ -268,9 +269,24 @@
                             <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="ZZj-9e-b4g" secondAttribute="trailing" constant="16" id="ozV-NU-dyN"/>
                             <constraint firstItem="SKb-6X-sKa" firstAttribute="top" secondItem="uWa-EK-c84" secondAttribute="bottom" constant="16" id="qZd-Ec-fsC"/>
                             <constraint firstAttribute="trailing" secondItem="SKb-6X-sKa" secondAttribute="trailing" constant="16" id="ugm-MM-tg8"/>
+                            <constraint firstItem="y9Q-Hb-a4j" firstAttribute="height" secondItem="rji-tO-Bxk" secondAttribute="height" multiplier="0.15" id="wLS-Yq-CHp"/>
                             <constraint firstItem="BvF-BI-hCz" firstAttribute="trailing" secondItem="7rI-kA-VZ8" secondAttribute="trailing" constant="16" id="xgG-Di-KDO"/>
                             <constraint firstItem="ZZj-9e-b4g" firstAttribute="leading" secondItem="BvF-BI-hCz" secondAttribute="leading" constant="35" id="yun-1T-2XU"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="iRo-WU-JUo"/>
+                                <exclude reference="wLS-Yq-CHp"/>
+                            </mask>
+                        </variation>
+                        <variation key="heightClass=regular-widthClass=regular">
+                            <mask key="constraints">
+                                <exclude reference="17g-17-oZp"/>
+                                <exclude reference="Dre-7Z-Pbm"/>
+                                <include reference="iRo-WU-JUo"/>
+                                <include reference="wLS-Yq-CHp"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" title="About App" id="jva-kV-2ke"/>
                     <connections>

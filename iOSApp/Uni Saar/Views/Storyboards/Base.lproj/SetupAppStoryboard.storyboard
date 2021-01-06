@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17506" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="aSx-Ns-C8X">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="aSx-Ns-C8X">
+    <device id="mac" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -15,26 +15,26 @@
             <objects>
                 <viewController id="aSx-Ns-C8X" customClass="AppSetupFirstScreenViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Dkm-J4-Nwc">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="800" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Let's get you set up  " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8WH-ck-W3Q">
-                                <rect key="frame" x="8" y="64" width="398" height="20.5"/>
+                                <rect key="frame" x="8" y="20" width="784" height="24"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="252" verticalHuggingPriority="252" horizontalCompressionResistancePriority="749" verticalCompressionResistancePriority="749" image="Logo-Universität_des_Saarlandes" translatesAutoresizingMaskIntoConstraints="NO" id="aTC-Sj-4G8">
-                                <rect key="frame" x="64" y="124.5" width="286" height="161.5"/>
+                                <rect key="frame" x="64" y="64" width="672" height="43.5"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hallo!  " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gzx-D5-Uaq">
-                                <rect key="frame" x="16" y="306" width="382" height="41"/>
+                                <rect key="frame" x="16" y="128" width="768" height="45.5"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalCompressionResistancePriority="751" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ZL-Wl-B7R">
-                                <rect key="frame" x="16" y="363" width="382" height="42.5"/>
+                                <rect key="frame" x="16" y="189" width="768" height="49"/>
                                 <string key="text">Welcome to the Official 
 Saarland University App</string>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
@@ -42,13 +42,13 @@ Saarland University App</string>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose your Campus " textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FFc-bu-C6z">
-                                <rect key="frame" x="16" y="520" width="382" height="20.5"/>
+                                <rect key="frame" x="16" y="318" width="768" height="24"/>
                                 <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R1G-xe-eWN" customClass="ButtonWithCheckedImageText" customModule="Uni_Saar" customModuleProvider="target">
-                                <rect key="frame" x="16" y="572.5" width="382" height="50"/>
+                                <rect key="frame" x="100" y="374" width="600" height="45"/>
                                 <color key="backgroundColor" name="uniColorTint"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="CMV-HJ-RQ1"/>
@@ -62,7 +62,7 @@ Saarland University App</string>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="58m-CW-pjp" customClass="ButtonWithCheckedImageText" customModule="Uni_Saar" customModuleProvider="target">
-                                <rect key="frame" x="16" y="638.5" width="382" height="50"/>
+                                <rect key="frame" x="100" y="445" width="600" height="45"/>
                                 <color key="backgroundColor" name="uniColorTint"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="45" id="ZFH-g8-ccf"/>
@@ -78,7 +78,7 @@ Saarland University App</string>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dwe-nF-Rc6">
-                                <rect key="frame" x="232" y="787" width="150" height="55"/>
+                                <rect key="frame" x="618" y="510" width="150" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBlueColor"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="50" id="0Mz-Ym-8DW"/>
@@ -101,7 +101,7 @@ Saarland University App</string>
                         <constraints>
                             <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="58m-CW-pjp" secondAttribute="trailing" constant="100" id="0Ax-Wg-wio"/>
                             <constraint firstItem="aTC-Sj-4G8" firstAttribute="height" relation="lessThanOrEqual" secondItem="Dkm-J4-Nwc" secondAttribute="height" multiplier="0.18" id="28m-ZK-bax">
-                                <variation key="heightClass=regular-widthClass=regular" constant="1.3"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="1.1299999999999999"/>
                             </constraint>
                             <constraint firstItem="gzx-D5-Uaq" firstAttribute="top" relation="greaterThanOrEqual" secondItem="aTC-Sj-4G8" secondAttribute="bottom" constant="20" id="4eR-KC-af9"/>
                             <constraint firstItem="aTC-Sj-4G8" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="64" id="76V-4X-Cq2"/>
@@ -109,16 +109,17 @@ Saarland University App</string>
                             <constraint firstItem="gzx-D5-Uaq" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="16" id="8Pf-yN-fKg"/>
                             <constraint firstItem="7ZL-Wl-B7R" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="16" id="8oB-b0-alU"/>
                             <constraint firstItem="aTC-Sj-4G8" firstAttribute="top" relation="greaterThanOrEqual" secondItem="8WH-ck-W3Q" secondAttribute="bottom" constant="8" id="AtU-kS-Txn">
-                                <variation key="heightClass=regular-widthClass=regular" constant="40"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="20"/>
                             </constraint>
-                            <constraint firstItem="8WH-ck-W3Q" firstAttribute="top" secondItem="tlm-gQ-QzG" secondAttribute="top" priority="998" constant="20" id="FtD-k3-9Or">
+                            <constraint firstItem="dwe-nF-Rc6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="16" id="EAV-gP-SVl"/>
+                            <constraint firstItem="8WH-ck-W3Q" firstAttribute="top" secondItem="tlm-gQ-QzG" secondAttribute="top" priority="400" constant="20" id="FtD-k3-9Or">
                                 <variation key="heightClass=regular-widthClass=regular" constant="80"/>
                             </constraint>
                             <constraint firstItem="tlm-gQ-QzG" firstAttribute="bottom" secondItem="dwe-nF-Rc6" secondAttribute="bottom" constant="20" id="GTt-TT-l5R">
-                                <variation key="heightClass=regular-widthClass=regular" constant="50"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="40"/>
                             </constraint>
                             <constraint firstItem="FFc-bu-C6z" firstAttribute="top" relation="greaterThanOrEqual" secondItem="7ZL-Wl-B7R" secondAttribute="bottom" constant="16" id="Gnw-BS-i7f">
-                                <variation key="heightClass=regular-widthClass=regular" constant="120"/>
+                                <variation key="heightClass=regular-widthClass=regular" constant="80"/>
                             </constraint>
                             <constraint firstItem="FFc-bu-C6z" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="16" id="OK4-ZO-Mhs"/>
                             <constraint firstItem="tlm-gQ-QzG" firstAttribute="trailing" secondItem="7ZL-Wl-B7R" secondAttribute="trailing" constant="16" id="PEJ-Y3-dgt"/>
@@ -146,7 +147,9 @@ Saarland University App</string>
                             <constraint firstItem="gzx-D5-Uaq" firstAttribute="top" secondItem="aTC-Sj-4G8" secondAttribute="bottom" priority="500" constant="20" id="q9r-d1-Mfr">
                                 <variation key="heightClass=regular-widthClass=regular" constant="120"/>
                             </constraint>
-                            <constraint firstItem="dwe-nF-Rc6" firstAttribute="top" relation="greaterThanOrEqual" secondItem="58m-CW-pjp" secondAttribute="bottom" constant="16" id="s7r-8x-r0X"/>
+                            <constraint firstItem="dwe-nF-Rc6" firstAttribute="top" relation="greaterThanOrEqual" secondItem="58m-CW-pjp" secondAttribute="bottom" constant="16" id="s7r-8x-r0X">
+                                <variation key="heightClass=regular-widthClass=regular" constant="20"/>
+                            </constraint>
                             <constraint firstItem="58m-CW-pjp" firstAttribute="leading" secondItem="tlm-gQ-QzG" secondAttribute="leading" constant="16" id="ugd-xm-Ewc"/>
                             <constraint firstItem="58m-CW-pjp" firstAttribute="top" secondItem="R1G-xe-eWN" secondAttribute="bottom" constant="16" id="xFs-hh-hxa">
                                 <variation key="heightClass=regular-widthClass=regular" constant="26"/>
@@ -158,6 +161,7 @@ Saarland University App</string>
                                 <exclude reference="Sqc-sz-gi5"/>
                                 <exclude reference="XaZ-Oa-32f"/>
                                 <exclude reference="dQZ-RO-lsF"/>
+                                <exclude reference="EAV-gP-SVl"/>
                             </mask>
                         </variation>
                         <variation key="heightClass=regular-widthClass=regular">
@@ -170,6 +174,7 @@ Saarland University App</string>
                                 <exclude reference="bOG-kV-sO6"/>
                                 <include reference="dQZ-RO-lsF"/>
                                 <exclude reference="ugd-xm-Ewc"/>
+                                <include reference="EAV-gP-SVl"/>
                             </mask>
                         </variation>
                     </view>

@@ -13,8 +13,8 @@ class SplitViewController: UISplitViewController, UISplitViewControllerDelegate 
         super.viewDidLoad()
         self.preferredDisplayMode = .allVisible
         self.maximumPrimaryColumnWidth = UIScreen.main.bounds.width/2
-        self.minimumPrimaryColumnWidth = UIScreen.main.bounds.width/3
-        self.preferredPrimaryColumnWidthFraction = 0.42
+        //self.minimumPrimaryColumnWidth = UIScreen.main.bounds.width/UIScreen.main.bounds.width - 2
+        self.preferredPrimaryColumnWidthFraction = 0.35
         self.delegate = self
     }
 
