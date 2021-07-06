@@ -24,6 +24,7 @@ public enum URLRouter: URLRequestConvertible {
     case staffDetails(Int)
     case events(String, String)
     case helpfulNumbers(String)
+    case mapCoordinate(String)
     var method: HTTPMethod {
         return .get
     }
@@ -54,6 +55,8 @@ public enum URLRouter: URLRequestConvertible {
             return "events/mainScreen"
         case .helpfulNumbers:
             return "directory/helpfulNumbers"
+        case .mapCoordinate:
+            return "map/"
         }
     }
     var parameters: [String: Any] {
@@ -80,6 +83,8 @@ public enum URLRouter: URLRequestConvertible {
             return ["language": language, "lastUpdated": lastUpdate]
         case .helpfulNumbers(let lastUpdate):
             return ["language": language, "lastUpdated": lastUpdate]
+        case .mapCoordinate(let lastUpdate):
+            return ["lastUpdated": lastUpdate]
         }
     }
     public func asURLRequest() throws -> URLRequest {

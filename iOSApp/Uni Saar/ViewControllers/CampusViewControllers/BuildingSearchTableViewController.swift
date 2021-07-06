@@ -72,3 +72,9 @@ extension BuildingSearchTableViewController {
         dismiss(animated: true, completion: nil)
     }
 }
+
+extension BuildingSearchTableViewController: CampusViewControllerDelegate {
+    func didUpdateCoordinatesCache(coordinates: [MapInfoModel]) {
+        self.campusCoordinates = coordinates
+    }
+}

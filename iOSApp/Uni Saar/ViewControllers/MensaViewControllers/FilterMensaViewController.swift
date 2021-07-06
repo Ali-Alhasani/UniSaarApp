@@ -60,9 +60,7 @@ class FilterMensaViewController: UIViewController {
 
         filterMensaViewModel.didUpdatefilterList.bind { [weak self] _ in
             if let `self` = self {
-                DispatchQueue.main.async {
-                    self.filterTableView.reloadData()
-                }
+                self.realodTableView()
             }
         }
         filterMensaViewModel.onShowError = { [weak self] alert in
@@ -95,6 +93,11 @@ class FilterMensaViewController: UIViewController {
 
     }
 
+    func realodTableView() {
+        DispatchQueue.main.async {
+            self.filterTableView.reloadData()
+        }
+    }
     func reloadFoodAlramSection() {
         DispatchQueue.main.async {
             self.filterTableView.reloadSections(IndexSet(integer: 1), with: .automatic)

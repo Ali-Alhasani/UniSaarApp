@@ -154,6 +154,19 @@ class DataClient {
         })
     }
 
+    typealias GetMapCoordinatesResult = CustomResult<CoordinatesCacheModel, Error>
+    typealias GetMapCoordinatesCompletion = (_ result: GetMapCoordinatesResult) -> Void
+    func getCampusMapCoordinates(completion: @escaping GetMapCoordinatesCompletion, cacheLastChanged: String) {
+        APIClient.sendRequest(requestURL: URLRouter.mapCoordinate(cacheLastChanged), success: { (response) in
+            if let responseData = response as? JSON {
+                let coordinatesCache = CoordinatesCacheModel(json: responseData)
+                completion(.success(payload: coordinatesCache))
+            }
+        }, failure: { (error) in
+            completion(.failure(error))
+        })
+    }
+
 }
 //this class is used for test purpose only 
 final class MockAppDataClient: DataClient {

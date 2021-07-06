@@ -15,7 +15,7 @@ class NewsFeedViewModel: ParentViewModel {
     let newsCells = Bindable([TableViewCellType<NewsFeedCellViewModel>]())
     var apiPageNumber = 0
     let numberOfItemPerPage = 10
-    var isFilterdCacheUpdated = true
+    var isFilterdCacheUpdated = false
     var isFreshLoad = Bindable(true)
     // fetch news categories form coredata
     lazy var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {

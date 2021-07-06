@@ -38,10 +38,15 @@ class MensaLocationsInfoViewController: UIViewController {
                 }
                 self.title = mensaInfo.locationName
             case .failure(let error):
-                let okAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil))
+                let okAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: {
+                    self?.loadAgain()
+                }))
                 self?.presentSingleButtonDialog(alert: okAlert)
             }
         }
+    }
+     func loadAgain() {
+        self.loadAPI()
     }
     /*
      // MARK: - Navigation
