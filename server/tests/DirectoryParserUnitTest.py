@@ -2,6 +2,7 @@ import unittest
 from os.path import join
 from source.parsers.DirectoryParser import DirectoryParser
 from source.models.DirectoryModel import GeneralPerson, DetailedPerson
+from source.parsers.DirectoryParser import UnspecificSearchQueryException
 
 TEST_DIRECTORY = 'testdata/directory'
 SEARCH_RESULT_FILE = 'searchResults.html'  # normal search results file
@@ -96,25 +97,23 @@ class DirectoryParserUnitTest(unittest.TestCase):
         """
         Tests the parser on a search results page where there are too many results
         """
-        searchResults, resultCount = self.directoryParser.parseWebpageForPIDs(self.searchResultTooManyResultsHTML)
-
-        # type
-        self.assertIsNone(searchResults, "Expected persewWebpageForPIDs to return None")
-
-        # count
-        self.assertEqual(0, resultCount, "Got {} search results, expected 0".format(resultCount))
+        try:
+            searchResults, resultCount = self.directoryParser.parseWebpageForPIDs(self.searchResultTooManyResultsHTML)
+        except UnspecificSearchQueryException:
+            self.assertTrue(True)
+            return
+        self.assertTrue(False)
 
     def test_parseSearchResultsTooFewCharacters(self):
         """
         Tests the parser on a search results page where the user entered too few characters to get results
         """
-        searchResults, resultCount = self.directoryParser.parseWebpageForPIDs(self.searchResultTooFewCharactersHTML)
-
-        # type
-        self.assertIsNone(searchResults, "Expected perseWebpageForPIDs to return None")
-
-        # count
-        self.assertEqual(0, resultCount, "Got {} search results, expected 0".format(resultCount))
+        try:
+            searchResults, resultCount = self.directoryParser.parseWebpageForPIDs(self.searchResultTooFewCharactersHTML)
+        except UnspecificSearchQueryException:
+            self.assertTrue(True)
+            return
+        self.assertTrue(False)
 
     def test_parseNormalDetails(self):
         """

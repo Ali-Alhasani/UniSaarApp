@@ -262,7 +262,8 @@ To run the Server follow these steps:
 
     * Map:
         -   retrieve map data `map?lastUpdated=timestamp` where timestamp is the time from which the current map data on the client side is.
-            If the map data on the server side is newer than the transmitted time stamp, the server will supply a json of a list of the coordinates with the corresponding buildings.
+            If the map data on the server side is newer than the transmitted time stamp, the server will supply a json of a dictionary with two entries. The first entry is the
+            list of the coordinates with the corresponding buildings, the second the time this list was last changed.
             Otherwise it will return an empty json.
             If the parameter lastUpdated is not given, the server will also supply the entire coordinate list.
     * More:

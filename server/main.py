@@ -7,13 +7,15 @@ import smtplib
 from email.message import EmailMessage
 from source.Constants import MENSA_UPDATE_THRESHOLD_WORKING_HOURS, MAP_UPDATE_THRESHOLD, NEWSFEED_UPDATE_THRESHOLD, \
     HELPFUL_NUMBERS_THRESHOLD, SERVER_ADDRESS, SERVER_PORT, ERROR_SLEEP_INT, MAX_RETRY_BEFORE_LONG_WAIT, \
-    ERROR_LONG_SLEEP, MENSA_UPDATE_THRESHOLD_NIGHT
+    ERROR_LONG_SLEEP, MENSA_UPDATE_THRESHOLD_NIGHT, DEAD_THREAD_CHECK_INTERVAL
 import time
 import argparse
 
 
 def reportError(e, loc):
-    print("there was an error while updating " + loc + ": " + str(e) + "\nRetrying...")
+    now = datetime.now()
+    print(str(now) + ": there was an error while updating " + loc + ": " + str(type(e).__name__) + ", " + str(e)
+          + "\nRetrying...")
     #msg = EmailMessage()
     #msg.set_content("there was an error while updating " + loc + ": " + str(e) + "\nRetrying...")
     #msg['Subject'] = "Error in Uni Saar App Server"
@@ -120,6 +122,14 @@ class UpdateHelpfulNumbersThread(threading.Thread):
             time.sleep(HELPFUL_NUMBERS_THRESHOLD.total_seconds())
 
 
+class ServerThread(threading.Thread):
+    def __init__(self, server: UniAppServer):
+        threading.Thread.__init__(self)
+        self.server = server
+
+    def run(self):
+        self.server.serve_forever()
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='UniSaarApp Server. '
                                                  'See the README on the Github for more information.')
@@ -136,4 +146,15 @@ if __name__ == '__main__':
     newsFeedUpdateThread.start()
     mapUpdateThread.start()
     helpfulNumbersUpdateThread.start()
-    server.serve_forever()
+    serverThread = ServerThread(server)
+    serverThread.start()
+    while True:
+        if mensaUpdateThread.is_alive() is not True:
+            mensaUpdateThread.start()
+        if newsFeedUpdateThread.is_alive() is not True:
+            newsFeedUpdateThread.start()
+        if mapUpdateThread.is_alive() is not True:
+            mapUpdateThread.start()
+        if helpfulNumbersUpdateThread.is_alive() is not True:
+            helpfulNumbersUpdateThread.start()
+        time.sleep(DEAD_THREAD_CHECK_INTERVAL.total_seconds())

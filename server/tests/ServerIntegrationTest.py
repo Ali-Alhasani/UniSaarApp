@@ -204,15 +204,15 @@ class ServerIntegrationTest(unittest.TestCase):
             self.assertTrue(True)
 
     def test_directorySearch(self):
-        searchResult = self.server.searchDirectory('Zeller', 0, 10)
+        searchResult = self.server.searchDirectory('Zeller', 0, 10, 'de')
         searchResultDict = json.loads(searchResult)
         self.assertEqual(4, searchResultDict['itemCount'])
         person = json.loads(self.server.requestPersonDetails(searchResultDict['results'][1]['pid'], 'de'))
         self.assertEqual('Andreas', person['firstname'])
 
     def test_directorySearchCache(self):
-        self.server.searchDirectory('Zeller', 0, 10)
-        searchResult = self.server.searchDirectory('Zeller', 0, 10)
+        self.server.searchDirectory('Zeller', 0, 10, 'de')
+        searchResult = self.server.searchDirectory('Zeller', 0, 10, 'de')
         searchResultDict = json.loads(searchResult)
         self.assertEqual(4, searchResultDict['itemCount'])
         person = json.loads(self.server.requestPersonDetails(searchResultDict['results'][1]['pid'], 'de'))

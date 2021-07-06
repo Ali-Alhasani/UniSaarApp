@@ -1,8 +1,8 @@
 from datetime import timedelta
 from os.path import abspath, join
 
-#SERVER_ADDRESS = 'localhost'
-SERVER_ADDRESS = 'unisaar-test.cs.uni-saarland.de'
+SERVER_ADDRESS = 'localhost'
+#SERVER_ADDRESS = 'unisaar-test.cs.uni-saarland.de'
 SERVER_PORT = 3000
 
 # News and Events
@@ -73,7 +73,10 @@ NEWSFEED_UPDATE_THRESHOLD = timedelta(minutes=60)
 MAP_UPDATE_THRESHOLD = timedelta(hours=1)
 HELPFUL_NUMBERS_THRESHOLD = timedelta(hours=1)
 
+# sleep interval to check for dead threads
+DEAD_THREAD_CHECK_INTERVAL = timedelta(hours=24)
+
 # sleep interval in seconds in case of errors
-ERROR_SLEEP_INT = 10
+ERROR_SLEEP_INT = 30
 MAX_RETRY_BEFORE_LONG_WAIT = 5
-ERROR_LONG_SLEEP = 30*60
+ERROR_LONG_SLEEP = 5*60
