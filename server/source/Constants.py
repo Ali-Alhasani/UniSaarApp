@@ -1,8 +1,8 @@
 from datetime import timedelta
 from os.path import abspath, join
 
-SERVER_ADDRESS = 'localhost'
-#SERVER_ADDRESS = 'unisaar-test.cs.uni-saarland.de'
+#SERVER_ADDRESS = 'localhost'
+SERVER_ADDRESS = 'unisaar-test.cs.uni-saarland.de'
 SERVER_PORT = 3000
 
 # News and Events

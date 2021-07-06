@@ -16,15 +16,6 @@ def reportError(e, loc):
     now = datetime.now()
     print(str(now) + ": there was an error while updating " + loc + ": " + str(type(e).__name__) + ", " + str(e)
           + "\nRetrying...")
-    #msg = EmailMessage()
-    #msg.set_content("there was an error while updating " + loc + ": " + str(e) + "\nRetrying...")
-    #msg['Subject'] = "Error in Uni Saar App Server"
-    #msg['From'] = 'julien@schanz-stade.de'
-    #msg['To'] = 'julien@schanz-stade.de'
-
-    #s = smtplib.SMTP('localhost')
-    #s.send_message(msg)
-    #s.quit()
 
 
 class UpdateMensaThread(threading.Thread):
@@ -130,6 +121,14 @@ class ServerThread(threading.Thread):
     def run(self):
         self.server.serve_forever()
 
+class TestThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+
+    def run(self):
+        time.sleep(10)
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='UniSaarApp Server. '
                                                  'See the README on the Github for more information.')
@@ -150,11 +149,23 @@ if __name__ == '__main__':
     serverThread.start()
     while True:
         if mensaUpdateThread.is_alive() is not True:
+            mensaUpdateThread = UpdateMensaThread(server, args.verbose)
             mensaUpdateThread.start()
+            now = datetime.now()
+            print(str(now) + ": restarted mensa thread.")
         if newsFeedUpdateThread.is_alive() is not True:
+            newsFeedUpdateThread = UpdateNewsFeedThread(server, args.verbose)
             newsFeedUpdateThread.start()
+            now = datetime.now()
+            print(str(now) + ": restarted newsfeed thread.")
         if mapUpdateThread.is_alive() is not True:
+            mapUpdateThread = UpdateMapThread(server, args.verbose)
             mapUpdateThread.start()
+            now = datetime.now()
+            print(str(now) + ": restarted map thread.")
         if helpfulNumbersUpdateThread.is_alive() is not True:
+            helpfulNumbersUpdateThread = UpdateHelpfulNumbersThread(server, args.verbose)
             helpfulNumbersUpdateThread.start()
+            now = datetime.now()
+            print(str(now) + ": restarted helpful numbers thread.")
         time.sleep(DEAD_THREAD_CHECK_INTERVAL.total_seconds())
