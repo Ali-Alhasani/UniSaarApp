@@ -16,20 +16,19 @@ class MapViewModel: ParentViewModel {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetMapData () {
+    func loadGetMapData() {
         showLoadingIndicator.value = true
-        dataClient.getCampusMapCoordinates(completion: {  result in
-            switch result {
-            case .success(let coordinates):
-                // only update the cache if the api update time is more recent
-                if coordinates.updateTime != "", coordinates.updateTime != self.coordinatesLastChanged {
-                    self.updateCoordinateCache(newCoordinates: coordinates.mapInfo)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let coordinates = try await dataClient.getCampusMapCoordinates(cacheLastChanged: coordinatesLastChanged)
+                if coordinates.updateTime != "", coordinates.updateTime != coordinatesLastChanged {
+                    updateCoordinateCache(newCoordinates: coordinates.mapInfo)
                 }
-            case .failure:
-                break
+            } catch {
+                // silently fail — map loads from local cache
             }
-        }, cacheLastChanged: coordinatesLastChanged)
-
+        }
     }
     func updateCoordinateCache(newCoordinates: JSON) {
         DispatchQueue.main.async {

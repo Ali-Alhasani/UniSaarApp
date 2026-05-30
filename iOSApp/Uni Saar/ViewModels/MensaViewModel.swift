@@ -15,33 +15,34 @@ class MensaMenuViewModel: ParentViewModel {
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
-   // load mensa menu from APi with the local cached alligern
+    // load mensa menu from APi with the local cached alligern
     func loadGetMensaMenu() {
         showLoadingIndicator.value = true
         Cache.shared.fetchMensaFilterFromStorage()
-        dataClient.getMensaMenu(completion: { [weak self] result in
-            switch result {
-            case .success(let menus):
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let menus = try await dataClient.getMensaMenu()
                 guard menus.daysMenus.count > 0 else {
-                    self?.daysMenus.value = [.empty]
+                    daysMenus.value = [.empty]
                     return
                 }
-                if  AppSessionManager.shared.mensafiltersLastChanged != menus.filtersLastChanged {
+                if AppSessionManager.shared.mensafiltersLastChanged != menus.filtersLastChanged {
                     AppSessionManager.shared.mensafiltersLastChanged = menus.filtersLastChanged
-                    self?.isFilterdCacheUpdated = false
+                    isFilterdCacheUpdated = false
                 } else {
                     AppSessionManager.shared.isMensaFiltersCacheFetched = true
                 }
-                self?.daysMenus.value = menus.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0))}
-                self?.showLoadingIndicator.value = false
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.daysMenus.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                self?.showError(error: error, tryAgainHandler: {
+                daysMenus.value = menus.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
+                showLoadingIndicator.value = false
+            } catch {
+                showLoadingIndicator.value = false
+                daysMenus.value = [.error(message: error.localizedDescription)]
+                showError(error: error, tryAgainHandler: { [weak self] in
                     self?.realodGetApi()
                 })
             }
-        })
+        }
     }
     func realodGetApi() {
         loadGetMensaMenu()

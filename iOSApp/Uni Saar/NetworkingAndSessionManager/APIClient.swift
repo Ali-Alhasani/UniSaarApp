@@ -19,37 +19,33 @@ class APIClient {
     }
     class func getNewSessionManager() -> Session {
         let configuration = URLSessionConfiguration.default
-        let sessionManager = Session(configuration: configuration)
-        return sessionManager
+        return Session(configuration: configuration)
     }
-    class func sendRequest(requestURL: URLRouter, success: @escaping (_ response: Any?) -> Void, failure: @escaping (_ error: Error?) -> Void) {
+    class func sendRequest(requestURL: URLRouter) async throws -> JSON {
         APIClient.printL("base url: \(requestURL)", type: .note)
-        APIClient.sessionManager.request(requestURL).validate().responseJSON { response in
-            APIClient.printL("request fired", type: .note)
-            APIClient.printL("request: \(String(describing: response.request))", type: .note)
-            APIClient.printL("Response Recieved : \(Date())", type: .note)
-            switch response.result {
-            case .success(let value):
-                APIClient.printL("response: \(value)", type: .note)
-                success(JSON(value))
-            case .failure(let afError):
-                APIClient.printL("Error while fetching data: \(afError)", type: .error)
-                if let responseData = response.data,
-                   let jsonMessage = String(data: responseData, encoding: .utf8), !jsonMessage.isEmpty {
-                    failure(LLError(status: false, message: jsonMessage))
-                    return
-                }
-                if afError.isResponseSerializationError || afError.isInvalidURLError ||
-                    afError.isParameterEncodingError || afError.isResponseValidationError {
-                    failure(MyError.customError)
-                    return
-                }
-                failure(afError)
+        APIClient.printL("request fired", type: .note)
+        let response = await APIClient.sessionManager.request(requestURL).validate().serializingData().response
+        APIClient.printL("request: \(String(describing: response.request))", type: .note)
+        APIClient.printL("Response Received : \(Date())", type: .note)
+        switch response.result {
+        case .success(let data):
+            let json = try JSON(data: data)
+            APIClient.printL("response: \(json)", type: .note)
+            return json
+        case .failure(let afError):
+            APIClient.printL("Error while fetching data: \(afError)", type: .error)
+            if let responseData = response.data,
+               let jsonMessage = String(data: responseData, encoding: .utf8), !jsonMessage.isEmpty {
+                throw LLError(status: false, message: jsonMessage)
             }
+            if afError.isResponseSerializationError || afError.isInvalidURLError ||
+                afError.isParameterEncodingError || afError.isResponseValidationError {
+                throw MyError.customError
+            }
+            throw afError
         }
     }
     class func printL(_ text: String, type: LogType) {
-        // change this to change what gets logged
         let logType: LogType = .none
         if(logType == .all || type == logType) && (type != .none) {
             debugPrint("APIClient-\(type.printCase()) \(text)")

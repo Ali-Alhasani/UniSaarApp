@@ -41,41 +41,34 @@ class FilterMensaViewModel: ParentViewModel {
     func loadGetFilterList() {
         showLoadingIndicator.value = true
         loadFoodAlarmStatus()
-        if isFilterdCacheUpdated { // check if the filter date has not been updated from the server
-            if !AppSessionManager.shared.isMensaFiltersCacheFetched { //  check if the cache date has not been fetched yet from the core date in this session
-                //
+        if isFilterdCacheUpdated {
+            if !AppSessionManager.shared.isMensaFiltersCacheFetched {
                 AppSessionManager.shared.isMensaFiltersCacheFetched = true
             }
             showLoadingIndicator.value = false
-            // notify FilterMensaViewController
-            self.didUpdatefilterList.value = true
+            didUpdatefilterList.value = true
         } else {
-
-            dataClient.getMensaFilter(completion: { [weak self] result in
-                self?.showLoadingIndicator.value = false
-
-                switch result {
-                case .success(let list):
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    let list = try await dataClient.getMensaFilter()
+                    showLoadingIndicator.value = false
                     let viewModelList = FilterLocationCellViewModel(mensaFilterModel: list)
-                    if let self = self {
-                        viewModelList.noticesText = self.getOldSelectedNotices(newViewModel: viewModelList)
-                        // remove last stored cache before saving the new data
-                        self.dataClient.clearFilterCache()
-                        self.dataClient.saveInCoreDataWith(model: viewModelList)
-                        self.isFilterdCacheUpdated = true
-                        Cache.shared.fetchMensaFilterFromStorage()
-                        // notify FilterMensaViewController
-                        self.didUpdatefilterList.value = true
-                        AppSessionManager.shared.isMensaFiltersCacheFetched = true
-                    }
-                case .failure(let error):
-                    self?.showLoadingIndicator.value = false
-                    self?.didUpdatefilterList.value = false
-                    self?.showError(error: error, tryAgainHandler: {
+                    viewModelList.noticesText = getOldSelectedNotices(newViewModel: viewModelList)
+                    dataClient.clearFilterCache()
+                    dataClient.saveInCoreDataWith(model: viewModelList)
+                    isFilterdCacheUpdated = true
+                    Cache.shared.fetchMensaFilterFromStorage()
+                    didUpdatefilterList.value = true
+                    AppSessionManager.shared.isMensaFiltersCacheFetched = true
+                } catch {
+                    showLoadingIndicator.value = false
+                    didUpdatefilterList.value = false
+                    showError(error: error, tryAgainHandler: { [weak self] in
                         self?.reloadGetApi()
                     })
                 }
-            })
+            }
         }
     }
     func reloadGetApi() {

@@ -28,32 +28,32 @@ class DirectoryViewModel: ParentViewModel {
         super.init(dataClient: dataClient)
     }
     func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) {
-
         if !hasNextPage && isFirstTime == false {
             return
         }
         showLoadingIndicator.value = true
-        dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery) { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let results):
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let results = try await dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery)
+                showLoadingIndicator.value = false
                 if isFirstTime {
                     guard results.staffItemCount > 0 else {
-                        self?.searchResutlsCells.value = [.empty]
+                        searchResutlsCells.value = [.empty]
                         return
                     }
-                    self?.searchResutlsCells.value = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel )}
-                    self?.apiPageNumber = 0
+                    searchResutlsCells.value = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) }
+                    apiPageNumber = 0
                 } else {
-                    self?.searchResutlsCells.value.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel)})
+                    searchResutlsCells.value.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) })
                 }
-                self?.hasNextPage = results.hasNextPage
-                self?.apiPageNumber += 1
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.searchResutlsCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
+                hasNextPage = results.hasNextPage
+                apiPageNumber += 1
+            } catch {
+                showLoadingIndicator.value = false
+                searchResutlsCells.value = [.error(message: error.localizedDescription)]
                 if !(error is LLError) {
-                    self?.showError(error: error)
+                    showError(error: error)
                 }
             }
         }
@@ -63,28 +63,27 @@ class DirectoryViewModel: ParentViewModel {
         if AppSessionManager.shared.helpfulNumbersLastChanged != "never" {
             fetchMoreLinksFromStorage()
             if let fetchedObjects = fetchedResultsController.fetchedObjects {
-                self.helpfulNumbersCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
+                helpfulNumbersCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
             }
-            self.showLoadingIndicator.value = false
+            showLoadingIndicator.value = false
         }
-
-        dataClient.getDirectoryHelpfulNumbers { [weak self] result in
-            switch result {
-            case .success(let list):
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let list = try await dataClient.getDirectoryHelpfulNumbers()
                 if list.numbers.count > 0 {
-                    self?.helpfulNumbersCells.value = list.numbers.map { .normal(cellViewModel: $0) }
+                    helpfulNumbersCells.value = list.numbers.map { .normal(cellViewModel: $0) }
                     AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged
-                    self?.dataClient.clearHelpfulNumbersCache()
-                    self?.dataClient.saveInCoreDataWith(model: list.numbers)
+                    dataClient.clearHelpfulNumbersCache()
+                    dataClient.saveInCoreDataWith(model: list.numbers)
                 }
-                self?.showLoadingIndicator.value = false
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                // we need to show the error message only if is the first time
+                showLoadingIndicator.value = false
+            } catch {
+                showLoadingIndicator.value = false
                 if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
-                    self?.helpfulNumbersCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
+                    helpfulNumbersCells.value = [.error(message: error.localizedDescription)]
                 }
-                self?.showError(error: error, tryAgainHandler: {
+                showError(error: error, tryAgainHandler: { [weak self] in
                     self?.reloadGetApi()
                 })
             }

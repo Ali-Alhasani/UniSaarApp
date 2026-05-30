@@ -37,32 +37,33 @@ class NewsFeedViewModel: ParentViewModel {
             fetchNewsFilterFromStorage()
             filterCatgroies = fetchedResultsController.fetchedObjects?.filter {!$0.isSelected}.compactMap {Int($0.categoryID)} ?? []
         }
-        dataClient.getNews(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, filter: filterCatgroies, completion: { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let news):
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let news = try await dataClient.getNews(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, filter: filterCatgroies)
+                showLoadingIndicator.value = false
                 if isFirstTime {
                     guard news.newsItemCount > 0 else {
-                        self?.newsCells.value = [.empty]
+                        newsCells.value = [.empty]
                         return
                     }
-                    self?.isFilterdCacheUpdated = true
-                    if  AppSessionManager.shared.newsFiltersLastChanged != news.categoriesLastChanged {
+                    isFilterdCacheUpdated = true
+                    if AppSessionManager.shared.newsFiltersLastChanged != news.categoriesLastChanged {
                         AppSessionManager.shared.newsFiltersLastChanged = news.categoriesLastChanged
-                        self?.isFilterdCacheUpdated = false
+                        isFilterdCacheUpdated = false
                     }
-                    self?.newsCells.value = news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel )}
-                    self?.isFreshLoad.value = true
+                    newsCells.value = news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+                    isFreshLoad.value = true
                 } else {
-                    self?.newsCells.value.append(contentsOf: news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel)})
+                    newsCells.value.append(contentsOf: news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) })
                 }
-                self?.apiPageNumber += 1
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.newsCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                self?.showError(error: error)
+                apiPageNumber += 1
+            } catch {
+                showLoadingIndicator.value = false
+                newsCells.value = [.error(message: error.localizedDescription)]
+                showError(error: error)
             }
-        })
+        }
     }
     func loadGetMockNews() {
         self.newsCells.value = NewsFeedModel.newsDemoData.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel)}

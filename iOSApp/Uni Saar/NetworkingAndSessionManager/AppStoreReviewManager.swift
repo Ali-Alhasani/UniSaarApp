@@ -8,6 +8,7 @@
 
 import Foundation
 import StoreKit
+import UIKit
 
 enum AppStoreReviewManager {
     static let minimumReviewWorthyActionCount = 5
@@ -45,7 +46,12 @@ enum AppStoreReviewManager {
         }
 
         let alert = ratingDialogHandler { _ in
-            SKStoreReviewController.requestReview()
+            Task { @MainActor in
+                if let windowScene = UIApplication.shared.connectedScenes
+                    .first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+                    AppStore.requestReview(in: windowScene)
+                }
+            }
         }
 
         presentedView.present(alert, animated: true)

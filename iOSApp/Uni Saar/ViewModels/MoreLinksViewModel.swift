@@ -27,29 +27,27 @@ class MoreLinksViewModel: ParentViewModel {
         if AppSessionManager.shared.morelinksLastChanged != "never" {
             fetchMoreLinksFromStorage()
             if let fetchedObjects = fetchedResultsController.fetchedObjects {
-                self.linksCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
+                linksCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
             }
-            self.showLoadingIndicator.value = false
+            showLoadingIndicator.value = false
         }
-
-        dataClient.getMoreLinks { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let links):
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let links = try await dataClient.getMoreLinks()
                 if links.links.count > 0 {
-                    self?.linksCells.value = links.links.map { .normal(cellViewModel: $0) }
+                    linksCells.value = links.links.map { .normal(cellViewModel: $0) }
                     AppSessionManager.shared.morelinksLastChanged = links.linksLastChanged
-                    self?.dataClient.clearMoreLinksCache()
-                    self?.dataClient.saveInCoreDataWith(model: links.links)
+                    dataClient.clearMoreLinksCache()
+                    dataClient.saveInCoreDataWith(model: links.links)
                 }
-                self?.showLoadingIndicator.value = false
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                // we need to show the error message only if is the first time
+                showLoadingIndicator.value = false
+            } catch {
+                showLoadingIndicator.value = false
                 if AppSessionManager.shared.morelinksLastChanged == "never" {
-                self?.linksCells.value = [.error(message: error?.localizedDescription ?? "Loading failed, check network connection")]
+                    linksCells.value = [.error(message: error.localizedDescription)]
                 }
-                self?.showError(error: error, tryAgainHandler: {
+                showError(error: error, tryAgainHandler: { [weak self] in
                     self?.reloadGetApi()
                 })
             }

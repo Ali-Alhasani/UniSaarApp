@@ -17,16 +17,17 @@ class MealDetailsViewModel: ParentViewModel {
     }
     func loadGetMealDetails(mealId: Int) {
         showLoadingIndicator.value = true
-        dataClient.getMealDetails(mealId: mealId, completion: { [weak self] result in
-            switch result {
-            case .success(let meal):
-                self?.mealDetails.value = MealViewModel(meal, noticesText: self?.noticesText)
-                  self?.showLoadingIndicator.value = false
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.showError(error: error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let meal = try await dataClient.getMealDetails(mealId: mealId)
+                mealDetails.value = MealViewModel(meal, noticesText: noticesText)
+                showLoadingIndicator.value = false
+            } catch {
+                showLoadingIndicator.value = false
+                showError(error: error)
             }
-        })
+        }
     }
     func loadGetMockMenu() {
         self.mealDetails.value = MealViewModel(MealDetailsModel.mealDemoData)

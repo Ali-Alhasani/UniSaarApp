@@ -14,16 +14,17 @@ class StaffDetailsViewModel: ParentViewModel {
     }
     func loadGetStaffDetails(staffId: Int) {
         showLoadingIndicator.value = true
-        dataClient.getStaffDetails(staffId: staffId, completion: { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let staff):
-                self?.staffDetails.value = StaffViewModel(staff)
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.showError(error: error)
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let staff = try await dataClient.getStaffDetails(staffId: staffId)
+                staffDetails.value = StaffViewModel(staff)
+                showLoadingIndicator.value = false
+            } catch {
+                showLoadingIndicator.value = false
+                showError(error: error)
             }
-        })
+        }
     }
 
 }

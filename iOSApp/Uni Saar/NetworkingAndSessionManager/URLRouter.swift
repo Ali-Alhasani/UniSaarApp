@@ -29,7 +29,7 @@ public enum URLRouter: URLRequestConvertible {
         return .get
     }
     var language: String {
-        return Locale.current.languageCode ?? "en"
+        return Locale.current.language.languageCode?.identifier ?? "en"
     }
     var path: String {
         switch self {

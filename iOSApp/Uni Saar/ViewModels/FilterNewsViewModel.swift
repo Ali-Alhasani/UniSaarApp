@@ -28,36 +28,32 @@ class FilterNewsViewModel: ParentViewModel {
     }
     func loadGetFilterList() {
         showLoadingIndicator.value = true
-        self.fetchNewsFilterFromStorage()
-        if isFilterdCacheUpdated { // check if the filter date has not been updated from the server
-            self.didUpdatefilterList.value = true
-            self.showLoadingIndicator.value = false
+        fetchNewsFilterFromStorage()
+        if isFilterdCacheUpdated {
+            didUpdatefilterList.value = true
+            showLoadingIndicator.value = false
         } else {
-            dataClient.getNewsCategories(completion: { [weak self] result in
-                self?.showLoadingIndicator.value = false
-                switch result {
-                case .success(let list):
-                    guard let self = self  else {
-                        return
-                    }
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                do {
+                    let list = try await dataClient.getNewsCategories()
+                    showLoadingIndicator.value = false
                     let viewModelList = FilterCategoriesCellViewModel(newsFilterModel: list)
-                    viewModelList.categoriesText = self.getOldSelectedCategories(newViewModel: viewModelList)
-                    // remove last stored cache before saving the new data
-                    self.dataClient.clearNewsCategoriesCache()
-                    self.dataClient.saveInCoreDataWith(model: viewModelList)
-                    self.fetchNewsFilterFromStorage()
-                    self.isFilterdCacheUpdated = true
-                    self.didUpdatefilterList.value = true
-                case .failure(let error):
-                    self?.showLoadingIndicator.value = false
-                    self?.didUpdatefilterList.value = false
-                    self?.showError(error: error, tryAgainHandler: {
+                    viewModelList.categoriesText = getOldSelectedCategories(newViewModel: viewModelList)
+                    dataClient.clearNewsCategoriesCache()
+                    dataClient.saveInCoreDataWith(model: viewModelList)
+                    fetchNewsFilterFromStorage()
+                    isFilterdCacheUpdated = true
+                    didUpdatefilterList.value = true
+                } catch {
+                    showLoadingIndicator.value = false
+                    didUpdatefilterList.value = false
+                    showError(error: error, tryAgainHandler: { [weak self] in
                         self?.reloadGetApi()
                     })
                 }
-            })
+            }
         }
-
     }
     func reloadGetApi() {
         loadGetFilterList()

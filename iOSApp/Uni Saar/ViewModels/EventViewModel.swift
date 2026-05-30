@@ -16,21 +16,22 @@ class EventViewModel: ParentViewModel {
     }
     func loadGetEvents(month: String, year: String) {
         showLoadingIndicator.value = true
-        dataClient.getEvents(month: month, year: year, completion: { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let events):
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let events = try await dataClient.getEvents(month: month, year: year)
+                showLoadingIndicator.value = false
                 guard events.newsList.count > 0 else {
-                    self?.eventCells.value = [.empty]
+                    eventCells.value = [.empty]
                     return
                 }
-                self?.eventCells.value = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel )}
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.eventCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                self?.showError(error: error)
+                eventCells.value = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+            } catch {
+                showLoadingIndicator.value = false
+                eventCells.value = [.error(message: error.localizedDescription)]
+                showError(error: error)
             }
-        })
+        }
     }
 
     func getDayEvents(day: Date?) {
