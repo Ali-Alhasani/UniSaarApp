@@ -29,6 +29,9 @@ class MoreLinksDetailsViewController: UIViewController {
     func setUplayout() {
         webView.scrollView.isScrollEnabled = true
         webView.navigationDelegate = self
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.allowsBackForwardNavigationGestures = true
         self.title = linkItem?.nameText
     }
     func getItemURL() -> URLRequest? {
@@ -55,8 +58,6 @@ class MoreLinksDetailsViewController: UIViewController {
 }
 extension MoreLinksDetailsViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        DispatchQueue.main.async {
-            self.activityIndicator.stopAnimating()
-        }
+        activityIndicator.stopAnimating()
     }
 }

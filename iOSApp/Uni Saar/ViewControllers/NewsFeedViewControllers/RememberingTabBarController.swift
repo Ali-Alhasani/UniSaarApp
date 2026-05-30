@@ -24,6 +24,5 @@ class RememberingTabBarController: UITabBarController, UITabBarControllerDelegat
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         // Save the selected index to the UserDefaults
         UserDefaults.standard.set(self.selectedIndex, forKey: self.lastOpenTabScreen)
-        UserDefaults.standard.synchronize()
     }
 }

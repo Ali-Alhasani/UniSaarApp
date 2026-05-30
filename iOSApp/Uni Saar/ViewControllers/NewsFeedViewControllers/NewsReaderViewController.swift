@@ -8,40 +8,46 @@
 
 import UIKit
 import WebKit
-import Alamofire
 import SafariServices
+import Combine
+
+@MainActor
 class NewsReaderViewController: UIViewController {
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var newsItemViewModel: NewsFeedCellViewModel?
-    //let documentController = UIDocumentInteractionController()
+    private var cancellables = Set<AnyCancellable>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModel()
         setUplayout()
-        // observer to listen for accessibility changing in the phone settings
-        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeDidChange(_:)), name: UIContentSizeCategory.didChangeNotification, object: nil)
-        // Do any additional setup after loading the view.
+        NotificationCenter.default.publisher(for: UIContentSizeCategory.didChangeNotification)
+            .sink { [weak self] _ in self?.webView.reload() }
+            .store(in: &cancellables)
     }
+
     func bindViewModel() {
-        DispatchQueue.main.async {
-            self.title = self.newsItemViewModel?.titleText
-            self.load()
-        }
+        title = newsItemViewModel?.titleText
+        load()
     }
+
     func load() {
-        self.activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         if let urlRequest = getNewsItemURL() {
-            self.webView.load(urlRequest)
+            webView.load(urlRequest)
         }
     }
+
     func setUplayout() {
         webView.scrollView.isScrollEnabled = true
         webView.navigationDelegate = self
-        webView.backgroundColor = .none
+        webView.isOpaque = false
+        webView.backgroundColor = .clear
+        webView.allowsBackForwardNavigationGestures = true
         webView.configuration.userContentController.add(self, name: "ics")
     }
-    //Todo
+
     func getNewsItemURL() -> URLRequest? {
         let baseSiteURl = URLRouter.Constants.baseURLPath
         if let newsId = newsItemViewModel?.newsItem.newsID {
@@ -57,68 +63,39 @@ class NewsReaderViewController: UIViewController {
         }
         return nil
     }
-    //respects the user's choice of content size.
-    @objc private func contentSizeDidChange(_ notification: Notification) {
-        webView.reload()
-    }
-    /*
-     // MARK: - Navigation
-     
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-
-    let destination: DownloadRequest.Destination = { _, _ in
-        var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        // the name of the file here I kept is yourFileName with appended extension
-        documentsURL.appendPathComponent("yourFileName."+"ics")
-        return (documentsURL, [.removePreviousFile])
-    }
 
     func requestReview() {
         AppStoreReviewManager.requestReviewIfAppropriate(presentedView: self)
     }
 }
+
 extension NewsReaderViewController: WKNavigationDelegate, WKScriptMessageHandler {
     func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         print(message)
     }
 
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
-        DispatchQueue.main.async {
-            self.activityIndicator.stopAnimating()
-            self.requestReview()
-        }
+        activityIndicator.stopAnimating()
+        requestReview()
     }
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping ((WKNavigationActionPolicy) -> Void)) {
-        if let url = navigationAction.request.url {
-            if url.absoluteString.contains("/iCal?") {
-               // change the UIBarButton to black color due to bug into add to Calendar view within the background of navigation is not inherit the app color
-                UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.labelCustomColor], for: UIControl.State.normal)
-                let configuration = SFSafariViewController.Configuration()
-                //configuration.entersReaderIfAvailable = true
-                configuration.barCollapsingEnabled = false
-                let safariVC = SFSafariViewController(url: url, configuration: configuration)
-                safariVC.delegate = self
-                safariVC.preferredBarTintColor = AppStyle.appNavgationMainColor
-                safariVC.preferredControlTintColor = .white
-                // hide navigation bar and present safari view controller
-                self.present(safariVC, animated: true)
-            }
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
+        if let url = navigationAction.request.url, url.absoluteString.contains("/iCal?") {
+            let configuration = SFSafariViewController.Configuration()
+            configuration.barCollapsingEnabled = false
+            let safariVC = SFSafariViewController(url: url, configuration: configuration)
+            safariVC.delegate = self
+            safariVC.preferredBarTintColor = AppStyle.appNavgationMainColor
+            safariVC.preferredControlTintColor = .white
+            present(safariVC, animated: true)
         }
-        decisionHandler(.allow)
+        return .allow
     }
 }
+
 // MARK: - SFSafariViewControllerDelegate
-extension NewsReaderViewController: SFSafariViewControllerDelegate {
+extension NewsReaderViewController: @preconcurrency SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        // pop safari view controller and display navigation bar again
-        // rest BarButtonItem to app tint color
-        UIBarButtonItem.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: UIControl.State.normal)
-        controller.dismiss(animated: true, completion: nil)
+        controller.dismiss(animated: true)
     }
 }

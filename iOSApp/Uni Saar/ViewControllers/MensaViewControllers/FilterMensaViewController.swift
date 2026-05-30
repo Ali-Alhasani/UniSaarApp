@@ -152,7 +152,7 @@ class FilterMensaViewController: UIViewController {
     }
 
     func dismissView() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
     }
 
     // MARK: - Navigation
@@ -338,8 +338,7 @@ extension FilterMensaViewController: NotificationTimeDelegate {
     }
 
     func updateTableView() {
-        filterTableView.beginUpdates()
-        filterTableView.endUpdates()
+        filterTableView.performBatchUpdates(nil)
     }
 
     func selectedTime(time: Date) {

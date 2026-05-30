@@ -11,17 +11,6 @@ import UIKit
 class MensaNotificationTableViewCell: UITableViewCell {
     @IBOutlet weak var notificationTimeLabel: UILabel!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
-
     var notificationSelectedTime: Date? {
         didSet {
             updateView()
@@ -29,13 +18,17 @@ class MensaNotificationTableViewCell: UITableViewCell {
     }
 
     func updateView() {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        let time: Date
         if let selectedTime = notificationSelectedTime {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "HH:mm"
-            let timeSting = dateFormatter.string(from: selectedTime)
-            notificationTimeLabel.text = NSLocalizedString("dailyTime", comment: "") + timeSting
+            time = selectedTime
         } else {
-            notificationTimeLabel.text = NSLocalizedString("dailyTime", comment: "") + "11:15 AM"
+            var components = DateComponents()
+            components.hour = 11
+            components.minute = 15
+            time = Calendar.current.date(from: components) ?? Date()
         }
+        notificationTimeLabel.text = NSLocalizedString("dailyTime", comment: "") + formatter.string(from: time)
     }
 }

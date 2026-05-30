@@ -24,6 +24,7 @@ class CampusViewController: UIViewController {
     weak var campusDelegate: CampusViewControllerDelegate?
     private var mapViewModel: MapViewModel?
     private var mapUpdateCancellable: AnyCancellable?
+    private var cancellables = Set<AnyCancellable>()
     private var mapRegionSet = false
 
     override func viewDidLoad() {
@@ -32,6 +33,7 @@ class CampusViewController: UIViewController {
         campusCoor = CampusModel(filename: AppSessionManager.shared.selectedCampus.mapCoorFileName)
         setUpSearchBar()
         setupNotification()
+        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     }
 
     override func viewDidLayoutSubviews() {
@@ -72,16 +74,16 @@ class CampusViewController: UIViewController {
     }
 
     func activateSearchBar() {
-        DispatchQueue.main.async {
-            if let staffAddress = self.staffAddress {
-                self.searchController?.isActive = true
-                self.searchController?.searchBar.text = staffAddress
-            }
+        if let staffAddress {
+            searchController?.isActive = true
+            searchController?.searchBar.text = staffAddress
         }
     }
 
     func setupNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
+        NotificationCenter.default.publisher(for: NSNotification.Name("CampusSettingsDidUpdate"))
+            .sink { [weak self] _ in self?.updateCampus() }
+            .store(in: &cancellables)
     }
 
     func loadCoordinates(checkForUpdate: Bool = true) -> [MapInfoModel] {
@@ -100,7 +102,7 @@ class CampusViewController: UIViewController {
         mapItem.openInMaps(launchOptions: nil)
     }
 
-    @objc func updateCampus() {
+    func updateCampus() {
         didChangeLocationFilter(selectedCampus: AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
     }
 
@@ -146,11 +148,12 @@ extension CampusViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !(annotation is MKUserLocation) else { return nil }
-        let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier, for: annotation) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
         annotationView.canShowCallout = true
-        let smallSquare = CGSize(width: 35, height: 30)
-        let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: smallSquare))
-        button.setBackgroundImage(UIImage(systemName: "car"), for: .normal)
+        var config = UIButton.Configuration.plain()
+        config.image = UIImage(systemName: "car")
+        let button = UIButton(configuration: config)
+        button.frame = CGRect(origin: .zero, size: CGSize(width: 35, height: 30))
         button.addTarget(self, action: #selector(self.getDirections), for: .touchUpInside)
         annotationView.rightCalloutAccessoryView = button
         return annotationView

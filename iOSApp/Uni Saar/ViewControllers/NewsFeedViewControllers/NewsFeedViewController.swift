@@ -122,7 +122,7 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
             viewModel.configure(cell)
             if let imageURL = viewModel.imageURL {
-                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(named: "SF_arrow_2_circlepath_circle_fill"), completion: { response in
+                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(systemName: "arrow.2.circlepath.circle.fill"), completion: { response in
                     if response.response != nil {
                         self.newsTable.reloadRowAt()
                     }

@@ -89,7 +89,7 @@ class FilterNewsFeedViewController: UIViewController {
     }
 
     func dismissView() {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
     }
 }
 

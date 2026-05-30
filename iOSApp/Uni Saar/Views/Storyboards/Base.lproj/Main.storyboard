@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dHX-Mi-FbM">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="dHX-Mi-FbM">
+    <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -31,7 +30,6 @@
         <!--News Feed-->
         <scene sceneID="ajh-m8-1DI">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2FK-uM-0gH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
                 <navigationController navigationBarHidden="YES" id="aHK-qW-aMO" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="News Feed" image="doc.append" id="Sjq-m0-3LX"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="0Ey-sX-tXl">
@@ -41,6 +39,7 @@
                         <segue destination="oR0-65-zLq" kind="relationship" relationship="rootViewController" id="APV-JD-LX2"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2FK-uM-0gH" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1300" y="-293"/>
         </scene>
@@ -88,7 +87,7 @@
                 <navigationController id="TGJ-JX-1MA" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="More" image="ellipsis.circle" id="IEC-jU-gfr"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="gfl-Mg-nma">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="124" width="402" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -116,7 +115,7 @@
                 <navigationController id="ZTM-2Z-ikJ" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Campus" image="map" id="C7m-ag-ubC"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Bgd-yh-Uy2">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="124" width="402" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -167,10 +166,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Material_Restaurant_Menu" width="30" height="30"/>
-        <image name="doc.append" width="14" height="18"/>
-        <image name="ellipsis.circle" width="17" height="17"/>
-        <image name="map" width="18" height="17"/>
-        <image name="person.2" width="23" height="16"/>
+        <image name="doc.append" width="11" height="14"/>
+        <image name="ellipsis.circle" width="13" height="13"/>
+        <image name="map" width="14" height="13"/>
+        <image name="person.2" width="18" height="12"/>
     </resources>
 </document>

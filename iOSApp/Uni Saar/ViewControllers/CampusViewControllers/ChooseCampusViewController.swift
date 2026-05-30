@@ -38,7 +38,7 @@ class ChooseCampusViewController: UIViewController {
     }
 
     func dismissView() {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true)
     }
 
 }

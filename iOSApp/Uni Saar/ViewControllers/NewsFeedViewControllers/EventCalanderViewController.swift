@@ -32,10 +32,8 @@ class EventCalanderViewController: UIViewController {
         super.viewDidLoad()
         setUpCalander()
         setupTableView()
-        DispatchQueue.main.async {
-            self.bindViewModel()
-            self.load()
-        }
+        bindViewModel()
+        load()
     }
 
     func setUpCalander() {
@@ -155,7 +153,7 @@ extension EventCalanderViewController: UITableViewDelegate, UITableViewDataSourc
             }
             viewModel.configure(cell)
             if let imageURL = viewModel.imageURL {
-                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(named: "SF_arrow_2_circlepath_circle_fill"), completion: { response in
+                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(systemName: "arrow.2.circlepath.circle.fill"), completion: { response in
                     if response.response != nil {
                         self.tableView.reloadRowAt()
                     }

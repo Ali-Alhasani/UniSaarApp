@@ -63,10 +63,8 @@ class SettingsViewController: UITableViewController {
     }
 
     func goToAppSettings() {
-        DispatchQueue.main.async {
-            if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
-                UIApplication.shared.open(settingsURL)
-            }
+        if let settingsURL = URL(string: UIApplication.openSettingsURLString) {
+            UIApplication.shared.open(settingsURL)
         }
     }
 }

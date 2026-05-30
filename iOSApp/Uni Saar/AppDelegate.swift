@@ -20,14 +20,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     func setupNavigationBarColor() {
-        let coloredAppearance = UINavigationBarAppearance()
-        //coloredAppearance.configureWithOpaqueBackground()
-        coloredAppearance.backgroundColor = AppStyle.appNavgationMainColor
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        let appearance = UINavigationBarAppearance()
+        if #available(iOS 26, *) {
+            appearance.configureWithDefaultBackground()
+            appearance.backgroundColor = AppStyle.appNavgationMainColor.withAlphaComponent(0.95)
+        } else {
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = AppStyle.appNavgationMainColor
+        }
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().tintColor = AppStyle.backNavgationTintColor
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = AppStyle.appGlobalTintColor
         let stackViewAppearance = UIStackView.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
         stackViewAppearance.spacing = -2

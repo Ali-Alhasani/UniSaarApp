@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,7 +13,7 @@
             <objects>
                 <navigationController storyboardIdentifier="CampusUINavigation" id="1eU-nQ-XUm" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="OOt-jd-nwe">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="124" width="402" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -29,24 +29,24 @@
             <objects>
                 <viewController storyboardIdentifier="CampusViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="c4B-eZ-SeG" customClass="CampusViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="UGc-dT-AV5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="J8P-fG-clc">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                                <rect key="frame" x="0.0" y="178" width="402" height="628"/>
                                 <connections>
                                     <outlet property="delegate" destination="c4B-eZ-SeG" id="vDR-f6-xQQ"/>
                                 </connections>
                             </mapView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="JwA-ae-O5b"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="J8P-fG-clc" firstAttribute="top" secondItem="JwA-ae-O5b" secondAttribute="top" id="ln9-gH-c0X"/>
                             <constraint firstItem="J8P-fG-clc" firstAttribute="leading" secondItem="JwA-ae-O5b" secondAttribute="leading" id="r97-4O-bcd"/>
                             <constraint firstItem="JwA-ae-O5b" firstAttribute="bottom" secondItem="J8P-fG-clc" secondAttribute="bottom" id="vks-HA-7cp"/>
                             <constraint firstItem="JwA-ae-O5b" firstAttribute="trailing" secondItem="J8P-fG-clc" secondAttribute="trailing" id="x0l-dS-ph9"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="JwA-ae-O5b"/>
                     </view>
                     <navigationItem key="navigationItem" title="Campus" id="rXA-CU-pRL">
                         <barButtonItem key="rightBarButtonItem" title="Item" image="gear" id="9am-Al-rfR">
@@ -68,26 +68,26 @@
             <objects>
                 <tableViewController storyboardIdentifier="BuildingSearchTable" id="Wiy-53-zoK" customClass="BuildingSearchTableViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="sS9-u7-APF">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CampusCell" textLabel="kiS-wx-8eo" detailTextLabel="oTh-jo-v0w" style="IBUITableViewCellStyleSubtitle" id="52F-Yu-Pak">
-                                <rect key="frame" x="0.0" y="28" width="414" height="55.5"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CampusCell" id="52F-Yu-Pak">
+                                <rect key="frame" x="0.0" y="50" width="402" height="55"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="52F-Yu-Pak" id="p2g-YE-iEk">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="55.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="402" height="55"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kiS-wx-8eo">
-                                            <rect key="frame" x="20" y="10" width="33.5" height="20.5"/>
+                                            <rect key="frame" x="20" y="9.9999999999999982" width="33" height="20.333333333333332"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="oTh-jo-v0w">
-                                            <rect key="frame" x="20" y="31.5" width="44" height="14.5"/>
+                                            <rect key="frame" x="19.999999999999996" y="31.333333333333332" width="43.666666666666664" height="14.333333333333334"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="textColor"/>
@@ -112,22 +112,22 @@
             <objects>
                 <viewController id="rqN-Zz-rg3" customClass="ChooseCampusViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="5A2-pm-Vco">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="Cbw-Gm-nOJ">
-                                <rect key="frame" x="0.0" y="56" width="414" height="752"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="0.0" y="70" width="402" height="742"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="4An-Sd-KPy"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Cbw-Gm-nOJ" firstAttribute="top" secondItem="4An-Sd-KPy" secondAttribute="top" id="PJp-gI-9Ui"/>
                             <constraint firstItem="Cbw-Gm-nOJ" firstAttribute="leading" secondItem="4An-Sd-KPy" secondAttribute="leading" id="ULB-YD-bWg"/>
                             <constraint firstItem="4An-Sd-KPy" firstAttribute="trailing" secondItem="Cbw-Gm-nOJ" secondAttribute="trailing" id="WIv-wE-B0m"/>
                             <constraint firstItem="4An-Sd-KPy" firstAttribute="bottom" secondItem="Cbw-Gm-nOJ" secondAttribute="bottom" id="jgV-Si-tkG"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="4An-Sd-KPy"/>
                     </view>
                     <navigationItem key="navigationItem" title="Choose Campus" id="Dtd-ih-lYp">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="e0F-35-m5M">
@@ -150,7 +150,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Qn9-Kd-P4i" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="bDt-tY-eLb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="16" width="402" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -164,6 +164,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="gear" width="19" height="19"/>
+        <image name="gear" width="15" height="15"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

@@ -21,10 +21,6 @@ class MensaMenuTableViewCell: UITableViewCell {
         // Initialization code
         setUpLayout()
     }
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
     func setUpLayout() {
         outerView.setAsCircle(cornerRadius: 5)
         colorView.layer.cornerRadius = 5

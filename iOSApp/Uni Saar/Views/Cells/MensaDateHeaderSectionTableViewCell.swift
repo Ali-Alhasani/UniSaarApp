@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import AlamofireImage
 
 class MensaDateHeaderSectionTableViewCell: UITableViewHeaderFooterView, UIGestureRecognizerDelegate {
     @IBOutlet weak var dayLabel: UILabel!
@@ -17,9 +16,7 @@ class MensaDateHeaderSectionTableViewCell: UITableViewHeaderFooterView, UIGestur
     }
     var dayMenuViewModel: MensaDayMenuViewModel? {
         didSet {
-            DispatchQueue.main.async {
-                self.dayLabel.attributedText = self.dayMenuViewModel?.dateText
-            }
+            dayLabel.attributedText = dayMenuViewModel?.dateText
         }
     }
     static var nib: UINib {

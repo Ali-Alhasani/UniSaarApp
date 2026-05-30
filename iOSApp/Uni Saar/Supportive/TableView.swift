@@ -35,19 +35,16 @@ extension UITableView {
     func layoutTableView(tableBackgroundColor: UIColor = AppStyle.tableViewBackgroundColor, withOutSeparator: Bool = true) {
         self.estimatedRowHeight = 300
         self.rowHeight = UITableView.automaticDimension
-        self.tableFooterView = UIView()
         self.backgroundColor = tableBackgroundColor
         if withOutSeparator {
             self.separatorStyle = .none
+        } else {
+            self.tableFooterView = UIView()
         }
-
     }
 
     func reloadRowAt() {
-        DispatchQueue.main.async {
-            self.beginUpdates()
-            self.endUpdates()
-        }
+        performBatchUpdates(nil)
     }
 
     func scrollToTop(animated: Bool) {

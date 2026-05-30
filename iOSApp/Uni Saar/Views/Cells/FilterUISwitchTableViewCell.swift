@@ -24,15 +24,6 @@ class FilterUISwitchTableViewCell: UITableViewCell {
     weak var delegate: NewsFilterViewCellDelegate?
     weak var mensaDelegate: MensaFilterCellDelegate?
     var indexPath: IndexPath?
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
     var cellTitle: String? {
         didSet {
             self.titleLabel.text = cellTitle

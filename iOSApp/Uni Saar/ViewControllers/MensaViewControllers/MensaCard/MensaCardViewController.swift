@@ -25,9 +25,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.main.async {
-            self.scanCardAction()
-        }
+        scanCardAction()
     }
 
     override func viewDidDisappear(_ animated: Bool) {
@@ -48,7 +46,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
                 preferredStyle: .alert
             )
             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
+            self.present(alertController, animated: true)
             return
         }
 
@@ -154,7 +152,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         Task { @MainActor [weak self] in
             self?.labelCurrentBalance.text = String(format: "%.2f €", currentBalanceValue)
             self?.labelDate.text = dateString
-            UIView.animate(withDuration: 1.0) {
+            UIView.animate(springDuration: 0.7, bounce: 0.25) {
                 self?.viewCardBackground.backgroundColor = self?.getColorByEuro(euro: currentBalanceValue)
             }
         }
@@ -246,7 +244,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
     }
 
     @IBAction func doneAction(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
+        self.dismiss(animated: true)
     }
 
 }

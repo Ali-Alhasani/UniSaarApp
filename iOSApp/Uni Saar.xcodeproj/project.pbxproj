@@ -86,7 +86,6 @@
 		6BA5771023DF479400D24F74 /* MoreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5770F23DF479400D24F74 /* MoreViewModelTests.swift */; };
 		6BA5771223DF4AEA00D24F74 /* ObservableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771123DF4AEA00D24F74 /* ObservableTest.swift */; };
 		6BA5771423DF4BA100D24F74 /* AlertControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771323DF4BA100D24F74 /* AlertControllerTest.swift */; };
-		F1A2B3C4D5E6F7A8B9C0D1E3 /* ViewExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */; };
 		6BA5771623DF4FCC00D24F74 /* NewsFeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771523DF4FCC00D24F74 /* NewsFeedViewControllerTests.swift */; };
 		6BA5771823DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771723DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift */; };
 		6BA5771A23DF567100D24F74 /* EventCalanderViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771923DF567100D24F74 /* EventCalanderViewControllerTests.swift */; };
@@ -134,6 +133,7 @@
 		CC02CC02CC02CC02CC02CC02 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = BB02BB02BB02BB02BB02BB02 /* AlamofireImage */; };
 		CC03CC03CC03CC03CC03CC03 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BB03BB03BB03BB03BB03BB03 /* SwiftyJSON */; };
 		CC04CC04CC04CC04CC04CC04 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = BB04BB04BB04BB04BB04BB04 /* FSCalendar */; };
+		F1A2B3C4D5E6F7A8B9C0D1E3 /* ViewExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -247,7 +247,6 @@
 		6BA5770F23DF479400D24F74 /* MoreViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewModelTests.swift; sourceTree = "<group>"; };
 		6BA5771123DF4AEA00D24F74 /* ObservableTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableTest.swift; sourceTree = "<group>"; };
 		6BA5771323DF4BA100D24F74 /* AlertControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerTest.swift; sourceTree = "<group>"; };
-		F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensionTests.swift; sourceTree = "<group>"; };
 		6BA5771523DF4FCC00D24F74 /* NewsFeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedViewControllerTests.swift; sourceTree = "<group>"; };
 		6BA5771723DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterNewsFeedViewControllerTests.swift; sourceTree = "<group>"; };
 		6BA5771923DF567100D24F74 /* EventCalanderViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCalanderViewControllerTests.swift; sourceTree = "<group>"; };
@@ -326,6 +325,7 @@
 		6BFBF2E924A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAppStoryboard.strings; sourceTree = "<group>"; };
 		6BFBF2EA24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6BFBF2EB24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; indentWidth = 5; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensionTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */

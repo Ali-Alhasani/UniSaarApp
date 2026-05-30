@@ -17,9 +17,7 @@ class MensaCollectionViewCell: UICollectionViewCell {
 
     var dayMenuViewModel: MensaDayMenuViewModel? {
         didSet {
-            DispatchQueue.main.async {
-                self.mensaTable.reloadData()
-            }
+            mensaTable.reloadData()
         }
     }
     weak var delegate: MensaCollectionViewCellDelegate?

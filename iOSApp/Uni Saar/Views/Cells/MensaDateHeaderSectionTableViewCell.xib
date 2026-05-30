@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15510"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,11 +14,12 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Today" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Iya-nR-yuH">
-                    <rect key="frame" x="16" y="8" width="72.5" height="63"/>
+                    <rect key="frame" x="16" y="8" width="72.666666666666671" height="29"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="G4F-HZ-Pyc"/>
             <constraints>
                 <constraint firstItem="G4F-HZ-Pyc" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Iya-nR-yuH" secondAttribute="trailing" constant="16" id="YH0-p4-Laz"/>
                 <constraint firstItem="G4F-HZ-Pyc" firstAttribute="bottom" secondItem="Iya-nR-yuH" secondAttribute="bottom" constant="4" id="sbC-cZ-8QH"/>
@@ -27,7 +27,6 @@
                 <constraint firstItem="Iya-nR-yuH" firstAttribute="leading" secondItem="G4F-HZ-Pyc" secondAttribute="leading" constant="16" id="uJZ-bg-bLn"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="G4F-HZ-Pyc"/>
             <connections>
                 <outlet property="dayLabel" destination="Iya-nR-yuH" id="Aga-a5-CuG"/>
             </connections>

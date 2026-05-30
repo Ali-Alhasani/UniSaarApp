@@ -91,7 +91,7 @@ extension MoreLinksViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
         if indexPath.section == 1 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "moreLinksCell") ?? defaultCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "moreLinksCell", for: indexPath)
             var content = cell.defaultContentConfiguration()
             content.text = moreLinksViewModel.extraCells[safe: indexPath.row]
             cell.contentConfiguration = content
@@ -99,7 +99,7 @@ extension MoreLinksViewController {
         } else {
             switch moreLinksViewModel.linksCells[safe: indexPath.row] {
             case .normal(let viewModel):
-                let cell = tableView.dequeueReusableCell(withIdentifier: "moreLinksCell") ?? defaultCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "moreLinksCell", for: indexPath)
                 var content = cell.defaultContentConfiguration()
                 content.text = viewModel.nameText
                 content.textProperties.numberOfLines = 0

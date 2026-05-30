@@ -50,15 +50,13 @@ extension BuildingSearchTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "CampusCell") {
-            let selectedItem = matchingItems[indexPath.row]
-            var content = cell.defaultContentConfiguration()
-            content.text = selectedItem.name
-            content.secondaryText = selectedItem.function
-            cell.contentConfiguration = content
-            return cell
-        }
-        return  UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CampusCell", for: indexPath)
+        let selectedItem = matchingItems[indexPath.row]
+        var content = cell.defaultContentConfiguration()
+        content.text = selectedItem.name
+        content.secondaryText = selectedItem.function
+        cell.contentConfiguration = content
+        return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -71,7 +69,7 @@ extension BuildingSearchTableViewController {
             let annotation = MapPin(coordinate: coordinate2D, title: selectedItem.name, subtitle: selectedItem.function, campus: selectedItem.campus)
             handleMapSearchDelegate?.dropPinZoomIn(placemark: annotation)
         }
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
     }
 }
 
