@@ -71,7 +71,7 @@ class NewsReaderViewController: UIViewController {
      }
      */
 
-    let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+    let destination: DownloadRequest.Destination = { _, _ in
         var documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         // the name of the file here I kept is yourFileName with appended extension
         documentsURL.appendPathComponent("yourFileName."+"ics")

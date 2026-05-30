@@ -81,7 +81,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-          if let window = UIApplication.shared.keyWindow {
+          if let window = UIApplication.shared.connectedScenes
+              .compactMap({ $0 as? UIWindowScene })
+              .flatMap({ $0.windows })
+              .first(where: { $0.isKeyWindow }) {
               MediatorDelegate.navigateToMensaScreen(window: window)
           }
           // you must call the completion handler when you're done
@@ -92,6 +95,6 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
                                   withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
           NSLog("userNotificationCenter:willPresent")
           //...
-          completionHandler([.alert])
+          completionHandler([.banner, .list])
       }
 }

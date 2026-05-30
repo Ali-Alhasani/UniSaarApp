@@ -25,7 +25,7 @@ class NewsFeedTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     override func prepareForReuse() {
-        newsImageView.af_cancelImageRequest()
+        newsImageView.af.cancelImageRequest()
         newsImageView.image = nil
     }
 }

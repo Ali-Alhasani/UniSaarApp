@@ -45,7 +45,7 @@ class StaffDetailsViewController: UIViewController {
             self?.genderLabel.text = staff.genderText
             self?.title = staff.fullName
             if let imageURL = staff.imageURL {
-                self?.imageView.af_setImage(withURL: imageURL)
+                self?.imageView.af.setImage(withURL: imageURL)
             }
         }
         staff.onShowError = { [weak self] alert in

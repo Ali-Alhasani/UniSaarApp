@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol MensaCollectionViewCellDelegate: class {
+protocol MensaCollectionViewCellDelegate: AnyObject {
     func didTapMealDetails(meal: MensaMealCellViewModel)
     func didTapLocationDetails()
 }

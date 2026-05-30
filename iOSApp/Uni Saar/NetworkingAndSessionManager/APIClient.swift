@@ -11,44 +11,41 @@ import Alamofire
 import SwiftyJSON
 
 class APIClient {
-    class var sessionManager: Alamofire.SessionManager {
+    class var sessionManager: Session {
         struct Static {
             static let instance = APIClient.getNewSessionManager()
         }
         return Static.instance
     }
-    class func getNewSessionManager() -> Alamofire.SessionManager {
+    class func getNewSessionManager() -> Session {
         let configuration = URLSessionConfiguration.default
-        let sessionManager = Alamofire.SessionManager(configuration: configuration)
+        let sessionManager = Session(configuration: configuration)
         return sessionManager
     }
     class func sendRequest(requestURL: URLRouter, success: @escaping (_ response: Any?) -> Void, failure: @escaping (_ error: Error?) -> Void) {
         APIClient.printL("base url: \(requestURL)", type: .note)
         APIClient.sessionManager.request(requestURL).validate().responseJSON { response in
             APIClient.printL("request fired", type: .note)
-            APIClient.printL("request: \(response.request!)", type: .note)
+            APIClient.printL("request: \(String(describing: response.request))", type: .note)
             APIClient.printL("Response Recieved : \(Date())", type: .note)
-            APIClient.printL("response: \(String(describing: response.result.value))", type: .note)
-            guard response.result.isSuccess,
-                  let value = response.result.value else {
-                APIClient.printL("Error while fetching data: \(String(describing: response.result.error))", type: .error)
-                // check for custum server error message
-                if let responseData = response.data, let jsonMessage = String(data: responseData, encoding: String.Encoding.utf8), jsonMessage != "" {
+            switch response.result {
+            case .success(let value):
+                APIClient.printL("response: \(value)", type: .note)
+                success(JSON(value))
+            case .failure(let afError):
+                APIClient.printL("Error while fetching data: \(afError)", type: .error)
+                if let responseData = response.data,
+                   let jsonMessage = String(data: responseData, encoding: .utf8), !jsonMessage.isEmpty {
                     failure(LLError(status: false, message: jsonMessage))
                     return
                 }
-                //checking the error, to show a custom friendly error for the user
-                if let overriddenError = response.result.error as? AFError {
-                    if overriddenError.isResponseSerializationError || overriddenError.isInvalidURLError ||
-                        overriddenError.isParameterEncodingError ||  overriddenError.isMultipartEncodingError ||   overriddenError.isResponseValidationError {
-                        failure(MyError.customError)
-                        return
-                    }
+                if afError.isResponseSerializationError || afError.isInvalidURLError ||
+                    afError.isParameterEncodingError || afError.isResponseValidationError {
+                    failure(MyError.customError)
+                    return
                 }
-                failure(response.result.error)
-                return
+                failure(afError)
             }
-            success(JSON(value))
         }
     }
     class func printL(_ text: String, type: LogType) {

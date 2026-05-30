@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol FilterCellDelegate: class {
+protocol FilterCellDelegate: AnyObject {
     func didSwitchOnFilter(indexPath: IndexPath?)
     func didSwitchOffFilter(indexPath: IndexPath?)
 }

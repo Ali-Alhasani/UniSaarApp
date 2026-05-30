@@ -11,7 +11,7 @@ import UIKit
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.preferredDisplayMode = .allVisible
+        self.preferredDisplayMode = .oneBesideSecondary
         self.maximumPrimaryColumnWidth = UIScreen.main.bounds.width/2
         self.minimumPrimaryColumnWidth = UIScreen.main.bounds.width/3
         self.preferredPrimaryColumnWidthFraction = 0.42

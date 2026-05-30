@@ -39,12 +39,11 @@ class AboutAppViewController: UIViewController {
 }
 
 extension AboutAppViewController: UITextViewDelegate {
-    func textView(_ textView: UITextView, shouldInteractWith URL: URL, in characterRange: NSRange, interaction: UITextItemInteraction) -> Bool {
-        if URL.absoluteString == "gitHubLink" {
-            openLink()
-            return true
+    func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
+        if case .link(let url) = textItem.content, url.absoluteString == "gitHubLink" {
+            return UIAction { [weak self] _ in self?.openLink() }
         }
-        return false
+        return defaultAction
     }
 
     func openLink() {

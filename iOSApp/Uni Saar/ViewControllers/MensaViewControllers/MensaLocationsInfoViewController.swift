@@ -34,7 +34,7 @@ class MensaLocationsInfoViewController: UIViewController {
                 }
                 self.descriptionLabel.text = mensaInfo.description
                 if let imageURL = URL(string: mensaInfo.imageLink) {
-                    self.imageView.af_setImage(withURL: imageURL)
+                    self.imageView.af.setImage(withURL: imageURL)
                 }
                 self.title = mensaInfo.locationName
             case .failure(let error):

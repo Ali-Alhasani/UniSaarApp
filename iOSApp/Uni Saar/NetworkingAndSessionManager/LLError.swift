@@ -48,8 +48,8 @@ extension AFError {
                 return "parameter Encoding Failed, missing URL"
             case .jsonEncodingFailed:
                 return "parameter Encoding Failed, json Encoding Failed"
-            case .propertyListEncodingFailed:
-                 return "parameter Encoding Failed, property List Encoding Failed"
+            default:
+                return "parameter Encoding Failed"
             }
             //return "parameter Encoding Failed"
         } else if case .multipartEncodingFailed(let reason) = self {
@@ -84,20 +84,18 @@ extension AFError {
             //return "multipart Encoding Failed"
         } else if case .responseSerializationFailed(let reason) = self {
             switch reason {
-            case .inputDataNil:
-                return "responseSerializationFailed, inputDataNil."
             case .inputDataNilOrZeroLength:
-                 return "responseSerializationFailed, inputDataNilOrZeroLength."
+                return "responseSerializationFailed, inputDataNilOrZeroLength."
             case .inputFileNil:
                 return "responseSerializationFailed, inputFileNil."
             case .inputFileReadFailed(let atLocation):
                 return "responseSerializationFailed, inputFileReadFailed. , \(atLocation)"
             case .stringSerializationFailed(let encoding):
-                 return "responseSerializationFailed, stringSerializationFailed., \(encoding.description)"
+                return "responseSerializationFailed, stringSerializationFailed., \(encoding.description)"
             case .jsonSerializationFailed:
-                  return "responseSerializationFailed, jsonSerializationFailed"
-            case .propertyListSerializationFailed:
-                  return "responseSerializationFailed, propertyListSerializationFailed"
+                return "responseSerializationFailed, jsonSerializationFailed"
+            default:
+                return "responseSerializationFailed"
             }
            // return "response Serialization Failed"
         } else if case .responseValidationFailed(let reason) = self {
@@ -112,6 +110,10 @@ extension AFError {
                  return "responseValidationFailed, unacceptableContentType. , \(acceptableContentTypes)"
             case .unacceptableStatusCode(let code):
                 return "responseValidationFailed, unacceptableStatusCode. , \(code)"
+            case .customValidationFailed(let error):
+                return "responseValidationFailed, customValidationFailed. , \(error)"
+            default:
+                return "responseValidationFailed"
             }
            // return "response Validation Failed"
         } else if case .invalidURL(let url)  = self {

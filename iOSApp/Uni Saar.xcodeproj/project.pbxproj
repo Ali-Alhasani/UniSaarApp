@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,8 +11,6 @@
 		5211AF3423C7B738006D1F9A /* CampusMapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AF3223C7B738006D1F9A /* CampusMapOverlayView.swift */; };
 		5211AF3623C7B76A006D1F9A /* Campus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AF3523C7B76A006D1F9A /* Campus.swift */; };
 		5211AF3923C7B89B006D1F9A /* CampusSaarCoor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5211AF3723C7B89B006D1F9A /* CampusSaarCoor.plist */; };
-		553C61C6C4068133FDDEE542 /* Pods_Uni_Saar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 282354A5D46394A81BD55318 /* Pods_Uni_Saar.framework */; };
-		64518BBF995A3CEED39948D3 /* Pods_UniSaarTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 198A752EBD2FAD76121B0C94 /* Pods_UniSaarTests.framework */; };
 		6B00FECF256EACB5002F85CA /* AppStoreReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */; };
 		6B06D6FC239C47F800A0F02F /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FB239C47F800A0F02F /* UIViewController.swift */; };
 		6B06D6FF239C4AD700A0F02F /* MensaMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FD239C4AD700A0F02F /* MensaMenuTableViewCell.swift */; };
@@ -132,7 +130,10 @@
 		6BFB587023D8BA0100B69C4A /* MoreLinksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFB586F23D8BA0100B69C4A /* MoreLinksViewModel.swift */; };
 		6BFB587323D8F4D700B69C4A /* CampusHomCoor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6BFB587223D8F4D700B69C4A /* CampusHomCoor.plist */; };
 		6BFB587523D9022D00B69C4A /* RememberingTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFB587423D9022D00B69C4A /* RememberingTabBarController.swift */; };
-		9A1E5C71E72CEBA89F40388A /* Pods_Uni_Saar_UniSaarUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F448B7270EB50BE27D8CCB7 /* Pods_Uni_Saar_UniSaarUITests.framework */; };
+		CC01CC01CC01CC01CC01CC01 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BB01BB01BB01BB01BB01BB01 /* Alamofire */; };
+		CC02CC02CC02CC02CC02CC02 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = BB02BB02BB02BB02BB02BB02 /* AlamofireImage */; };
+		CC03CC03CC03CC03CC03CC03 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BB03BB03BB03BB03BB03BB03 /* SwiftyJSON */; };
+		CC04CC04CC04CC04CC04CC04 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = BB04BB04BB04BB04BB04BB04 /* FSCalendar */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,12 +154,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		04C76B2E01BB8CF904F53DBA /* Pods-Uni SaarTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni SaarTests.release.xcconfig"; path = "Target Support Files/Pods-Uni SaarTests/Pods-Uni SaarTests.release.xcconfig"; sourceTree = "<group>"; };
-		198A752EBD2FAD76121B0C94 /* Pods_UniSaarTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UniSaarTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		27195BF0BA869B685A8A3011 /* Pods-UniSaarTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniSaarTests.release.xcconfig"; path = "Target Support Files/Pods-UniSaarTests/Pods-UniSaarTests.release.xcconfig"; sourceTree = "<group>"; };
-		282354A5D46394A81BD55318 /* Pods_Uni_Saar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uni_Saar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		3D0B65831DFAB583CCF85BB9 /* Pods-Uni Saar.somketest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar.somketest.xcconfig"; path = "Target Support Files/Pods-Uni Saar/Pods-Uni Saar.somketest.xcconfig"; sourceTree = "<group>"; };
-		471A18BB671754D99A8F9687 /* Pods_Uni_SaarTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uni_SaarTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5211AF3123C7B738006D1F9A /* CampusMapOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CampusMapOverlay.swift; sourceTree = "<group>"; };
 		5211AF3223C7B738006D1F9A /* CampusMapOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CampusMapOverlayView.swift; sourceTree = "<group>"; };
 		5211AF3523C7B76A006D1F9A /* Campus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
@@ -331,18 +326,6 @@
 		6BFBF2E924A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAppStoryboard.strings; sourceTree = "<group>"; };
 		6BFBF2EA24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6BFBF2EB24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; indentWidth = 5; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6F448B7270EB50BE27D8CCB7 /* Pods_Uni_Saar_UniSaarUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uni_Saar_UniSaarUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		841037AC90EEFA53A5C26914 /* Pods-Uni Saar-Uni SaarUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar-Uni SaarUITests.debug.xcconfig"; path = "Target Support Files/Pods-Uni Saar-Uni SaarUITests/Pods-Uni Saar-Uni SaarUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		9E6D804B943286509EE8A9C0 /* Pods-Uni Saar-Uni SaarUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar-Uni SaarUITests.release.xcconfig"; path = "Target Support Files/Pods-Uni Saar-Uni SaarUITests/Pods-Uni Saar-Uni SaarUITests.release.xcconfig"; sourceTree = "<group>"; };
-		9ECAA288D4794DB1F4DBCCBE /* Pods-UniSaarTests.somketest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniSaarTests.somketest.xcconfig"; path = "Target Support Files/Pods-UniSaarTests/Pods-UniSaarTests.somketest.xcconfig"; sourceTree = "<group>"; };
-		AAFDA2C49B0AAA1447091070 /* Pods-Uni Saar.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar.release.xcconfig"; path = "Target Support Files/Pods-Uni Saar/Pods-Uni Saar.release.xcconfig"; sourceTree = "<group>"; };
-		B6EF42EB0EFEBEA903E97354 /* Pods-Uni Saar-UniSaarUITests.somketest.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar-UniSaarUITests.somketest.xcconfig"; path = "Target Support Files/Pods-Uni Saar-UniSaarUITests/Pods-Uni Saar-UniSaarUITests.somketest.xcconfig"; sourceTree = "<group>"; };
-		BF18D59632E4F8D2AE582085 /* Pods_Uni_Saar_Uni_SaarUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Uni_Saar_Uni_SaarUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C02414E40BB5B292ABB4B66E /* Pods-Uni Saar-UniSaarUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar-UniSaarUITests.debug.xcconfig"; path = "Target Support Files/Pods-Uni Saar-UniSaarUITests/Pods-Uni Saar-UniSaarUITests.debug.xcconfig"; sourceTree = "<group>"; };
-		CD68C616D3D8756DDCF58D0B /* Pods-Uni Saar-UniSaarUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar-UniSaarUITests.release.xcconfig"; path = "Target Support Files/Pods-Uni Saar-UniSaarUITests/Pods-Uni Saar-UniSaarUITests.release.xcconfig"; sourceTree = "<group>"; };
-		D8DA64A2EA737081C5103ECF /* Pods-Uni SaarTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni SaarTests.debug.xcconfig"; path = "Target Support Files/Pods-Uni SaarTests/Pods-Uni SaarTests.debug.xcconfig"; sourceTree = "<group>"; };
-		DEAB9B254F426394131B2CE1 /* Pods-Uni Saar.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Uni Saar.debug.xcconfig"; path = "Target Support Files/Pods-Uni Saar/Pods-Uni Saar.debug.xcconfig"; sourceTree = "<group>"; };
-		EC45F0D75DCBF0890ECD8E36 /* Pods-UniSaarTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UniSaarTests.debug.xcconfig"; path = "Target Support Files/Pods-UniSaarTests/Pods-UniSaarTests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -350,15 +333,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				553C61C6C4068133FDDEE542 /* Pods_Uni_Saar.framework in Frameworks */,
-			);
+				CC01CC01CC01CC01CC01CC01 /* Alamofire in Frameworks */,
+				CC02CC02CC02CC02CC02CC02 /* AlamofireImage in Frameworks */,
+				CC03CC03CC03CC03CC03CC03 /* SwiftyJSON in Frameworks */,
+				CC04CC04CC04CC04CC04CC04 /* FSCalendar in Frameworks */,
+				);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6B6E1E25239B4A0A00563B9D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				64518BBF995A3CEED39948D3 /* Pods_UniSaarTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,7 +351,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9A1E5C71E72CEBA89F40388A /* Pods_Uni_Saar_UniSaarUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,11 +362,6 @@
 			children = (
 				6B8DBCE225222D7C0019BA4D /* NVActivityIndicatorView.framework */,
 				6B8DBCD925222D580019BA4D /* NVActivityIndicatorView.framework */,
-				282354A5D46394A81BD55318 /* Pods_Uni_Saar.framework */,
-				BF18D59632E4F8D2AE582085 /* Pods_Uni_Saar_Uni_SaarUITests.framework */,
-				471A18BB671754D99A8F9687 /* Pods_Uni_SaarTests.framework */,
-				6F448B7270EB50BE27D8CCB7 /* Pods_Uni_Saar_UniSaarUITests.framework */,
-				198A752EBD2FAD76121B0C94 /* Pods_UniSaarTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -394,7 +373,6 @@
 				6B6E1E29239B4A0A00563B9D /* UniSaarTests */,
 				6B6E1E37239B4A2200563B9D /* UniSaarUITests */,
 				6B0F25D42396974E002E587E /* Products */,
-				BA2BE5DBA53ABA00284361AD /* Pods */,
 				54E769F81E828DF6FC8E20F7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -719,26 +697,6 @@
 			path = DirectoryViewControllers;
 			sourceTree = "<group>";
 		};
-		BA2BE5DBA53ABA00284361AD /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				DEAB9B254F426394131B2CE1 /* Pods-Uni Saar.debug.xcconfig */,
-				AAFDA2C49B0AAA1447091070 /* Pods-Uni Saar.release.xcconfig */,
-				841037AC90EEFA53A5C26914 /* Pods-Uni Saar-Uni SaarUITests.debug.xcconfig */,
-				9E6D804B943286509EE8A9C0 /* Pods-Uni Saar-Uni SaarUITests.release.xcconfig */,
-				D8DA64A2EA737081C5103ECF /* Pods-Uni SaarTests.debug.xcconfig */,
-				04C76B2E01BB8CF904F53DBA /* Pods-Uni SaarTests.release.xcconfig */,
-				3D0B65831DFAB583CCF85BB9 /* Pods-Uni Saar.somketest.xcconfig */,
-				C02414E40BB5B292ABB4B66E /* Pods-Uni Saar-UniSaarUITests.debug.xcconfig */,
-				B6EF42EB0EFEBEA903E97354 /* Pods-Uni Saar-UniSaarUITests.somketest.xcconfig */,
-				CD68C616D3D8756DDCF58D0B /* Pods-Uni Saar-UniSaarUITests.release.xcconfig */,
-				EC45F0D75DCBF0890ECD8E36 /* Pods-UniSaarTests.debug.xcconfig */,
-				9ECAA288D4794DB1F4DBCCBE /* Pods-UniSaarTests.somketest.xcconfig */,
-				27195BF0BA869B685A8A3011 /* Pods-UniSaarTests.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -746,18 +704,21 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6B0F25FD2396974F002E587E /* Build configuration list for PBXNativeTarget "Uni Saar" */;
 			buildPhases = (
-				D43E91A9ED5BC3F562C074A5 /* [CP] Check Pods Manifest.lock */,
 				6B0F25CF2396974E002E587E /* Sources */,
 				6B0F25D02396974E002E587E /* Frameworks */,
 				6B0F25D12396974E002E587E /* Resources */,
-				6BACBA6F239B2243003A532B /* ShellScript */,
-				547C587B6875E4822C88A53D /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Uni Saar";
+			packageProductDependencies = (
+				BB01BB01BB01BB01BB01BB01 /* Alamofire */,
+				BB02BB02BB02BB02BB02BB02 /* AlamofireImage */,
+				BB03BB03BB03BB03BB03BB03 /* SwiftyJSON */,
+				BB04BB04BB04BB04BB04BB04 /* FSCalendar */,
+				);
 			productName = "Uni Saar";
 			productReference = 6B0F25D32396974E002E587E /* Uni Saar.app */;
 			productType = "com.apple.product-type.application";
@@ -766,7 +727,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6B6E1E2F239B4A0A00563B9D /* Build configuration list for PBXNativeTarget "UniSaarTests" */;
 			buildPhases = (
-				EA615E2C5E1A74F7D37D7B05 /* [CP] Check Pods Manifest.lock */,
 				6B6E1E24239B4A0A00563B9D /* Sources */,
 				6B6E1E25239B4A0A00563B9D /* Frameworks */,
 				6B6E1E26239B4A0A00563B9D /* Resources */,
@@ -785,11 +745,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6B6E1E3D239B4A2200563B9D /* Build configuration list for PBXNativeTarget "UniSaarUITests" */;
 			buildPhases = (
-				46ABB762BAE4603B1DA15F8A /* [CP] Check Pods Manifest.lock */,
 				6B6E1E32239B4A2200563B9D /* Sources */,
 				6B6E1E33239B4A2200563B9D /* Frameworks */,
 				6B6E1E34239B4A2200563B9D /* Resources */,
-				0AB81932D039326FEAAC8D9C /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -838,6 +796,12 @@
 			productRefGroup = 6B0F25D42396974E002E587E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
+			packageReferences = (
+				AA01AA01AA01AA01AA01AA01 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				AA02AA02AA02AA02AA02AA02 /* XCRemoteSwiftPackageReference "AlamofireImage" */,
+				AA03AA03AA03AA03AA03AA03 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				AA04AA04AA04AA04AA04AA04 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				);
 			targets = (
 				6B0F25D22396974E002E587E /* Uni Saar */,
 				6B6E1E27239B4A0A00563B9D /* UniSaarTests */,
@@ -893,126 +857,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		0AB81932D039326FEAAC8D9C /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Uni Saar-UniSaarUITests/Pods-Uni Saar-UniSaarUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Uni Saar-UniSaarUITests/Pods-Uni Saar-UniSaarUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Uni Saar-UniSaarUITests/Pods-Uni Saar-UniSaarUITests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		46ABB762BAE4603B1DA15F8A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Uni Saar-UniSaarUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		547C587B6875E4822C88A53D /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Uni Saar/Pods-Uni Saar-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Uni Saar/Pods-Uni Saar-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Uni Saar/Pods-Uni Saar-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6BACBA6F239B2243003A532B /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n\n";
-		};
-		D43E91A9ED5BC3F562C074A5 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-				"",
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Uni Saar-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		EA615E2C5E1A74F7D37D7B05 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-UniSaarTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		6B0F25CF2396974E002E587E /* Sources */ = {
@@ -1272,6 +1116,64 @@
 		};
 /* End PBXVariantGroup section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		AA01AA01AA01AA01AA01AA01 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.9.0;
+			};
+		};
+		AA02AA02AA02AA02AA02AA02 /* XCRemoteSwiftPackageReference "AlamofireImage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/AlamofireImage";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.3.0;
+			};
+		};
+		AA03AA03AA03AA03AA03AA03 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+		AA04AA04AA04AA04AA04AA04 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.8.4;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BB01BB01BB01BB01BB01BB01 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA01AA01AA01AA01AA01AA01 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		BB02BB02BB02BB02BB02BB02 /* AlamofireImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA02AA02AA02AA02AA02AA02 /* XCRemoteSwiftPackageReference "AlamofireImage" */;
+			productName = AlamofireImage;
+		};
+		BB03BB03BB03BB03BB03BB03 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA03AA03AA03AA03AA03AA03 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
+		BB04BB04BB04BB04BB04BB04 /* FSCalendar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA04AA04AA04AA04AA04AA04 /* XCRemoteSwiftPackageReference "FSCalendar" */;
+			productName = FSCalendar;
+		};
+/* End XCSwiftPackageProductDependency section */
+
 /* Begin XCBuildConfiguration section */
 		6B0F25FB2396974F002E587E /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1325,7 +1227,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1381,7 +1283,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1393,7 +1295,6 @@
 		};
 		6B0F25FE2396974F002E587E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DEAB9B254F426394131B2CE1 /* Pods-Uni Saar.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Uni Saar/Uni Saar.entitlements";
@@ -1403,7 +1304,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1421,7 +1322,6 @@
 		};
 		6B0F25FF2396974F002E587E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AAFDA2C49B0AAA1447091070 /* Pods-Uni Saar.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Uni Saar/Uni Saar.entitlements";
@@ -1431,7 +1331,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1499,7 +1399,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1511,7 +1411,6 @@
 		};
 		6B65A066239BAD0F0061F323 /* SomkeTest */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3D0B65831DFAB583CCF85BB9 /* Pods-Uni Saar.somketest.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = "Uni Saar/Uni Saar.entitlements";
@@ -1521,7 +1420,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1539,13 +1438,12 @@
 		};
 		6B65A067239BAD0F0061F323 /* SomkeTest */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9ECAA288D4794DB1F4DBCCBE /* Pods-UniSaarTests.somketest.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1561,12 +1459,11 @@
 		};
 		6B65A068239BAD0F0061F323 /* SomkeTest */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B6EF42EB0EFEBEA903E97354 /* Pods-Uni Saar-UniSaarUITests.somketest.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1582,13 +1479,12 @@
 		};
 		6B6E1E30239B4A0A00563B9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = EC45F0D75DCBF0890ECD8E36 /* Pods-UniSaarTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1604,13 +1500,12 @@
 		};
 		6B6E1E31239B4A0A00563B9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 27195BF0BA869B685A8A3011 /* Pods-UniSaarTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1626,12 +1521,11 @@
 		};
 		6B6E1E3E239B4A2200563B9D /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C02414E40BB5B292ABB4B66E /* Pods-Uni Saar-UniSaarUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1647,12 +1541,11 @@
 		};
 		6B6E1E3F239B4A2200563B9D /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = CD68C616D3D8756DDCF58D0B /* Pods-Uni Saar-UniSaarUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

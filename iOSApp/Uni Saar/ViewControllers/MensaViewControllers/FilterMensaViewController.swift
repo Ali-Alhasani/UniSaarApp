@@ -8,7 +8,7 @@
 
 import UIKit
 import CoreData
-protocol FilterMensaViewDelegate: class {
+protocol FilterMensaViewDelegate: AnyObject {
     func didChangeLocationFilter()
     func didUpdateNoticesFilter()
     func didUpdateNoticesData()

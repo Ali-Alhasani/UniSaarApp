@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol ChooseCampusDelegate: class {
+protocol ChooseCampusDelegate: AnyObject {
     func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool)
 }
 class ChooseCampusViewController: UIViewController {

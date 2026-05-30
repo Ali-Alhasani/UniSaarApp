@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-protocol CampusViewControllerDelegate: class {
+protocol CampusViewControllerDelegate: AnyObject {
     func didUpdateCoordinatesCache(coordinates: [MapInfoModel])
 }
 class CampusViewController: UIViewController {

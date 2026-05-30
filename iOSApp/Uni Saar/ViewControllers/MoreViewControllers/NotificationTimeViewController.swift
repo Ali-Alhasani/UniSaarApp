@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol NotificationTimeDelegate: class {
+protocol NotificationTimeDelegate: AnyObject {
     func selectedTime(time: Date)
     func tmpSelectedTime(time: Date)
 }

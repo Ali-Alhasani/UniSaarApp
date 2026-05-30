@@ -7,7 +7,7 @@
 //
 
 import UIKit
-protocol FilterNewsFeedViewDelegate: class {
+protocol FilterNewsFeedViewDelegate: AnyObject {
     func didSelectFilterAll()
     func didSelectCustomFiltering(newsCatgroies: [Int])
 }

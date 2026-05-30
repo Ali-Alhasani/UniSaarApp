@@ -112,7 +112,7 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
             viewModel.configure(cell)
             if let imageURL = viewModel.imageURL {
                 // async download
-                cell.newsImageView.af_setImage(withURL: imageURL, placeholderImage: UIImage(named: "SF_arrow_2_circlepath_circle_fill"), completion: { response in
+                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(named: "SF_arrow_2_circlepath_circle_fill"), completion: { response in
                     // Check if the image isn't already cached
                     if response.response != nil {
                         // Force the cell update

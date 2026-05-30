@@ -9,7 +9,7 @@
 import UIKit
 import MapKit
 
-protocol HandleMapSearch: class {
+protocol HandleMapSearch: AnyObject {
     func dropPinZoomIn(placemark: MapPin)
     func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool)
 }
