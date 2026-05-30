@@ -11,36 +11,25 @@ import UIKit
 //commonly used Table View configuration functions in the app
 extension UITableView {
     public func showingLoadingView() {
-        DispatchQueue.main.async {
-            guard let refreshControl = self.refreshControl, !refreshControl.isRefreshing else {
-                return
-            }
-            let spinner = UIActivityIndicatorView()
-            if #available(iOS 13.0, *) {
-                spinner.style = .large
-            } else {
-                spinner.style = .whiteLarge
-                // Fallback on earlier versions
-            }
-            spinner.color = AppStyle.appGlobalTintColor
-            spinner.startAnimating()
-            spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: self.bounds.width, height: CGFloat(44))
-            self.tableFooterView = spinner
-            self.tableFooterView?.isHidden = false
-        }
+        guard let refreshControl = self.refreshControl, !refreshControl.isRefreshing else { return }
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.color = AppStyle.appGlobalTintColor
+        spinner.startAnimating()
+        spinner.frame = CGRect(x: 0, y: 0, width: bounds.width, height: 44)
+        tableFooterView = spinner
+        tableFooterView?.isHidden = false
     }
+
     public func hideLoadingView() {
-        DispatchQueue.main.async {
-            self.tableFooterView = nil
-            self.endRefreshing()
-        }
+        tableFooterView = nil
+        endRefreshing()
     }
     public func endRefreshing() {
         refreshControl?.endRefreshing()
     }
     public func setUpRefreshControl() -> UIRefreshControl {
         let refreshControl = UIRefreshControl()
-        refreshControl.tintColor =  AppStyle.appGlobalTintColor
+        refreshControl.tintColor = AppStyle.appGlobalTintColor
         return refreshControl
     }
     func layoutTableView(tableBackgroundColor: UIColor = AppStyle.tableViewBackgroundColor, withOutSeparator: Bool = true) {

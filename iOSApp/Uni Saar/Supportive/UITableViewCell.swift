@@ -16,11 +16,12 @@ extension UITableViewCell {
     static var identifier: String {
         return String(describing: self)
     }
-   // return default cell with message
     func setupEmptyCell(message: String) -> UITableViewCell {
-        self.isUserInteractionEnabled = false
-        self.textLabel?.numberOfLines = 0
-        self.textLabel?.text = message
+        isUserInteractionEnabled = false
+        var content = defaultContentConfiguration()
+        content.text = message
+        content.textProperties.numberOfLines = 0
+        contentConfiguration = content
         return self
     }
 }

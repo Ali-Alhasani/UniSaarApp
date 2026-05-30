@@ -8,23 +8,24 @@
 
 import Foundation
 import UIKit
+
 class MensaMenuViewModel: ParentViewModel {
-    let daysMenus = Bindable([TableViewCellType<MensaDayMenuViewModel>]())
+    @Published var daysMenus: [TableViewCellType<MensaDayMenuViewModel>] = []
     var isFilterdCacheUpdated = false
-    // MARK: - Object Lifecycle
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
-    // load mensa menu from APi with the local cached alligern
+
     func loadGetMensaMenu() {
-        showLoadingIndicator.value = true
+        showLoadingIndicator = true
         Cache.shared.fetchMensaFilterFromStorage()
-        Task { @MainActor [weak self] in
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let menus = try await dataClient.getMensaMenu()
                 guard menus.daysMenus.count > 0 else {
-                    daysMenus.value = [.empty]
+                    daysMenus = [.empty]
                     return
                 }
                 if AppSessionManager.shared.mensafiltersLastChanged != menus.filtersLastChanged {
@@ -33,33 +34,34 @@ class MensaMenuViewModel: ParentViewModel {
                 } else {
                     AppSessionManager.shared.isMensaFiltersCacheFetched = true
                 }
-                daysMenus.value = menus.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
-                showLoadingIndicator.value = false
+                daysMenus = menus.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
+                showLoadingIndicator = false
             } catch {
-                showLoadingIndicator.value = false
-                daysMenus.value = [.error(message: error.localizedDescription)]
+                showLoadingIndicator = false
+                daysMenus = [.error(message: error.localizedDescription)]
                 showError(error: error, tryAgainHandler: { [weak self] in
                     self?.realodGetApi()
                 })
             }
         }
     }
+
     func realodGetApi() {
         loadGetMensaMenu()
     }
+
     func loadGetMockMenu() {
-        self.daysMenus.value = MensaMenuModel.menuDemoData.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0))}
+        daysMenus = MensaMenuModel.menuDemoData.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
     }
 
     func isMenuUpdated() {
-        let firstMenuDay = self.daysMenus.value.first
+        let firstMenuDay = daysMenus.first
         switch firstMenuDay {
         case .normal(let viewModel):
-            // if the view model date is outdate we fire the api call again
             if viewModel.dateValue != getDateFormater(date: Date()) {
                 loadGetMensaMenu()
             }
-        default :
+        default:
             loadGetMensaMenu()
         }
     }
@@ -72,7 +74,6 @@ class MensaMenuViewModel: ParentViewModel {
 }
 
 class MensaDayMenuViewModel {
-    // MARK: - Instance Properties
     var dateText: NSMutableAttributedString
     var dateValue: String
     var mealsCells: [MensaMealCellViewModel]
@@ -81,7 +82,7 @@ class MensaDayMenuViewModel {
         let mutableAttributedString = NSMutableAttributedString()
         let dayText = String(splitedDate.first ?? "")
         dateValue = String(splitedDate.last ?? "")
-        let dayName =  NSMutableAttributedString(string: dayText + " ", attributes: AppStyle.largeTitleAttributes)
+        let dayName = NSMutableAttributedString(string: dayText + " ", attributes: AppStyle.largeTitleAttributes)
         let date = NSMutableAttributedString(string: dateValue, attributes: AppStyle.calloutAttributes)
         mutableAttributedString.append(dayName)
         mutableAttributedString.append(date)
@@ -100,7 +101,6 @@ class MensaDayMenuViewModel {
 }
 
 protocol MensaMealCellViewModel {
-    // MARK: - Instance Properties
     var mensaMealsModel: MensaMealsModel { get }
     var counterDisplayName: String { get }
     var mealName: String { get }
@@ -145,9 +145,7 @@ extension MensaMealsModel: MensaMealCellViewModel {
         let selectedNotices = getSelectedNotices()
         if let selectedNotices = selectedNotices, selectedNotices.count > 0 {
             let intersectionNotices = selectedNotices.filter { (item) -> Bool in
-                guard let noticeID = item.noticeID else {
-                    return false
-                }
+                guard let noticeID = item.noticeID else { return false }
                 return mensaMealsModel.notices.contains(noticeID)
             }
             return intersectionNotices
@@ -156,7 +154,7 @@ extension MensaMealsModel: MensaMealCellViewModel {
     }
 
     func getSelectedNotices() -> [FilterNoticesListCache]? {
-        return  Cache.shared.fetchedResultsController.fetchedObjects?.filter { $0.isSelected}
+        return Cache.shared.fetchedResultsController.fetchedObjects?.filter { $0.isSelected }
     }
 }
 

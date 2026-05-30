@@ -7,27 +7,30 @@
 //
 
 import Foundation
+
 class StaffDetailsViewModel: ParentViewModel {
-    var staffDetails: Bindable = Bindable(StaffViewModel())
+    @Published var staffDetails: StaffViewModel = StaffViewModel()
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
+
     func loadGetStaffDetails(staffId: Int) {
-        showLoadingIndicator.value = true
-        Task { @MainActor [weak self] in
+        showLoadingIndicator = true
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let staff = try await dataClient.getStaffDetails(staffId: staffId)
-                staffDetails.value = StaffViewModel(staff)
-                showLoadingIndicator.value = false
+                staffDetails = StaffViewModel(staff)
+                showLoadingIndicator = false
             } catch {
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
                 showError(error: error)
             }
         }
     }
-
 }
+
 class StaffViewModel {
     var staffDetailsModel: StaffDetailsModel?
     var fullName: String {
@@ -48,7 +51,7 @@ class StaffViewModel {
             contactString += "☏   " + phoneNumber + "\n"
         }
         if let faxNumber = staffDetailsModel?.fax, faxNumber != "" {
-            contactString +=  "⎙   " + faxNumber + "\n"
+            contactString += "⎙   " + faxNumber + "\n"
         }
         if let websiteURL = staffDetailsModel?.websiteURL, websiteURL != "" {
             contactString += "\n" + websiteURL + "\n"
@@ -60,7 +63,7 @@ class StaffViewModel {
     }
     var email: String? {
         if let email = staffDetailsModel?.email, email != "" {
-             return "✉︎   " + email
+            return "✉︎   " + email
         }
         return ""
     }
@@ -70,7 +73,6 @@ class StaffViewModel {
     var remarkText: String? {
         return staffDetailsModel?.remarks
     }
-
     var genderText: String {
         var string = ""
         string += staffDetailsModel?.gender ?? ""
@@ -82,7 +84,5 @@ class StaffViewModel {
     init(_ staffDetailsModel: StaffDetailsModel) {
         self.staffDetailsModel = staffDetailsModel
     }
-
-    public init() {
-    }
+    public init() { }
 }

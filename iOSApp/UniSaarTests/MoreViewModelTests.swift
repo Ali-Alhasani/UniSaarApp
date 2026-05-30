@@ -7,83 +7,104 @@
 //
 
 import XCTest
-@testable import Uni_Saar
+import Combine
 import SwiftyJSON
+@testable import Uni_Saar
+
+@MainActor
 class MoreViewModelTests: XCTestCase {
+    private var cancellables = Set<AnyCancellable>()
 
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        // Prevent CoreData pre-load so mock network responses control cell state
+        AppSessionManager.shared.morelinksLastChanged = "never"
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        AppSessionManager.shared.morelinksLastChanged = "never"
+        cancellables.removeAll()
+        super.tearDown()
     }
 
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
     func testMoreLinksModel() {
         let testSuccessfulJSON = MoreLinksModel.deomJSON
-        let foramtedJSON = JSON(testSuccessfulJSON)
-        XCTAssertNotNil(MoreLinksModel(json: foramtedJSON))
+        let formattedJSON = JSON(testSuccessfulJSON)
+        XCTAssertNotNil(MoreLinksModel(json: formattedJSON, index: 0))
     }
+
     func testNormalMoreLinksCells() {
         let dataClient = MockAppDataClient()
-        dataClient.getMoreLinksResult = .success(payload: MoreModel.demoData)
+        dataClient.getMoreLinksResult = .success(MoreModel.demoData)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "linksCells updated")
+        viewModel.$linksCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMoreLinks()
-        guard case .some(.normal(_)) = viewModel.linksCells.value.first else {
+        waitForExpectations(timeout: 1.0)
+
+        guard case .normal(_) = viewModel.linksCells.first else {
             XCTFail("More Links should have value")
             return
         }
     }
-    func testEmptyHelpfulCells() {
+
+    func testEmptyMoreLinksCells() {
         let dataClient = MockAppDataClient()
-        dataClient.getMoreLinksResult = .success(payload: MoreModel(json: [:]))
+        dataClient.getMoreLinksResult = .success(MoreModel(json: [:]))
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
+
+        // Empty network response doesn't update linksCells; wait for loading to finish instead
+        let exp = expectation(description: "load completes")
+        viewModel.$showLoadingIndicator.dropFirst().filter { !$0 }.sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMoreLinks()
-        guard viewModel.linksCells.value.count == 0 else {
-            XCTFail("More Links Cell should be empty")
-            return
-        }
+        waitForExpectations(timeout: 1.0)
+
+        XCTAssertTrue(viewModel.linksCells.isEmpty, "More Links Cell should be empty")
     }
+
     func testErrorMoreLinksCells() {
         let dataClient = MockAppDataClient()
         dataClient.getMoreLinksResult = .failure(MyError.customError)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "linksCells updated")
+        viewModel.$linksCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMoreLinks()
-        guard case .some(.error(_)) = viewModel.linksCells.value.first else {
-            if viewModel.fetchedResultsController.fetchedObjects?.count == 0 {
-                return
-            }
-            XCTFail("More Links should be in faild")
+        waitForExpectations(timeout: 1.0)
+
+        if case .error(_) = viewModel.linksCells.first {
+            return
+        }
+        guard viewModel.fetchedResultsController.fetchedObjects?.count == 0 else {
+            XCTFail("More Links should be in failed")
             return
         }
     }
-    func testMoreLinksViewModelValues() {
 
+    func testMoreLinksViewModelValues() {
         let dataClient = MockAppDataClient()
-        let moreLinksResutls = MoreModel.demoData
-        dataClient.getMoreLinksResult = .success(payload: moreLinksResutls)
+        let moreLinksResults = MoreModel.demoData
+        dataClient.getMoreLinksResult = .success(moreLinksResults)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "linksCells updated")
+        viewModel.$linksCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMoreLinks()
-        switch viewModel.linksCells.value.first {
+        waitForExpectations(timeout: 1.0)
+
+        switch viewModel.linksCells.first {
         case .normal(let cellViewModel):
-            let linkItem = moreLinksResutls.links.first
+            let linkItem = moreLinksResults.links.first
             XCTAssertEqual(linkItem?.displayName, cellViewModel.nameText)
             XCTAssertEqual(URL(string: linkItem?.url ?? ""), cellViewModel.linkURL)
-
-        case .some(.error(let message)):
+        case .error(let message):
             XCTAssertNotNil(message)
-        case .some(.empty):
+        case .empty:
             break
         case .none:
             XCTFail("View Model should not be empty!")

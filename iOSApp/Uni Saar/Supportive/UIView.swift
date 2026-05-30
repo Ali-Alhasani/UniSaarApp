@@ -14,12 +14,7 @@ extension UIView {
         self.clipsToBounds = true
     }
     func setAllSideShadow(shadowColor: UIColor? = nil, shadowOpacity: Float = 0.8) { // this method adds shadow to allsides
-        // no shdow in dark mode
-        if #available(iOS 13.0, *) {
-            if traitCollection.userInterfaceStyle == .dark {
-                return
-            }
-        }
+        if traitCollection.userInterfaceStyle == .dark { return }
         self.layer.masksToBounds = false
 
         if let shadowColor = shadowColor {

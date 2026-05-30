@@ -8,9 +8,9 @@
 
 import Foundation
 import CoreData
+
 class FilterNewsViewModel: ParentViewModel {
-    // MARK: - Object Lifecycle
-    let didUpdatefilterList: Bindable = Bindable(false)
+    @Published var didUpdatefilterList: Bool = false
     var isFilterdCacheUpdated: Bool = false
     var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
@@ -23,31 +23,33 @@ class FilterNewsViewModel: ParentViewModel {
     enum Filter: Int, CaseIterable {
         case location, allergenList
     }
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
+
     func loadGetFilterList() {
-        showLoadingIndicator.value = true
+        showLoadingIndicator = true
         fetchNewsFilterFromStorage()
         if isFilterdCacheUpdated {
-            didUpdatefilterList.value = true
-            showLoadingIndicator.value = false
+            didUpdatefilterList = true
+            showLoadingIndicator = false
         } else {
-            Task { @MainActor [weak self] in
+            Task { [weak self] in
                 guard let self else { return }
                 do {
                     let list = try await dataClient.getNewsCategories()
-                    showLoadingIndicator.value = false
+                    showLoadingIndicator = false
                     let viewModelList = FilterCategoriesCellViewModel(newsFilterModel: list)
                     viewModelList.categoriesText = getOldSelectedCategories(newViewModel: viewModelList)
                     dataClient.clearNewsCategoriesCache()
                     dataClient.saveInCoreDataWith(model: viewModelList)
                     fetchNewsFilterFromStorage()
                     isFilterdCacheUpdated = true
-                    didUpdatefilterList.value = true
+                    didUpdatefilterList = true
                 } catch {
-                    showLoadingIndicator.value = false
-                    didUpdatefilterList.value = false
+                    showLoadingIndicator = false
+                    didUpdatefilterList = false
                     showError(error: error, tryAgainHandler: { [weak self] in
                         self?.reloadGetApi()
                     })
@@ -55,14 +57,13 @@ class FilterNewsViewModel: ParentViewModel {
             }
         }
     }
+
     func reloadGetApi() {
         loadGetFilterList()
     }
 
     func getOldSelectedCategories(newViewModel: FilterCategoriesCellViewModel) -> [FilterIntElement] {
-        // get the last cached selected categories before update the new categories name or id
         let oldSelectedCategories = fetchedResultsController.fetchedObjects?.filter {!$0.isSelected}.map {$0.categoryID}
-        //if there are no previous selected categories just return the updated list from the server as it
         guard let selectedCategories = oldSelectedCategories, selectedCategories.count > 0 else {
             return newViewModel.categoriesText
         }
@@ -76,22 +77,21 @@ class FilterNewsViewModel: ParentViewModel {
         }
         return intersectionCategories
     }
+
     func fetchNewsFilterFromStorage() {
         do {
             try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            fatalError("Error: \(error.localizedDescription)")
+        } catch {
+            assertionFailure("CoreData fetch failed: \(error)")
         }
     }
 }
+
 class FilterCategoriesCellViewModel {
-    // MARK: - Instance Properties
     var categoriesText = [FilterIntElement]()
     var isFilterAll = true
     init(newsFilterModel: [NewsCategories]) {
-        //inital value all filters are switch on
         categoriesText = newsFilterModel.compactMap {FilterIntElement(filterName: $0.categoryName, filterID: $0.categoryID, isSelected: true) }
     }
-    init() {
-    }
+    init() { }
 }

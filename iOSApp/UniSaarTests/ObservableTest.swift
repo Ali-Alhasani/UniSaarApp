@@ -1,5 +1,5 @@
 //
-//  ObservableTest.swift
+//  PublisherTests.swift
 //  UniSaarTests
 //
 //  Created by Ali Al-Hasani on 1/27/20.
@@ -7,37 +7,49 @@
 //
 
 import XCTest
+import Combine
 @testable import Uni_Saar
 
-class ObservableTest: XCTestCase {
+@MainActor
+class PublisherTests: XCTestCase {
+    private var cancellables = Set<AnyCancellable>()
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func tearDown() {
+        cancellables.removeAll()
+        super.tearDown()
     }
 
-    func testBindObservable() {
-        let bindable = Bindable(false)
+    func testCurrentAlertPublishesOnError() {
+        let viewModel = NewsFeedViewModel()
+        let exp = expectation(description: "currentAlert fires on Error")
 
-        let expectListenerCalled = expectation(description: "Observable is called")
-        bindable.bind { value in
-            XCTAssert(value == true, "testBind failed")
-            expectListenerCalled.fulfill()
-        }
+        viewModel.$currentAlert
+            .dropFirst()
+            .compactMap { $0 }
+            .sink { alert in
+                XCTAssertNotNil(alert.message)
+                exp.fulfill()
+            }
+            .store(in: &cancellables)
 
-        bindable.value = true
-        waitForExpectations(timeout: 0.1, handler: nil)
+        viewModel.showError(error: MyError.customError)
+        waitForExpectations(timeout: 1.0)
     }
 
-    func testBindAndFire() {
-        let bindable = Bindable(true)
+    func testCurrentAlertPublishesOnLLError() {
+        let viewModel = NewsFeedViewModel()
+        let exp = expectation(description: "currentAlert fires on LLError")
 
-        let expectListenerCalled = expectation(description: "Observable is called")
-        bindable.bindAndFire { value in
-            XCTAssert(value == true, "testBindAndFire failed")
-            expectListenerCalled.fulfill()
-        }
+        viewModel.$currentAlert
+            .dropFirst()
+            .compactMap { $0 }
+            .sink { alert in
+                XCTAssertNotNil(alert.message)
+                exp.fulfill()
+            }
+            .store(in: &cancellables)
 
-        waitForExpectations(timeout: 0.1, handler: nil)
+        viewModel.showError(error: LLError(status: false, message: "test error"))
+        waitForExpectations(timeout: 1.0)
     }
-
 }

@@ -10,14 +10,13 @@ import Foundation
 import UIKit
 import AlamofireImage
 import CoreData
+
 class NewsFeedViewModel: ParentViewModel {
-    // MARK: - Object Lifecycle
-    let newsCells = Bindable([TableViewCellType<NewsFeedCellViewModel>]())
+    @Published var newsCells: [TableViewCellType<NewsFeedCellViewModel>] = []
+    @Published var isFreshLoad: Bool = true
     var apiPageNumber = 0
     let numberOfItemPerPage = 10
     var isFilterdCacheUpdated = false
-    var isFreshLoad = Bindable(true)
-    // fetch news categories form coredata
     lazy var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(FilterNoticesListCache.isSelected), ascending: false)]
@@ -29,22 +28,22 @@ class NewsFeedViewModel: ParentViewModel {
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
+
     func loadGetNews(_ isFirstTime: Bool = true, filterCatgroies: [Int]) {
-        showLoadingIndicator.value = true
+        showLoadingIndicator = true
         var filterCatgroies = filterCatgroies
-        // if the user open the screen for the first time, we load his cached filter
         if filterCatgroies.count == 0 {
             fetchNewsFilterFromStorage()
             filterCatgroies = fetchedResultsController.fetchedObjects?.filter {!$0.isSelected}.compactMap {Int($0.categoryID)} ?? []
         }
-        Task { @MainActor [weak self] in
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let news = try await dataClient.getNews(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, filter: filterCatgroies)
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
                 if isFirstTime {
                     guard news.newsItemCount > 0 else {
-                        newsCells.value = [.empty]
+                        newsCells = [.empty]
                         return
                     }
                     isFilterdCacheUpdated = true
@@ -52,30 +51,31 @@ class NewsFeedViewModel: ParentViewModel {
                         AppSessionManager.shared.newsFiltersLastChanged = news.categoriesLastChanged
                         isFilterdCacheUpdated = false
                     }
-                    newsCells.value = news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
-                    isFreshLoad.value = true
+                    newsCells = news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+                    isFreshLoad = true
                 } else {
-                    newsCells.value.append(contentsOf: news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) })
+                    newsCells.append(contentsOf: news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) })
                 }
                 apiPageNumber += 1
             } catch {
-                showLoadingIndicator.value = false
-                newsCells.value = [.error(message: error.localizedDescription)]
+                showLoadingIndicator = false
+                newsCells = [.error(message: error.localizedDescription)]
                 showError(error: error)
             }
         }
     }
+
     func loadGetMockNews() {
-        self.newsCells.value = NewsFeedModel.newsDemoData.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel)}
+        newsCells = NewsFeedModel.newsDemoData.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
     }
+
     func fetchNewsFilterFromStorage() {
         do {
             try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            fatalError("Error: \(error.localizedDescription)")
+        } catch {
+            assertionFailure("CoreData fetch failed: \(error)")
         }
     }
-
 }
 
 @objc public protocol NewsFeedViewModelView {
@@ -86,7 +86,6 @@ class NewsFeedViewModel: ParentViewModel {
 }
 
 protocol NewsFeedCellViewModel {
-    // MARK: - Instance Properties
     var newsItem: NewsModel { get }
     var titleText: String { get }
     var subTitleText: String { get }

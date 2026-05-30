@@ -37,8 +37,8 @@ class Cache {
         do {
             try fetchedResultsController.performFetch()
             try fetchedLocationResultsController.performFetch()
-        } catch let error as NSError {
-            fatalError("Error: \(error.localizedDescription)")
+        } catch {
+            assertionFailure("CoreData fetch failed: \(error)")
         }
     }
 }

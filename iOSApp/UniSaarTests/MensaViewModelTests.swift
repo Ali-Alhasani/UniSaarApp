@@ -7,26 +7,18 @@
 //
 
 import XCTest
+import Combine
 @testable import Uni_Saar
 
+@MainActor
 class MensaViewModelTests: XCTestCase {
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    private var cancellables = Set<AnyCancellable>()
+
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        cancellables.removeAll()
+        super.tearDown()
     }
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    //test correctly formatted JSON
+
     func testMensaModel() {
         let testSuccessfulJSON = MensaMenuModel.deomJSON
         XCTAssertNotNil(MensaMenuModel(json: testSuccessfulJSON))
@@ -36,53 +28,81 @@ class MensaViewModelTests: XCTestCase {
         let testSuccessfulJSON = MensaDayModel.menuDemoData
         XCTAssertNotNil(MensaDayModel(json: testSuccessfulJSON))
     }
+
     func testNormalMensaCells() {
         let dataClient = MockAppDataClient()
-        dataClient.getMensaResult = .success(payload: MensaMenuModel.menuDemoData)
+        dataClient.getMensaResult = .success(MensaMenuModel.menuDemoData)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "daysMenus updated")
+        viewModel.$daysMenus.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMensaMenu()
-        guard case .some(.normal(_)) = viewModel.daysMenus.value.first else {
-            XCTFail("mensa menu should has values")
+        waitForExpectations(timeout: 1.0)
+
+        guard case .normal(_) = viewModel.daysMenus.first else {
+            XCTFail("mensa menu should have values")
             return
         }
     }
+
     func testEmptyMensaCells() {
         let dataClient = MockAppDataClient()
-        dataClient.getMensaResult = .success(payload: MensaMenuModel.emptyMenuDemoData)
+        dataClient.getMensaResult = .success(MensaMenuModel.emptyMenuDemoData)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "daysMenus updated")
+        viewModel.$daysMenus.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMensaMenu()
-        guard case .some(.empty) = viewModel.daysMenus.value.first else {
-            XCTFail("mensa menu table view should be empty, no data returned ")
+        waitForExpectations(timeout: 1.0)
+
+        guard case .empty = viewModel.daysMenus.first else {
+            XCTFail("mensa menu table view should be empty, no data returned")
             return
         }
     }
+
     func testErrorMensaCells() {
         let dataClient = MockAppDataClient()
         dataClient.getMensaResult = .failure(MyError.customError)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "daysMenus updated")
+        viewModel.$daysMenus.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMensaMenu()
-        guard case .some(.error(_)) = viewModel.daysMenus.value.first else {
-            XCTFail("Mensa request should be in faild, and return error message")
+        waitForExpectations(timeout: 1.0)
+
+        guard case .error(_) = viewModel.daysMenus.first else {
+            XCTFail("Mensa request should be failed and return error message")
             return
         }
     }
+
     func testMensaViewModelValues() {
         let dataClient = MockAppDataClient()
         let menu = MensaMenuModel.menuDemoData
-        dataClient.getMensaResult = .success(payload: menu)
+        dataClient.getMensaResult = .success(menu)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "daysMenus updated")
+        viewModel.$daysMenus.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMensaMenu()
-        switch viewModel.daysMenus.value.first {
+        waitForExpectations(timeout: 1.0)
+
+        switch viewModel.daysMenus.first {
         case .normal(let cellViewModel):
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.mealDispalyName, cellViewModel.mealsCells.first?.mealName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.counterDisplayName, cellViewModel.mealsCells.first?.counterDisplayName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.openingHoursText, cellViewModel.mealsCells.first?.openingHoursText)
-            if let countersMeal =  menu.daysMenus.first?.countersMeals, let color = countersMeal.first?.color {
+            if let countersMeal = menu.daysMenus.first?.countersMeals, let color = countersMeal.first?.color {
                 XCTAssertEqual(AppStyle.mensaCounterColor(color), cellViewModel.mealsCells.first?.counterColor)
             }
-        case .some(.error(let message)):
+        case .error(let message):
             XCTAssertNotNil(message)
-        case .some(.empty):
+        case .empty:
             break
         case .none:
             XCTFail("View Model should not be empty!")
@@ -91,47 +111,67 @@ class MensaViewModelTests: XCTestCase {
 
     func testNormalMealDetails() {
         let dataClient = MockAppDataClient()
-        dataClient.getMealResult = .success(payload: MealDetailsModel.mealDemoData)
+        dataClient.getMealResult = .success(MealDetailsModel.mealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "mealDetails updated")
+        viewModel.$mealDetails.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMealDetails(mealId: 1)
-        // they should be identical
-        guard MealDetailsModel.mealDemoData === viewModel.mealDetails.value.mealDetailsModel else {
-            XCTFail("mensa meal should has values")
+        waitForExpectations(timeout: 1.0)
+
+        guard MealDetailsModel.mealDemoData === viewModel.mealDetails.mealDetailsModel else {
+            XCTFail("mensa meal should have values")
             return
         }
     }
+
     func testEmptyMealDetails() {
         let dataClient = MockAppDataClient()
-        dataClient.getMealResult = .success(payload: MealDetailsModel.emptyMealDemoData)
+        dataClient.getMealResult = .success(MealDetailsModel.emptyMealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
+
+        let exp = expectation(description: "mealDetails updated")
+        viewModel.$mealDetails.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMealDetails(mealId: 1)
-        // they should be identical
-        if MealDetailsModel.emptyMealDemoData !== viewModel.mealDetails.value.mealDetailsModel {
-            XCTFail("mensa menu table view should be empty, no data returned ")
-            return
+        waitForExpectations(timeout: 1.0)
+
+        if MealDetailsModel.emptyMealDemoData !== viewModel.mealDetails.mealDetailsModel {
+            XCTFail("mensa menu table view should be empty, no data returned")
         }
     }
+
     func testErrorMealDetails() {
         let dataClient = MockAppDataClient()
         dataClient.getMealResult = .failure(MyError.customError)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
+
+        // Error path sets showLoadingIndicator=false and currentAlert, but does not update mealDetails
+        let exp = expectation(description: "load completes after error")
+        viewModel.$showLoadingIndicator.dropFirst().filter { !$0 }.sink { _ in exp.fulfill() }.store(in: &cancellables)
+
         viewModel.loadGetMealDetails(mealId: 1)
-        guard viewModel.mealDetails.value.mealDetailsModel == nil else {
-            XCTFail("Mensa meal details request should be in faild and empty, and return error message")
-            return
-        }
+        waitForExpectations(timeout: 1.0)
+
+        XCTAssertNil(viewModel.mealDetails.mealDetailsModel, "Mensa meal details request should be failed and return empty model")
     }
 
     func testMealDetailsValues() {
         let dataClient = MockAppDataClient()
         let model = MealDetailsModel.mealDemoData
-        dataClient.getMealResult = .success(payload: model)
+        dataClient.getMealResult = .success(model)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
-        viewModel.loadGetMealDetails(mealId: 1)
 
-        XCTAssertEqual(viewModel.mealDetails.value.mealName, model.mealName)
-        XCTAssertEqual(viewModel.mealDetails.value.mealCounterDescription, model.counterDescription)
-        XCTAssertEqual(viewModel.mealDetails.value.priceTagNamesText, model.prices.map {$0.priceTagName + "\n"}.joined())
-        XCTAssertEqual(viewModel.mealDetails.value.priceValuesText, model.prices.map {$0.price + " € \n"}.joined())
+        let exp = expectation(description: "mealDetails updated")
+        viewModel.$mealDetails.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
+
+        viewModel.loadGetMealDetails(mealId: 1)
+        waitForExpectations(timeout: 1.0)
+
+        XCTAssertEqual(viewModel.mealDetails.mealName, model.mealName)
+        XCTAssertEqual(viewModel.mealDetails.mealCounterDescription, model.counterDescription)
+        XCTAssertEqual(viewModel.mealDetails.priceTagNamesText, model.prices.map { $0.priceTagName + "\n" }.joined())
+        XCTAssertEqual(viewModel.mealDetails.priceValuesText, model.prices.map { $0.price + " € \n" }.joined())
     }
 }

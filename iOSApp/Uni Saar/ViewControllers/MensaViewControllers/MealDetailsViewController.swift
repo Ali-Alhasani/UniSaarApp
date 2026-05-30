@@ -7,9 +7,9 @@
 //
 
 import UIKit
+import Combine
 
 class MealDetailsViewController: UIViewController {
-
     @IBOutlet weak var mealDispalyNameLabel: UILabel!
     @IBOutlet weak var counterEntranceLabel: UILabel!
     @IBOutlet weak var generalNoticesLabel: UILabel!
@@ -19,9 +19,10 @@ class MealDetailsViewController: UIViewController {
     @IBOutlet weak var colorView: UIView!
     var mealItemViewModel: MensaMealCellViewModel?
     var meal = MealDetailsViewModel()
+    private var cancellables = Set<AnyCancellable>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         self.title = mealItemViewModel?.counterDisplayName
         bindViewModel()
         colorView.setAsCircle(cornerRadius: colorView.frame.height/2)
@@ -30,53 +31,48 @@ class MealDetailsViewController: UIViewController {
 
     func bindViewModel() {
         if mealItemViewModel != nil {
-              self.showLoadingActivity()
+            self.showLoadingActivity()
         }
-        meal.mealDetails.bind { [weak self] meal in
-            self?.mealDispalyNameLabel.text = meal.mealName
-            self?.counterEntranceLabel.text = meal.mealCounterDescription
-            self?.generalNoticesLabel.attributedText = meal.generalNoticesText
-            self?.componentsLabel.attributedText = meal.mealComponetsText
-            self?.priceTagNamesLabel.text = meal.priceTagNamesText
-            self?.pricesLabel.text = meal.priceValuesText
-            self?.requestReview()
-        }
-        meal.onShowError = { [weak self] alert in
-            self?.presentSingleButtonDialog(alert: alert)
-        }
+        meal.$mealDetails
+            .dropFirst()
+            .sink { [weak self] meal in
+                guard let self else { return }
+                mealDispalyNameLabel.text = meal.mealName
+                counterEntranceLabel.text = meal.mealCounterDescription
+                generalNoticesLabel.attributedText = meal.generalNoticesText
+                componentsLabel.attributedText = meal.mealComponetsText
+                priceTagNamesLabel.text = meal.priceTagNamesText
+                pricesLabel.text = meal.priceValuesText
+                requestReview()
+            }
+            .store(in: &cancellables)
+
+        meal.$currentAlert
+            .dropFirst()
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.presentSingleButtonDialog(alert: alert)
+            }
+            .store(in: &cancellables)
+
         if let mealID = mealItemViewModel?.mensaMealsModel.mealID {
             meal.noticesText = mealItemViewModel?.noticesList
             meal.loadGetMealDetails(mealId: mealID)
         }
 
-        meal.showLoadingIndicator.bind {  [weak self] visible in
-            if let `self` = self {
-                visible ? self.showLoadingActivity() : self.hideLoadingActivity()
+        meal.$showLoadingIndicator
+            .dropFirst()
+            .sink { [weak self] visible in
+                guard let self else { return }
+                visible ? showLoadingActivity() : hideLoadingActivity()
             }
-        }
-
-        //meal.loadGetMockMenu()
+            .store(in: &cancellables)
     }
 
     func requestReview() {
         AppStoreReviewManager.requestReviewIfAppropriate(presentedView: self)
     }
-
-//    func showActivityLoad() {
-//        DispatchQueue.main.async {
-//            self.startAnimating(CGSize(width: 50, height: 50), message: NSLocalizedString("Removing MDM Profile", comment: ""), type: .ballClipRotateMultiple,
-//                                fadeInAnimation: nil)
-//        }
-//    }
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-
 }
+
 extension MealDetailsViewController: SingleButtonDialogPresenter { }

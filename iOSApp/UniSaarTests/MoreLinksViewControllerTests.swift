@@ -9,6 +9,7 @@
 import XCTest
 @testable import Uni_Saar
 
+@MainActor
 class MoreLinksViewControllerTests: XCTestCase {
     var viewControllerUnderTest: MoreLinksViewController!
     override func setUp() {
@@ -52,18 +53,21 @@ class MoreLinksViewControllerTests: XCTestCase {
         XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
     }
     func testTableCellHasCorrectLabelText() {
-        switch viewControllerUnderTest.moreLinksViewModel.linksCells.value[safe: 0] {
+        switch viewControllerUnderTest.moreLinksViewModel.linksCells[safe: 0] {
         case .normal(let cellViewModel):
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, cellViewModel.nameText)
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, cellViewModel.nameText)
 
         case .error(let message):
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, message)
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, message)
 
         case .empty:
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, NSLocalizedString("EmptyResults", comment: ""))
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, NSLocalizedString("EmptyResults", comment: ""))
         case .none:
             break
         }

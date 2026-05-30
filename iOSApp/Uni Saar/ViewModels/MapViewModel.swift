@@ -8,17 +8,18 @@
 
 import Foundation
 import SwiftyJSON
+
 class MapViewModel: ParentViewModel {
     var coordinatesLastChanged = ""
-    let didUpdateCoordinates: Bindable = Bindable(JSON())
+    @Published var didUpdateCoordinates: JSON = JSON()
 
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
     func loadGetMapData() {
-        showLoadingIndicator.value = true
-        Task { @MainActor [weak self] in
+        showLoadingIndicator = true
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let coordinates = try await dataClient.getCampusMapCoordinates(cacheLastChanged: coordinatesLastChanged)
@@ -30,14 +31,13 @@ class MapViewModel: ParentViewModel {
             }
         }
     }
+
     func updateCoordinateCache(newCoordinates: JSON) {
-        DispatchQueue.main.async {
-            do {
-                try Data.saveJson(data: newCoordinates.rawData(), toFilename: "Campus_Map_Coord")
-                self.didUpdateCoordinates.value = newCoordinates
-            } catch {
-                print(error)
-            }
+        do {
+            try Data.saveJson(data: newCoordinates.rawData(), toFilename: "Campus_Map_Coord")
+            didUpdateCoordinates = newCoordinates
+        } catch {
+            print(error)
         }
     }
 }

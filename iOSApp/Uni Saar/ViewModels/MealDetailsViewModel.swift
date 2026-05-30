@@ -8,31 +8,35 @@
 
 import Foundation
 import UIKit
+
 class MealDetailsViewModel: ParentViewModel {
-    var mealDetails: Bindable = Bindable(MealViewModel())
+    @Published var mealDetails: MealViewModel = MealViewModel()
     var noticesText: [FilterNoticesListCache]?
-    // MARK: - Object Lifecycle
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
+
     func loadGetMealDetails(mealId: Int) {
-        showLoadingIndicator.value = true
-        Task { @MainActor [weak self] in
+        showLoadingIndicator = true
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let meal = try await dataClient.getMealDetails(mealId: mealId)
-                mealDetails.value = MealViewModel(meal, noticesText: noticesText)
-                showLoadingIndicator.value = false
+                mealDetails = MealViewModel(meal, noticesText: noticesText)
+                showLoadingIndicator = false
             } catch {
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
                 showError(error: error)
             }
         }
     }
+
     func loadGetMockMenu() {
-        self.mealDetails.value = MealViewModel(MealDetailsModel.mealDemoData)
+        mealDetails = MealViewModel(MealDetailsModel.mealDemoData)
     }
 }
+
 class MealViewModel {
     var mealDetailsModel: MealDetailsModel?
     var noticesText: [FilterNoticesListCache]?
@@ -61,15 +65,12 @@ class MealViewModel {
         }
     }
     var mealComponetsText: NSAttributedString {
-
-        //need refactoring
-        if  let mealDetailsModel = mealDetailsModel, mealDetailsModel.mealComponets.count > 0 {
+        if let mealDetailsModel = mealDetailsModel, mealDetailsModel.mealComponets.count > 0 {
             if let noticesText = noticesText, noticesText.count > 0 {
                 let mutableAttributedString = NSMutableAttributedString()
                 for meal in mealDetailsModel.mealComponets {
                     let componentName = NSMutableAttributedString(string: AppStyle.square + meal.componentName, attributes: AppStyle.regularAttributes)
                     mutableAttributedString.append(componentName)
-                    // new line separator should only be between notices, there no need to an extra newline after the last notice
                     for notice in meal.componentNotices {
                         mutableAttributedString.append(
                             getNoticesAttributedString(selectedNotices: noticesText, notice: notice, listItemNormalStyle: AppStyle.BULLET, listItemWarningStyle:
@@ -100,7 +101,7 @@ class MealViewModel {
         -> NSMutableAttributedString {
         let mutableAttributedString = NSMutableAttributedString()
         if selectedNotices.contains(where: {$0.noticeID == notice.noticeTag}) {
-            let redNotices = NSMutableAttributedString(string: listItemWarningStyle + notice.noticeDispalyName ,
+            let redNotices = NSMutableAttributedString(string: listItemWarningStyle + notice.noticeDispalyName,
                                                        attributes: AppStyle.redAttributes)
             mutableAttributedString.append(redNotices)
         } else {

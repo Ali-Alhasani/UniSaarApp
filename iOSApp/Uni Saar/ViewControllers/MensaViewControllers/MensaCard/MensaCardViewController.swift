@@ -10,11 +10,11 @@ import UIKit
 import CoreNFC
 import SQLite3
 
+private let kNFCAppID: Int = 0x5F8415
+private let kNFCFileID: UInt8 = 1
+
 class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
 
-    static var APPID: Int    = 0x5F8415
-    static var FILEID: UInt8  = 1
-    static var DEMO: Bool   = false
     enum Commands: UInt8 {
         case selectApp = 0x5a
         case readValue = 0x6c
@@ -93,7 +93,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
                             tag: tag,
                             data: Data(_: self.wrap(
                                 command: Commands.readValue.rawValue, // command : read value
-                                parameter: [MainViewController.FILEID] // file id : 1
+                                parameter: [kNFCFileID] // file id : 1
                             )),
                             completion: { (balanceData) -> Void in
 
@@ -105,7 +105,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
                                     tag: tag,
                                     data: Data(_: self.wrap(
                                         command: Commands.getFileSettings.rawValue, // command : get file settings
-                                        parameter: [MainViewController.FILEID] // file id : 1
+                                        parameter: [kNFCFileID] // file id : 1
                                     )),
                                     completion: { (transactionData) -> Void in
 
@@ -126,7 +126,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
             print("INVALID CARD")
         }
     }
-    func parseIDNumberResponse(tag: NFCMiFareTag) -> Int {
+    nonisolated func parseIDNumberResponse(tag: NFCMiFareTag) -> Int {
         var idData = tag.identifier
         if idData.count == 7 {
             idData.append(UInt8(0))
@@ -134,57 +134,51 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         let idInt = idData.withUnsafeBytes {
             $0.load(as: Int.self)
         }
-
         print("CONNECTED TO CARD")
         print("CARD-TYPE:"+String(tag.mifareFamily.rawValue))
         print("CARD-ID hex:"+idData.hexEncodedString())
-        DispatchQueue.main.async {
-            self.labelCardID.text = String(idInt)
+        Task { @MainActor [weak self] in
+            self?.labelCardID.text = String(idInt)
         }
         return idInt
-
     }
 
-    func parseBalanceResponse(data: Data) -> Double {
+    nonisolated func parseBalanceResponse(data: Data) -> Double {
         var trimmedData = data
         trimmedData.removeLast()
         trimmedData.removeLast()
         trimmedData.reverse()
-        let currentBalanceRaw = self.byteArrayToInt(
-            buf: [UInt8](trimmedData)
-        )
-        let currentBalanceValue: Double = self.intToEuro(value: currentBalanceRaw)
-        DispatchQueue.main.async {
-            self.labelCurrentBalance.text = String(format: "%.2f €", currentBalanceValue)
-            self.labelDate.text = self.getDateString()
-            UIView.animate(withDuration: 1.0, animations: {
-                self.viewCardBackground.backgroundColor = self.getColorByEuro(euro: currentBalanceValue)
-            })
+        let currentBalanceRaw = byteArrayToInt(buf: [UInt8](trimmedData))
+        let currentBalanceValue: Double = intToEuro(value: currentBalanceRaw)
+        let dateString = getDateString()
+        Task { @MainActor [weak self] in
+            self?.labelCurrentBalance.text = String(format: "%.2f €", currentBalanceValue)
+            self?.labelDate.text = dateString
+            UIView.animate(withDuration: 1.0) {
+                self?.viewCardBackground.backgroundColor = self?.getColorByEuro(euro: currentBalanceValue)
+            }
         }
         return currentBalanceValue
     }
 
-    func parseTransactionResponse(data: Data) -> Double {
-        // parse last transaction response
+    nonisolated func parseTransactionResponse(data: Data) -> Double {
         var lastTransactionValue: Double = 0
         let buf = [UInt8](data)
         if buf.count > 13 {
-            let lastTransactionRaw = self.byteArrayToInt(
-                buf: [ buf[13], buf[12] ]
-            )
-            lastTransactionValue = self.intToEuro(value: lastTransactionRaw)
-            DispatchQueue.main.async {
-                self.labelLastTransaction.text = String(format: "%.2f €", lastTransactionValue)
+            let lastTransactionRaw = byteArrayToInt(buf: [buf[13], buf[12]])
+            lastTransactionValue = intToEuro(value: lastTransactionRaw)
+            Task { @MainActor [weak self] in
+                self?.labelLastTransaction.text = String(format: "%.2f €", lastTransactionValue)
             }
         }
         return lastTransactionValue
     }
 
-    func appendAppIDs() -> [Int] {
+    nonisolated func appendAppIDs() -> [Int] {
         var appIdBuff: [Int] = []
-        appIdBuff.append((MainViewController.APPID & 0xFF0000) >> 16)
-        appIdBuff.append((MainViewController.APPID & 0xFF00) >> 8)
-        appIdBuff.append(MainViewController.APPID & 0xFF)
+        appIdBuff.append((kNFCAppID & 0xFF0000) >> 16)
+        appIdBuff.append((kNFCAppID & 0xFF00) >> 8)
+        appIdBuff.append(kNFCAppID & 0xFF)
         return appIdBuff
     }
 
@@ -197,14 +191,13 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
     //        )
     //
     //    }
-    // dismiss iOS NFC window
-    func dismissNFC() {
-        if let session = session {
-            session.invalidate()
+    nonisolated func dismissNFC() {
+        Task { @MainActor [weak self] in
+            self?.session?.invalidate()
         }
     }
 
-    func byteArrayToInt(buf: [UInt8]) -> Int {
+    nonisolated func byteArrayToInt(buf: [UInt8]) -> Int {
         var rawValue: Int = 0
         for byte in buf {
             rawValue = rawValue << 8
@@ -212,14 +205,14 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         }
         return rawValue
     }
-    func intToEuro(value: Int) -> Double {
+    nonisolated func intToEuro(value: Int) -> Double {
         return (Double(value)/1000).rounded(toPlaces: 2)
     }
-    func getColorByEuro(euro: Double) -> UIColor {
+    nonisolated func getColorByEuro(euro: Double) -> UIColor {
         return UIColor.systemGreen.withAlphaComponent(0.5)
     }
 
-    func getDateString() -> String {
+    nonisolated func getDateString() -> String {
         let dateFormatterGet = DateFormatter()
         dateFormatterGet.dateFormat = "dd.MM.yyyy HH:mm"
         return dateFormatterGet.string(from: Date())
@@ -240,7 +233,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         buff.append(0x00)
         return buff
     }
-    func send(tag: NFCMiFareTag, data: Data, completion: @escaping (_ data: Data) -> Void) {
+    nonisolated func send(tag: NFCMiFareTag, data: Data, completion: @escaping (_ data: Data) -> Void) {
         print("COMMAND TO CARD => "+data.hexEncodedString())
         tag.sendMiFareCommand(commandPacket: data, completionHandler: { (data: Data, error: Error?) in
             if let error = error {

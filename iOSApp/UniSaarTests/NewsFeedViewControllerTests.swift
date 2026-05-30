@@ -9,6 +9,7 @@
 import XCTest
 @testable import Uni_Saar
 
+@MainActor
 class NewsFeedViewControllerTests: XCTestCase {
     var viewControllerUnderTest: NewsFeedViewController!
     override func setUp() {
@@ -65,18 +66,20 @@ class NewsFeedViewControllerTests: XCTestCase {
     }
 
     func testTableCellHasCorrectLabelText() {
-        switch viewControllerUnderTest.newsViewModel.newsCells.value[safe: 0] {
+        switch viewControllerUnderTest.newsViewModel.newsCells[safe: 0] {
         case .normal(let cellViewModel):
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.newsTable, cellForRowAt: IndexPath(row: 0, section: 0)) as? NewsFeedTableViewCell
             XCTAssertEqual(cell?.newsTitleLabel.text, cellViewModel.titleText)
 
         case .error(let message):
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.newsTable, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, message)
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, message)
 
         case .empty:
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.newsTable, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, NSLocalizedString("EmptyNews", comment: ""))
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, NSLocalizedString("EmptyNews", comment: ""))
         case .none:
             break
         }

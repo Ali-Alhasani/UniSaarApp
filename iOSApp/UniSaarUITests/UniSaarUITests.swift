@@ -8,36 +8,128 @@
 
 import XCTest
 
-class UniSaarUITests: XCTestCase {
+final class UniSaarUITests: XCTestCase {
+    var app: XCUIApplication!
 
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-
-        // In UI tests it is usually best to stop immediately when a failure occurs.
+        super.setUp()
         continueAfterFailure = false
+        app = XCUIApplication()
 
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        // Dismiss any system alerts (e.g. notification permission) automatically
+        addUIInterruptionMonitor(withDescription: "System alert") { alert in
+            let allow = alert.buttons["Allow"]
+            if allow.exists { allow.tap(); return true }
+            let ok = alert.buttons["OK"]
+            if ok.exists { ok.tap(); return true }
+            return false
+        }
+
+        app.launch()
+        handleSetupScreenIfNeeded()
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        app = nil
+        super.tearDown()
     }
 
-    func testExample() {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
+    // MARK: - Helpers
 
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    /// Taps through the first-launch campus selection screen if it is shown.
+    private func handleSetupScreenIfNeeded() {
+        let saarbruecken = app.buttons["Saarbrücken"]
+        guard saarbruecken.waitForExistence(timeout: 3) else { return }
+        saarbruecken.tap()
+        app.buttons["Next"].tap()
+        // Trigger the interruption monitor to handle the notification alert
+        app.swipeUp()
     }
+
+    private var tabBar: XCUIElement { app.tabBars.firstMatch }
+
+    // MARK: - Tab bar structure
+
+    func testTabBarIsPresent() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5), "Tab bar should be visible after launch")
+    }
+
+    func testTabBarHasFiveTabs() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        XCTAssertEqual(tabBar.buttons.count, 5, "App should have 5 tabs")
+    }
+
+    func testAllTabsAreReachable() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        let expectedTabs = ["News Feed", "Mensa", "Campus", "Directory", "More"]
+        for tab in expectedTabs {
+            XCTAssertTrue(tabBar.buttons[tab].exists, "Tab '\(tab)' should exist in the tab bar")
+        }
+    }
+
+    // MARK: - News Feed tab
+
+    func testNewsFeedTabShowsTableView() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        tabBar.buttons["News Feed"].tap()
+        XCTAssertTrue(app.tables.firstMatch.waitForExistence(timeout: 5), "News feed should show a table view")
+    }
+
+    // MARK: - Mensa tab
+
+    func testMensaTabShowsCollectionView() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        tabBar.buttons["Mensa"].tap()
+        XCTAssertTrue(app.collectionViews.firstMatch.waitForExistence(timeout: 5), "Mensa tab should show a collection view")
+    }
+
+    // MARK: - Directory tab
+
+    func testDirectoryTabShowsSearchBar() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        tabBar.buttons["Directory"].tap()
+        XCTAssertTrue(app.searchFields.firstMatch.waitForExistence(timeout: 3), "Directory tab should show a search bar")
+    }
+
+    func testDirectorySearchAcceptsInput() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        tabBar.buttons["Directory"].tap()
+        let searchField = app.searchFields.firstMatch
+        XCTAssertTrue(searchField.waitForExistence(timeout: 3))
+        searchField.tap()
+        searchField.typeText("Ali")
+        XCTAssertEqual(searchField.value as? String, "Ali", "Search field should reflect typed text")
+    }
+
+    func testDirectorySearchCancelRestoresView() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        tabBar.buttons["Directory"].tap()
+        let searchField = app.searchFields.firstMatch
+        XCTAssertTrue(searchField.waitForExistence(timeout: 3))
+        searchField.tap()
+        searchField.typeText("Ali")
+        // The dismiss button label varies by locale and iOS version ("Cancel", "Abbrechen", "Close")
+        let dismissButton = app.buttons.matching(
+            NSPredicate(format: "label IN %@", ["Cancel", "Abbrechen", "Close", "Annuler"])
+        ).firstMatch
+        XCTAssertTrue(dismissButton.waitForExistence(timeout: 3), "A dismiss button should appear while search is active")
+        dismissButton.tap()
+        XCTAssertFalse(app.keyboards.firstMatch.waitForExistence(timeout: 2), "Keyboard should be gone after dismissing search")
+    }
+
+    // MARK: - More tab
+
+    func testMoreTabShowsTableView() {
+        XCTAssertTrue(tabBar.waitForExistence(timeout: 5))
+        tabBar.buttons["More"].tap()
+        XCTAssertTrue(app.tables.firstMatch.waitForExistence(timeout: 5), "More tab should show a table view")
+    }
+
+    // MARK: - Performance
 
     func testLaunchPerformance() {
-        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, *) {
-            // This measures how long it takes to launch your application.
-            measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
-                XCUIApplication().launch()
-            }
+        measure(metrics: [XCTOSSignpostMetric.applicationLaunch]) {
+            XCUIApplication().launch()
         }
     }
 }

@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Combine
+
 class StaffDetailsViewController: UIViewController {
     @IBOutlet weak var staffTitleLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -18,89 +20,95 @@ class StaffDetailsViewController: UIViewController {
     @IBOutlet weak var navigateButton: UIButton!
     var staffId: Int?
     var staff = StaffDetailsViewModel()
+    private var cancellables = Set<AnyCancellable>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigateButton.isHidden = true
+        navigateButton.isHidden = true
         bindViewModel()
-        //meal.loadGetMockMenu()
-        // Do any additional setup after loading the view.
     }
+
     func bindViewModel() {
         if staffId != nil {
-              self.showLoadingActivity()
+            showLoadingActivity()
         }
-        staff.staffDetails.bind { [weak self] staff in
-            self?.staffTitleLabel.text = staff.titleText
-            self?.nameLabel.text = staff.fullName
-            if let email = staff.email {
-                self?.emailTextView.text = email
-            }
-            if staff.address != " - \n\n" {
-                if (staff.staffDetailsModel?.building != "") || staff.staffDetailsModel?.city != "" {
-                    self?.navigateButton.isHidden = false
+
+        staff.$staffDetails
+            .dropFirst()
+            .sink { [weak self] staffInfo in
+                guard let self else { return }
+                staffTitleLabel.text = staffInfo.titleText
+                nameLabel.text = staffInfo.fullName
+                if let email = staffInfo.email {
+                    emailTextView.text = email
+                }
+                if staffInfo.address != " - \n\n" {
+                    if (staffInfo.staffDetailsModel?.building != "") || staffInfo.staffDetailsModel?.city != "" {
+                        navigateButton.isHidden = false
+                    }
+                }
+                addressLabel.text = staffInfo.address
+                contactTextView.text = staffInfo.contactText
+                genderLabel.text = staffInfo.genderText
+                title = staffInfo.fullName
+                if let imageURL = staffInfo.imageURL {
+                    imageView.af.setImage(withURL: imageURL)
                 }
             }
-            self?.addressLabel.text = staff.address
-            self?.contactTextView.text = staff.contactText
-            self?.genderLabel.text = staff.genderText
-            self?.title = staff.fullName
-            if let imageURL = staff.imageURL {
-                self?.imageView.af.setImage(withURL: imageURL)
+            .store(in: &cancellables)
+
+        staff.$currentAlert
+            .dropFirst()
+            .compactMap { $0 }
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] alert in
+                self?.presentSingleButtonDialog(alert: alert)
             }
-        }
-        staff.onShowError = { [weak self] alert in
-            self?.presentSingleButtonDialog(alert: alert)
-        }
+            .store(in: &cancellables)
+
         if let staffID = staffId {
             staff.loadGetStaffDetails(staffId: staffID)
         }
-        staff.showLoadingIndicator.bind {  [weak self] visible in
-            if let `self` = self {
-                visible ? self.showLoadingActivity() : self.hideLoadingActivity()
+
+        staff.$showLoadingIndicator
+            .dropFirst()
+            .sink { [weak self] visible in
+                guard let self else { return }
+                visible ? showLoadingActivity() : hideLoadingActivity()
             }
-        }
+            .store(in: &cancellables)
     }
 
     // MARK: - Navigation
     internal struct SegueIdentifiers {
         static let toStaffAddress = "toAddress"
     }
-    @IBAction func navigateAction(_ sender: Any) {
-        //self.performSegue(withIdentifier: SegueIdentifiers.toStaffAddress, sender: self)
-        if let tabbar = self.tabBarController {
-            if let topViewNavgation = tabbar.viewControllers?[safe: 1] as? UINavigationController ,
-            let campusView = topViewNavgation.topViewController as? CampusViewController {
-                var address: String?
-                if let building = staff.staffDetails.value.staffDetailsModel?.building, building != "" {
-                    address = building
-                } else {
-                    if let city = staff.staffDetails.value.staffDetailsModel?.city, city != "" {
-                        address = city
-                    }
-                }
-                if let address = address {
-                    campusView.staffAddress = address
-                                   tabbar.selectedIndex = 1
-                                   campusView.activateSearchBar()
-                }
 
+    @IBAction func navigateAction(_ sender: Any) {
+        if let tabbar = tabBarController,
+           let topViewNavgation = tabbar.viewControllers?[safe: 1] as? UINavigationController,
+           let campusView = topViewNavgation.topViewController as? CampusViewController {
+            var address: String?
+            if let building = staff.staffDetails.staffDetailsModel?.building, building != "" {
+                address = building
+            } else if let city = staff.staffDetails.staffDetailsModel?.city, city != "" {
+                address = city
             }
-//            tabbar.selectedIndex = 1
-//            if let topView = UIApplication.topViewController(), let topViewNavgation = topView as? UINavigationController ,
-//                let campusView = topViewNavgation.topViewController as? CampusViewController {
-//                campusView.staffAddress = staff.staffDetails.value.staffDetailsModel?.building ?? staff.staffDetails.value.staffDetailsModel?.city
-//            }
+            if let address = address {
+                campusView.staffAddress = address
+                tabbar.selectedIndex = 1
+                campusView.activateSearchBar()
+            }
         }
     }
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-        if segue.identifier == SegueIdentifiers.toStaffAddress, let destination = segue.destination as? UINavigationController,
-            let destinationViewController = destination.topViewController as? CampusViewController {
-            destinationViewController.staffAddress = staff.staffDetails.value.staffDetailsModel?.building ?? staff.staffDetails.value.staffDetailsModel?.city
+        if segue.identifier == SegueIdentifiers.toStaffAddress,
+           let destination = segue.destination as? UINavigationController,
+           let destinationViewController = destination.topViewController as? CampusViewController {
+            destinationViewController.staffAddress = staff.staffDetails.staffDetailsModel?.building ?? staff.staffDetails.staffDetailsModel?.city
         }
     }
 }
+
 extension StaffDetailsViewController: SingleButtonDialogPresenter { }

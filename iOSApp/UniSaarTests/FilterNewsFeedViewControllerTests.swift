@@ -9,6 +9,7 @@
 import XCTest
 @testable import Uni_Saar
 
+@MainActor
 class FilterNewsFeedViewControllerTests: XCTestCase {
     var viewControllerUnderTest: FilterNewsFeedViewController!
     override func setUp() {

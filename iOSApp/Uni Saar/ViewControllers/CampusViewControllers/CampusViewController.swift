@@ -8,10 +8,12 @@
 
 import UIKit
 import MapKit
+import Combine
 
 protocol CampusViewControllerDelegate: AnyObject {
     func didUpdateCoordinatesCache(coordinates: [MapInfoModel])
 }
+
 class CampusViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var searchController: UISearchController!
@@ -20,106 +22,114 @@ class CampusViewController: UIViewController {
     var selectedCampus: Campus = AppSessionManager.shared.selectedCampus
     var staffAddress: String?
     weak var campusDelegate: CampusViewControllerDelegate?
+    private var mapViewModel: MapViewModel?
+    private var mapUpdateCancellable: AnyCancellable?
+    private var mapRegionSet = false
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         selectedCampus = AppSessionManager.shared.selectedCampus
         campusCoor = CampusModel(filename: AppSessionManager.shared.selectedCampus.mapCoorFileName)
         setUpSearchBar()
-        mapRegion()
         setupNotification()
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard !mapRegionSet else { return }
+        mapRegionSet = true
+        mapRegion()
+    }
+
     // MARK: - Add methods
     func addOverlay() {
         let overlay = CampusMapOverlay(campus: campusCoor)
         mapView.addOverlay(overlay)
     }
+
     func mapRegion() {
         let latDelta = campusCoor.overlayTopLeftCoordinate.latitude - campusCoor.overlayBottomRightCoordinate.latitude
-        // Think of a span as a tv size, measure from one corner to another
-        let span = MKCoordinateSpan(latitudeDelta: fabs(1.8*latDelta), longitudeDelta: 0.0)
+        let span = MKCoordinateSpan(latitudeDelta: fabs(1.8 * latDelta), longitudeDelta: 0.0)
         let region = MKCoordinateRegion(center: campusCoor.midCoordinate, span: span)
         mapView.setRegion(region, animated: true)
-        self.addOverlay()
-
+        addOverlay()
     }
 
     func setUpSearchBar() {
-
-        self.definesPresentationContext = true
-        if let buildingSearchTable = self.storyboard!.instantiateViewController(withIdentifier: "BuildingSearchTable") as? BuildingSearchTableViewController {
-            self.searchController = UISearchController(searchResultsController: buildingSearchTable)
-            self.searchController.searchResultsUpdater = buildingSearchTable
+        definesPresentationContext = true
+        if let buildingSearchTable = storyboard?.instantiateViewController(withIdentifier: "BuildingSearchTable") as? BuildingSearchTableViewController {
+            searchController = UISearchController(searchResultsController: buildingSearchTable)
+            searchController.searchResultsUpdater = buildingSearchTable
             buildingSearchTable.handleMapSearchDelegate = self
-            buildingSearchTable.campusCoordinates = self.loadCoordinates()
-            self.campusDelegate = buildingSearchTable
+            buildingSearchTable.campusCoordinates = loadCoordinates()
+            campusDelegate = buildingSearchTable
         }
-        self.searchController.obscuresBackgroundDuringPresentation = false
-        self.searchController.searchBar.placeholder = NSLocalizedString("BuildingsSearch", comment: "")
-        if #available(iOS 13, *) {
-            self.searchController.searchBar.searchTextField.backgroundColor = .systemBackground
-        }
-        navigationItem.searchController = self.searchController
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = NSLocalizedString("BuildingsSearch", comment: "")
+        searchController.searchBar.searchTextField.backgroundColor = .systemBackground
+        navigationItem.searchController = searchController
         activateSearchBar()
-
     }
+
     func activateSearchBar() {
         DispatchQueue.main.async {
             if let staffAddress = self.staffAddress {
                 self.searchController?.isActive = true
                 self.searchController?.searchBar.text = staffAddress
-
             }
         }
     }
+
     func setupNotification() {
         NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
     }
+
     func loadCoordinates(checkForUpdate: Bool = true) -> [MapInfoModel] {
         if let data = Data.dataFromFile(withFilename: "Campus_Map_Coord") {
             let campusCoordinatesModel = CampusCoordinatesModel(data: data)
             updateCoordinateCache(lastChangedDate: campusCoordinatesModel.updateTime)
             return campusCoordinatesModel.mapInfo
         }
-
         return []
     }
 
     @objc func getDirections() {
         guard let selectedPin = selectedPin else { return }
         let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: selectedPin.coordinate))
-        //let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeWalking]
         mapItem.name = selectedPin.title
         mapItem.openInMaps(launchOptions: nil)
     }
 
     @objc func updateCampus() {
-        DispatchQueue.main.async {
-            self.didChangeLocationFilter(selectedCampus: AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
-        }
+        didChangeLocationFilter(selectedCampus: AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
     }
 
     func saveLocation() {
         AppSessionManager.shared.selectedCampus = selectedCampus
         AppSessionManager.saveCampuslocation()
     }
+
     func updateCoordinateCache(lastChangedDate: String) {
-        DispatchQueue.global(qos: .utility).async {
-            let mapViewModel = MapViewModel()
-            mapViewModel.coordinatesLastChanged = lastChangedDate
-            mapViewModel.loadGetMapData()
-            mapViewModel.didUpdateCoordinates.bind { (updatedCoor) in
+        let vm = MapViewModel()
+        vm.coordinatesLastChanged = lastChangedDate
+        mapViewModel = vm
+        mapUpdateCancellable = vm.$didUpdateCoordinates
+            .dropFirst()
+            .first()
+            .sink { [weak self] updatedCoor in
+                guard let self else { return }
                 let campusCoordinatesModel = CampusCoordinatesModel(json: updatedCoor)
-                self.campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
+                campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
+                mapViewModel = nil
+                mapUpdateCancellable = nil
             }
-        }
+        vm.loadGetMapData()
     }
 
     // MARK: - Navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-        if let destination = segue.destination as? UINavigationController, let destinationViewController = destination.topViewController as? ChooseCampusViewController {
+        if let destination = segue.destination as? UINavigationController,
+           let destinationViewController = destination.topViewController as? ChooseCampusViewController {
             destinationViewController.delegate = self
         }
     }
@@ -129,30 +139,24 @@ class CampusViewController: UIViewController {
 extension CampusViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is CampusMapOverlay {
-            // campus have been changed for search purpose only
-            return CampusMapOverlayView(overlay: overlay, overlayImage: UIImage(named: selectedCampus.mapOverLayerImageName)! )
+            return CampusMapOverlayView(overlay: overlay, overlayImage: UIImage(named: selectedCampus.mapOverLayerImageName)!)
         }
         return MKOverlayRenderer()
     }
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-
         guard !(annotation is MKUserLocation) else { return nil }
         let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: nil)
         annotationView.canShowCallout = true
         let smallSquare = CGSize(width: 35, height: 30)
         let button = UIButton(frame: CGRect(origin: CGPoint.zero, size: smallSquare))
-        if #available(iOS 13.0, *) {
-            button.setBackgroundImage(UIImage(systemName: "car"), for: .normal)
-        } else {
-            // Fallback on earlier versions
-        }
+        button.setBackgroundImage(UIImage(systemName: "car"), for: .normal)
         button.addTarget(self, action: #selector(self.getDirections), for: .touchUpInside)
         annotationView.rightCalloutAccessoryView = button
-
         return annotationView
     }
 }
+
 // MARK: - ChooseCampusDelegate
 extension CampusViewController: ChooseCampusDelegate {
     func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool) {
@@ -164,28 +168,23 @@ extension CampusViewController: ChooseCampusDelegate {
             mapRegion()
             saveLocation()
         }
-
     }
 }
+
 // MARK: - HandleMapSearch
 extension CampusViewController: HandleMapSearch {
-
     func dropPinZoomIn(placemark: MapPin) {
-        // cache the pin
         selectedPin = placemark
-        // clear existing pins
         mapView.removeAnnotations(mapView.annotations)
         if let pinCampus = placemark.campus, pinCampus != selectedCampus {
-            // cache the pin Campus
             didChangeLocationFilter(selectedCampus: pinCampus, regionNeedUpdate: false)
-            // update the overlayer map image
             addOverlay()
         }
         mapView.addAnnotation(placemark)
         let latDelta = campusCoor.overlayTopLeftCoordinate.latitude - campusCoor.overlayBottomRightCoordinate.latitude
-        var span = MKCoordinateSpan(latitudeDelta: fabs(1*latDelta), longitudeDelta: 0.0)
+        var span = MKCoordinateSpan(latitudeDelta: fabs(1 * latDelta), longitudeDelta: 0.0)
         if UIDevice.current.userInterfaceIdiom == .pad {
-            span = MKCoordinateSpan(latitudeDelta: fabs(0.5*latDelta), longitudeDelta: 0.0)
+            span = MKCoordinateSpan(latitudeDelta: fabs(0.5 * latDelta), longitudeDelta: 0.0)
         }
         let region = MKCoordinateRegion(center: placemark.coordinate, span: span)
         mapView.setRegion(region, animated: true)

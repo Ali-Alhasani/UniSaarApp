@@ -8,8 +8,9 @@
 
 import Foundation
 import CoreData
+
 class MoreLinksViewModel: ParentViewModel {
-    let linksCells = Bindable([TableViewCellType<MoreLinksCellViewModel>]())
+    @Published var linksCells: [TableViewCellType<MoreLinksCellViewModel>] = []
     lazy var fetchedResultsController: NSFetchedResultsController<MoreLinksCache> = {
         let fetchRequest = NSFetchRequest<MoreLinksCache>(entityName: String(describing: MoreLinksCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "orderIndex", ascending: true)]
@@ -18,34 +19,35 @@ class MoreLinksViewModel: ParentViewModel {
         return frc
     }()
     let extraCells = [NSLocalizedString("AboutApp", comment: ""), NSLocalizedString("AppSettings", comment: "")]
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
     func loadGetMoreLinks() {
-        showLoadingIndicator.value = true
+        showLoadingIndicator = true
         if AppSessionManager.shared.morelinksLastChanged != "never" {
             fetchMoreLinksFromStorage()
             if let fetchedObjects = fetchedResultsController.fetchedObjects {
-                linksCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
+                linksCells = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
             }
-            showLoadingIndicator.value = false
+            showLoadingIndicator = false
         }
-        Task { @MainActor [weak self] in
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let links = try await dataClient.getMoreLinks()
                 if links.links.count > 0 {
-                    linksCells.value = links.links.map { .normal(cellViewModel: $0) }
+                    linksCells = links.links.map { .normal(cellViewModel: $0) }
                     AppSessionManager.shared.morelinksLastChanged = links.linksLastChanged
                     dataClient.clearMoreLinksCache()
                     dataClient.saveInCoreDataWith(model: links.links)
                 }
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
             } catch {
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
                 if AppSessionManager.shared.morelinksLastChanged == "never" {
-                    linksCells.value = [.error(message: error.localizedDescription)]
+                    linksCells = [.error(message: error.localizedDescription)]
                 }
                 showError(error: error, tryAgainHandler: { [weak self] in
                     self?.reloadGetApi()
@@ -57,37 +59,27 @@ class MoreLinksViewModel: ParentViewModel {
     func reloadGetApi() {
         loadGetMoreLinks()
     }
+
     func fetchMoreLinksFromStorage() {
         do {
             try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            fatalError("Error: \(error.localizedDescription)")
+        } catch {
+            assertionFailure("CoreData fetch failed: \(error)")
         }
     }
-
 }
 
 protocol MoreLinksCellViewModel {
-    // MARK: - Instance Properties
     var linkURL: URL? { get }
     var nameText: String {get }
 }
 
 extension MoreLinksModel: MoreLinksCellViewModel {
-    var linkURL: URL? {
-        return URL(string: url)
-    }
-
-    var nameText: String {
-        return displayName
-    }
+    var linkURL: URL? { return URL(string: url) }
+    var nameText: String { return displayName }
 }
-extension MoreLinksCache: MoreLinksCellViewModel {
-    var linkURL: URL? {
-        return URL(string: link ?? "")
-    }
 
-    var nameText: String {
-        return name ?? ""
-    }
+extension MoreLinksCache: MoreLinksCellViewModel {
+    var linkURL: URL? { return URL(string: link ?? "") }
+    var nameText: String { return name ?? "" }
 }

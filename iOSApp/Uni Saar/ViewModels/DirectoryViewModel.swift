@@ -9,11 +9,11 @@
 import Foundation
 import CoreData
 import UIKit
+import Combine
 
 class DirectoryViewModel: ParentViewModel {
-    // MARK: - Object Lifecycle
-    let searchResutlsCells = Bindable([TableViewCellType<DirectorySearchResutlsCellViewModel>]())
-    let helpfulNumbersCells = Bindable([TableViewCellType<HelpfulNumbersCellViewModel>]())
+    @Published var searchResutlsCells: [TableViewCellType<DirectorySearchResutlsCellViewModel>] = []
+    @Published var helpfulNumbersCells: [TableViewCellType<HelpfulNumbersCellViewModel>] = []
     lazy var fetchedResultsController: NSFetchedResultsController<HelpfulNumberCache> = {
         let fetchRequest = NSFetchRequest<HelpfulNumberCache>(entityName: String(describing: HelpfulNumberCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
@@ -24,64 +24,67 @@ class DirectoryViewModel: ParentViewModel {
     var apiPageNumber = 0
     let numberOfItemPerPage = UIDevice.current.userInterfaceIdiom == .pad ? 16 : 10
     var hasNextPage = false
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
+
     func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) {
         if !hasNextPage && isFirstTime == false {
             return
         }
-        showLoadingIndicator.value = true
-        Task { @MainActor [weak self] in
+        showLoadingIndicator = true
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let results = try await dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery)
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
                 if isFirstTime {
                     guard results.staffItemCount > 0 else {
-                        searchResutlsCells.value = [.empty]
+                        searchResutlsCells = [.empty]
                         return
                     }
-                    searchResutlsCells.value = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) }
+                    searchResutlsCells = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) }
                     apiPageNumber = 0
                 } else {
-                    searchResutlsCells.value.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) })
+                    searchResutlsCells.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) })
                 }
                 hasNextPage = results.hasNextPage
                 apiPageNumber += 1
             } catch {
-                showLoadingIndicator.value = false
-                searchResutlsCells.value = [.error(message: error.localizedDescription)]
+                showLoadingIndicator = false
+                searchResutlsCells = [.error(message: error.localizedDescription)]
                 if !(error is LLError) {
                     showError(error: error)
                 }
             }
         }
     }
+
     func loadGetHelpHelpfulNumbers() {
-        showLoadingIndicator.value = true
+        showLoadingIndicator = true
         if AppSessionManager.shared.helpfulNumbersLastChanged != "never" {
             fetchMoreLinksFromStorage()
             if let fetchedObjects = fetchedResultsController.fetchedObjects {
-                helpfulNumbersCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
+                helpfulNumbersCells = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
             }
-            showLoadingIndicator.value = false
+            showLoadingIndicator = false
         }
-        Task { @MainActor [weak self] in
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let list = try await dataClient.getDirectoryHelpfulNumbers()
                 if list.numbers.count > 0 {
-                    helpfulNumbersCells.value = list.numbers.map { .normal(cellViewModel: $0) }
+                    helpfulNumbersCells = list.numbers.map { .normal(cellViewModel: $0) }
                     AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged
                     dataClient.clearHelpfulNumbersCache()
                     dataClient.saveInCoreDataWith(model: list.numbers)
                 }
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
             } catch {
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
                 if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
-                    helpfulNumbersCells.value = [.error(message: error.localizedDescription)]
+                    helpfulNumbersCells = [.error(message: error.localizedDescription)]
                 }
                 showError(error: error, tryAgainHandler: { [weak self] in
                     self?.reloadGetApi()
@@ -89,58 +92,45 @@ class DirectoryViewModel: ParentViewModel {
             }
         }
     }
+
     func reloadGetApi() {
         loadGetHelpHelpfulNumbers()
     }
-    func loadGetMockSearchResults() {
-        //self?.searchResutlsCells.value = results.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel )}
-    }
+
+    func loadGetMockSearchResults() { }
+
     func fetchMoreLinksFromStorage() {
         do {
             try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            fatalError("Error: \(error.localizedDescription)")
+        } catch {
+            assertionFailure("CoreData fetch failed: \(error)")
         }
     }
 }
+
 protocol DirectorySearchResutlsCellViewModel {
-    // MARK: - Instance Properties
     var titleText: String { get }
     var nameText: String { get }
     var staffId: Int { get }
 }
 
 protocol HelpfulNumbersCellViewModel {
-    // MARK: - Instance Properties
     var fortmatedText: String { get }
 }
+
 extension StaffResultsModel: DirectorySearchResutlsCellViewModel {
-    var titleText: String {
-        return title
-    }
-    var nameText: String {
-        return fullName
-    }
-    var staffId: Int {
-        return staffID
-    }
+    var titleText: String { return title }
+    var nameText: String { return fullName }
+    var staffId: Int { return staffID }
 }
 
 extension NumberModel: HelpfulNumbersCellViewModel {
     var fortmatedText: String {
         var finalText = ""
-        if let name = name {
-            finalText += name + "\n"
-        }
-        if let number = number {
-            finalText += number + "\n"
-        }
-        if let link = link {
-            finalText += link + "\n"
-        }
-        if let mail = mail {
-            finalText += mail + "\n"
-        }
+        if let name = name { finalText += name + "\n" }
+        if let number = number { finalText += number + "\n" }
+        if let link = link { finalText += link + "\n" }
+        if let mail = mail { finalText += mail + "\n" }
         finalText.removeLast()
         return finalText
     }
@@ -149,19 +139,10 @@ extension NumberModel: HelpfulNumbersCellViewModel {
 extension HelpfulNumberCache: HelpfulNumbersCellViewModel {
     var fortmatedText: String {
         var finalText = ""
-        if let name = name {
-            finalText += name + "\n"
-        }
-        if let number = number {
-            finalText += number + "\n"
-        }
-        if let link = link {
-            finalText += link + "\n"
-        }
-        if let mail = mail {
-            finalText += mail + "\n"
-        }
-        // remove the extra while speace
+        if let name = name { finalText += name + "\n" }
+        if let number = number { finalText += number + "\n" }
+        if let link = link { finalText += link + "\n" }
+        if let mail = mail { finalText += mail + "\n" }
         finalText.removeLast()
         return finalText
     }

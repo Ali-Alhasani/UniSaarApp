@@ -49,23 +49,13 @@ extension ChooseCampusViewController: UITableViewDelegate, UITableViewDataSource
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell()
-        switch indexPath.row {
-        case 0:
-            cell.textLabel?.text = Campus.saarbruken.title
-            if selctedLocation == .saarbruken {
-                cell.isSelected = true
-                cell.accessoryType = .checkmark
-            }
-        case 1:
-            cell.textLabel?.text = Campus.homburg.title
-            if selctedLocation == .homburg {
-                cell.isSelected = true
-                cell.accessoryType = .checkmark
-            }
-        default:
-            break
+        let campus: Campus = indexPath.row == 0 ? .saarbruken : .homburg
+        var content = cell.defaultContentConfiguration()
+        content.text = campus.title
+        cell.contentConfiguration = content
+        if selctedLocation == campus {
+            cell.accessoryType = .checkmark
         }
-
         return cell
     }
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

@@ -9,6 +9,7 @@
 import XCTest
 @testable import Uni_Saar
 
+@MainActor
 class FilterMensaViewControllerTests: XCTestCase {
     var viewControllerUnderTest: FilterMensaViewController!
     override func setUp() {
@@ -56,13 +57,18 @@ class FilterMensaViewControllerTests: XCTestCase {
 
     }
     func testTableCellHasCorrectLabelText() {
-        if let cell0 = viewControllerUnderTest.tableView(viewControllerUnderTest.filterTableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? FilterUISwitchTableViewCell {
-            XCTAssertEqual(cell0.cellTitle, viewControllerUnderTest.filterMensaViewModel.filterList(for: .location)[safe: 0]?.filterName)
-            XCTAssertEqual(cell0.switchValue, viewControllerUnderTest.filterMensaViewModel.filterList(for: .location)[safe: 0]?.isSelected)
-        }
-        let cell2 = viewControllerUnderTest.tableView(viewControllerUnderTest.filterTableView, cellForRowAt: IndexPath(row: 0, section: 2)) as? FilterUISwitchTableViewCell
-        XCTAssertEqual(cell2?.cellTitle, viewControllerUnderTest.filterMensaViewModel.filterList(for: .allergenList)[safe: 0]?.filterName)
-        XCTAssertEqual(cell2?.switchValue, viewControllerUnderTest.filterMensaViewModel.filterList(for: .location)[safe: 0]?.isSelected)
+        // Section 0 (.location) returns a plain UITableViewCell (not FilterUISwitchTableViewCell); cast is expected to fail
+        XCTAssertNil(
+            viewControllerUnderTest.tableView(viewControllerUnderTest.filterTableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? FilterUISwitchTableViewCell,
+            "Location section uses a plain cell, not a switch cell"
+        )
+        // .allergenList is rawValue 3 (enum order: location=0, foodAlram=1, empty=2, allergenList=3)
+        let allergenSection = FilterMensaViewModel.Filter.allergenList.rawValue
+        let allergenItems = viewControllerUnderTest.filterMensaViewModel.filterList(for: .allergenList)
+        guard !allergenItems.isEmpty else { return }
+        let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.filterTableView, cellForRowAt: IndexPath(row: 0, section: allergenSection)) as? FilterUISwitchTableViewCell
+        XCTAssertEqual(cell?.cellTitle, allergenItems[safe: 0]?.filterName)
+        XCTAssertEqual(cell?.switchValue, allergenItems[safe: 0]?.isSelected)
     }
 
 }

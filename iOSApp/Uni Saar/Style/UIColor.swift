@@ -25,62 +25,26 @@ public extension UIColor {
         return UIColor(named: "barColorTint") ?? appSystemBackgroundColor
     }
     class var appSystemBackgroundColor: UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor.systemBackground
-        } else {
-            // Fallback on earlier versions
-            return UIColor.white
-        }
+        return UIColor.systemBackground
     }
     class var appSystemLabelColor: UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor.label
-        } else {
-            // Fallback on earlier versions
-            return UIColor.black
-        }
+        return UIColor.label
     }
     class var flatGray: UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor.systemGroupedBackground
-        } else {
-            // Fallback on earlier versions
-            return UIColor(red: 239, green: 242, blue: 247, alpha: 100)
-        }
+        return UIColor.systemGroupedBackground
     }
     class var secondaryFillColor: UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor.secondarySystemFill
-        } else {
-            return UIColor.lightGray
-        }
+        return UIColor.secondarySystemFill
     }
     class var flatDarkGray: UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor {(traitCollection: UITraitCollection) -> UIColor in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return  systemGray4
-                } else {
-                    return systemGray3
-                }
-            }
-        } else {
-            // Fallback on earlier versions
-            return .lightGray
+        return UIColor { traitCollection in
+            traitCollection.userInterfaceStyle == .dark ? systemGray4 : systemGray3
         }
     }
     class var labelCustomColor: UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor.label
-        } else {
-            return .black
-        }
+        return UIColor.label
     }
     class var lightLabelCustomColor: UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor.lightText
-        } else {
-            return .white
-        }
+        return UIColor.lightText
     }
 }

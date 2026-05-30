@@ -7,35 +7,37 @@
 //
 
 import Foundation
+
 class EventViewModel: ParentViewModel {
-    // MARK: - Object Lifecycle
-    let eventCells = Bindable([TableViewCellType<NewsFeedCellViewModel>]())
-    var selectedDateEvents =  Bindable([TableViewCellType<NewsFeedCellViewModel>]())
+    @Published var eventCells: [TableViewCellType<NewsFeedCellViewModel>] = []
+    @Published var selectedDateEvents: [TableViewCellType<NewsFeedCellViewModel>] = []
+
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
+
     func loadGetEvents(month: String, year: String) {
-        showLoadingIndicator.value = true
-        Task { @MainActor [weak self] in
+        showLoadingIndicator = true
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let events = try await dataClient.getEvents(month: month, year: year)
-                showLoadingIndicator.value = false
+                showLoadingIndicator = false
                 guard events.newsList.count > 0 else {
-                    eventCells.value = [.empty]
+                    eventCells = [.empty]
                     return
                 }
-                eventCells.value = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+                eventCells = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
             } catch {
-                showLoadingIndicator.value = false
-                eventCells.value = [.error(message: error.localizedDescription)]
+                showLoadingIndicator = false
+                eventCells = [.error(message: error.localizedDescription)]
                 showError(error: error)
             }
         }
     }
 
     func getDayEvents(day: Date?) {
-        selectedDateEvents.value = eventCells.value.filter { (item) -> Bool in
+        selectedDateEvents = eventCells.filter { (item) -> Bool in
             switch item {
             case .normal(let event):
                 if convertDate(strDate: event.newsDate) == day {
@@ -47,8 +49,9 @@ class EventViewModel: ParentViewModel {
             return false
         }
     }
+
     func countDayEvents(day: Date) -> Int {
-        let events = eventCells.value.filter { (item) -> Bool in
+        let events = eventCells.filter { (item) -> Bool in
             switch item {
             case .normal(let event):
                 if convertDate(strDate: event.newsDate) == day {
@@ -67,5 +70,4 @@ class EventViewModel: ParentViewModel {
         dateFormatter.dateFormat = "yyyy'-'MM'-'dd'"
         return dateFormatter.date(from: strDate)
     }
-
 }

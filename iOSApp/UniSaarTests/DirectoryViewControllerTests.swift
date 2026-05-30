@@ -9,6 +9,7 @@
 import XCTest
 @testable import Uni_Saar
 
+@MainActor
 class DirectoryViewControllerTests: XCTestCase {
 
     var viewControllerUnderTest: DirectoryViewController!
@@ -71,18 +72,21 @@ class DirectoryViewControllerTests: XCTestCase {
     }
 
     func testTableCellHasCorrectLabelText() {
-        switch viewControllerUnderTest.directoryViewModel.helpfulNumbersCells.value[safe: 0] {
+        // cellForRowAt uses searchResutlsCells; helpful numbers cells are served via getHelpfulNumbersCell
+        switch viewControllerUnderTest.directoryViewModel.helpfulNumbersCells[safe: 0] {
         case .normal(let cellViewModel):
-            let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.directoryTableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? HelpfulNumbersTableViewCell
+            let cell = viewControllerUnderTest.getHelpfulNumbersCell(indexPath: IndexPath(row: 0, section: 0)) as? HelpfulNumbersTableViewCell
             XCTAssertEqual(cell?.textView.text, cellViewModel.fortmatedText)
 
         case .error(let message):
-            let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.directoryTableView, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, message)
+            let cell = viewControllerUnderTest.getHelpfulNumbersCell(indexPath: IndexPath(row: 0, section: 0))
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, message)
 
         case .empty:
-            let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.directoryTableView, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, NSLocalizedString("EmptyResults", comment: ""))
+            let cell = viewControllerUnderTest.getHelpfulNumbersCell(indexPath: IndexPath(row: 0, section: 0))
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, NSLocalizedString("EmptyResults", comment: ""))
         case .none:
             break
         }

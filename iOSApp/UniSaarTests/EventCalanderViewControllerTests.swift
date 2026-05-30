@@ -9,6 +9,7 @@
 import XCTest
 @testable import Uni_Saar
 
+@MainActor
 class EventCalanderViewControllerTests: XCTestCase {
     var viewControllerUnderTest: EventCalanderViewController!
     override func setUp() {
@@ -62,7 +63,7 @@ class EventCalanderViewControllerTests: XCTestCase {
     }
 
     func testTableCellHasCorrectLabelText() {
-        if let viewModel =  viewControllerUnderTest.eventViewModel.eventCells.value[safe: 0] {
+        if let viewModel = viewControllerUnderTest.eventViewModel.eventCells[safe: 0] {
             switch viewModel {
             case .normal(let cellViewModel):
                 let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? NewsFeedTableViewCell
@@ -70,15 +71,15 @@ class EventCalanderViewControllerTests: XCTestCase {
 
             case .error(let message):
                 let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
-                XCTAssertEqual(cell.textLabel?.text, message)
+                let config = cell.contentConfiguration as? UIListContentConfiguration
+                XCTAssertEqual(config?.text, message)
 
             case .empty:
                 let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
-                XCTAssertEqual(cell.textLabel?.text, NSLocalizedString("EmptyEvents", comment: ""))
-
+                let config = cell.contentConfiguration as? UIListContentConfiguration
+                XCTAssertEqual(config?.text, NSLocalizedString("EmptyEvents", comment: ""))
             }
         }
-
     }
 
     // utility for finding segues

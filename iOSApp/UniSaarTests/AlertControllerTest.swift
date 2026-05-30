@@ -18,7 +18,7 @@ class AlertControllerTest: XCTestCase {
             message: "",
             action: AlertAction(handler: {
                 expectAlertActionHandlerCall.fulfill()
-            })
+            }, tryAgainHandler: nil)
         )
 
         alert.action.handler!()

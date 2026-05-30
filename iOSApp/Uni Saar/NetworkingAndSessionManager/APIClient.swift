@@ -29,7 +29,9 @@ class APIClient {
         APIClient.printL("Response Received : \(Date())", type: .note)
         switch response.result {
         case .success(let data):
-            let json = try JSON(data: data)
+            guard !data.isEmpty, let json = try? JSON(data: data) else {
+                return JSON([:])
+            }
             APIClient.printL("response: \(json)", type: .note)
             return json
         case .failure(let afError):

@@ -52,8 +52,10 @@ extension BuildingSearchTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if let cell = tableView.dequeueReusableCell(withIdentifier: "CampusCell") {
             let selectedItem = matchingItems[indexPath.row]
-            cell.textLabel?.text = selectedItem.name
-            cell.detailTextLabel?.text = selectedItem.function
+            var content = cell.defaultContentConfiguration()
+            content.text = selectedItem.name
+            content.secondaryText = selectedItem.function
+            cell.contentConfiguration = content
             return cell
         }
         return  UITableViewCell()

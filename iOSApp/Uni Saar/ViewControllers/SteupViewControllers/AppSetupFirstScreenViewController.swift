@@ -61,20 +61,15 @@ class AppSetupFirstScreenViewController: UIViewController {
 
     }
     @IBAction func nextButtonAction(_ sender: Any) {
-        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { success, _ in
-            if success {
-                print("All set!")
-                self.navigateToMainHomeScreen()
-            } else {
-                self.navigateToMainHomeScreen()
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] success, _ in
+            Task { @MainActor [weak self] in
+                self?.navigateToMainHomeScreen()
             }
         }
     }
     func navigateToMainHomeScreen() {
-        DispatchQueue.main.async {
-            MediatorDelegate.navigateToMainHomeScreen(window: self.view.window)
-            self.nextSessionWelcomeScreen()
-        }
+        MediatorDelegate.navigateToMainHomeScreen(window: view.window)
+        nextSessionWelcomeScreen()
     }
     func nextSessionWelcomeScreen() {
         AppSessionManager.shared.dismissWelcomeScreen = true

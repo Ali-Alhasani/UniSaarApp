@@ -9,6 +9,7 @@
 import XCTest
 @testable import Uni_Saar
 
+@MainActor
 class MensaViewControllerTests: XCTestCase {
     var viewControllerUnderTest: MensaViewController!
     override func setUp() {
@@ -55,7 +56,7 @@ class MensaViewControllerTests: XCTestCase {
     }
 
     func testCollectionViewHasCorrectLabelText() {
-        switch viewControllerUnderTest.mensaMenuViewModel.daysMenus.value[safe: 0] {
+        switch viewControllerUnderTest.mensaMenuViewModel.daysMenus[safe: 0] {
         case .normal:
             XCTAssertNotNil(viewControllerUnderTest.collectionView(viewControllerUnderTest.mensaCollectionView, cellForItemAt:
                 IndexPath(item: 0, section: 0)) as? MensaCollectionViewCell)
