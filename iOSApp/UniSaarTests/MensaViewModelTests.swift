@@ -120,4 +120,34 @@ final class MensaViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.mealDetails.priceTagNamesText, model.prices.map { $0.priceTagName + "\n" }.joined())
         XCTAssertEqual(viewModel.mealDetails.priceValuesText, model.prices.map { $0.price + " € \n" }.joined())
     }
+
+    // MARK: - MensaMealsModel demo data
+    // Note: mensaDemoData uses legacy JSON keys (mealDispalyName, openiningHours, meals)
+    // that predate the current parser (mealName, openingHours, components).
+    // Tests here verify the array initialises from the stored fixture and that
+    // fields whose keys match the current parser round-trip correctly.
+
+    func testMensaMealsModelDemoDataInitializes() {
+        // Smoke test: the static fixture should produce a valid, non-empty array
+        XCTAssertFalse(MensaMealsModel.mensaDemoData.isEmpty, "mensaDemoData should contain at least one entry")
+    }
+
+    func testMensaMealsModelDemoDataCount() {
+        XCTAssertEqual(MensaMealsModel.mensaDemoData.count, 2, "mensaDemoData should contain exactly 2 meal entries")
+    }
+
+    func testMensaMealsModelDemoDataDescriptionField() {
+        // "description" key matches the current parser — verify it round-trips correctly
+        let firstMeal = MensaMealsModel.mensaDemoData[0]
+        XCTAssertEqual(firstMeal.description, "description",
+                       "description field should parse correctly from the demo payload")
+    }
+
+    func testMensaMealsModelDemoDataColorField() {
+        // color sub-object uses the correct r/g/b keys and should parse regardless of other key mismatches
+        let firstMeal = MensaMealsModel.mensaDemoData[0]
+        XCTAssertEqual(firstMeal.color.red, 217, "color.red should match the demo value")
+        XCTAssertEqual(firstMeal.color.green, 38, "color.green should match the demo value")
+        XCTAssertEqual(firstMeal.color.blue, 26, "color.blue should match the demo value")
+    }
 }

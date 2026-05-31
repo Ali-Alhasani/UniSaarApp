@@ -12,17 +12,17 @@ import XCTest
 class AlertControllerTest: XCTestCase {
 
     func testAlert() {
-        let expectAlertActionHandlerCall = expectation(description: "Alert action handler called")
+        var handlerCalled = false
 
         let alert = SingleButtonAlert(
             message: "",
             action: AlertAction(handler: {
-                expectAlertActionHandlerCall.fulfill()
+                handlerCalled = true
             }, tryAgainHandler: nil)
         )
 
         alert.action.handler!()
 
-        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssertTrue(handlerCalled, "Alert action handler should be called")
     }
 }

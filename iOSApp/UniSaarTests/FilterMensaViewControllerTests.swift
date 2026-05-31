@@ -12,8 +12,7 @@ import XCTest
 @MainActor
 class FilterMensaViewControllerTests: XCTestCase {
     var viewControllerUnderTest: FilterMensaViewController!
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() async throws {
         let storyboard = UIStoryboard(name: "MensaStoryboard", bundle: nil)
         self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "FilterMensaViewController") as? FilterMensaViewController
         self.viewControllerUnderTest.loadView()
@@ -21,7 +20,7 @@ class FilterMensaViewControllerTests: XCTestCase {
         self.viewControllerUnderTest.setupTableView()
     }
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewControllerUnderTest = nil
         super.tearDown()
     }
     func testExample() {

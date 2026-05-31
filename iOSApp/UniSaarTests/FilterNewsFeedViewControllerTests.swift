@@ -12,8 +12,7 @@ import XCTest
 @MainActor
 class FilterNewsFeedViewControllerTests: XCTestCase {
     var viewControllerUnderTest: FilterNewsFeedViewController!
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() async throws {
         let storyboard = UIStoryboard(name: "NewsStoryboard", bundle: nil)
         self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "FilterNewsFeedViewController") as? FilterNewsFeedViewController
         self.viewControllerUnderTest.loadView()
@@ -21,7 +20,7 @@ class FilterNewsFeedViewControllerTests: XCTestCase {
         self.viewControllerUnderTest.setupTableView()
     }
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewControllerUnderTest = nil
         super.tearDown()
     }
     func testExample() {

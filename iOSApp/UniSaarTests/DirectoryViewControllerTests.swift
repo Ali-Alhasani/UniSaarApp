@@ -13,19 +13,16 @@ import XCTest
 class DirectoryViewControllerTests: XCTestCase {
 
     var viewControllerUnderTest: DirectoryViewController!
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() async throws {
         let storyboard = UIStoryboard(name: "DirectoryStoryboard", bundle: nil)
         self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "DirectoryViewControllerTest") as? DirectoryViewController
-
         self.viewControllerUnderTest.loadView()
         self.viewControllerUnderTest.viewDidLoad()
         self.viewControllerUnderTest.setupTableView()
-
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewControllerUnderTest = nil
         super.tearDown()
     }
 

@@ -12,17 +12,15 @@ import XCTest
 @MainActor
 class MensaViewControllerTests: XCTestCase {
     var viewControllerUnderTest: MensaViewController!
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() async throws {
         let storyboard = UIStoryboard(name: "MensaStoryboard", bundle: nil)
         self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "MensaViewControllerTest") as? MensaViewController
-
         self.viewControllerUnderTest.loadView()
         self.viewControllerUnderTest.viewDidLoad()
         self.viewControllerUnderTest.setupCollectionView()
     }
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewControllerUnderTest = nil
         super.tearDown()
     }
     func testExample() {
