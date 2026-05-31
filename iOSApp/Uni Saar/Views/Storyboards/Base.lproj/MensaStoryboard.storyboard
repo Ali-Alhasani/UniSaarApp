@@ -197,7 +197,7 @@
         <!--Meal Details View Controller-->
         <scene sceneID="Kdy-6V-pRU">
             <objects>
-                <viewController id="osd-Wk-LAm" customClass="MealDetailsViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="MealDetailsViewControllerTest" id="osd-Wk-LAm" customClass="MealDetailsViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="S2z-gp-L93">
                         <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

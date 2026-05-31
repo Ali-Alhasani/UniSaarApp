@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Observation
 
 @MainActor
 class HelpfulContactsViewController: UIViewController {
@@ -23,8 +22,24 @@ class HelpfulContactsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        startObserving()
         refershLoad()
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+        if let alert = directoryViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                directoryViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
+        directoryTableView.reloadData()
     }
 
     func setupTableView() {
@@ -33,24 +48,6 @@ class HelpfulContactsViewController: UIViewController {
         directoryTableView.delegate = self
         directoryTableView.dataSource = self
         directoryTableView.layoutTableView(withOutSeparator: false)
-    }
-
-    private func startObserving() {
-        withObservationTracking {
-            _ = directoryViewModel.helpfulNumbersCells
-            _ = directoryViewModel.currentAlert
-            directoryTableView.reloadData()
-            directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if let alert = directoryViewModel.currentAlert {
-                    directoryViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                startObserving()
-            }
-        }
     }
 
     @objc private func refershLoad() {

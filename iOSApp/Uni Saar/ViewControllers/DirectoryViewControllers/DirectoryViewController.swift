@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Observation
 
 @MainActor
 class DirectoryViewController: UIViewController {
@@ -27,9 +26,25 @@ class DirectoryViewController: UIViewController {
         super.viewDidLoad()
         setupSearchBar()
         setupTableView()
-        startObserving()
         observeKeyboardEvents()
         refershLoad()
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+        if let alert = directoryViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                directoryViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
+        directoryTableView.reloadData()
     }
 
     func setupSearchBar() {
@@ -49,25 +64,6 @@ class DirectoryViewController: UIViewController {
         directoryTableView.dataSource = self
         directoryTableView.layoutTableView(withOutSeparator: false)
         helpfulContactsView.setAsCircle(cornerRadius: 8)
-    }
-
-    private func startObserving() {
-        withObservationTracking {
-            _ = directoryViewModel.searchResutlsCells
-            _ = directoryViewModel.helpfulNumbersCells
-            _ = directoryViewModel.currentAlert
-            directoryTableView.reloadData()
-            directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if let alert = directoryViewModel.currentAlert {
-                    directoryViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                startObserving()
-            }
-        }
     }
 
     @objc private func refershLoad() {

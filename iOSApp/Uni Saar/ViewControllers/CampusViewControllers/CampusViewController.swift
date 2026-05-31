@@ -8,7 +8,6 @@
 
 import UIKit
 import MapKit
-import Observation
 
 @MainActor
 protocol CampusViewControllerDelegate: AnyObject {
@@ -113,22 +112,19 @@ class CampusViewController: UIViewController {
         let vm = MapViewModel()
         vm.coordinatesLastChanged = lastChangedDate
         mapViewModel = vm
-        observeMapCoordinates()
         Task { [weak self] in await self?.mapViewModel?.loadGetMapData() }
     }
 
-    private func observeMapCoordinates() {
-        guard let vm = mapViewModel else { return }
-        withObservationTracking {
-            _ = vm.updatedCoordinates
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self, let vm = mapViewModel, let updatedCoor = vm.updatedCoordinates else { return }
-                let campusCoordinatesModel = CampusCoordinatesModel(json: updatedCoor)
-                campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
-                mapViewModel = nil
-            }
-        }
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        guard let vm = mapViewModel, let updatedCoor = vm.updatedCoordinates else { return }
+        let campusCoordinatesModel = CampusCoordinatesModel(json: updatedCoor)
+        campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
+        mapViewModel = nil
     }
 
     // MARK: - Navigation

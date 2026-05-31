@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Observation
 
 @MainActor
 class NewsFeedViewController: UIViewController {
@@ -23,8 +22,31 @@ class NewsFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        startObserving()
         Task { [weak self] in await self?.newsViewModel.loadGetNews(filterCatgroies: []) }
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        newsViewModel.showLoadingIndicator ? newsTable.showingLoadingView() : newsTable.hideLoadingView()
+        if newsViewModel.isFreshLoad {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                newsViewModel.isFreshLoad = false
+                initialSelection()
+            }
+        }
+        if let alert = newsViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                newsViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
+        newsTable.reloadData()
     }
 
     @objc private func refershLoad() {
@@ -40,29 +62,6 @@ class NewsFeedViewController: UIViewController {
         newsTable.delegate = self
         newsTable.dataSource = self
         newsTable.layoutTableView()
-    }
-
-    private func startObserving() {
-        withObservationTracking {
-            _ = newsViewModel.newsCells
-            _ = newsViewModel.isFreshLoad
-            _ = newsViewModel.currentAlert
-            newsTable.reloadData()
-            newsViewModel.showLoadingIndicator ? newsTable.showingLoadingView() : newsTable.hideLoadingView()
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if newsViewModel.isFreshLoad {
-                    newsViewModel.isFreshLoad = false
-                    initialSelection()
-                }
-                if let alert = newsViewModel.currentAlert {
-                    newsViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                startObserving()
-            }
-        }
     }
 
     func initialSelection() {

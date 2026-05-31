@@ -8,7 +8,6 @@
 
 import UIKit
 import FSCalendar
-import Observation
 
 @MainActor
 class EventCalanderViewController: UIViewController {
@@ -32,9 +31,30 @@ class EventCalanderViewController: UIViewController {
         super.viewDidLoad()
         setUpCalander()
         setupTableView()
-        observeEventCells()
-        observeSelectedDayEvents()
         load()
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        eventViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
+        if let alert = eventViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                eventViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
+        calendar.reloadData()
+        tableView.reloadData()
+        if !eventViewModel.eventCells.isEmpty && eventViewModel.selectedDateEvents.isEmpty {
+            Task { @MainActor [weak self] in
+                self?.eventViewModel.getDayEvents(day: self?.calendar.today)
+            }
+        }
     }
 
     func setUpCalander() {
@@ -61,34 +81,6 @@ class EventCalanderViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.layoutTableView()
-    }
-
-    private func observeEventCells() {
-        withObservationTracking {
-            _ = eventViewModel.eventCells
-            _ = eventViewModel.currentAlert
-            eventViewModel.getDayEvents(day: calendar.today)
-            calendar.reloadData()
-            eventViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if let alert = eventViewModel.currentAlert {
-                    eventViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                observeEventCells()
-            }
-        }
-    }
-
-    private func observeSelectedDayEvents() {
-        withObservationTracking {
-            _ = eventViewModel.selectedDateEvents
-            tableView.reloadData()
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in self?.observeSelectedDayEvents() }
-        }
     }
 
     func getNumberOfEvents(date: Date) -> Int {

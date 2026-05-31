@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Observation
 
 @MainActor
 class StaffDetailsViewController: UIViewController {
@@ -19,83 +18,94 @@ class StaffDetailsViewController: UIViewController {
     @IBOutlet weak var genderLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var navigateButton: UIButton!
+    
     var staffId: Int?
     var staff = StaffDetailsViewModel()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigateButton.isHidden = true
-        if let staffID = staffId {
-            showLoadingActivity()
-            Task { [weak self] in await self?.staff.loadGetStaffDetails(staffId: staffID) }
-        }
-        startObserving()
+        setupInitialDataLoad()
     }
 
-    private func startObserving() {
-        withObservationTracking {
-            let staffInfo = staff.staffDetails
-            _ = staff.currentAlert
-            staff.showLoadingIndicator ? showLoadingActivity() : hideLoadingActivity()
-            if staffInfo.staffDetailsModel != nil {
-                staffTitleLabel.text = staffInfo.titleText
-                nameLabel.text = staffInfo.fullName
-                if let email = staffInfo.email {
-                    emailTextView.text = email
-                }
-                if staffInfo.address != " - \n\n" {
-                    if (staffInfo.staffDetailsModel?.building != "") || staffInfo.staffDetailsModel?.city != "" {
-                        navigateButton.isHidden = false
-                    }
-                }
-                addressLabel.text = staffInfo.address
-                contactTextView.text = staffInfo.contactText
-                genderLabel.text = staffInfo.genderText
-                title = staffInfo.fullName
-                if let imageURL = staffInfo.imageURL {
-                    imageView.af.setImage(withURL: imageURL)
-                }
+    /// MODERN CONCURRENCY PATTERN: Native reactive UI pipeline
+    /// The runtime automatically intercepts any @Observable read here, tracks it,
+    /// and triggers updates safely across frame boundaries without recursive closures.
+    override func updateProperties() {
+        super.updateProperties()
+        renderUI()
+    }
+
+    private func renderUI() {
+        let staffInfo = staff.staffDetails
+        
+        // 1. Manage Global Overlays
+        staff.showLoadingIndicator ? showLoadingActivity() : hideLoadingActivity()
+        
+        // 2. Safe Interception of Alert Triggers (Runs outside the mutation cycle)
+        if let alert = staff.currentAlert {
+            // Defer property mutation slightly to avoid overlapping write contexts
+            Task { @MainActor in
+                staff.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
             }
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if let alert = staff.currentAlert {
-                    staff.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                startObserving()
-            }
+        }
+        
+        // 3. Update Presentation Strings Safely
+        guard staffInfo.staffDetailsModel != nil else { return }
+        
+        staffTitleLabel.text = staffInfo.titleText
+        nameLabel.text = staffInfo.fullName
+        emailTextView.text = staffInfo.email ?? ""
+        addressLabel.text = staffInfo.address
+        contactTextView.text = staffInfo.contactText
+        genderLabel.text = staffInfo.genderText
+        title = staffInfo.fullName
+        
+        // Configure explicit button state logic flags cleanly
+        let hasBuilding = !(staffInfo.staffDetailsModel?.building?.isEmpty ?? true)
+        let hasCity = !(staffInfo.staffDetailsModel?.city?.isEmpty ?? true)
+        let isAddressValid = staffInfo.address != " - \n\n"
+        navigateButton.isHidden = !(isAddressValid && (hasBuilding || hasCity))
+        
+        if let imageURL = staffInfo.imageURL {
+            imageView.af.setImage(withURL: imageURL)
         }
     }
 
-    // MARK: - Navigation
+    private func setupInitialDataLoad() {
+        guard let staffID = staffId else { return }
+        Task { [weak self] in
+            await self?.staff.loadGetStaffDetails(staffId: staffID)
+        }
+    }
+
+    // MARK: - Actions & Navigation
     internal struct SegueIdentifiers {
         static let toStaffAddress = "toAddress"
     }
 
     @IBAction func navigateAction(_ sender: Any) {
-        if let tabbar = tabBarController,
-           let topViewNavgation = tabbar.viewControllers?[safe: 1] as? UINavigationController,
-           let campusView = topViewNavgation.topViewController as? CampusViewController {
-            var address: String?
-            if let building = staff.staffDetails.staffDetailsModel?.building, building != "" {
-                address = building
-            } else if let city = staff.staffDetails.staffDetailsModel?.city, city != "" {
-                address = city
-            }
-            if let address = address {
-                campusView.staffAddress = address
-                tabbar.selectedIndex = 1
-                campusView.activateSearchBar()
-            }
+        guard let tabbar = tabBarController,
+              let topViewNavigation = tabbar.viewControllers?[safe: 1] as? UINavigationController,
+              let campusView = topViewNavigation.topViewController as? CampusViewController else { return }
+        
+        let model = staff.staffDetails.staffDetailsModel
+        let address = (model?.building != "") ? model?.building : model?.city
+        
+        if let targetAddress = address, !targetAddress.isEmpty {
+            campusView.staffAddress = targetAddress
+            tabbar.selectedIndex = 1
+            campusView.activateSearchBar()
         }
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SegueIdentifiers.toStaffAddress,
            let destination = segue.destination as? UINavigationController,
-           let destinationViewController = destination.topViewController as? CampusViewController {
-            destinationViewController.staffAddress = staff.staffDetails.staffDetailsModel?.building ?? staff.staffDetails.staffDetailsModel?.city
+           let campusView = destination.topViewController as? CampusViewController {
+            let model = staff.staffDetails.staffDetailsModel
+            campusView.staffAddress = model?.building ?? model?.city
         }
     }
 }

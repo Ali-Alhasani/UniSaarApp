@@ -8,7 +8,6 @@
 
 import UIKit
 import CoreData
-import Observation
 
 @MainActor
 protocol FilterMensaViewDelegate: AnyObject {
@@ -36,9 +35,38 @@ class FilterMensaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        observeFilterList()
-        observeAlarmSection()
         Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        filterMensaViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
+        if filterMensaViewModel.didUpdatefilterList {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                filterMensaViewModel.didUpdatefilterList = false
+                filterTableView.reloadData()
+            }
+        }
+        if filterMensaViewModel.didUpdateFoodAlarmStatus {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                filterMensaViewModel.didUpdateFoodAlarmStatus = false
+                updateTableView()
+            }
+        }
+        reloadFoodAlramSection()
+        if let alert = filterMensaViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                filterMensaViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -54,49 +82,6 @@ class FilterMensaViewController: UIViewController {
         filterTableView.dataSource = self
         filterTableView.layoutTableView()
         view.backgroundColor = UIColor.flatGray
-    }
-
-    private func observeFilterList() {
-        withObservationTracking {
-            _ = filterMensaViewModel.didUpdatefilterList
-            _ = filterMensaViewModel.showLoadingIndicator
-            _ = filterMensaViewModel.currentAlert
-            filterMensaViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if filterMensaViewModel.didUpdatefilterList {
-                    filterMensaViewModel.didUpdatefilterList = false
-                    realodTableView()
-                }
-                if let alert = filterMensaViewModel.currentAlert {
-                    filterMensaViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                observeFilterList()
-            }
-        }
-    }
-
-    private func observeAlarmSection() {
-        withObservationTracking {
-            _ = filterMensaViewModel.selectedAlramTime
-            _ = filterMensaViewModel.didUpdateFoodAlarmStatus
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if filterMensaViewModel.didUpdateFoodAlarmStatus {
-                    filterMensaViewModel.didUpdateFoodAlarmStatus = false
-                    updateTableView()
-                }
-                reloadFoodAlramSection()
-                observeAlarmSection()
-            }
-        }
-    }
-
-    func realodTableView() {
-        filterTableView.reloadData()
     }
 
     func reloadFoodAlramSection() {

@@ -13,6 +13,7 @@ import SQLite3
 private let kNFCAppID: Int = 0x5F8415
 private let kNFCFileID: UInt8 = 1
 
+@MainActor
 class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
 
     enum Commands: UInt8 {
@@ -56,12 +57,12 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         session?.begin()
     }
 
-    func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
+    nonisolated func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
     }
-    func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
+    nonisolated func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
         print(error.localizedDescription)
     }
-    func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
+    nonisolated func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
         if tags.count != 1 {
             print("MULTIPLE TAGS! ABORT.")
             return

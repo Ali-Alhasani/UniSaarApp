@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Observation
 
 @MainActor
 class MoreLinksViewController: UITableViewController {
@@ -15,28 +14,26 @@ class MoreLinksViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        startObserving()
         setRefreshControl()
         Task { [weak self] in await self?.moreLinksViewModel.loadGetMoreLinks() }
     }
 
-    private func startObserving() {
-        withObservationTracking {
-            _ = moreLinksViewModel.linksCells
-            _ = moreLinksViewModel.currentAlert
-            tableView.reloadData()
-            moreLinksViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
-        } onChange: { [weak self] in
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        moreLinksViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
+        if let alert = moreLinksViewModel.currentAlert {
             Task { @MainActor [weak self] in
                 guard let self else { return }
-                if let alert = moreLinksViewModel.currentAlert {
-                    moreLinksViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                requestReview()
-                startObserving()
+                moreLinksViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
             }
         }
+        tableView.reloadData()
+        requestReview()
     }
 
     func setRefreshControl() {

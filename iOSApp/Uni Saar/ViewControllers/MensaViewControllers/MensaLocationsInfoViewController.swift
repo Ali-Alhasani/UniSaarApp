@@ -24,10 +24,11 @@ class MensaLocationsInfoViewController: UIViewController {
 
     func loadAPI() {
         let dataClient = DataClient()
+        let locationKey = AppSessionManager.shared.selectedMensaLocation.locationKey
         Task { [weak self] in
             guard let self else { return }
             do {
-                let mensaInfo = try await dataClient.getMensaInfo()
+                let mensaInfo = try await dataClient.getMensaInfo(locationKey: locationKey)
                 descriptionLabel.text = mensaInfo.description
                 if let imageURL = URL(string: mensaInfo.imageLink) {
                     imageView.af.setImage(withURL: imageURL)

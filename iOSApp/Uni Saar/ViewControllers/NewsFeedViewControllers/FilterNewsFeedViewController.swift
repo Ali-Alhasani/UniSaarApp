@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Observation
 
 @MainActor
 protocol FilterNewsFeedViewDelegate: AnyObject {
@@ -30,8 +29,30 @@ class FilterNewsFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        startObserving()
         Task { [weak self] in await self?.filterNewsViewModel.loadGetFilterList() }
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        filterNewsViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
+        if filterNewsViewModel.didUpdatefilterList {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                filterNewsViewModel.didUpdatefilterList = false
+                filterTableView.reloadData()
+            }
+        }
+        if let alert = filterNewsViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                filterNewsViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
     }
 
     func setupTableView() {
@@ -42,32 +63,6 @@ class FilterNewsFeedViewController: UIViewController {
         filterTableView.rowHeight = UITableView.automaticDimension
         filterTableView.allowsSelection = false
         view.backgroundColor = UIColor.flatGray
-    }
-
-    private func startObserving() {
-        withObservationTracking {
-            _ = filterNewsViewModel.didUpdatefilterList
-            _ = filterNewsViewModel.showLoadingIndicator
-            _ = filterNewsViewModel.currentAlert
-            filterNewsViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if filterNewsViewModel.didUpdatefilterList {
-                    filterNewsViewModel.didUpdatefilterList = false
-                    relaodTableView()
-                }
-                if let alert = filterNewsViewModel.currentAlert {
-                    filterNewsViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                startObserving()
-            }
-        }
-    }
-
-    func relaodTableView() {
-        filterTableView.reloadData()
     }
 
     @objc private func refershLoad() {
