@@ -7,97 +7,58 @@
 //
 
 import XCTest
-import Combine
 @testable import Uni_Saar
 
 @MainActor
-class NewsViewModelTests: XCTestCase {
-    private var cancellables = Set<AnyCancellable>()
-
-    override func tearDown() {
-        cancellables.removeAll()
-        super.tearDown()
-    }
+final class NewsViewModelTests: XCTestCase {
 
     func testNewsModel() {
         let testSuccessfulJSON = NewsModel.deomJSON
         XCTAssertNotNil(NewsModel(json: testSuccessfulJSON))
     }
 
-    func testNormalNewsCells() {
+    func testNormalNewsCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "newsCells updated")
-        viewModel.$newsCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetNews(filterCatgroies: [])
-        waitForExpectations(timeout: 1.0)
-
-        guard case .normal(_) = viewModel.newsCells.first else {
-            XCTFail("News should have value")
-            return
-        }
+        await viewModel.loadGetNews(filterCatgroies: [])
+        guard case .normal = viewModel.newsCells.first else { XCTFail("Expected normal cell"); return }
     }
 
-    func testEmptyNewsCells() {
+    func testEmptyNewsCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel(json: [:]))
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "newsCells updated")
-        viewModel.$newsCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetNews(filterCatgroies: [])
-        waitForExpectations(timeout: 1.0)
-
-        guard case .empty = viewModel.newsCells.first else {
-            XCTFail("News Cell should be empty")
-            return
-        }
+        await viewModel.loadGetNews(filterCatgroies: [])
+        guard case .empty = viewModel.newsCells.first else { XCTFail("Expected empty cell"); return }
     }
 
-    func testErrorNewsCells() {
+    func testErrorNewsCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .failure(MyError.customError)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "newsCells updated")
-        viewModel.$newsCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetNews(filterCatgroies: [])
-        waitForExpectations(timeout: 1.0)
-
-        guard case .error(_) = viewModel.newsCells.first else {
-            XCTFail("News should be in failed")
-            return
-        }
+        await viewModel.loadGetNews(filterCatgroies: [])
+        guard case .error = viewModel.newsCells.first else { XCTFail("Expected error cell"); return }
     }
 
-    func testNewsViewModelValues() {
+    func testIsFreshLoadSetAfterLoad() async {
+        let testSuccessfulJSON = NewsFeedModel.newsDemoData
         let dataClient = MockAppDataClient()
+        dataClient.getNewsResult = .success(testSuccessfulJSON)
+        let viewModel = NewsFeedViewModel(dataClient: dataClient)
+        await viewModel.loadGetNews(filterCatgroies: [])
+        XCTAssertTrue(viewModel.isFreshLoad)
+    }
+
+    func testNewsViewModelValues() async {
         let news = NewsFeedModel.newsDemoData
+        let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(news)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "newsCells updated")
-        viewModel.$newsCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetNews(filterCatgroies: [])
-        waitForExpectations(timeout: 1.0)
-
-        switch viewModel.newsCells.first {
-        case .normal(let cellViewModel):
-            XCTAssertEqual(news.newsList.first?.title, cellViewModel.titleText)
-            XCTAssertEqual(news.newsList.first?.subTitle, cellViewModel.subTitleText)
-            XCTAssertEqual(news.newsList.first?.annoucementDate, cellViewModel.newsDate)
-        case .error(let message):
-            XCTAssertNotNil(message)
-        case .empty:
-            break
-        case .none:
-            XCTFail("View Model should not be empty!")
-        }
+        await viewModel.loadGetNews(filterCatgroies: [])
+        guard case .normal(let cell) = viewModel.newsCells.first else { XCTFail("Expected normal cell"); return }
+        XCTAssertEqual(news.newsList.first?.title, cell.titleText)
+        XCTAssertEqual(news.newsList.first?.subTitle, cell.subTitleText)
+        XCTAssertEqual(news.newsList.first?.annoucementDate, cell.newsDate)
     }
 }

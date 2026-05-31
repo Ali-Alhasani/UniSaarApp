@@ -8,12 +8,14 @@
 
 import UIKit
 import MapKit
-import Combine
+import Observation
 
+@MainActor
 protocol CampusViewControllerDelegate: AnyObject {
     func didUpdateCoordinatesCache(coordinates: [MapInfoModel])
 }
 
+@MainActor
 class CampusViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     var searchController: UISearchController!
@@ -23,8 +25,6 @@ class CampusViewController: UIViewController {
     var staffAddress: String?
     weak var campusDelegate: CampusViewControllerDelegate?
     private var mapViewModel: MapViewModel?
-    private var mapUpdateCancellable: AnyCancellable?
-    private var cancellables = Set<AnyCancellable>()
     private var mapRegionSet = false
 
     override func viewDidLoad() {
@@ -81,9 +81,7 @@ class CampusViewController: UIViewController {
     }
 
     func setupNotification() {
-        NotificationCenter.default.publisher(for: NSNotification.Name("CampusSettingsDidUpdate"))
-            .sink { [weak self] _ in self?.updateCampus() }
-            .store(in: &cancellables)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name("CampusSettingsDidUpdate"), object: nil)
     }
 
     func loadCoordinates(checkForUpdate: Bool = true) -> [MapInfoModel] {
@@ -102,7 +100,7 @@ class CampusViewController: UIViewController {
         mapItem.openInMaps(launchOptions: nil)
     }
 
-    func updateCampus() {
+    @objc func updateCampus() {
         didChangeLocationFilter(selectedCampus: AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
     }
 
@@ -115,17 +113,22 @@ class CampusViewController: UIViewController {
         let vm = MapViewModel()
         vm.coordinatesLastChanged = lastChangedDate
         mapViewModel = vm
-        mapUpdateCancellable = vm.$didUpdateCoordinates
-            .dropFirst()
-            .first()
-            .sink { [weak self] updatedCoor in
-                guard let self else { return }
+        observeMapCoordinates()
+        Task { [weak self] in await self?.mapViewModel?.loadGetMapData() }
+    }
+
+    private func observeMapCoordinates() {
+        guard let vm = mapViewModel else { return }
+        withObservationTracking {
+            _ = vm.updatedCoordinates
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self, let vm = mapViewModel, let updatedCoor = vm.updatedCoordinates else { return }
                 let campusCoordinatesModel = CampusCoordinatesModel(json: updatedCoor)
                 campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
                 mapViewModel = nil
-                mapUpdateCancellable = nil
             }
-        vm.loadGetMapData()
+        }
     }
 
     // MARK: - Navigation

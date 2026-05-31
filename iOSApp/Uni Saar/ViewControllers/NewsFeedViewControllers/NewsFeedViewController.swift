@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 class NewsFeedViewController: UIViewController {
     @IBOutlet weak var newsTable: UITableView! {
         didSet {
@@ -18,13 +19,12 @@ class NewsFeedViewController: UIViewController {
         }
     }
     lazy var newsViewModel: NewsFeedViewModel = NewsFeedViewModel()
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        bindViewModel()
-        newsViewModel.loadGetNews(filterCatgroies: [])
+        startObserving()
+        Task { [weak self] in await self?.newsViewModel.loadGetNews(filterCatgroies: []) }
     }
 
     @objc private func refershLoad() {
@@ -32,7 +32,7 @@ class NewsFeedViewController: UIViewController {
     }
 
     @objc func load(isFirstTime: Bool = true, filterCatgroies: [Int]) {
-        newsViewModel.loadGetNews(isFirstTime, filterCatgroies: filterCatgroies)
+        Task { [weak self] in await self?.newsViewModel.loadGetNews(isFirstTime, filterCatgroies: filterCatgroies) }
     }
 
     func setupTableView() {
@@ -42,39 +42,27 @@ class NewsFeedViewController: UIViewController {
         newsTable.layoutTableView()
     }
 
-    func bindViewModel() {
-        newsViewModel.$newsCells
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.newsTable.reloadData()
-            }
-            .store(in: &cancellables)
-
-        newsViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        newsViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
+    private func startObserving() {
+        withObservationTracking {
+            _ = newsViewModel.newsCells
+            _ = newsViewModel.isFreshLoad
+            _ = newsViewModel.currentAlert
+            newsTable.reloadData()
+            newsViewModel.showLoadingIndicator ? newsTable.showingLoadingView() : newsTable.hideLoadingView()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                visible ? newsTable.showingLoadingView() : newsTable.hideLoadingView()
+                if newsViewModel.isFreshLoad {
+                    newsViewModel.isFreshLoad = false
+                    initialSelection()
+                }
+                if let alert = newsViewModel.currentAlert {
+                    newsViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                startObserving()
             }
-            .store(in: &cancellables)
-
-        newsViewModel.$isFreshLoad
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.initialSelection()
-            }
-            .store(in: &cancellables)
+        }
     }
 
     func initialSelection() {

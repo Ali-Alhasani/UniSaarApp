@@ -8,27 +8,26 @@
 
 import Foundation
 import UIKit
+import Observation
 
+@Observable
 class MealDetailsViewModel: ParentViewModel {
-    @Published var mealDetails: MealViewModel = MealViewModel()
+    var mealDetails: MealViewModel = MealViewModel()
     var noticesText: [FilterNoticesListCache]?
 
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetMealDetails(mealId: Int) {
+    func loadGetMealDetails(mealId: Int) async {
         showLoadingIndicator = true
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let meal = try await dataClient.getMealDetails(mealId: mealId)
-                mealDetails = MealViewModel(meal, noticesText: noticesText)
-                showLoadingIndicator = false
-            } catch {
-                showLoadingIndicator = false
-                showError(error: error)
-            }
+        do {
+            let meal = try await dataClient.getMealDetails(mealId: mealId)
+            mealDetails = MealViewModel(meal, noticesText: noticesText)
+            showLoadingIndicator = false
+        } catch {
+            showLoadingIndicator = false
+            showError(error: error)
         }
     }
 

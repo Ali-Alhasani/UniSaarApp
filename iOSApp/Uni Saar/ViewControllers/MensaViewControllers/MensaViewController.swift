@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 class MensaViewController: UIViewController {
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var mensaCollectionView: UICollectionView! {
@@ -19,12 +20,12 @@ class MensaViewController: UIViewController {
         }
     }
     lazy var mensaMenuViewModel: MensaMenuViewModel = MensaMenuViewModel()
-    private var cancellables = Set<AnyCancellable>()
+    private var didLoadInitialContent = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        bindViewModel()
+        startObserving()
         load()
     }
 
@@ -39,7 +40,7 @@ class MensaViewController: UIViewController {
     }
 
     @objc func load() {
-        mensaMenuViewModel.loadGetMensaMenu()
+        Task { [weak self] in await self?.mensaMenuViewModel.loadGetMensaMenu() }
     }
 
     func setupCollectionView() {
@@ -51,34 +52,27 @@ class MensaViewController: UIViewController {
         mensaCollectionView.layoutCollectionView()
     }
 
-    func bindViewModel() {
-        mensaMenuViewModel.$daysMenus
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                guard let self else { return }
-                mensaCollectionView.reloadData()
-                pageControl.numberOfPages = mensaMenuViewModel.daysMenus.count
+    private func startObserving() {
+        withObservationTracking {
+            _ = mensaMenuViewModel.daysMenus
+            _ = mensaMenuViewModel.currentAlert
+            mensaCollectionView.reloadData()
+            pageControl.numberOfPages = mensaMenuViewModel.daysMenus.count
+            mensaMenuViewModel.showLoadingIndicator ? mensaCollectionView.showingLoadingView() : mensaCollectionView.hideLoadingView()
+            if !didLoadInitialContent && !mensaMenuViewModel.daysMenus.isEmpty {
+                didLoadInitialContent = true
                 initialSelection()
             }
-            .store(in: &cancellables)
-
-        mensaMenuViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        mensaMenuViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                visible ? mensaCollectionView.showingLoadingView() : mensaCollectionView.hideLoadingView()
+                if let alert = mensaMenuViewModel.currentAlert {
+                    mensaMenuViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                startObserving()
             }
-            .store(in: &cancellables)
+        }
     }
 
     func isMenuUpdated() {

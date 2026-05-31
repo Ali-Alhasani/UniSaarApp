@@ -8,8 +8,9 @@
 
 import UIKit
 import FSCalendar
-import Combine
+import Observation
 
+@MainActor
 class EventCalanderViewController: UIViewController {
     @IBOutlet weak var calendar: FSCalendar!
     @IBOutlet weak var tableView: UITableView! {
@@ -20,7 +21,6 @@ class EventCalanderViewController: UIViewController {
         }
     }
     lazy var eventViewModel: EventViewModel = EventViewModel()
-    private var cancellables = Set<AnyCancellable>()
 
     fileprivate let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -32,7 +32,8 @@ class EventCalanderViewController: UIViewController {
         super.viewDidLoad()
         setUpCalander()
         setupTableView()
-        bindViewModel()
+        observeEventCells()
+        observeSelectedDayEvents()
         load()
     }
 
@@ -47,7 +48,7 @@ class EventCalanderViewController: UIViewController {
 
     @objc func load() {
         let currentCalendarDate = getCurrentDate()
-        eventViewModel.loadGetEvents(month: currentCalendarDate.month, year: currentCalendarDate.year)
+        Task { [weak self] in await self?.eventViewModel.loadGetEvents(month: currentCalendarDate.month, year: currentCalendarDate.year) }
     }
 
     func getCurrentDate() -> (month: String, year: String) {
@@ -62,41 +63,32 @@ class EventCalanderViewController: UIViewController {
         tableView.layoutTableView()
     }
 
-    func bindViewModel() {
-        eventViewModel.$eventCells
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+    private func observeEventCells() {
+        withObservationTracking {
+            _ = eventViewModel.eventCells
+            _ = eventViewModel.currentAlert
+            eventViewModel.getDayEvents(day: calendar.today)
+            calendar.reloadData()
+            eventViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                eventViewModel.getDayEvents(day: calendar.today)
-                calendar.reloadData()
+                if let alert = eventViewModel.currentAlert {
+                    eventViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                observeEventCells()
             }
-            .store(in: &cancellables)
+        }
+    }
 
-        eventViewModel.$selectedDateEvents
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.tableView.reloadData()
-            }
-            .store(in: &cancellables)
-
-        eventViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        eventViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
-                guard let self else { return }
-                visible ? tableView.showingLoadingView() : tableView.hideLoadingView()
-            }
-            .store(in: &cancellables)
+    private func observeSelectedDayEvents() {
+        withObservationTracking {
+            _ = eventViewModel.selectedDateEvents
+            tableView.reloadData()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in self?.observeSelectedDayEvents() }
+        }
     }
 
     func getNumberOfEvents(date: Date) -> Int {
@@ -119,7 +111,7 @@ class EventCalanderViewController: UIViewController {
 }
 
 // MARK: - FSCalendarDelegate
-extension EventCalanderViewController: FSCalendarDelegate, FSCalendarDataSource {
+extension EventCalanderViewController: @preconcurrency FSCalendarDelegate, @preconcurrency FSCalendarDataSource {
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         load()
         eventViewModel.selectedDateEvents = []

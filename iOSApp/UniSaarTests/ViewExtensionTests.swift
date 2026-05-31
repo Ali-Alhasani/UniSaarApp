@@ -7,7 +7,6 @@
 //
 
 import XCTest
-import Combine
 @testable import Uni_Saar
 
 // MARK: - UITableView loading indicator
@@ -94,37 +93,19 @@ class UITableViewCellEmptyStateTests: XCTestCase {
     }
 }
 
-// MARK: - showLoadingIndicator publisher
+// MARK: - showLoadingIndicator
 
 @MainActor
-class LoadingIndicatorPublisherTests: XCTestCase {
-    private var cancellables = Set<AnyCancellable>()
+final class LoadingIndicatorTests: XCTestCase {
 
-    override func tearDown() {
-        cancellables.removeAll()
-        super.tearDown()
-    }
-
-    func testShowLoadingIndicatorStartsTrue() {
-        let viewModel = NewsFeedViewModel()
-        XCTAssertTrue(viewModel.showLoadingIndicator, "showLoadingIndicator should be true before any load")
-    }
-
-    func testShowLoadingIndicatorTurnsFalseAfterLoad() {
+    func testLoadingStartsTrueAndClearsAfterLoad() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "showLoadingIndicator turns false after load")
-        viewModel.$showLoadingIndicator
-            .dropFirst()
-            .filter { !$0 }
-            .sink { _ in exp.fulfill() }
-            .store(in: &cancellables)
-
-        viewModel.loadGetNews(filterCatgroies: [])
-        waitForExpectations(timeout: 1.0)
-
+        let task = Task { await viewModel.loadGetNews(filterCatgroies: []) }
+        await Task.yield()  // let Task start and execute synchronous preamble
+        XCTAssertTrue(viewModel.showLoadingIndicator, "showLoadingIndicator should be true while loading")
+        await task.value
         XCTAssertFalse(viewModel.showLoadingIndicator, "showLoadingIndicator should be false after load completes")
     }
 }

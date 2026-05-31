@@ -8,10 +8,12 @@
 
 import Foundation
 import CoreData
+import Observation
 
+@Observable
 class MoreLinksViewModel: ParentViewModel {
-    @Published var linksCells: [TableViewCellType<MoreLinksCellViewModel>] = []
-    lazy var fetchedResultsController: NSFetchedResultsController<MoreLinksCache> = {
+    var linksCells: [TableViewCellType<MoreLinksCellViewModel>] = []
+    @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<MoreLinksCache> = {
         let fetchRequest = NSFetchRequest<MoreLinksCache>(entityName: String(describing: MoreLinksCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "orderIndex", ascending: true)]
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
@@ -24,7 +26,7 @@ class MoreLinksViewModel: ParentViewModel {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetMoreLinks() {
+    func loadGetMoreLinks() async {
         showLoadingIndicator = true
         if AppSessionManager.shared.morelinksLastChanged != "never" {
             fetchMoreLinksFromStorage()
@@ -33,31 +35,28 @@ class MoreLinksViewModel: ParentViewModel {
             }
             showLoadingIndicator = false
         }
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let links = try await dataClient.getMoreLinks()
-                if links.links.count > 0 {
-                    linksCells = links.links.map { .normal(cellViewModel: $0) }
-                    AppSessionManager.shared.morelinksLastChanged = links.linksLastChanged
-                    dataClient.clearMoreLinksCache()
-                    dataClient.saveInCoreDataWith(model: links.links)
-                }
-                showLoadingIndicator = false
-            } catch {
-                showLoadingIndicator = false
-                if AppSessionManager.shared.morelinksLastChanged == "never" {
-                    linksCells = [.error(message: error.localizedDescription)]
-                }
-                showError(error: error, tryAgainHandler: { [weak self] in
-                    self?.reloadGetApi()
-                })
+        do {
+            let links = try await dataClient.getMoreLinks()
+            if links.links.count > 0 {
+                linksCells = links.links.map { .normal(cellViewModel: $0) }
+                AppSessionManager.shared.morelinksLastChanged = links.linksLastChanged
+                dataClient.clearMoreLinksCache()
+                dataClient.saveInCoreDataWith(model: links.links)
             }
+            showLoadingIndicator = false
+        } catch {
+            showLoadingIndicator = false
+            if AppSessionManager.shared.morelinksLastChanged == "never" {
+                linksCells = [.error(message: error.localizedDescription)]
+            }
+            showError(error: error, tryAgainHandler: { [weak self] in
+                self?.reloadGetApi()
+            })
         }
     }
 
     func reloadGetApi() {
-        loadGetMoreLinks()
+        Task { await self.loadGetMoreLinks() }
     }
 
     func fetchMoreLinksFromStorage() {

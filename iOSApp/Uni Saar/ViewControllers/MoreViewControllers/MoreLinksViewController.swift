@@ -7,46 +7,36 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 class MoreLinksViewController: UITableViewController {
     lazy var moreLinksViewModel: MoreLinksViewModel = MoreLinksViewModel()
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindViewModel()
+        startObserving()
         setRefreshControl()
-        moreLinksViewModel.loadGetMoreLinks()
+        Task { [weak self] in await self?.moreLinksViewModel.loadGetMoreLinks() }
     }
 
-    func bindViewModel() {
-        moreLinksViewModel.$linksCells
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
+    private func startObserving() {
+        withObservationTracking {
+            _ = moreLinksViewModel.linksCells
+            _ = moreLinksViewModel.currentAlert
+            tableView.reloadData()
+            moreLinksViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                tableView.reloadData()
+                if let alert = moreLinksViewModel.currentAlert {
+                    moreLinksViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
                 requestReview()
+                startObserving()
             }
-            .store(in: &cancellables)
-
-        moreLinksViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        moreLinksViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
-                guard let self else { return }
-                visible ? tableView.showingLoadingView() : tableView.hideLoadingView()
-            }
-            .store(in: &cancellables)
+        }
     }
 
     func setRefreshControl() {
@@ -56,7 +46,7 @@ class MoreLinksViewController: UITableViewController {
     }
 
     @objc private func refershLoad() {
-        moreLinksViewModel.loadGetMoreLinks()
+        Task { [weak self] in await self?.moreLinksViewModel.loadGetMoreLinks() }
     }
 
     func requestReview() {

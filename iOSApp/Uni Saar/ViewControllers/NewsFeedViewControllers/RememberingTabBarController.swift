@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+@MainActor
 class RememberingTabBarController: UITabBarController, UITabBarControllerDelegate {
     let lastOpenTabScreen = "selectedTabIndex"
 

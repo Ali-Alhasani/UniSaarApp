@@ -7,32 +7,31 @@
 //
 
 import Foundation
+import Observation
 
+@Observable
 class EventViewModel: ParentViewModel {
-    @Published var eventCells: [TableViewCellType<NewsFeedCellViewModel>] = []
-    @Published var selectedDateEvents: [TableViewCellType<NewsFeedCellViewModel>] = []
+    var eventCells: [TableViewCellType<NewsFeedCellViewModel>] = []
+    var selectedDateEvents: [TableViewCellType<NewsFeedCellViewModel>] = []
 
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetEvents(month: String, year: String) {
+    func loadGetEvents(month: String, year: String) async {
         showLoadingIndicator = true
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let events = try await dataClient.getEvents(month: month, year: year)
-                showLoadingIndicator = false
-                guard events.newsList.count > 0 else {
-                    eventCells = [.empty]
-                    return
-                }
-                eventCells = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
-            } catch {
-                showLoadingIndicator = false
-                eventCells = [.error(message: error.localizedDescription)]
-                showError(error: error)
+        do {
+            let events = try await dataClient.getEvents(month: month, year: year)
+            showLoadingIndicator = false
+            guard events.newsList.count > 0 else {
+                eventCells = [.empty]
+                return
             }
+            eventCells = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+        } catch {
+            showLoadingIndicator = false
+            eventCells = [.error(message: error.localizedDescription)]
+            showError(error: error)
         }
     }
 

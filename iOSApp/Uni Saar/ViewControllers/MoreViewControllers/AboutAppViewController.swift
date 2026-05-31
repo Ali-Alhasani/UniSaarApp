@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 class AboutAppViewController: UIViewController {
     @IBOutlet weak var gitHubText: UITextView!
     override func viewDidLoad() {

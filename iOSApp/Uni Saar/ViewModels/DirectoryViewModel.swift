@@ -9,12 +9,13 @@
 import Foundation
 import CoreData
 import UIKit
-import Combine
+import Observation
 
+@Observable
 class DirectoryViewModel: ParentViewModel {
-    @Published var searchResutlsCells: [TableViewCellType<DirectorySearchResutlsCellViewModel>] = []
-    @Published var helpfulNumbersCells: [TableViewCellType<HelpfulNumbersCellViewModel>] = []
-    lazy var fetchedResultsController: NSFetchedResultsController<HelpfulNumberCache> = {
+    var searchResutlsCells: [TableViewCellType<DirectorySearchResutlsCellViewModel>] = []
+    var helpfulNumbersCells: [TableViewCellType<HelpfulNumbersCellViewModel>] = []
+    @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<HelpfulNumberCache> = {
         let fetchRequest = NSFetchRequest<HelpfulNumberCache>(entityName: String(describing: HelpfulNumberCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
@@ -29,39 +30,36 @@ class DirectoryViewModel: ParentViewModel {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) {
+    func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) async {
         if !hasNextPage && isFirstTime == false {
             return
         }
         showLoadingIndicator = true
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let results = try await dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery)
-                showLoadingIndicator = false
-                if isFirstTime {
-                    guard results.staffItemCount > 0 else {
-                        searchResutlsCells = [.empty]
-                        return
-                    }
-                    searchResutlsCells = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) }
-                    apiPageNumber = 0
-                } else {
-                    searchResutlsCells.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) })
+        do {
+            let results = try await dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery)
+            showLoadingIndicator = false
+            if isFirstTime {
+                guard results.staffItemCount > 0 else {
+                    searchResutlsCells = [.empty]
+                    return
                 }
-                hasNextPage = results.hasNextPage
-                apiPageNumber += 1
-            } catch {
-                showLoadingIndicator = false
-                searchResutlsCells = [.error(message: error.localizedDescription)]
-                if !(error is LLError) {
-                    showError(error: error)
-                }
+                searchResutlsCells = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) }
+                apiPageNumber = 0
+            } else {
+                searchResutlsCells.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) })
+            }
+            hasNextPage = results.hasNextPage
+            apiPageNumber += 1
+        } catch {
+            showLoadingIndicator = false
+            searchResutlsCells = [.error(message: error.localizedDescription)]
+            if !(error is LLError) {
+                showError(error: error)
             }
         }
     }
 
-    func loadGetHelpHelpfulNumbers() {
+    func loadGetHelpHelpfulNumbers() async {
         showLoadingIndicator = true
         if AppSessionManager.shared.helpfulNumbersLastChanged != "never" {
             fetchMoreLinksFromStorage()
@@ -70,31 +68,28 @@ class DirectoryViewModel: ParentViewModel {
             }
             showLoadingIndicator = false
         }
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let list = try await dataClient.getDirectoryHelpfulNumbers()
-                if list.numbers.count > 0 {
-                    helpfulNumbersCells = list.numbers.map { .normal(cellViewModel: $0) }
-                    AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged
-                    dataClient.clearHelpfulNumbersCache()
-                    dataClient.saveInCoreDataWith(model: list.numbers)
-                }
-                showLoadingIndicator = false
-            } catch {
-                showLoadingIndicator = false
-                if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
-                    helpfulNumbersCells = [.error(message: error.localizedDescription)]
-                }
-                showError(error: error, tryAgainHandler: { [weak self] in
-                    self?.reloadGetApi()
-                })
+        do {
+            let list = try await dataClient.getDirectoryHelpfulNumbers()
+            if list.numbers.count > 0 {
+                helpfulNumbersCells = list.numbers.map { .normal(cellViewModel: $0) }
+                AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged
+                dataClient.clearHelpfulNumbersCache()
+                dataClient.saveInCoreDataWith(model: list.numbers)
             }
+            showLoadingIndicator = false
+        } catch {
+            showLoadingIndicator = false
+            if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
+                helpfulNumbersCells = [.error(message: error.localizedDescription)]
+            }
+            showError(error: error, tryAgainHandler: { [weak self] in
+                self?.reloadGetApi()
+            })
         }
     }
 
     func reloadGetApi() {
-        loadGetHelpHelpfulNumbers()
+        Task { await self.loadGetHelpHelpfulNumbers() }
     }
 
     func loadGetMockSearchResults() { }

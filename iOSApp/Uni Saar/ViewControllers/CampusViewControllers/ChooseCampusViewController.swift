@@ -7,9 +7,11 @@
 //
 
 import UIKit
+@MainActor
 protocol ChooseCampusDelegate: AnyObject {
     func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool)
 }
+@MainActor
 class ChooseCampusViewController: UIViewController {
     @IBOutlet weak var filterTableView: UITableView!
     var selctedLocation = AppSessionManager.shared.selectedCampus

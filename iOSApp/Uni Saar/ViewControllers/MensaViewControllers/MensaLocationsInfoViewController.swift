@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 class MensaLocationsInfoViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
@@ -23,7 +24,7 @@ class MensaLocationsInfoViewController: UIViewController {
 
     func loadAPI() {
         let dataClient = DataClient()
-        Task { @MainActor [weak self] in
+        Task { [weak self] in
             guard let self else { return }
             do {
                 let mensaInfo = try await dataClient.getMensaInfo()

@@ -9,10 +9,12 @@
 import UIKit
 import MapKit
 
+@MainActor
 protocol HandleMapSearch: AnyObject {
     func dropPinZoomIn(placemark: MapPin)
     func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool)
 }
+@MainActor
 class BuildingSearchTableViewController: UITableViewController {
     weak var handleMapSearchDelegate: HandleMapSearch?
     var matchingItems: [MapInfoModel] = []

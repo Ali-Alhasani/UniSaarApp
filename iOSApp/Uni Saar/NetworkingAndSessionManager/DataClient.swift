@@ -105,4 +105,32 @@ final class MockAppDataClient: DataClient {
         case .failure(let error): throw error
         }
     }
+    var getEventsResult: Result<NewsFeedModel, Error>?
+    override func getEvents(month: String, year: String) async throws -> NewsFeedModel {
+        switch getEventsResult! {
+        case .success(let data): return data
+        case .failure(let error): throw error
+        }
+    }
+    var getStaffDetailsResult: Result<StaffDetailsModel, Error>?
+    override func getStaffDetails(staffId: Int) async throws -> StaffDetailsModel {
+        switch getStaffDetailsResult! {
+        case .success(let data): return data
+        case .failure(let error): throw error
+        }
+    }
+    var getNewsCategoriesResult: Result<[NewsCategories], Error>?
+    override func getNewsCategories() async throws -> [NewsCategories] {
+        switch getNewsCategoriesResult! {
+        case .success(let data): return data
+        case .failure(let error): throw error
+        }
+    }
+    var getMensaFilterResult: Result<MensaFilterModel, Error>?
+    override func getMensaFilter() async throws -> MensaFilterModel {
+        switch getMensaFilterResult! {
+        case .success(let data): return data
+        case .failure(let error): throw error
+        }
+    }
 }

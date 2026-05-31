@@ -9,6 +9,7 @@
 import UIKit
 import WebKit
 
+@MainActor
 class MoreLinksDetailsViewController: UIViewController {
     var linkItem: MoreLinksCellViewModel?
     @IBOutlet weak var webView: WKWebView!

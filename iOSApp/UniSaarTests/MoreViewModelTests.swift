@@ -7,13 +7,11 @@
 //
 
 import XCTest
-import Combine
 import SwiftyJSON
 @testable import Uni_Saar
 
 @MainActor
-class MoreViewModelTests: XCTestCase {
-    private var cancellables = Set<AnyCancellable>()
+final class MoreViewModelTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -23,7 +21,6 @@ class MoreViewModelTests: XCTestCase {
 
     override func tearDown() {
         AppSessionManager.shared.morelinksLastChanged = "never"
-        cancellables.removeAll()
         super.tearDown()
     }
 
@@ -33,49 +30,30 @@ class MoreViewModelTests: XCTestCase {
         XCTAssertNotNil(MoreLinksModel(json: formattedJSON, index: 0))
     }
 
-    func testNormalMoreLinksCells() {
+    func testNormalMoreLinksCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getMoreLinksResult = .success(MoreModel.demoData)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "linksCells updated")
-        viewModel.$linksCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetMoreLinks()
-        waitForExpectations(timeout: 1.0)
-
+        await viewModel.loadGetMoreLinks()
         guard case .normal(_) = viewModel.linksCells.first else {
             XCTFail("More Links should have value")
             return
         }
     }
 
-    func testEmptyMoreLinksCells() {
+    func testEmptyMoreLinksCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getMoreLinksResult = .success(MoreModel(json: [:]))
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
-
-        // Empty network response doesn't update linksCells; wait for loading to finish instead
-        let exp = expectation(description: "load completes")
-        viewModel.$showLoadingIndicator.dropFirst().filter { !$0 }.sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetMoreLinks()
-        waitForExpectations(timeout: 1.0)
-
+        await viewModel.loadGetMoreLinks()
         XCTAssertTrue(viewModel.linksCells.isEmpty, "More Links Cell should be empty")
     }
 
-    func testErrorMoreLinksCells() {
+    func testErrorMoreLinksCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getMoreLinksResult = .failure(MyError.customError)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "linksCells updated")
-        viewModel.$linksCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetMoreLinks()
-        waitForExpectations(timeout: 1.0)
-
+        await viewModel.loadGetMoreLinks()
         if case .error(_) = viewModel.linksCells.first {
             return
         }
@@ -85,18 +63,12 @@ class MoreViewModelTests: XCTestCase {
         }
     }
 
-    func testMoreLinksViewModelValues() {
+    func testMoreLinksViewModelValues() async {
         let dataClient = MockAppDataClient()
         let moreLinksResults = MoreModel.demoData
         dataClient.getMoreLinksResult = .success(moreLinksResults)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
-
-        let exp = expectation(description: "linksCells updated")
-        viewModel.$linksCells.dropFirst().sink { _ in exp.fulfill() }.store(in: &cancellables)
-
-        viewModel.loadGetMoreLinks()
-        waitForExpectations(timeout: 1.0)
-
+        await viewModel.loadGetMoreLinks()
         switch viewModel.linksCells.first {
         case .normal(let cellViewModel):
             let linkItem = moreLinksResults.links.first

@@ -8,6 +8,7 @@
 
 import UIKit
 // add customization to spilt view for iPad's and mac's and remove the default behavior for iPhone's
+@MainActor
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()

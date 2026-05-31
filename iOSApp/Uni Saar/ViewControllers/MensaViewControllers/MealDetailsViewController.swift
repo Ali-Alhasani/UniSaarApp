@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 class MealDetailsViewController: UIViewController {
     @IBOutlet weak var mealDispalyNameLabel: UILabel!
     @IBOutlet weak var counterEntranceLabel: UILabel!
@@ -19,55 +20,44 @@ class MealDetailsViewController: UIViewController {
     @IBOutlet weak var colorView: UIView!
     var mealItemViewModel: MensaMealCellViewModel?
     var meal = MealDetailsViewModel()
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.title = mealItemViewModel?.counterDisplayName
-        bindViewModel()
         colorView.setAsCircle(cornerRadius: colorView.frame.height/2)
         colorView.backgroundColor = mealItemViewModel?.counterColor
-    }
-
-    func bindViewModel() {
-        if mealItemViewModel != nil {
-            self.showLoadingActivity()
-        }
-        meal.$mealDetails
-            .dropFirst()
-            .sink { [weak self] meal in
-                guard let self else { return }
-                mealDispalyNameLabel.text = meal.mealName
-                counterEntranceLabel.text = meal.mealCounterDescription
-                generalNoticesLabel.attributedText = meal.generalNoticesText
-                componentsLabel.attributedText = meal.mealComponetsText
-                priceTagNamesLabel.text = meal.priceTagNamesText
-                pricesLabel.text = meal.priceValuesText
-                requestReview()
-            }
-            .store(in: &cancellables)
-
-        meal.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
         if let mealID = mealItemViewModel?.mensaMealsModel.mealID {
             meal.noticesText = mealItemViewModel?.noticesList
-            meal.loadGetMealDetails(mealId: mealID)
+            showLoadingActivity()
+            Task { [weak self] in await self?.meal.loadGetMealDetails(mealId: mealID) }
         }
+        startObserving()
+    }
 
-        meal.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
-                guard let self else { return }
-                visible ? showLoadingActivity() : hideLoadingActivity()
+    private func startObserving() {
+        withObservationTracking {
+            let m = meal.mealDetails
+            _ = meal.currentAlert
+            meal.showLoadingIndicator ? showLoadingActivity() : hideLoadingActivity()
+            if m.mealDetailsModel != nil {
+                mealDispalyNameLabel.text = m.mealName
+                counterEntranceLabel.text = m.mealCounterDescription
+                generalNoticesLabel.attributedText = m.generalNoticesText
+                componentsLabel.attributedText = m.mealComponetsText
+                priceTagNamesLabel.text = m.priceTagNamesText
+                pricesLabel.text = m.priceValuesText
+                requestReview()
             }
-            .store(in: &cancellables)
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                if let alert = meal.currentAlert {
+                    meal.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                startObserving()
+            }
+        }
     }
 
     func requestReview() {

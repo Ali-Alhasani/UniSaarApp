@@ -7,26 +7,25 @@
 //
 
 import Foundation
+import Observation
 
+@Observable
 class StaffDetailsViewModel: ParentViewModel {
-    @Published var staffDetails: StaffViewModel = StaffViewModel()
+    var staffDetails: StaffViewModel = StaffViewModel()
 
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetStaffDetails(staffId: Int) {
+    func loadGetStaffDetails(staffId: Int) async {
         showLoadingIndicator = true
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let staff = try await dataClient.getStaffDetails(staffId: staffId)
-                staffDetails = StaffViewModel(staff)
-                showLoadingIndicator = false
-            } catch {
-                showLoadingIndicator = false
-                showError(error: error)
-            }
+        do {
+            let staff = try await dataClient.getStaffDetails(staffId: staffId)
+            staffDetails = StaffViewModel(staff)
+            showLoadingIndicator = false
+        } catch {
+            showLoadingIndicator = false
+            showError(error: error)
         }
     }
 }

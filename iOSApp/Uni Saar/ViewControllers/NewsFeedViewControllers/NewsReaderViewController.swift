@@ -9,27 +9,19 @@
 import UIKit
 import WebKit
 import SafariServices
-import Combine
 
 @MainActor
 class NewsReaderViewController: UIViewController {
     @IBOutlet weak var webView: WKWebView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     var newsItemViewModel: NewsFeedCellViewModel?
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindViewModel()
-        setUplayout()
-        NotificationCenter.default.publisher(for: UIContentSizeCategory.didChangeNotification)
-            .sink { [weak self] _ in self?.webView.reload() }
-            .store(in: &cancellables)
-    }
-
-    func bindViewModel() {
         title = newsItemViewModel?.titleText
+        setUplayout()
         load()
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadWebView), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
 
     func load() {
@@ -62,6 +54,10 @@ class NewsReaderViewController: UIViewController {
             }
         }
         return nil
+    }
+
+    @objc private func reloadWebView() {
+        webView.reload()
     }
 
     func requestReview() {

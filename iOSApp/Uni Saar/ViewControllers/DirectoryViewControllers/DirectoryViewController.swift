@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 class DirectoryViewController: UIViewController {
     @IBOutlet weak var directoryTableView: UITableView! {
         didSet {
@@ -21,22 +22,14 @@ class DirectoryViewController: UIViewController {
     @IBOutlet weak var outerView: UIView!
     lazy var directoryViewModel: DirectoryViewModel = DirectoryViewModel()
     let searchController = UISearchController(searchResultsController: nil)
-    private var keyboardShowObserver: NSObjectProtocol?
-    private var keyboardHideObserver: NSObjectProtocol?
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSearchBar()
         setupTableView()
-        bindViewModel()
+        startObserving()
         observeKeyboardEvents()
         refershLoad()
-    }
-
-    deinit {
-        keyboardShowObserver.map { NotificationCenter.default.removeObserver($0) }
-        keyboardHideObserver.map { NotificationCenter.default.removeObserver($0) }
     }
 
     func setupSearchBar() {
@@ -58,47 +51,31 @@ class DirectoryViewController: UIViewController {
         helpfulContactsView.setAsCircle(cornerRadius: 8)
     }
 
-    func bindViewModel() {
-        directoryViewModel.$searchResutlsCells
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.directoryTableView.reloadData()
-            }
-            .store(in: &cancellables)
-
-        directoryViewModel.$helpfulNumbersCells
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.directoryTableView.reloadData()
-            }
-            .store(in: &cancellables)
-
-        directoryViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        directoryViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
+    private func startObserving() {
+        withObservationTracking {
+            _ = directoryViewModel.searchResutlsCells
+            _ = directoryViewModel.helpfulNumbersCells
+            _ = directoryViewModel.currentAlert
+            directoryTableView.reloadData()
+            directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                visible ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+                if let alert = directoryViewModel.currentAlert {
+                    directoryViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                startObserving()
             }
-            .store(in: &cancellables)
+        }
     }
 
     @objc private func refershLoad() {
-        directoryViewModel.loadGetHelpHelpfulNumbers()
+        Task { [weak self] in await self?.directoryViewModel.loadGetHelpHelpfulNumbers() }
     }
 
     @objc func load(isFirstTime: Bool = true, searchText: String) {
-        directoryViewModel.loadGetSearchResults(isFirstTime, searchQuery: searchText)
+        Task { [weak self] in await self?.directoryViewModel.loadGetSearchResults(isFirstTime, searchQuery: searchText) }
     }
 
     var isSearchBarEmpty: Bool {
@@ -186,7 +163,7 @@ extension DirectoryViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         outerView.isHidden = true
         if let searchText = searchController.searchBar.text, searchText.count >= 3 {
-            directoryViewModel.loadGetSearchResults(searchQuery: searchText)
+            Task { [weak self] in await self?.directoryViewModel.loadGetSearchResults(searchQuery: searchText) }
         }
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -220,14 +197,18 @@ extension DirectoryViewController: SingleButtonDialogPresenter { }
 
 extension DirectoryViewController {
     private func observeKeyboardEvents() {
-        keyboardShowObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillShowNotification, object: nil, queue: nil) { [weak self] notification in
-            guard let keyboardHeight = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-            self?.directoryTableView.contentInset.bottom = keyboardHeight.height
-            self?.directoryTableView.verticalScrollIndicatorInsets.bottom = keyboardHeight.height
-        }
-        keyboardHideObserver = NotificationCenter.default.addObserver(forName: UIResponder.keyboardWillHideNotification, object: nil, queue: nil) { [weak self] _ in
-            self?.directoryTableView.verticalScrollIndicatorInsets.bottom = 0
-            self?.directoryTableView.contentInset.bottom = 0
-        }
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let keyboardHeight = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+        directoryTableView.contentInset.bottom = keyboardHeight.height
+        directoryTableView.verticalScrollIndicatorInsets.bottom = keyboardHeight.height
+    }
+
+    @objc private func keyboardWillHide() {
+        directoryTableView.verticalScrollIndicatorInsets.bottom = 0
+        directoryTableView.contentInset.bottom = 0
     }
 }

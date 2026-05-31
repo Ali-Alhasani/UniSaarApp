@@ -29,6 +29,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
     }
 
     override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         dismissNFC()
     }
 

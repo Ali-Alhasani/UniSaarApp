@@ -8,22 +8,19 @@
 
 import Foundation
 import CoreData
-import NotificationCenter
 import UserNotifications
+import Observation
 
+@Observable
 class FilterMensaViewModel: ParentViewModel {
-    @Published var didUpdatefilterList: Bool = false
-    @Published var didUpdateFoodAlarmStatus: Bool = false
-    @Published var selectedAlramTime: Date? = nil {
-        didSet {
-            AppSessionManager.shared.foodAlarmTime = selectedAlramTime
-        }
+    var didUpdatefilterList: Bool = false
+    var didUpdateFoodAlarmStatus: Bool = false
+    var selectedAlramTime: Date? {
+        didSet { AppSessionManager.shared.foodAlarmTime = selectedAlramTime }
     }
     var isFilterdCacheUpdated: Bool = false
     var isFoodAlarmEnabled: Bool = false {
-        didSet {
-            AppSessionManager.shared.isFoodAlarmEnabled = isFoodAlarmEnabled
-        }
+        didSet { AppSessionManager.shared.isFoodAlarmEnabled = isFoodAlarmEnabled }
     }
     var tmpSelectedAlramTime: Date?
 
@@ -40,7 +37,7 @@ class FilterMensaViewModel: ParentViewModel {
     var mensaLocation = AppSessionManager.shared.selectedMensaLocation
     var selectedNotices = [FilterElement]()
 
-    func loadGetFilterList() {
+    func loadGetFilterList() async {
         showLoadingIndicator = true
         loadFoodAlarmStatus()
         if isFilterdCacheUpdated {
@@ -49,33 +46,30 @@ class FilterMensaViewModel: ParentViewModel {
             }
             showLoadingIndicator = false
             didUpdatefilterList = true
-        } else {
-            Task { [weak self] in
-                guard let self else { return }
-                do {
-                    let list = try await dataClient.getMensaFilter()
-                    showLoadingIndicator = false
-                    let viewModelList = FilterLocationCellViewModel(mensaFilterModel: list)
-                    viewModelList.noticesText = getOldSelectedNotices(newViewModel: viewModelList)
-                    dataClient.clearFilterCache()
-                    dataClient.saveInCoreDataWith(model: viewModelList)
-                    isFilterdCacheUpdated = true
-                    Cache.shared.fetchMensaFilterFromStorage()
-                    didUpdatefilterList = true
-                    AppSessionManager.shared.isMensaFiltersCacheFetched = true
-                } catch {
-                    showLoadingIndicator = false
-                    didUpdatefilterList = false
-                    showError(error: error, tryAgainHandler: { [weak self] in
-                        self?.reloadGetApi()
-                    })
-                }
-            }
+            return
+        }
+        do {
+            let list = try await dataClient.getMensaFilter()
+            showLoadingIndicator = false
+            let viewModelList = FilterLocationCellViewModel(mensaFilterModel: list)
+            viewModelList.noticesText = getOldSelectedNotices(newViewModel: viewModelList)
+            dataClient.clearFilterCache()
+            dataClient.saveInCoreDataWith(model: viewModelList)
+            isFilterdCacheUpdated = true
+            Cache.shared.fetchMensaFilterFromStorage()
+            didUpdatefilterList = true
+            AppSessionManager.shared.isMensaFiltersCacheFetched = true
+        } catch {
+            showLoadingIndicator = false
+            didUpdatefilterList = false
+            showError(error: error, tryAgainHandler: { [weak self] in
+                self?.reloadGetApi()
+            })
         }
     }
 
     func reloadGetApi() {
-        loadGetFilterList()
+        Task { await self.loadGetFilterList() }
     }
 
     func filterList(for fliter: Filter) -> [FilterElement] {

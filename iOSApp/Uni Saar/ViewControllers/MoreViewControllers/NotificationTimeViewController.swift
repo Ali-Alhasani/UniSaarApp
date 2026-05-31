@@ -7,10 +7,12 @@
 //
 
 import UIKit
+@MainActor
 protocol NotificationTimeDelegate: AnyObject {
     func selectedTime(time: Date)
     func tmpSelectedTime(time: Date)
 }
+@MainActor
 class NotificationTimeViewController: UIViewController {
     @IBOutlet weak var timerPicker: UIDatePicker!
     var selectedTime: Date?

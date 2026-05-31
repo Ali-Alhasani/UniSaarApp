@@ -7,13 +7,14 @@
 //
 
 import Foundation
-import Combine
+import Observation
 
 @MainActor
-class ParentViewModel: ObservableObject {
-    var dataClient: DataClient
-    @Published var showLoadingIndicator: Bool = true
-    @Published var currentAlert: SingleButtonAlert?
+@Observable
+class ParentViewModel {
+    @ObservationIgnored var dataClient: DataClient
+    var showLoadingIndicator: Bool = false
+    var currentAlert: SingleButtonAlert?
 
     init(dataClient: DataClient = DataClient()) {
         self.dataClient = dataClient

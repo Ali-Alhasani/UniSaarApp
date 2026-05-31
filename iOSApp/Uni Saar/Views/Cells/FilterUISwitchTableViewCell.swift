@@ -7,16 +7,13 @@
 //
 
 import UIKit
+@MainActor
 protocol FilterCellDelegate: AnyObject {
     func didSwitchOnFilter(indexPath: IndexPath?)
     func didSwitchOffFilter(indexPath: IndexPath?)
 }
-protocol NewsFilterViewCellDelegate: FilterCellDelegate {
-
-}
-protocol MensaFilterCellDelegate: FilterCellDelegate {
-
-}
+protocol NewsFilterViewCellDelegate: FilterCellDelegate {}
+protocol MensaFilterCellDelegate: FilterCellDelegate {}
 class FilterUISwitchTableViewCell: UITableViewCell {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var valueSwitch: UISwitch!

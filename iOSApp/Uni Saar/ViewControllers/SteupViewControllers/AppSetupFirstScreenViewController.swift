@@ -8,6 +8,7 @@
 
 import UIKit
 
+@MainActor
 class AppSetupFirstScreenViewController: UIViewController {
 
     @IBOutlet weak var saarbrukenButton: ButtonWithCheckedImageText!
@@ -77,9 +78,8 @@ class AppSetupFirstScreenViewController: UIViewController {
     }
 
     func cacheCampusCoorFile() {
-        DispatchQueue.global(qos: .utility).async {
+        Task.detached(priority: .utility) {
             Data.copyFileFromBundleToDocumentsFolder(sourceFile: "Campus_Map_Coord.json")
-
         }
     }
     /*

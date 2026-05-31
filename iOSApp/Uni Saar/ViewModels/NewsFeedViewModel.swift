@@ -9,14 +9,16 @@
 import Foundation
 import UIKit
 import CoreData
+import Observation
 
+@Observable
 class NewsFeedViewModel: ParentViewModel {
-    @Published var newsCells: [TableViewCellType<NewsFeedCellViewModel>] = []
-    @Published var isFreshLoad: Bool = true
+    var newsCells: [TableViewCellType<NewsFeedCellViewModel>] = []
+    var isFreshLoad: Bool = false
     var apiPageNumber = 0
     let numberOfItemPerPage = 10
     var isFilterdCacheUpdated = false
-    lazy var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
+    @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(FilterNoticesListCache.isSelected), ascending: false)]
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
@@ -28,39 +30,36 @@ class NewsFeedViewModel: ParentViewModel {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetNews(_ isFirstTime: Bool = true, filterCatgroies: [Int]) {
+    func loadGetNews(_ isFirstTime: Bool = true, filterCatgroies: [Int]) async {
         showLoadingIndicator = true
         var filterCatgroies = filterCatgroies
         if filterCatgroies.count == 0 {
             fetchNewsFilterFromStorage()
             filterCatgroies = fetchedResultsController.fetchedObjects?.filter {!$0.isSelected}.compactMap {Int($0.categoryID)} ?? []
         }
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let news = try await dataClient.getNews(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, filter: filterCatgroies)
-                showLoadingIndicator = false
-                if isFirstTime {
-                    guard news.newsItemCount > 0 else {
-                        newsCells = [.empty]
-                        return
-                    }
-                    isFilterdCacheUpdated = true
-                    if AppSessionManager.shared.newsFiltersLastChanged != news.categoriesLastChanged {
-                        AppSessionManager.shared.newsFiltersLastChanged = news.categoriesLastChanged
-                        isFilterdCacheUpdated = false
-                    }
-                    newsCells = news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
-                    isFreshLoad = true
-                } else {
-                    newsCells.append(contentsOf: news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) })
+        do {
+            let news = try await dataClient.getNews(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, filter: filterCatgroies)
+            showLoadingIndicator = false
+            if isFirstTime {
+                guard news.newsItemCount > 0 else {
+                    newsCells = [.empty]
+                    return
                 }
-                apiPageNumber += 1
-            } catch {
-                showLoadingIndicator = false
-                newsCells = [.error(message: error.localizedDescription)]
-                showError(error: error)
+                isFilterdCacheUpdated = true
+                if AppSessionManager.shared.newsFiltersLastChanged != news.categoriesLastChanged {
+                    AppSessionManager.shared.newsFiltersLastChanged = news.categoriesLastChanged
+                    isFilterdCacheUpdated = false
+                }
+                newsCells = news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+                isFreshLoad = true
+            } else {
+                newsCells.append(contentsOf: news.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) })
             }
+            apiPageNumber += 1
+        } catch {
+            showLoadingIndicator = false
+            newsCells = [.error(message: error.localizedDescription)]
+            showError(error: error)
         }
     }
 

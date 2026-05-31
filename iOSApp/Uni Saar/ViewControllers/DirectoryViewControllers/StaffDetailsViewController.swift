@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 class StaffDetailsViewController: UIViewController {
     @IBOutlet weak var staffTitleLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
@@ -20,23 +21,23 @@ class StaffDetailsViewController: UIViewController {
     @IBOutlet weak var navigateButton: UIButton!
     var staffId: Int?
     var staff = StaffDetailsViewModel()
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigateButton.isHidden = true
-        bindViewModel()
+        if let staffID = staffId {
+            showLoadingActivity()
+            Task { [weak self] in await self?.staff.loadGetStaffDetails(staffId: staffID) }
+        }
+        startObserving()
     }
 
-    func bindViewModel() {
-        if staffId != nil {
-            showLoadingActivity()
-        }
-
-        staff.$staffDetails
-            .dropFirst()
-            .sink { [weak self] staffInfo in
-                guard let self else { return }
+    private func startObserving() {
+        withObservationTracking {
+            let staffInfo = staff.staffDetails
+            _ = staff.currentAlert
+            staff.showLoadingIndicator ? showLoadingActivity() : hideLoadingActivity()
+            if staffInfo.staffDetailsModel != nil {
                 staffTitleLabel.text = staffInfo.titleText
                 nameLabel.text = staffInfo.fullName
                 if let email = staffInfo.email {
@@ -55,28 +56,16 @@ class StaffDetailsViewController: UIViewController {
                     imageView.af.setImage(withURL: imageURL)
                 }
             }
-            .store(in: &cancellables)
-
-        staff.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        if let staffID = staffId {
-            staff.loadGetStaffDetails(staffId: staffID)
-        }
-
-        staff.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                visible ? showLoadingActivity() : hideLoadingActivity()
+                if let alert = staff.currentAlert {
+                    staff.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                startObserving()
             }
-            .store(in: &cancellables)
+        }
     }
 
     // MARK: - Navigation

@@ -7,13 +7,15 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 protocol FilterNewsFeedViewDelegate: AnyObject {
     func didSelectFilterAll()
     func didSelectCustomFiltering(newsCatgroies: [Int])
 }
 
+@MainActor
 class FilterNewsFeedViewController: UIViewController {
     @IBOutlet weak var filterTableView: UITableView! {
         didSet {
@@ -24,13 +26,12 @@ class FilterNewsFeedViewController: UIViewController {
     }
     lazy var filterNewsViewModel: FilterNewsViewModel = FilterNewsViewModel()
     weak var delegate: FilterNewsFeedViewDelegate?
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        bindViewModel()
-        filterNewsViewModel.loadGetFilterList()
+        startObserving()
+        Task { [weak self] in await self?.filterNewsViewModel.loadGetFilterList() }
     }
 
     func setupTableView() {
@@ -43,31 +44,26 @@ class FilterNewsFeedViewController: UIViewController {
         view.backgroundColor = UIColor.flatGray
     }
 
-    func bindViewModel() {
-        filterNewsViewModel.$didUpdatefilterList
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.relaodTableView()
-            }
-            .store(in: &cancellables)
-
-        filterNewsViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        filterNewsViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
+    private func startObserving() {
+        withObservationTracking {
+            _ = filterNewsViewModel.didUpdatefilterList
+            _ = filterNewsViewModel.showLoadingIndicator
+            _ = filterNewsViewModel.currentAlert
+            filterNewsViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                visible ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
+                if filterNewsViewModel.didUpdatefilterList {
+                    filterNewsViewModel.didUpdatefilterList = false
+                    relaodTableView()
+                }
+                if let alert = filterNewsViewModel.currentAlert {
+                    filterNewsViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                startObserving()
             }
-            .store(in: &cancellables)
+        }
     }
 
     func relaodTableView() {
@@ -76,7 +72,7 @@ class FilterNewsFeedViewController: UIViewController {
 
     @objc private func refershLoad() {
         filterNewsViewModel.isFilterdCacheUpdated = false
-        filterNewsViewModel.loadGetFilterList()
+        Task { [weak self] in await self?.filterNewsViewModel.loadGetFilterList() }
     }
 
     @IBAction func doneButtonAction(_ sender: Any) {

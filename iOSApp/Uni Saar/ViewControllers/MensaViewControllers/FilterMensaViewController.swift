@@ -8,14 +8,16 @@
 
 import UIKit
 import CoreData
-import Combine
+import Observation
 
+@MainActor
 protocol FilterMensaViewDelegate: AnyObject {
     func didChangeLocationFilter()
     func didUpdateNoticesFilter()
     func didUpdateNoticesData()
 }
 
+@MainActor
 class FilterMensaViewController: UIViewController {
     @IBOutlet weak var filterTableView: UITableView! {
         didSet {
@@ -26,7 +28,6 @@ class FilterMensaViewController: UIViewController {
     }
     lazy var filterMensaViewModel: FilterMensaViewModel = FilterMensaViewModel()
     weak var delegate: FilterMensaViewDelegate?
-    private var cancellables = Set<AnyCancellable>()
 
     private func filterForSectionIndex(_ index: Int) -> FilterMensaViewModel.Filter? {
         return FilterMensaViewModel.Filter(rawValue: index)
@@ -35,8 +36,9 @@ class FilterMensaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        bindViewModel()
-        filterMensaViewModel.loadGetFilterList()
+        observeFilterList()
+        observeAlarmSection()
+        Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -54,53 +56,43 @@ class FilterMensaViewController: UIViewController {
         view.backgroundColor = UIColor.flatGray
     }
 
-    func bindViewModel() {
-        AppSessionManager.loadFoodAlarmTime()
-
-        filterMensaViewModel.$didUpdatefilterList
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.realodTableView()
-            }
-            .store(in: &cancellables)
-
-        filterMensaViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        filterMensaViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
+    private func observeFilterList() {
+        withObservationTracking {
+            _ = filterMensaViewModel.didUpdatefilterList
+            _ = filterMensaViewModel.showLoadingIndicator
+            _ = filterMensaViewModel.currentAlert
+            filterMensaViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                visible ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
-            }
-            .store(in: &cancellables)
-
-        filterMensaViewModel.$didUpdateFoodAlarmStatus
-            .dropFirst()
-            .sink { [weak self] updated in
-                guard let self else { return }
-                if updated {
-                    updateTableView()
-                } else {
-                    reloadFoodAlramSection()
+                if filterMensaViewModel.didUpdatefilterList {
+                    filterMensaViewModel.didUpdatefilterList = false
+                    realodTableView()
                 }
+                if let alert = filterMensaViewModel.currentAlert {
+                    filterMensaViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                observeFilterList()
             }
-            .store(in: &cancellables)
+        }
+    }
 
-        filterMensaViewModel.$selectedAlramTime
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.reloadFoodAlramSection()
+    private func observeAlarmSection() {
+        withObservationTracking {
+            _ = filterMensaViewModel.selectedAlramTime
+            _ = filterMensaViewModel.didUpdateFoodAlarmStatus
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                if filterMensaViewModel.didUpdateFoodAlarmStatus {
+                    filterMensaViewModel.didUpdateFoodAlarmStatus = false
+                    updateTableView()
+                }
+                reloadFoodAlramSection()
+                observeAlarmSection()
             }
-            .store(in: &cancellables)
+        }
     }
 
     func realodTableView() {
@@ -113,7 +105,7 @@ class FilterMensaViewController: UIViewController {
 
     @objc private func refershLoad() {
         filterMensaViewModel.isFilterdCacheUpdated = false
-        filterMensaViewModel.loadGetFilterList()
+        Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
     }
 
     @IBAction func doneButtonAction(_ sender: Any) {
@@ -225,6 +217,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
         let alramCell = tableView.dequeueReusableCell(withIdentifier: NewMensaNotificationTableViewCell.identifier, for: indexPath) as? NewMensaNotificationTableViewCell
         alramCell?.notificationSelectedTime = filterMensaViewModel.selectedAlramTime
         alramCell?.delegate = self
+        alramCell?.clipsToBounds = true
         return alramCell ?? cell
     }
 
@@ -286,7 +279,10 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         if indexPath.section == 1 && indexPath.row == 1 && filterMensaViewModel.isFoodAlarmEnabled == false {
-            return 0.0
+            // Returning exactly 0.0 makes UIKit add a hard height==0 constraint that conflicts
+            // with UIDatePicker's internal constraints. leastNormalMagnitude collapses the row
+            // visually without triggering that constraint.
+            return CGFloat.leastNormalMagnitude
         }
         return getDefultHieght(indexPath, tableview: tableView)
     }

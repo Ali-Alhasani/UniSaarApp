@@ -1,5 +1,5 @@
 //
-//  PublisherTests.swift
+//  ObservableTest.swift
 //  UniSaarTests
 //
 //  Created by Ali Al-Hasani on 1/27/20.
@@ -7,49 +7,38 @@
 //
 
 import XCTest
-import Combine
 @testable import Uni_Saar
 
 @MainActor
-class PublisherTests: XCTestCase {
-    private var cancellables = Set<AnyCancellable>()
+final class ObservationTests: XCTestCase {
 
-    override func tearDown() {
-        cancellables.removeAll()
-        super.tearDown()
-    }
-
-    func testCurrentAlertPublishesOnError() {
+    // showError is synchronous — no async needed
+    func testCurrentAlertSetOnError() {
         let viewModel = NewsFeedViewModel()
-        let exp = expectation(description: "currentAlert fires on Error")
-
-        viewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .sink { alert in
-                XCTAssertNotNil(alert.message)
-                exp.fulfill()
-            }
-            .store(in: &cancellables)
-
         viewModel.showError(error: MyError.customError)
-        waitForExpectations(timeout: 1.0)
+        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(viewModel.currentAlert?.message)
     }
 
-    func testCurrentAlertPublishesOnLLError() {
+    func testCurrentAlertSetOnLLError() {
         let viewModel = NewsFeedViewModel()
-        let exp = expectation(description: "currentAlert fires on LLError")
-
-        viewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .sink { alert in
-                XCTAssertNotNil(alert.message)
-                exp.fulfill()
-            }
-            .store(in: &cancellables)
-
         viewModel.showError(error: LLError(status: false, message: "test error"))
-        waitForExpectations(timeout: 1.0)
+        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(viewModel.currentAlert?.message)
+    }
+
+    // Verifies that MockAppDataClient is properly injected and drives ViewModel state
+    func testMockInjectionDeliversData() async {
+        let dataClient = MockAppDataClient()
+        dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
+        let viewModel = NewsFeedViewModel(dataClient: dataClient)
+        XCTAssertTrue(viewModel.newsCells.isEmpty)
+        await viewModel.loadGetNews(filterCatgroies: [])
+        XCTAssertFalse(viewModel.newsCells.isEmpty)
+        guard case .normal(let cell) = viewModel.newsCells.first else {
+            XCTFail("Expected normal cell from mock")
+            return
+        }
+        XCTAssertEqual(NewsFeedModel.newsDemoData.newsList.first?.title, cell.titleText)
     }
 }

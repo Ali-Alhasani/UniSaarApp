@@ -8,6 +8,7 @@
 
 import UIKit
 // this class is not used!
+@MainActor
 class SetupPrivacyViewController: UIViewController {
 
     override func viewDidLoad() {

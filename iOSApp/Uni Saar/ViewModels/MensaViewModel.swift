@@ -8,46 +8,45 @@
 
 import Foundation
 import UIKit
+import Observation
 
+@Observable
 class MensaMenuViewModel: ParentViewModel {
-    @Published var daysMenus: [TableViewCellType<MensaDayMenuViewModel>] = []
+    var daysMenus: [TableViewCellType<MensaDayMenuViewModel>] = []
     var isFilterdCacheUpdated = false
 
     override init(dataClient: DataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetMensaMenu() {
+    func loadGetMensaMenu() async {
         showLoadingIndicator = true
         Cache.shared.fetchMensaFilterFromStorage()
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let menus = try await dataClient.getMensaMenu()
-                guard menus.daysMenus.count > 0 else {
-                    daysMenus = [.empty]
-                    return
-                }
-                if AppSessionManager.shared.mensafiltersLastChanged != menus.filtersLastChanged {
-                    AppSessionManager.shared.mensafiltersLastChanged = menus.filtersLastChanged
-                    isFilterdCacheUpdated = false
-                } else {
-                    AppSessionManager.shared.isMensaFiltersCacheFetched = true
-                }
-                daysMenus = menus.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
-                showLoadingIndicator = false
-            } catch {
-                showLoadingIndicator = false
-                daysMenus = [.error(message: error.localizedDescription)]
-                showError(error: error, tryAgainHandler: { [weak self] in
-                    self?.realodGetApi()
-                })
+        do {
+            let menus = try await dataClient.getMensaMenu()
+            guard menus.daysMenus.count > 0 else {
+                daysMenus = [.empty]
+                return
             }
+            if AppSessionManager.shared.mensafiltersLastChanged != menus.filtersLastChanged {
+                AppSessionManager.shared.mensafiltersLastChanged = menus.filtersLastChanged
+                isFilterdCacheUpdated = false
+            } else {
+                AppSessionManager.shared.isMensaFiltersCacheFetched = true
+            }
+            daysMenus = menus.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
+            showLoadingIndicator = false
+        } catch {
+            showLoadingIndicator = false
+            daysMenus = [.error(message: error.localizedDescription)]
+            showError(error: error, tryAgainHandler: { [weak self] in
+                self?.realodGetApi()
+            })
         }
     }
 
     func realodGetApi() {
-        loadGetMensaMenu()
+        Task { await self.loadGetMensaMenu() }
     }
 
     func loadGetMockMenu() {
@@ -59,10 +58,10 @@ class MensaMenuViewModel: ParentViewModel {
         switch firstMenuDay {
         case .normal(let viewModel):
             if viewModel.dateValue != getDateFormater(date: Date()) {
-                loadGetMensaMenu()
+                Task { await self.loadGetMensaMenu() }
             }
         default:
-            loadGetMensaMenu()
+            Task { await self.loadGetMensaMenu() }
         }
     }
 

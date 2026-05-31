@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import Combine
+import Observation
 
+@MainActor
 class HelpfulContactsViewController: UIViewController {
     @IBOutlet weak var directoryTableView: UITableView! {
         didSet {
@@ -18,12 +19,11 @@ class HelpfulContactsViewController: UIViewController {
         }
     }
     lazy var directoryViewModel: DirectoryViewModel = DirectoryViewModel()
-    private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        bindViewModel()
+        startObserving()
         refershLoad()
     }
 
@@ -35,35 +35,26 @@ class HelpfulContactsViewController: UIViewController {
         directoryTableView.layoutTableView(withOutSeparator: false)
     }
 
-    func bindViewModel() {
-        directoryViewModel.$helpfulNumbersCells
-            .dropFirst()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.directoryTableView.reloadData()
-            }
-            .store(in: &cancellables)
-
-        directoryViewModel.$currentAlert
-            .dropFirst()
-            .compactMap { $0 }
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] alert in
-                self?.presentSingleButtonDialog(alert: alert)
-            }
-            .store(in: &cancellables)
-
-        directoryViewModel.$showLoadingIndicator
-            .dropFirst()
-            .sink { [weak self] visible in
+    private func startObserving() {
+        withObservationTracking {
+            _ = directoryViewModel.helpfulNumbersCells
+            _ = directoryViewModel.currentAlert
+            directoryTableView.reloadData()
+            directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
                 guard let self else { return }
-                visible ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+                if let alert = directoryViewModel.currentAlert {
+                    directoryViewModel.currentAlert = nil
+                    presentSingleButtonDialog(alert: alert)
+                }
+                startObserving()
             }
-            .store(in: &cancellables)
+        }
     }
 
     @objc private func refershLoad() {
-        directoryViewModel.loadGetHelpHelpfulNumbers()
+        Task { [weak self] in await self?.directoryViewModel.loadGetHelpHelpfulNumbers() }
     }
 }
 
