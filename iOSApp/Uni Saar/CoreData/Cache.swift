@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 
+@MainActor
 class Cache {
 
     lazy var fetchedResultsController: NSFetchedResultsController<FilterNoticesListCache> = {
@@ -27,12 +28,7 @@ class Cache {
         return frc
     }()
 
-    class var shared: Cache {
-        struct Static {
-            static let instance = Cache()
-        }
-        return Static.instance
-    }
+    static let shared = Cache()
     func fetchMensaFilterFromStorage() {
         do {
             try fetchedResultsController.performFetch()

@@ -19,6 +19,7 @@ public struct FilterCacheKeys {
     //support adding more entities
 }
 
+@MainActor
 class CoreDataStack: NSObject {
 
     static let sharedInstance = CoreDataStack()
