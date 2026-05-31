@@ -18,10 +18,9 @@ class MensaMenuTableViewCell: UITableViewCell {
     @IBOutlet weak var noticesLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         setUpLayout()
     }
-    func setUpLayout() {
+    @MainActor func setUpLayout() {
         outerView.setAsCircle(cornerRadius: 5)
         colorView.layer.cornerRadius = 5
         colorView.backgroundColor = .systemRed

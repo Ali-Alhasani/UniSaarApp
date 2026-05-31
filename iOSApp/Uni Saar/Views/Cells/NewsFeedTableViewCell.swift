@@ -16,7 +16,6 @@ class NewsFeedTableViewCell: UITableViewCell {
     @IBOutlet weak var outerView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         outerView.setAsCircle(cornerRadius: 4)
         outerView.setAllSideShadow(shadowOpacity: 0.8)
     }

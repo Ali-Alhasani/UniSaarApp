@@ -24,10 +24,9 @@ class MensaCollectionViewCell: UICollectionViewCell {
     weak var delegate: MensaCollectionViewCellDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
         setupTableView()
     }
-    func setupTableView() {
+    @MainActor func setupTableView() {
         mensaTable.register(MensaMenuTableViewCell.nib, forCellReuseIdentifier: MensaMenuTableViewCell.identifier)
         mensaTable.register(MensaDateHeaderSectionTableViewCell.nib, forHeaderFooterViewReuseIdentifier: MensaDateHeaderSectionTableViewCell.identifier)
         mensaTable.delegate = self

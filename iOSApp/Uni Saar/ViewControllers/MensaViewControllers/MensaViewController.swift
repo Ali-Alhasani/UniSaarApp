@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Observation
 
 @MainActor
 class MensaViewController: UIViewController {
@@ -20,13 +19,33 @@ class MensaViewController: UIViewController {
         }
     }
     lazy var mensaMenuViewModel: MensaMenuViewModel = MensaMenuViewModel()
-    private var didLoadInitialContent = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        startObserving()
         load()
+    }
+
+    override func updateProperties() {
+        super.updateProperties()
+        updateUI()
+    }
+
+    private func updateUI() {
+        mensaMenuViewModel.showLoadingIndicator ? mensaCollectionView.showingLoadingView() : mensaCollectionView.hideLoadingView()
+        if let alert = mensaMenuViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                mensaMenuViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
+        mensaCollectionView.reloadData()
+        pageControl.numberOfPages = mensaMenuViewModel.daysMenus.count
+        if UIDevice.current.userInterfaceIdiom == .pad && !mensaMenuViewModel.daysMenus.isEmpty
+            && mensaCollectionView.indexPathsForSelectedItems?.isEmpty != false {
+            initialSelection()
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -50,29 +69,6 @@ class MensaViewController: UIViewController {
         mensaCollectionView.dataSource = self
         pageControl.hidesForSinglePage = true
         mensaCollectionView.layoutCollectionView()
-    }
-
-    private func startObserving() {
-        withObservationTracking {
-            _ = mensaMenuViewModel.daysMenus
-            _ = mensaMenuViewModel.currentAlert
-            mensaCollectionView.reloadData()
-            pageControl.numberOfPages = mensaMenuViewModel.daysMenus.count
-            mensaMenuViewModel.showLoadingIndicator ? mensaCollectionView.showingLoadingView() : mensaCollectionView.hideLoadingView()
-            if !didLoadInitialContent && !mensaMenuViewModel.daysMenus.isEmpty {
-                didLoadInitialContent = true
-                initialSelection()
-            }
-        } onChange: { [weak self] in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                if let alert = mensaMenuViewModel.currentAlert {
-                    mensaMenuViewModel.currentAlert = nil
-                    presentSingleButtonDialog(alert: alert)
-                }
-                startObserving()
-            }
-        }
     }
 
     func isMenuUpdated() {
