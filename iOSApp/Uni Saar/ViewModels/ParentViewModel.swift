@@ -12,11 +12,11 @@ import Observation
 @MainActor
 @Observable
 class ParentViewModel {
-    @ObservationIgnored var dataClient: DataClient
+    @ObservationIgnored var dataClient: any AppDataClient
     var showLoadingIndicator: Bool = false
     var currentAlert: SingleButtonAlert?
 
-    init(dataClient: DataClient = DataClient()) {
+    init(dataClient: any AppDataClient = DataClient()) {
         self.dataClient = dataClient
     }
 

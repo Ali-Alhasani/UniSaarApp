@@ -8,19 +8,23 @@
 
 import Foundation
 import SwiftyJSON
-class MensaFilterModel {
-    var locations = [Locations]()
-    var notices = [Notices]()
+
+final class MensaFilterModel: Sendable {
+    let locations: [Locations]
+    let notices: [Notices]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.locations = jsonFromated["locations"].arrayValue.map {Locations(json: $0.dictionaryValue)}
         self.notices = jsonFromated["notices"].arrayValue.map {Notices(json: $0.dictionaryValue)}
     }
-    init() {}
+    init() {
+        locations = []
+        notices = []
+    }
 }
-class Locations {
-    var locationID: String
-    var name: String
+final class Locations: Sendable {
+    let locationID: String
+    let name: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.locationID = jsonFromated["locationID"].stringValue
@@ -31,11 +35,11 @@ class Locations {
         self.name = name
     }
 }
-class Notices {
-    var noticeID: String
-    var name: String
-    var isAllergen: Bool
-    var isNegated: Bool
+final class Notices: Sendable {
+    let noticeID: String
+    let name: String
+    let isAllergen: Bool
+    let isNegated: Bool
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.noticeID = jsonFromated["noticeID"].stringValue

@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+
 public func dataFromFile(_ filename: String) -> Data? {
     let bundle = Bundle(for: CampusCoordinatesModel.self)
     if let path = bundle.path(forResource: filename, ofType: "json") {
@@ -15,9 +16,10 @@ public func dataFromFile(_ filename: String) -> Data? {
     }
     return nil
 }
-class CampusCoordinatesModel {
-    var mapInfo = [MapInfoModel]()
-    var updateTime: String
+
+final class CampusCoordinatesModel {
+    let mapInfo: [MapInfoModel]
+    let updateTime: String
     init(data: Data) {
         do {
             let json = try JSON(data: data)
@@ -26,6 +28,7 @@ class CampusCoordinatesModel {
             mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue)}
         } catch {
             updateTime = ""
+            mapInfo = []
         }
     }
 
@@ -36,21 +39,21 @@ class CampusCoordinatesModel {
     }
 }
 
-class CoordinatesCacheModel {
-    var mapInfo: JSON
-    var updateTime: String
+final class CoordinatesCacheModel {
+    let mapInfo: JSON
+    let updateTime: String
     init(json: JSON) {
         mapInfo = json
         updateTime = json["updateTime"].stringValue
     }
 }
 
-class MapInfoModel {
-    var campus: Campus?
-    var name: String
-    var function: String
-    var longitude: String
-    var latitude: String
+final class MapInfoModel {
+    let campus: Campus?
+    let name: String
+    let function: String
+    let longitude: String
+    let latitude: String
     init(json: [String: Any]) {
         let formattedJson = JSON(json)
         name = formattedJson["name"].stringValue
@@ -62,6 +65,8 @@ class MapInfoModel {
             campus = Campus.saarbruken
         } else if campusString == "hom" {
             campus = Campus.homburg
+        } else {
+            campus = nil
         }
     }
 }

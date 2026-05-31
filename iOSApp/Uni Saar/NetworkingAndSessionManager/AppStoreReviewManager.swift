@@ -14,6 +14,7 @@ enum AppStoreReviewManager {
     static let minimumReviewWorthyActionCount = 5
     static let appVersion = "2.1"
 
+    @MainActor
     static func requestReviewIfAppropriate(presentedView: UIViewController) {
 
         let defaults = UserDefaults.standard
@@ -61,6 +62,7 @@ enum AppStoreReviewManager {
 
     }
 
+    @MainActor
     static func ratingDialogHandler(_ succesHandler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(title: NSLocalizedString("RateTitle", comment: ""), message: NSLocalizedString("EnjoyingAPP", comment: ""), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("RateYesActionTitle", comment: ""), style: .default, handler: succesHandler))

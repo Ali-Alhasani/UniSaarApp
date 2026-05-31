@@ -8,7 +8,7 @@
 
 import UIKit
 
-private var loadingOverlayKey: UInt8 = 0
+private nonisolated(unsafe) var loadingOverlayKey: UInt8 = 0
 
 extension UIViewController {
 

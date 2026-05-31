@@ -26,7 +26,7 @@ class DirectoryViewModel: ParentViewModel {
     let numberOfItemPerPage = UIDevice.current.userInterfaceIdiom == .pad ? 16 : 10
     var hasNextPage = false
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
@@ -69,7 +69,7 @@ class DirectoryViewModel: ParentViewModel {
             showLoadingIndicator = false
         }
         do {
-            let list = try await dataClient.getDirectoryHelpfulNumbers()
+            let list = try await dataClient.getDirectoryHelpfulNumbers(cacheLastChanged: AppSessionManager.shared.helpfulNumbersLastChanged)
             if list.numbers.count > 0 {
                 helpfulNumbersCells = list.numbers.map { .normal(cellViewModel: $0) }
                 AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged

@@ -8,20 +8,21 @@
 
 import Foundation
 import SwiftyJSON
-class HelpfulNumbersModel {
-    var numbersLastChanged: String
-    var numbers: [NumberModel]
+
+final class HelpfulNumbersModel: Sendable {
+    let numbersLastChanged: String
+    let numbers: [NumberModel]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         numbersLastChanged = jsonFromated["numbersLastChanged"].stringValue
         numbers = jsonFromated["numbers"].arrayValue.map {NumberModel(json: $0)}
     }
 }
-class NumberModel {
-    var name: String?
-    var number: String?
-    var link: String?
-    var mail: String?
+final class NumberModel: Sendable {
+    let name: String?
+    let number: String?
+    let link: String?
+    let mail: String?
     init(json: JSON) {
         name = json["name"].string
         number = json["number"].string
@@ -30,7 +31,7 @@ class NumberModel {
     }
 }
 extension NumberModel {
-    static let deomJSON: [String: Any] = ["name": "Student office", "number": "0681 302-5491", "link":
+    nonisolated(unsafe) static let deomJSON: [String: Any] = ["name": "Student office", "number": "0681 302-5491", "link":
         "https://www.uni-saarland.de/studium/beratung/studierendensekretariat.html", "mail": "anmeldung@univw.uni-saarland.de"]
 }
 extension HelpfulNumbersModel {

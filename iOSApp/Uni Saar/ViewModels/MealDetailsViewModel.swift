@@ -15,7 +15,7 @@ class MealDetailsViewModel: ParentViewModel {
     var mealDetails: MealViewModel = MealViewModel()
     var noticesText: [FilterNoticesListCache]?
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
@@ -23,8 +23,8 @@ class MealDetailsViewModel: ParentViewModel {
         showLoadingIndicator = true
         do {
             let meal = try await dataClient.getMealDetails(mealId: mealId)
-            mealDetails = MealViewModel(meal, noticesText: noticesText)
             showLoadingIndicator = false
+            mealDetails = MealViewModel(meal, noticesText: noticesText)
         } catch {
             showLoadingIndicator = false
             showError(error: error)

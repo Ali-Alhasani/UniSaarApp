@@ -26,6 +26,7 @@ class MealDetailsViewController: UIViewController {
         self.title = mealItemViewModel?.counterDisplayName
         colorView.setAsCircle(cornerRadius: colorView.frame.height/2)
         colorView.backgroundColor = mealItemViewModel?.counterColor
+                
         if let mealID = mealItemViewModel?.mensaMealsModel.mealID {
             meal.noticesText = mealItemViewModel?.noticesList
             showLoadingActivity()

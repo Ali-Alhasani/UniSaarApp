@@ -8,6 +8,7 @@
 
 import Foundation
 //todo later
+@MainActor
 class AppSessionManager {
     var dismissWelcomeScreen: Bool = false
     var selectedCampus: Campus = .saarbruken

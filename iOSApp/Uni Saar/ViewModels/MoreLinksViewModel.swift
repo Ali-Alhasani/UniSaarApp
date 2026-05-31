@@ -22,7 +22,7 @@ class MoreLinksViewModel: ParentViewModel {
     }()
     let extraCells = [NSLocalizedString("AboutApp", comment: ""), NSLocalizedString("AppSettings", comment: "")]
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
@@ -36,14 +36,14 @@ class MoreLinksViewModel: ParentViewModel {
             showLoadingIndicator = false
         }
         do {
-            let links = try await dataClient.getMoreLinks()
+            let links = try await dataClient.getMoreLinks(cacheLastChanged: AppSessionManager.shared.morelinksLastChanged)
+            showLoadingIndicator = false
             if links.links.count > 0 {
                 linksCells = links.links.map { .normal(cellViewModel: $0) }
                 AppSessionManager.shared.morelinksLastChanged = links.linksLastChanged
                 dataClient.clearMoreLinksCache()
                 dataClient.saveInCoreDataWith(model: links.links)
             }
-            showLoadingIndicator = false
         } catch {
             showLoadingIndicator = false
             if AppSessionManager.shared.morelinksLastChanged == "never" {

@@ -28,10 +28,10 @@ public struct AppStyle {
     static let title1Font = UIFont.preferredFont(forTextStyle: .title1)
     static let calloutFont = UIFont.preferredFont(forTextStyle: .callout)
     static let bodyFont = UIFont.preferredFont(forTextStyle: .body)
-    static let largeTitleAttributes: [NSAttributedString.Key: Any] = [.font: title1Font]
-    static let calloutAttributes: [NSAttributedString.Key: Any] = [.font: calloutFont]
-    static let redAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.systemRed]
-    static let regularAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.labelCustomColor]
+    nonisolated(unsafe) static let largeTitleAttributes: [NSAttributedString.Key: Any] = [.font: title1Font]
+    nonisolated(unsafe) static let calloutAttributes: [NSAttributedString.Key: Any] = [.font: calloutFont]
+    nonisolated(unsafe) static let redAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.systemRed]
+    nonisolated(unsafe) static let regularAttributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.labelCustomColor]
     static let square = "◼︎ "
     static let newLineSquare = "\n◼︎ "
     static let BULLET = "\n\t• "

@@ -15,7 +15,7 @@ class MensaMenuViewModel: ParentViewModel {
     var daysMenus: [TableViewCellType<MensaDayMenuViewModel>] = []
     var isFilterdCacheUpdated = false
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
@@ -23,7 +23,7 @@ class MensaMenuViewModel: ParentViewModel {
         showLoadingIndicator = true
         Cache.shared.fetchMensaFilterFromStorage()
         do {
-            let menus = try await dataClient.getMensaMenu()
+            let menus = try await dataClient.getMensaMenu(locationKey: AppSessionManager.shared.selectedMensaLocation.locationKey)
             guard menus.daysMenus.count > 0 else {
                 daysMenus = [.empty]
                 return
@@ -90,7 +90,7 @@ class MensaDayMenuViewModel {
     }
 }
 
-@objc public protocol MensaMenuViewModelView {
+@MainActor @objc public protocol MensaMenuViewModelView {
     @objc var counterLabel: UILabel? { get }
     @objc optional var mealDisplayNameLabel: UILabel? { get }
     @objc optional var hoursLabel: UILabel? { get }
@@ -99,6 +99,7 @@ class MensaDayMenuViewModel {
     @objc optional var counterColorView: UIView? { get}
 }
 
+@MainActor
 protocol MensaMealCellViewModel {
     var mensaMealsModel: MensaMealsModel { get }
     var counterDisplayName: String { get }
@@ -110,6 +111,7 @@ protocol MensaMealCellViewModel {
     var noticesList: [FilterNoticesListCache] { get }
 }
 
+@MainActor
 extension MensaMealsModel: MensaMealCellViewModel {
     var mensaMealsModel: MensaMealsModel {
         return self
@@ -129,10 +131,10 @@ extension MensaMealsModel: MensaMealCellViewModel {
     var mealsText: String {
         return meals.compactMap {$0}.joined(separator: "\n")
     }
-    var noticesList: [FilterNoticesListCache] {
+    @MainActor var noticesList: [FilterNoticesListCache] {
         return checkMealNotices()
     }
-    var noticesText: String {
+    @MainActor var noticesText: String {
         if noticesList.count > 0 {
             return AppStyle.warningTriangle + NSLocalizedString("contains", comment: "") + noticesList.compactMap {$0.name}.joined(separator: ", ")
         } else {
@@ -140,7 +142,7 @@ extension MensaMealsModel: MensaMealCellViewModel {
         }
     }
 
-    func checkMealNotices() -> [FilterNoticesListCache] {
+    @MainActor func checkMealNotices() -> [FilterNoticesListCache] {
         let selectedNotices = getSelectedNotices()
         if let selectedNotices = selectedNotices, selectedNotices.count > 0 {
             let intersectionNotices = selectedNotices.filter { (item) -> Bool in
@@ -152,7 +154,7 @@ extension MensaMealsModel: MensaMealCellViewModel {
         return []
     }
 
-    func getSelectedNotices() -> [FilterNoticesListCache]? {
+    @MainActor func getSelectedNotices() -> [FilterNoticesListCache]? {
         return Cache.shared.fetchedResultsController.fetchedObjects?.filter { $0.isSelected }
     }
 }

@@ -26,8 +26,9 @@ class FilterNewsViewModel: ParentViewModel {
         case location, allergenList
     }
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
+        fetchNewsFilterFromStorage()
     }
 
     func loadGetFilterList() async {

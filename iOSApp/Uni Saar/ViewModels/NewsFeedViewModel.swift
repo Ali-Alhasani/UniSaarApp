@@ -26,7 +26,7 @@ class NewsFeedViewModel: ParentViewModel {
         return frc
     }()
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
@@ -76,7 +76,7 @@ class NewsFeedViewModel: ParentViewModel {
     }
 }
 
-@objc public protocol NewsFeedViewModelView {
+@MainActor @objc public protocol NewsFeedViewModelView {
     @objc var titleLabel: UILabel? { get }
     @objc optional var subTitleLabel: UILabel? { get }
     @objc optional var dateLabel: UILabel? { get }
@@ -115,7 +115,7 @@ extension NewsModel: NewsFeedCellViewModel {
 }
 
 extension NewsFeedCellViewModel {
-    public func configure(_ view: NewsFeedViewModelView) {
+    @MainActor public func configure(_ view: NewsFeedViewModelView) {
         view.titleLabel?.text = titleText
         view.subTitleLabel??.text = subTitleText
         view.dateLabel??.text = newsHeader

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 protocol SingleButtonDialogPresenter {
     func presentSingleButtonDialog(alert: SingleButtonAlert)
 }

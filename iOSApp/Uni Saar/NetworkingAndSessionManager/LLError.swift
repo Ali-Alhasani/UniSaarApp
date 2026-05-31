@@ -9,9 +9,9 @@
 import Foundation
 import Alamofire
 //our own custom class error handler, to show more friendly error networking/server messages
-class LLError: NSObject, Error {
-    var status: Bool
-    var message: String
+final class LLError: NSObject, Error {
+    let status: Bool
+    let message: String
     init(status: Bool?, message: String) {
         self.status = status ?? true
         self.message = message

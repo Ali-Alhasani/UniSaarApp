@@ -21,13 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     func setupNavigationBarColor() {
         let appearance = UINavigationBarAppearance()
-        if #available(iOS 26, *) {
-            appearance.configureWithDefaultBackground()
-            appearance.backgroundColor = AppStyle.appNavgationMainColor.withAlphaComponent(0.95)
-        } else {
-            appearance.configureWithOpaqueBackground()
-            appearance.backgroundColor = AppStyle.appNavgationMainColor
-        }
+        appearance.configureWithDefaultBackground()
+        appearance.backgroundColor = AppStyle.appNavgationMainColor.withAlphaComponent(0.95)
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().standardAppearance = appearance
@@ -66,21 +61,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-          if let window = UIApplication.shared.connectedScenes
-              .compactMap({ $0 as? UIWindowScene })
-              .flatMap({ $0.windows })
-              .first(where: { $0.isKeyWindow }) {
-              MediatorDelegate.navigateToMensaScreen(window: window)
-          }
-          // you must call the completion handler when you're done
-          completionHandler()
-      }
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @Sendable @escaping () -> Void) {
+        Task { @MainActor in
+            if let window = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap({ $0.windows })
+                .first(where: { $0.isKeyWindow }) {
+                MediatorDelegate.navigateToMensaScreen(window: window)
+            }
+            completionHandler()
+        }
+    }
 
-      func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
-                                  withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-          NSLog("userNotificationCenter:willPresent")
-          //...
-          completionHandler([.banner, .list])
-      }
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
+                                            withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        NSLog("userNotificationCenter:willPresent")
+        completionHandler([.banner, .list])
+    }
 }

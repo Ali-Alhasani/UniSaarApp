@@ -8,9 +8,10 @@
 
 import Foundation
 import SwiftyJSON
-class MensaMenuModel {
-    var daysMenus: [MensaDayModel]
-    var filtersLastChanged: String
+
+final class MensaMenuModel: Sendable {
+    let daysMenus: [MensaDayModel]
+    let filtersLastChanged: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         let days = jsonFromated["days"].arrayValue
@@ -19,9 +20,9 @@ class MensaMenuModel {
     }
 }
 
-class MensaDayModel {
-    var date: String
-    var countersMeals: [MensaMealsModel]
+final class MensaDayModel: Sendable {
+    let date: String
+    let countersMeals: [MensaMealsModel]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.date = jsonFromated["date"].stringValue
@@ -30,15 +31,15 @@ class MensaDayModel {
     }
 }
 
-class MensaMealsModel {
-    var mealID: Int
-    var counterName: String
-    var mealDispalyName: String
-    var description: String
-    var openiningHours: String
-    var color: MensaColorModel
-    var meals: [String]
-    var notices: [String]
+final class MensaMealsModel: Sendable {
+    let mealID: Int
+    let counterName: String
+    let mealDispalyName: String
+    let description: String
+    let openiningHours: String
+    let color: MensaColorModel
+    let meals: [String]
+    let notices: [String]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.mealID = jsonFromated["id"].intValue
@@ -51,10 +52,10 @@ class MensaMealsModel {
         self.notices = jsonFromated["notices"].arrayObject as? [String]  ?? []
     }
 }
-class MensaColorModel {
-    var red: Float
-    var green: Float
-    var blue: Float
+final class MensaColorModel: Sendable {
+    let red: Float
+    let green: Float
+    let blue: Float
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.red = jsonFromated["r"].floatValue
@@ -62,13 +63,13 @@ class MensaColorModel {
         self.blue = jsonFromated["b"].floatValue
     }
 }
-class MealDetailsModel {
-    var mealID: Int
-    var mealName: String
-    var generalNotices: [MealNotices]
-    var counterDescription: String
-    var mealComponets: [MealComponents]
-    var prices: [MealPrice]
+final class MealDetailsModel: Sendable {
+    let mealID: Int
+    let mealName: String
+    let generalNotices: [MealNotices]
+    let counterDescription: String
+    let mealComponets: [MealComponents]
+    let prices: [MealPrice]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.mealID = jsonFromated["id"].intValue
@@ -79,9 +80,9 @@ class MealDetailsModel {
         self.mealComponets = jsonFromated["mealComponents"].arrayValue.map {MealComponents(json: $0.dictionaryValue)}
     }
 }
-class MealComponents {
-    var componentName: String
-    var componentNotices: [MealNotices]
+final class MealComponents: Sendable {
+    let componentName: String
+    let componentNotices: [MealNotices]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.componentName = jsonFromated["componentName"].stringValue
@@ -89,28 +90,28 @@ class MealComponents {
         self.componentNotices = notices.map {MealNotices(json: $0.dictionaryValue)}
     }
 }
-class MealNotices {
-    var noticeTag: String
-    var noticeDispalyName: String
+final class MealNotices: Sendable {
+    let noticeTag: String
+    let noticeDispalyName: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.noticeTag = jsonFromated["notice"].stringValue
         self.noticeDispalyName = jsonFromated["displayName"].stringValue
     }
 }
-class MealPrice {
-    var priceTagName: String
-    var price: String
+final class MealPrice: Sendable {
+    let priceTagName: String
+    let price: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.priceTagName = jsonFromated["priceTag"].stringValue
         self.price = jsonFromated["price"].stringValue
     }
 }
-class MensaInfo {
-    var locationName: String
-    var description: String
-    var imageLink: String
+final class MensaInfo: Sendable {
+    let locationName: String
+    let description: String
+    let imageLink: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         locationName = jsonFromated["name"].stringValue
@@ -122,7 +123,7 @@ class MensaInfo {
 extension MensaMenuModel {
     // note maybe we should return the notices code in order to do the filtering?!
     //one array for meals name and the other for notices??!
-    static let deomJSON = ["days": [
+    nonisolated(unsafe) static let deomJSON = ["days": [
         ["date": "today", "meals":
             [
                 [
@@ -150,7 +151,7 @@ extension MensaMenuModel {
                 ], ["counterName": "Free Flow", "mealName": "Salatbuffet", "description": "description", "openingHours": "11:30-14:15", "color":
                     ["r": 245, "g": 204, "b": 43], "components":
                         ["Tomatensalat", "Weisskraut", "Gurken", "Zwiebel Ringe", "Karotten", "Gemischter Paprika",
-                         "Mais", "Peperoni", "Lollo Bianco", "Radicchio", "Klare Salatsoße"]
+                         "Mais", "Peperoni", "Lollo Biondo", "Radicchio", "Klare Salatsoße"]
                 ]
             ]
         ]]]
@@ -283,7 +284,7 @@ extension MensaMenuModel {
 
 // MARK: MensaMenuModel demo data
 extension MensaDayModel {
-    static let menuDemoData: [String: Any] = ["date": "2019-12-10", "counters":
+    nonisolated(unsafe) static let menuDemoData: [String: Any] = ["date": "2019-12-10", "counters":
         [
             "mealDispalyName": "Picadillo Argentinisches Hackfleischgericht", "description": "description", "openiningHours": "11:30-14:15",
             "color": ["r": 217, "g": 38, "b": 26],
@@ -306,45 +307,10 @@ extension MensaMealsModel {
             [
                 ["name": "Tomaten-Zucchini-Bechamelsoße"], ["name": "Endiviensalat"], ["name": "Weiße Salatsoße"], ["name": "Klare Salatsoße"], ["name": "Fruchtjoghurt"]
             ]
-    ]), MensaMealsModel(json:
-        ["mealDispalyName": "Feuriges Gemüse-Fischcurry mit Ingwerreis", "description": "description", "openiningHours": "11:30-14:15", "color":
-            ["r": 245, "g": 204, "b": 43], "meals":
-                [
-                    ["name": "Kartoffelgratin"], ["name": "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln"],
-                    ["name": "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf"], ["name": "Salatbuffet"]
-            ]
-    ]), MensaMealsModel(json:
-        ["mealDispalyName": "Kartoffelgratin", "description": "description", "openiningHours": "11:30-14:15", "color":
-            ["r": 245, "g": 204, "b": 43], "meals":
-                [
-                    ["name": "Bunter Blattsalat"], ["name": "Balsamico-Dressing"]
-            ]
-    ]), MensaMealsModel(json:
-        ["mealDispalyName": "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "description": "description", "openiningHours": "11:30-14:15", "color":
-            ["r": 245, "g": 204, "b": 43], "meals":
-                [
-                    [:]
-            ]
-    ]), MensaMealsModel(json:
-        ["mealDispalyName": "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "description": "description", "openiningHours": "11:30-14:15", "color":
-            ["r": 245, "g": 204, "b": 43], "meals":
-                [
-                    ["name": "Pommes Frites"]
-            ]
-    ]), MensaMealsModel(json:
-        ["mealDispalyName": "Salatbuffet", "description": "description", "openiningHours": "11:30-14:15", "color":
-            ["r": 245, "g": 204, "b": 43], "meals":
-                [
-                    ["name": "Tomatensalat"], ["name": "Weisskraut"], ["name": "Gurken"], ["name": "Zwiebel Ringe"], ["name": "Karotten"],
-                    ["name": "Gemischter Paprika"], ["name": "Mais"], ["name": "Peperoni"],
-                    ["name": "Lollo Bianco"], ["name": "Radicchio"], ["name": "Klare Salatsoße"]
-            ]
-    ])
-    ]
+    ])]
 }
 
 extension MealDetailsModel {
-    //mealName is can optional here
     static let mealDemoData = MealDetailsModel(json:
         ["mealName": "Fischfilet im Backteig", "description": "Entrance A and B (to the left)", "generalNotices": [
             ["notice": "ba", "displayName": "raising agent"], ["notice": "fnf", "displayName": "fish from sustainable fishing"], ["notice": "fi", "displayName": "Fish"]
@@ -363,5 +329,3 @@ extension MealDetailsModel {
     ])
     static let emptyMealDemoData = MealDetailsModel(json: [:])
 }
-//extra model for notice it will be array of ["notice": "ba", "displayName": "raising agent"]
-//fourth API is the mensa info, to show the description and the location open hours .. etc

@@ -13,7 +13,7 @@ import Observation
 class StaffDetailsViewModel: ParentViewModel {
     var staffDetails: StaffViewModel = StaffViewModel()
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
@@ -21,8 +21,8 @@ class StaffDetailsViewModel: ParentViewModel {
         showLoadingIndicator = true
         do {
             let staff = try await dataClient.getStaffDetails(staffId: staffId)
-            staffDetails = StaffViewModel(staff)
             showLoadingIndicator = false
+            staffDetails = StaffViewModel(staff)
         } catch {
             showLoadingIndicator = false
             showError(error: error)

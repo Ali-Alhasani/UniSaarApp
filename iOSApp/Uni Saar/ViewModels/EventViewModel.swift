@@ -14,7 +14,7 @@ class EventViewModel: ParentViewModel {
     var eventCells: [TableViewCellType<NewsFeedCellViewModel>] = []
     var selectedDateEvents: [TableViewCellType<NewsFeedCellViewModel>] = []
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 

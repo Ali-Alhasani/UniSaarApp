@@ -88,11 +88,17 @@ public enum URLRouter: URLRequestConvertible {
         }
     }
     public func asURLRequest() throws -> URLRequest {
-        let url = try Constants.baseURLPath.asURL()
-        var request = URLRequest(url: url.appendingPathComponent(path))
+        let base = try Constants.baseURLPath.asURL()
+        var components = URLComponents(url: base.appendingPathComponent(path), resolvingAgainstBaseURL: true)!
+        components.queryItems = parameters.flatMap { key, value -> [URLQueryItem] in
+            if let ints = value as? [Int] {
+                return ints.map { URLQueryItem(name: key, value: String($0)) }
+            }
+            return [URLQueryItem(name: key, value: "\(value)")]
+        }
+        var request = URLRequest(url: components.url ?? base)
         request.httpMethod = method.rawValue
-        request.timeoutInterval = TimeInterval(10 * 1000)
-        let urlEncoding = URLEncoding(arrayEncoding: .noBrackets)
-        return try urlEncoding.encode(request, with: parameters)
+        request.timeoutInterval = 10_000
+        return request
     }
 }

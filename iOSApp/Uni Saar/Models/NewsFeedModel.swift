@@ -9,11 +9,11 @@
 import Foundation
 import SwiftyJSON
 
-class NewsFeedModel {
-    var newsItemCount: Int
-    var categoriesLastChanged: String
-    var hasNextPage: Bool
-    var newsList = [NewsModel]()
+final class NewsFeedModel: Sendable {
+    let newsItemCount: Int
+    let categoriesLastChanged: String
+    let hasNextPage: Bool
+    let newsList: [NewsModel]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         newsItemCount = jsonFromated["itemCount"].intValue
@@ -22,22 +22,23 @@ class NewsFeedModel {
         newsList = jsonFromated["items"].arrayValue.map {NewsModel(json: $0.dictionaryValue)}
     }
 }
-class NewsModel {
-    var annoucementDate: String
-    var title: String
-    var newsID: Int
-    var subTitle: String?
-    var categoryName: [String: String]
-    var imageURLString: String?
-    var newslink: String?
-    var isEvent: Bool = false
+final class NewsModel: Sendable {
+    let annoucementDate: String
+    let title: String
+    let newsID: Int
+    let subTitle: String?
+    let categoryName: [String: String]
+    let imageURLString: String?
+    let newslink: String?
+    let isEvent: Bool
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        if let happeningDate =  jsonFromated["happeningDate"].string {
+        if let happeningDate = jsonFromated["happeningDate"].string {
             self.annoucementDate = happeningDate
             self.isEvent = true
         } else {
             self.annoucementDate = jsonFromated["publishedDate"].stringValue
+            self.isEvent = false
         }
         self.title = jsonFromated["title"].stringValue
         self.newsID = jsonFromated["id"].intValue
@@ -48,9 +49,9 @@ class NewsModel {
     }
 }
 
-class NewsCategories {
-    var categoryID: Int
-    var categoryName: String
+final class NewsCategories: Sendable {
+    let categoryID: Int
+    let categoryName: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.categoryID = jsonFromated["id"].intValue
@@ -58,7 +59,7 @@ class NewsCategories {
     }
 }
 extension NewsModel {
-    static let deomJSON: [String: Any] =  ["date": "12/05/2019", "title": "„Echt jetzt?“ – Eine öffentliche Vortragsreihe über die Realität", "id": 100,
+    nonisolated(unsafe) static let deomJSON: [String: Any] =  ["date": "12/05/2019", "title": "Echt jetzt? – Eine öffentliche Vortragsreihe über die Realität", "id": 100,
                                            "description": """
         Ihr Thema ist dieses Mal nichts Geringeres als die Realität: Eine Physik-Professorin und ein Physik-Professor der Universität des Saarlandes
         organisieren auch in diesem Wintersemester eine interdisziplinäre öffentliche Vortragsreihe im Filmhaus Saarbrücken.
@@ -68,14 +69,14 @@ extension NewsModel {
 extension NewsFeedModel {
     static let newsDemoData = NewsFeedModel(json:
         ["itemCount": 5, "items": [
-            ["date": "12/05/2019", "title": "„Echt jetzt?“ – Eine öffentliche Vortragsreihe über die Realität", "id": 100,
+            ["date": "12/05/2019", "title": "Echt jetzt? – Eine öffentliche Vortragsreihe über die Realität", "id": 100,
              "description": """
                 Ihr Thema ist dieses Mal nichts Geringeres als die Realität: Eine Physik-Professorin und ein Physik-Professor der Universität des Saarlandes
                 organisieren auch in diesem Wintersemester eine interdisziplinäre öffentliche Vortragsreihe im Filmhaus Saarbrücken.
                 """, "imageURL": "", "category": ["categoryName"]],
             ["date": "12/04/2019", "title": "Probestudium Physik für Schülerinnen und Schüler beschäftigt sich mit Quantenwelten", "id": 100,
              "description": """
-                Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein „Probestudium Physik“.
+                Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein "Probestudium Physik".
                 Es bietet Schülerinnen und Schülern der gymnasialen Oberstufe die Möglichkeit, samstags an Vorlesungen und einem physikalischen Praktikum teilzunehmen,
                 um so einen realistischen Einblick vom Physik-Studium an der Saar-Uni zu erhalten.
                 """,
@@ -83,7 +84,7 @@ extension NewsFeedModel {
              "imageURL": ""],
             ["date": "11/30/2019", "title": "Neue Webseiten für die Universität des Saarlandes", "id": 100,
              "description": """
-                Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein „Probestudium Physik“.
+                Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein "Probestudium Physik".
                 Es bietet Schülerinnen und Schülern der gymnasialen Oberstufe die Möglichkeit
                 """,
              "category": ["categoryName"],
@@ -91,7 +92,7 @@ extension NewsFeedModel {
             ,
             ["date": "11/30/2019", "title": "Neue Webseiten für die Universität des Saarlandes", "id": 100,
              "description": """
-                Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein „Probestudium Physik“.
+                Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein "Probestudium Physik".
                 Es bietet Schülerinnen und Schülern der gymnasialen Oberstufe die Möglichkeit
                 """,
              "category": ["categoryName"],

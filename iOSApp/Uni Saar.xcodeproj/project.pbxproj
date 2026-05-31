@@ -108,6 +108,7 @@
 		6BCDAF5423AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5223AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld */; };
 		6BCDAF5F23AC13BD00DDB464 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5E23AC13BD00DDB464 /* CoreDataStack.swift */; };
 		6BCDAF6723AC16F100DDB464 /* DataClientCacheExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF6623AC16F100DDB464 /* DataClientCacheExtension.swift */; };
+		6BCDAF6823AC16F200DDB464 /* CacheClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF6923AC16F200DDB464 /* CacheClient.swift */; };
 		6BDA791D23DA198C002E363C /* SplitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDA791C23DA198C002E363C /* SplitViewController.swift */; };
 		6BF1125E23D35CD1008D99C4 /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF1125D23D35CD1008D99C4 /* Cache.swift */; };
 		6BF1CA1323A1DB5C00A514CB /* FilterUISwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BF1CA1123A1DB5C00A514CB /* FilterUISwitchTableViewCell.swift */; };
@@ -275,6 +276,7 @@
 		6BCDAF6023AC14D100DDB464 /* FilterNoticesListCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterNoticesListCache+CoreDataProperties.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterNoticesListCache+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		6BCDAF6123AC14D100DDB464 /* FilterNoticesListCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterNoticesListCache+CoreDataClass.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterNoticesListCache+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		6BCDAF6623AC16F100DDB464 /* DataClientCacheExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataClientCacheExtension.swift; sourceTree = "<group>"; };
+		6BCDAF6923AC16F200DDB464 /* CacheClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheClient.swift; sourceTree = "<group>"; };
 		6BCDAF6823AC19AD00DDB464 /* FilterLocationsCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterLocationsCache+CoreDataClass.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterLocationsCache+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		6BCDAF6923AC19AD00DDB464 /* FilterLocationsCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterLocationsCache+CoreDataProperties.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterLocationsCache+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		6BDA791823D933D4002E363C /* HelpfulNumberCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HelpfulNumberCache+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -657,6 +659,7 @@
 				6BCDAF6123AC14D100DDB464 /* FilterNoticesListCache+CoreDataClass.swift */,
 				6BCDAF6023AC14D100DDB464 /* FilterNoticesListCache+CoreDataProperties.swift */,
 				6BCDAF6623AC16F100DDB464 /* DataClientCacheExtension.swift */,
+				6BCDAF6923AC16F200DDB464 /* CacheClient.swift */,
 				6BF1125D23D35CD1008D99C4 /* Cache.swift */,
 			);
 			path = CoreData;
@@ -907,6 +910,7 @@
 				6B63C16423AD68C400A2E090 /* FilterNewsViewModel.swift in Sources */,
 				6BA670EA239BDCD400857DB7 /* UITableViewCell.swift in Sources */,
 				6BCDAF6723AC16F100DDB464 /* DataClientCacheExtension.swift in Sources */,
+				6BCDAF6823AC16F200DDB464 /* CacheClient.swift in Sources */,
 				6B10440C23D079650081BABF /* BuildingSearchTableViewController.swift in Sources */,
 				6BF1CA1323A1DB5C00A514CB /* FilterUISwitchTableViewCell.swift in Sources */,
 				6BACBA6A239B1C80003A532B /* StaffModel.swift in Sources */,
@@ -1186,7 +1190,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1244,7 +1248,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1266,7 +1270,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1277,7 +1281,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1293,7 +1297,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1304,7 +1308,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
@@ -1362,7 +1366,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1384,7 +1388,7 @@
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = MP8ZWZ7G58;
 				INFOPLIST_FILE = "Uni Saar/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1395,7 +1399,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = SomkeTest;
@@ -1407,7 +1411,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1415,7 +1419,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saarland.uni.UniSaarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Uni Saar.app/Uni Saar";
 			};
@@ -1427,7 +1431,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1435,7 +1439,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saarland.uni.UniSaarUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Uni Saar";
 			};
@@ -1448,7 +1452,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1456,7 +1460,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saarland.uni.UniSaarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Uni Saar.app/Uni Saar";
 			};
@@ -1469,7 +1473,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1477,7 +1481,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saarland.uni.UniSaarTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Uni Saar.app/Uni Saar";
 			};
@@ -1489,7 +1493,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1497,7 +1501,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saarland.uni.UniSaarUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Uni Saar";
 			};
@@ -1509,7 +1513,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 745GS5QSVH;
 				INFOPLIST_FILE = UniSaarUITests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1517,7 +1521,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.saarland.uni.UniSaarUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = "Uni Saar";
 			};

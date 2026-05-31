@@ -15,7 +15,7 @@ class MapViewModel: ParentViewModel {
     var coordinatesLastChanged = ""
     var updatedCoordinates: JSON?
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 

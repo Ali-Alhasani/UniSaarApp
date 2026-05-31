@@ -29,7 +29,7 @@ class FilterMensaViewModel: ParentViewModel {
     }
     let workingDays = [2, 3, 4, 5, 6]
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
         Cache.shared.fetchMensaFilterFromStorage()
     }
@@ -145,12 +145,13 @@ extension FilterMensaViewModel {
 
     func checkNotificationStatus() {
         UNUserNotificationCenter.current().getNotificationSettings { [weak self] settings in
+            let authorizationStatus = settings.authorizationStatus
             Task { @MainActor [weak self] in
                 guard let self else { return }
-                if settings.authorizationStatus == .notDetermined {
+                if authorizationStatus == .notDetermined {
                     enableNotification()
                     updateSwitchButton()
-                } else if settings.authorizationStatus != .authorized {
+                } else if authorizationStatus != .authorized {
                     updateSwitchButton()
                     notificationAlert()
                 } else {

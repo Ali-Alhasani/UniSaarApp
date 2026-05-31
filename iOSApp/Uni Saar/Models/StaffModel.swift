@@ -9,10 +9,10 @@
 import Foundation
 import SwiftyJSON
 
-class StaffModel {
-    var staffResults = [StaffResultsModel]()
-    var staffItemCount: Int
-    var hasNextPage: Bool
+final class StaffModel: Sendable {
+    let staffResults: [StaffResultsModel]
+    let staffItemCount: Int
+    let hasNextPage: Bool
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         staffResults = jsonFromated["results"].arrayValue.map {StaffResultsModel(json: $0.dictionaryValue)}
@@ -20,10 +20,10 @@ class StaffModel {
         hasNextPage = jsonFromated["hasNextPage"].boolValue
     }
 }
-class StaffResultsModel {
-    var title: String
-    var fullName: String
-    var staffID: Int
+final class StaffResultsModel: Sendable {
+    let title: String
+    let fullName: String
+    let staffID: Int
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.title = jsonFromated["title"].stringValue
@@ -31,23 +31,23 @@ class StaffResultsModel {
         self.fullName = jsonFromated["name"].stringValue
     }
 }
-class StaffDetailsModel {
-    var email: String?
-    var phoneNumber: String?
-    var websiteURL: String?
-    var gender: String?
-    var title: String?
-    var firstName: String?
-    var lastName: String?
-    var office: String?
-    var building: String?
-    var street: String?
-    var postalCode: String?
-    var city: String?
-    var fax: String?
-    var remarks: String?
-    var image: String?
-    var officeHour: String?
+final class StaffDetailsModel: Sendable {
+    let email: String?
+    let phoneNumber: String?
+    let websiteURL: String?
+    let gender: String?
+    let title: String?
+    let firstName: String?
+    let lastName: String?
+    let office: String?
+    let building: String?
+    let street: String?
+    let postalCode: String?
+    let city: String?
+    let fax: String?
+    let remarks: String?
+    let image: String?
+    let officeHour: String?
 
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
@@ -67,17 +67,24 @@ class StaffDetailsModel {
         remarks = jsonFromated["remark"].string
         image = jsonFromated["imageLink"].string
         officeHour = jsonFromated["officeHour"].string
-
     }
 }
-class StaffFavoritesModel: StaffModel {
+final class StaffFavoritesModel: @unchecked Sendable {
+    let staffResults: [StaffResultsModel]
+    let staffItemCount: Int
+    let hasNextPage: Bool
     var isFavorited: Bool?
-    override init(json: [String: Any]) {
-        super.init(json: json)
+    init(json: [String: Any]) {
+        let jsonFromated = JSON(json)
+        staffResults = jsonFromated["results"].arrayValue.map { StaffResultsModel(json: $0.dictionaryValue) }
+        staffItemCount = jsonFromated["itemCount"].intValue
+        hasNextPage = jsonFromated["hasNextPage"].boolValue
     }
 }
 extension StaffModel {
-    static let deomJSON: [String: Any] = ["name": "Ali Baylan", "title": "", "pid": 9091]
+    // nonisolated(unsafe) is required when the type is not Sendable (e.g. [String: Any] — because Any isn't Sendable).
+    // Sendable types (like StaffModel) don't need it; Swift verifies safety on its own.
+    nonisolated(unsafe) static let deomJSON: [String: Any] = ["name": "Ali Baylan", "title": "", "pid": 9091]
     static let staffDemoData = StaffModel(json: ["itemCount": 3, "results": [["name": "Ali Baylan", "title": "", "pid": 9091],
                                                              ["name": "Galina Baron", "title": "", "pid": 16776],
                                                              ["name": "Paanteha Kamali-Moghadam", "title": "M. Sc", "pid": 14477]]

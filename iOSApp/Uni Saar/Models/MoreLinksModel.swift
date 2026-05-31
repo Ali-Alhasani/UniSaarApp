@@ -8,25 +8,27 @@
 
 import Foundation
 import SwiftyJSON
-class MoreModel {
-    var linksLastChanged: String
-    var links: [MoreLinksModel]
+
+final class MoreModel: Sendable {
+    let linksLastChanged: String
+    let links: [MoreLinksModel]
 
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         self.linksLastChanged = jsonFromated["linksLastChanged"].stringValue
         let arrayLinks = jsonFromated["links"].arrayValue
-        links = []
+        var tempLinks: [MoreLinksModel] = []
         for (index, link) in arrayLinks.enumerated() {
-            self.links.append(MoreLinksModel(json: link, index: index))
+            tempLinks.append(MoreLinksModel(json: link, index: index))
         }
+        links = tempLinks
     }
 }
 
-class MoreLinksModel {
-    var displayName: String
-    var url: String
-    var index: Int
+final class MoreLinksModel: Sendable {
+    let displayName: String
+    let url: String
+    let index: Int
     init(json: JSON, index: Int) {
         let jsonFromated = JSON(json)
         self.displayName = jsonFromated["name"].stringValue
