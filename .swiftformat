@@ -1,0 +1,8 @@
+# 1. Formatting Configuration Blueprint
+--allman false             # Enforces clean, standard Egyptian brace style (func() {)
+--indent 4                 # Matches Xcode default 4-space indent rule
+--trimwhitespace always    # Automatically strips out stray trailing spaces
+--stripunusedargs closures # Cleans up unused parameters inside closure blocks
+
+# 2. Exclude files that shouldn't be automatically rewritten
+--exclude .build,DerivedData,Pods,Carthage

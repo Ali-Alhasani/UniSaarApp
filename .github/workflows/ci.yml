@@ -1,0 +1,113 @@
+name: iOS 26 Swift 6 CI Pipeline
+
+on:
+  pull_request:
+    branches: [ main, master, develop ]
+  push:
+    branches: [ main, master ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build & Test Automation
+    runs-on: macos-16
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout Code Baseline
+        uses: actions/checkout@v4
+
+      # ── Homebrew cache ────────────────────────────────────────────────────────
+      # Caches the local Cellar so swiftlint and swiftformat are not re-downloaded
+      # on every push. Cache is invalidated when either tool config file changes.
+      - name: Cache Homebrew Cellar
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/Library/Caches/Homebrew/downloads
+            /usr/local/Cellar/swiftlint
+            /usr/local/Cellar/swiftformat
+          key: ${{ runner.os }}-brew-${{ hashFiles('.swiftlint.yml', '.swiftformat') }}
+          restore-keys: |
+            ${{ runner.os }}-brew-
+
+      - name: Install SwiftLint & SwiftFormat
+        run: |
+          brew install swiftlint swiftformat
+
+      # ── Style gates (fail fast before compilation) ────────────────────────────
+      # --strict promotes SwiftLint warnings to errors so nothing slips through.
+      - name: Run SwiftLint Verification
+        run: swiftlint lint --strict --reporter github-actions-logging
+
+      # --lint mode exits non-zero if any file is not already formatted correctly.
+      - name: Run SwiftFormat Lint Check
+        run: swiftformat --lint iOSApp
+
+      # ── Toolchain setup ───────────────────────────────────────────────────────
+      - name: Select Xcode 17.0
+        run: |
+          sudo xcode-select -s /Applications/Xcode_17.app/Contents/Developer
+          xcodebuild -version
+
+      - name: Install xcpretty
+        run: sudo gem install xcpretty
+
+      # ── SPM dependency cache ──────────────────────────────────────────────────
+      # Path corrected to iOSApp/.build where the project resolves packages.
+      - name: Cache Swift Package Manager Dependencies
+        uses: actions/cache@v4
+        with:
+          path: iOSApp/.build
+          key: ${{ runner.os }}-spm-${{ hashFiles('iOSApp/**/Package.resolved', 'iOSApp/*.xcodeproj/project.pbxproj') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
+
+      - name: Resolve Swift Packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project "iOSApp/Uni Saar.xcodeproj" \
+            -scheme "Uni Saar" \
+            -clonedSourcePackagesDirPath iOSApp/.build
+
+      # ── Simulator setup ───────────────────────────────────────────────────────
+      - name: Boot Target Simulator
+        run: |
+          xcrun simctl boot "iPhone 16" || true
+          defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool true
+          xcrun simctl list devices status booted
+
+      # ── Compilation gate (separate from test run) ─────────────────────────────
+      # Compile-only pass — a failure here means a build error, not a test failure.
+      - name: Compile (build-for-testing)
+        run: |
+          set -o pipefail && xcodebuild build-for-testing \
+            -project "iOSApp/Uni Saar.xcodeproj" \
+            -scheme "Uni Saar" \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            -clonedSourcePackagesDirPath iOSApp/.build \
+            -parallel-testing-enabled YES \
+            CODE_SIGNING_ALLOWED=NO | xcpretty
+
+      # ── Test execution gate ───────────────────────────────────────────────────
+      # Runs against the already-compiled artefacts — no recompilation needed.
+      - name: Execute Unit & UI Test Suites (test-without-building)
+        run: |
+          set -o pipefail && xcodebuild test-without-building \
+            -project "iOSApp/Uni Saar.xcodeproj" \
+            -scheme "Uni Saar" \
+            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            -clonedSourcePackagesDirPath iOSApp/.build \
+            -parallel-testing-enabled YES \
+            CODE_SIGNING_ALLOWED=NO | xcpretty
+
+      # ── Artefact upload (failure only) ────────────────────────────────────────
+      - name: Archive Test Failure Logs & UI Test Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-test-logs
+          path: ~/Library/Developer/Xcode/DerivedData/*/Logs/Test/*.xcresult
