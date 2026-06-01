@@ -1,0 +1,23 @@
+line-length = 88
+target-version = "py313"
+src = ["src", "tests"]
+# Legacy files — excluded until migrated and removed in PRs 3–5
+exclude = [
+    "source/",
+    "tests/DirectoryParserUnitTest.py",
+    "tests/MensaParserUnitTest.py",
+    "tests/NewsAndEventsParserUnitTest.py",
+    "tests/RequestHandlerIntegrationTest.py",
+    "tests/ServerIntegrationTest.py",
+    "tests/modelsUnitTest.py",
+]
+
+[lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[lint.isort]
+known-first-party = ["src"]
+
+[format]
+quote-style = "double"
+indent-style = "space"

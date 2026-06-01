@@ -1,0 +1,19 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.15.15
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v2.1.0
+    hooks:
+      - id: mypy
+        args: [--config-file=mypy.ini]
+        additional_dependencies:
+          - pydantic>=2.13.0
+          - pydantic-settings>=2.9.0
+          - fastapi>=0.136.0
+          - loguru>=0.7.2
+          - types-cachetools>=7.0.0

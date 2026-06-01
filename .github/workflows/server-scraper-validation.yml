@@ -1,0 +1,36 @@
+name: Server Live Scraper Validation
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Every Monday at 08:00 UTC
+
+jobs:
+  scraper-validation:
+    name: Live Scraper Validation
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      # PR 3 will replace this placeholder with real scraper tests marked @pytest.mark.live
+      - name: Run live scraper validation
+        run: |
+          echo "Live scraper tests will be enabled in PR 3."
+          echo "Command will be: poetry run pytest tests/ -v -m live"
+        env:
+          SERVER_ADDRESS: ${{ secrets.SERVER_ADDRESS }}
+          PROXY_URL: ${{ secrets.PROXY_URL }}

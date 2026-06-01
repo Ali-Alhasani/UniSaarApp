@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "unisaarapp-server"
+version = "2.0.0"
+description = "UniSaarApp Server — Phase 2 Refactor"
+authors = ["Ali-Alhasani"]
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.13,<3.15"
+fastapi = "^0.136.0"
+uvicorn = {extras = ["standard"], version = "^0.34.0"}
+pydantic = "^2.13.0"
+pydantic-settings = "^2.9.0"
+httpx = "^0.28.0"
+selectolax = "^0.4.0"
+diskcache = "^5.6.3"
+apscheduler = ">=3.10.4,<4.0.0"
+loguru = "^0.7.2"
+sentry-sdk = {extras = ["fastapi"], version = "^2.18.0"}
+slowapi = "^0.1.9"
+cachetools = "^7.0.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.15.0"
+mypy = "^2.1.0"
+pytest = "^9.0.0"
+pytest-asyncio = "^1.4.0"
+httpx = "^0.28.0"
+respx = "^0.23.0"
+pre-commit = "^4.0.0"
+types-cachetools = "^7.0.0"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

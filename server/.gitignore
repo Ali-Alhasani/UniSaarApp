@@ -1,0 +1,23 @@
+# Environment / secrets — never commit
+.env
+.secrets
+
+# DiskCache data directory
+.cache/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+
+# Pre-commit
+.pre-commit-cache/
