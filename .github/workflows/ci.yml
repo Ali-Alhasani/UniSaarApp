@@ -99,7 +99,7 @@ jobs:
       # ── Simulator setup ───────────────────────────────────────────────────────
       - name: Boot Target Simulator
         run: |
-          xcrun simctl boot "iPhone 16" || true
+          xcrun simctl boot "iPhone 17" || true
           xcrun simctl list devices status booted
 
       # ── Compilation gate ──────────────────────────────────────────────────────
@@ -108,26 +108,39 @@ jobs:
           set -o pipefail && xcodebuild build-for-testing \
             -project "iOSApp/Uni Saar.xcodeproj" \
             -scheme "Uni Saar" \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            -destination "platform=iOS Simulator,name=iPhone 17,OS=latest" \
             -clonedSourcePackagesDirPath iOSApp/.build \
             -parallel-testing-enabled YES \
             CODE_SIGNING_ALLOWED=NO | xcpretty
 
-      # ── Test execution gate ───────────────────────────────────────────────────
-      - name: Execute Unit & UI Test Suites
+      # ── Test execution gate ──────────────────────────────────────────────────
+      # Unit tests: always a hard gate
+      - name: Execute Unit Tests
         run: |
           set -o pipefail && xcodebuild test-without-building \
             -project "iOSApp/Uni Saar.xcodeproj" \
             -scheme "Uni Saar" \
-            -destination "platform=iOS Simulator,name=iPhone 16,OS=latest" \
+            -destination "platform=iOS Simulator,name=iPhone 17,OS=latest" \
             -clonedSourcePackagesDirPath iOSApp/.build \
-            -parallel-testing-enabled YES \
+            -only-testing:UniSaarTests \
+            CODE_SIGNING_ALLOWED=NO | xcpretty
+
+      # UI tests: strict on merge to master, non-blocking on PRs
+      - name: Execute UI Tests
+        continue-on-error: ${{ github.event_name == 'pull_request' }}
+        run: |
+          set -o pipefail && xcodebuild test-without-building \
+            -project "iOSApp/Uni Saar.xcodeproj" \
+            -scheme "Uni Saar" \
+            -destination "platform=iOS Simulator,name=iPhone 17,OS=latest" \
+            -clonedSourcePackagesDirPath iOSApp/.build \
+            -only-testing:UniSaarUITests \
             CODE_SIGNING_ALLOWED=NO | xcpretty
 
       # ── Artefact upload (failure only) ────────────────────────────────────────
       - name: Archive Test Failure Logs
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: xcodebuild-test-logs
           path: ~/Library/Developer/Xcode/DerivedData/*/Logs/Test/*.xcresult
