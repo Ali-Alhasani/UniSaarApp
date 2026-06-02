@@ -135,7 +135,9 @@ class TestMensaMealDetailContract:
 class TestMensaInfoContract:
     def test_ios_keys(self) -> None:
         data = MensaInfo(
-            name="Mensa SB", description="Hauptmensa", image_link="https://example.com/img.jpg"
+            name="Mensa SB",
+            description="Hauptmensa",
+            image_link="https://example.com/img.jpg",
         ).model_dump(by_alias=True)
         assert "name" in data
         assert "description" in data

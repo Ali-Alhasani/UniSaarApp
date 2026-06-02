@@ -21,7 +21,10 @@ class TestMoreLinksResponse:
             links_last_changed="2020-01-20 17:42:14",
             language="de",
             links=[
-                MoreLink(name="Welcome Centre", link="https://www.uni-saarland.de/en/global/welcome-center.html"),
+                MoreLink(
+                    name="Welcome Centre",
+                    link="https://www.uni-saarland.de/en/global/welcome-center.html",
+                ),
                 MoreLink(name="AStA", link="https://asta.uni-saarland.de/en/"),
             ],
         )

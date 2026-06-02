@@ -5,12 +5,16 @@ from src.models.more import MoreLink, MoreLinksResponse
 
 class TestMoreLinkContract:
     def test_ios_keys(self) -> None:
-        data = MoreLink(name="Welcome Centre", link="https://example.com").model_dump(by_alias=True)
+        data = MoreLink(name="Welcome Centre", link="https://example.com").model_dump(
+            by_alias=True
+        )
         assert "name" in data
         assert "link" in data
 
     def test_no_extra_keys(self) -> None:
-        data = MoreLink(name="AStA", link="https://asta.uni-saarland.de/").model_dump(by_alias=True)
+        data = MoreLink(name="AStA", link="https://asta.uni-saarland.de/").model_dump(
+            by_alias=True
+        )
         assert set(data.keys()) == {"name", "link"}
 
 
@@ -20,7 +24,10 @@ class TestMoreLinksResponseContract:
             links_last_changed="2020-01-20 17:42:14",
             language="de",
             links=[
-                MoreLink(name="Welcome Centre", link="https://www.uni-saarland.de/en/global/welcome-center.html"),
+                MoreLink(
+                    name="Welcome Centre",
+                    link="https://www.uni-saarland.de/en/global/welcome-center.html",
+                ),
             ],
         )
         data = resp.model_dump(by_alias=True)

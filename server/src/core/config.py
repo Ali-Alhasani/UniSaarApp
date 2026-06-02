@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     # Secrets — loaded from .secrets, never logged
     server_address: str = ""
     proxy_url: str = ""
+    mensa_api_key: SecretStr = SecretStr("")
     sentry_dsn: SecretStr = SecretStr("")
     smtp_host: str = ""
     smtp_user: str = ""
