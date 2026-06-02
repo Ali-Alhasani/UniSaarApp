@@ -7,18 +7,16 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
-extension HelpfulNumberCache {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<HelpfulNumberCache> {
-        return NSFetchRequest<HelpfulNumberCache>(entityName: "HelpfulNumberCache")
+public extension HelpfulNumberCache {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<HelpfulNumberCache> {
+        NSFetchRequest<HelpfulNumberCache>(entityName: "HelpfulNumberCache")
     }
 
-    @NSManaged public var name: String?
-    @NSManaged public var number: String?
-    @NSManaged public var link: String?
-    @NSManaged public var mail: String?
-
+    @NSManaged var name: String?
+    @NSManaged var number: String?
+    @NSManaged var link: String?
+    @NSManaged var mail: String?
 }

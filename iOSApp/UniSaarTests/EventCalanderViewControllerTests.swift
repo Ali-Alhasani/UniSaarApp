@@ -6,27 +6,30 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 class EventCalanderViewControllerTests: XCTestCase {
     var viewControllerUnderTest: EventCalanderViewController!
     override func setUp() async throws {
         let storyboard = UIStoryboard(name: "NewsStoryboard", bundle: nil)
-        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "EventCalanderViewController") as? EventCalanderViewController
-        self.viewControllerUnderTest.loadView()
-        self.viewControllerUnderTest.viewDidLoad()
-        self.viewControllerUnderTest.setupTableView()
+        viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "EventCalanderViewController") as? EventCalanderViewController
+        viewControllerUnderTest.loadView()
+        viewControllerUnderTest.viewDidLoad()
+        viewControllerUnderTest.setupTableView()
     }
+
     override func tearDown() {
         viewControllerUnderTest = nil
         super.tearDown()
     }
+
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+
     func testHasATableView() {
         XCTAssertNotNil(viewControllerUnderTest.tableView)
     }
@@ -58,17 +61,16 @@ class EventCalanderViewControllerTests: XCTestCase {
             let expectedReuseIdentifier = "NewsFeedTableViewCell"
             XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
         }
-
     }
 
     func testTableCellHasCorrectLabelText() {
         if let viewModel = viewControllerUnderTest.eventViewModel.eventCells[safe: 0] {
             switch viewModel {
-            case .normal(let cellViewModel):
+            case let .normal(cellViewModel):
                 let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? NewsFeedTableViewCell
                 XCTAssertEqual(cell?.newsTitleLabel.text, cellViewModel.titleText)
 
-            case .error(let message):
+            case let .error(message):
                 let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.tableView, cellForRowAt: IndexPath(row: 0, section: 0))
                 let config = cell.contentConfiguration as? UIListContentConfiguration
                 XCTAssertEqual(config?.text, message)
@@ -81,11 +83,10 @@ class EventCalanderViewControllerTests: XCTestCase {
         }
     }
 
-    // utility for finding segues
+    /// utility for finding segues
     func hasSegueWithIdentifier(segueId: String) -> Bool {
-
         let segues = viewControllerUnderTest.value(forKey: "storyboardSegueTemplates") as? [NSObject]
-        let filtered = segues?.filter({ $0.value(forKey: "identifier") as? String == segueId })
+        let filtered = segues?.filter { $0.value(forKey: "identifier") as? String == segueId }
 
         return (filtered?.count ?? 0 > 0)
     }
@@ -94,5 +95,4 @@ class EventCalanderViewControllerTests: XCTestCase {
         let targetIdentifier2 = EventCalanderViewController.SegueIdentifiers.toEventDetails
         XCTAssertTrue(hasSegueWithIdentifier(segueId: targetIdentifier2))
     }
-
 }

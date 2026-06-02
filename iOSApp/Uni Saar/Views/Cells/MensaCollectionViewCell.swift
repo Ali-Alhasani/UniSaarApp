@@ -13,19 +13,24 @@ protocol MensaCollectionViewCellDelegate: AnyObject {
     func didTapMealDetails(meal: MensaMealCellViewModel)
     func didTapLocationDetails()
 }
+
 class MensaCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var mensaTable: UITableView!
+    @IBOutlet var mensaTable: UITableView!
 
     var dayMenuViewModel: MensaDayMenuViewModel? {
         didSet {
             mensaTable.reloadData()
         }
     }
+
     weak var delegate: MensaCollectionViewCellDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
-        setupTableView()
+        MainActor.assumeIsolated {
+            setupTableView()
+        }
     }
+
     @MainActor func setupTableView() {
         mensaTable.register(MensaMenuTableViewCell.nib, forCellReuseIdentifier: MensaMenuTableViewCell.identifier)
         mensaTable.register(MensaDateHeaderSectionTableViewCell.nib, forHeaderFooterViewReuseIdentifier: MensaDateHeaderSectionTableViewCell.identifier)
@@ -37,10 +42,11 @@ class MensaCollectionViewCell: UICollectionViewCell {
 
 extension MensaCollectionViewCell: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dayMenuViewModel?.mealsCells.count ?? 0
+        dayMenuViewModel?.mealsCells.count ?? 0
     }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if let viewModel =  dayMenuViewModel?.mealsCells[safe: indexPath.row] {
+        if let viewModel = dayMenuViewModel?.mealsCells[safe: indexPath.row] {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MensaMenuTableViewCell.identifier, for: indexPath) as? MensaMenuTableViewCell else {
                 return UITableViewCell()
             }
@@ -50,6 +56,7 @@ extension MensaCollectionViewCell: UITableViewDelegate, UITableViewDataSource {
         }
         return UITableViewCell()
     }
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let cell = tableView.dequeueReusableHeaderFooterView(withIdentifier: MensaDateHeaderSectionTableViewCell.identifier) as? MensaDateHeaderSectionTableViewCell else {
             return nil
@@ -57,12 +64,14 @@ extension MensaCollectionViewCell: UITableViewDelegate, UITableViewDataSource {
         cell.dayMenuViewModel = dayMenuViewModel
         return cell
     }
+
     func tableView(_ tableView: UITableView, estimatedHeightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        60
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let viewModel =  dayMenuViewModel?.mealsCells[safe: indexPath.row] {
-            self.delegate?.didTapMealDetails(meal: viewModel)
+        if let viewModel = dayMenuViewModel?.mealsCells[safe: indexPath.row] {
+            delegate?.didTapMealDetails(meal: viewModel)
         }
     }
 }

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @MainActor
 final class CacheClient {
@@ -74,7 +74,7 @@ final class CacheClient {
         _ = model.noticesText.map { self.createNoticesEntityFrom(model: $0) }
         do {
             try CoreDataStack.sharedInstance.persistentContainer.viewContext.save()
-        } catch let error {
+        } catch {
             print(error)
         }
     }
@@ -83,7 +83,7 @@ final class CacheClient {
         _ = model.categoriesText.map { self.createNewsCategoriesEntityFrom(model: $0) }
         do {
             try CoreDataStack.sharedInstance.persistentContainer.viewContext.save()
-        } catch let error {
+        } catch {
             print(error)
         }
     }
@@ -92,7 +92,7 @@ final class CacheClient {
         _ = model.map { self.createMoreLinksEntityFrom(model: $0) }
         do {
             try CoreDataStack.sharedInstance.persistentContainer.viewContext.save()
-        } catch let error {
+        } catch {
             print(error)
         }
     }
@@ -101,7 +101,7 @@ final class CacheClient {
         _ = model.map { self.createHelpfulNumbersEntityFrom(model: $0) }
         do {
             try CoreDataStack.sharedInstance.persistentContainer.viewContext.save()
-        } catch let error {
+        } catch {
             print(error)
         }
     }
@@ -114,14 +114,14 @@ final class CacheClient {
             let locationsList = try managedObjectContext.fetch(locationsfetchRequest)
             _ = locationsList.map { managedObjectContext.delete($0) }
             CoreDataStack.sharedInstance.saveContext()
-        } catch let error {
+        } catch {
             print("ERROR DELETING : \(error)")
         }
         do {
             let noticesList = try managedObjectContext.fetch(noticesfetchRequest)
             _ = noticesList.map { managedObjectContext.delete($0) }
             CoreDataStack.sharedInstance.saveContext()
-        } catch let error {
+        } catch {
             print(error)
         }
     }
@@ -133,7 +133,7 @@ final class CacheClient {
             let categoriesList = try managedObjectContext.fetch(categoriesfetchRequest)
             _ = categoriesList.map { managedObjectContext.delete($0) }
             CoreDataStack.sharedInstance.saveContext()
-        } catch let error {
+        } catch {
             print("ERROR DELETING : \(error)")
         }
     }
@@ -145,7 +145,7 @@ final class CacheClient {
             let linksList = try managedObjectContext.fetch(moreLinksfetchRequest)
             _ = linksList.map { managedObjectContext.delete($0) }
             CoreDataStack.sharedInstance.saveContext()
-        } catch let error {
+        } catch {
             print("ERROR DELETING : \(error)")
         }
     }
@@ -157,7 +157,7 @@ final class CacheClient {
             let helpfulNumberList = try managedObjectContext.fetch(helpfulNumberfetchRequest)
             _ = helpfulNumberList.map { managedObjectContext.delete($0) }
             CoreDataStack.sharedInstance.saveContext()
-        } catch let error {
+        } catch {
             print("ERROR DELETING : \(error)")
         }
     }

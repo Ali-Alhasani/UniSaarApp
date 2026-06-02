@@ -6,8 +6,8 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import Alamofire
+import Foundation
 import SwiftyJSON
 
 class APIClient {
@@ -17,10 +17,12 @@ class APIClient {
         }
         return Static.instance
     }
+
     class func getNewSessionManager() -> Session {
         let configuration = URLSessionConfiguration.default
         return Session(configuration: configuration)
     }
+
     class func sendRequest(requestURL: URLRouter) async throws -> JSON {
         APIClient.printL("base url: \(requestURL)", type: .note)
         APIClient.printL("request fired", type: .note)
@@ -28,13 +30,13 @@ class APIClient {
         APIClient.printL("request: \(String(describing: response.request))", type: .note)
         APIClient.printL("Response Received : \(Date())", type: .note)
         switch response.result {
-        case .success(let data):
+        case let .success(data):
             guard !data.isEmpty, let json = try? JSON(data: data) else {
                 return JSON([:])
             }
             APIClient.printL("response: \(json)", type: .note)
             return json
-        case .failure(let afError):
+        case let .failure(afError):
             APIClient.printL("Error while fetching data: \(afError)", type: .error)
             if let responseData = response.data,
                let jsonMessage = String(data: responseData, encoding: .utf8), !jsonMessage.isEmpty {
@@ -47,9 +49,10 @@ class APIClient {
             throw afError
         }
     }
+
     class func printL(_ text: String, type: LogType) {
         let logType: LogType = .none
-        if(logType == .all || type == logType) && (type != .none) {
+        if logType == .all || type == logType, type != .none {
             debugPrint("APIClient-\(type.printCase()) \(text)")
         }
     }

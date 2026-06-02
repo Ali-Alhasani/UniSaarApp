@@ -10,15 +10,16 @@ import UIKit
 
 @MainActor
 class MensaViewController: UIViewController {
-    @IBOutlet weak var pageControl: UIPageControl!
-    @IBOutlet weak var mensaCollectionView: UICollectionView! {
+    @IBOutlet var pageControl: UIPageControl!
+    @IBOutlet var mensaCollectionView: UICollectionView! {
         didSet {
             let refreshControl = mensaCollectionView.setUpRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.load), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(load), for: .valueChanged)
             mensaCollectionView.refreshControl = refreshControl
         }
     }
-    lazy var mensaMenuViewModel: MensaMenuViewModel = MensaMenuViewModel()
+
+    lazy var mensaMenuViewModel: MensaMenuViewModel = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,12 +28,11 @@ class MensaViewController: UIViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        mensaMenuViewModel.showLoadingIndicator ? mensaCollectionView.showingLoadingView() : mensaCollectionView.hideLoadingView()
+        if mensaMenuViewModel.showLoadingIndicator { mensaCollectionView.showingLoadingView() } else { mensaCollectionView.hideLoadingView() }
         if let alert = mensaMenuViewModel.currentAlert {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -42,8 +42,8 @@ class MensaViewController: UIViewController {
         }
         mensaCollectionView.reloadData()
         pageControl.numberOfPages = mensaMenuViewModel.daysMenus.count
-        if UIDevice.current.userInterfaceIdiom == .pad && !mensaMenuViewModel.daysMenus.isEmpty
-            && mensaCollectionView.indexPathsForSelectedItems?.isEmpty != false {
+        if UIDevice.current.userInterfaceIdiom == .pad, !mensaMenuViewModel.daysMenus.isEmpty,
+           mensaCollectionView.indexPathsForSelectedItems?.isEmpty != false {
             initialSelection()
         }
     }
@@ -79,7 +79,7 @@ class MensaViewController: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let initialIndexPath = IndexPath(row: 0, section: 0)
             switch mensaMenuViewModel.daysMenus[safe: initialIndexPath.row] {
-            case .normal(let viewModel):
+            case let .normal(viewModel):
                 performSegue(withIdentifier: SegueIdentifiers.toMealDetails, sender: viewModel.mealsCells[0])
             case .empty, .error, .none:
                 break
@@ -87,16 +87,16 @@ class MensaViewController: UIViewController {
         }
     }
 
-    internal struct SegueIdentifiers {
+    enum SegueIdentifiers {
         static let toMealDetails = "toMealDetails"
         static let toLocationDetails = "toLocationInfo"
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == SegueIdentifiers.toMealDetails,
-            let destination = segue.destination as? UINavigationController,
-            let destinationViewController = destination.topViewController as? MealDetailsViewController,
-            let viewModel = sender as? MensaMealCellViewModel {
+           let destination = segue.destination as? UINavigationController,
+           let destinationViewController = destination.topViewController as? MealDetailsViewController,
+           let viewModel = sender as? MensaMealCellViewModel {
             destinationViewController.mealItemViewModel = viewModel
         } else if let destination = segue.destination as? UINavigationController,
                   let destinationViewController = destination.topViewController as? FilterMensaViewController {
@@ -108,25 +108,34 @@ class MensaViewController: UIViewController {
 
 extension MensaViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return mensaMenuViewModel.daysMenus.count
+        mensaMenuViewModel.daysMenus.count
     }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch mensaMenuViewModel.daysMenus[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             guard let cell = mensaCollectionView.dequeueReusableCell(withReuseIdentifier: MensaCollectionViewCell.identifier, for: indexPath) as? MensaCollectionViewCell else {
                 return UICollectionViewCell()
             }
             cell.dayMenuViewModel = viewModel
             cell.delegate = self
             return cell
-        case .error(let message):
-            guard let cell = mensaCollectionView.dequeueReusableCell(withReuseIdentifier: ErrorCellCollectionViewCell.identifier, for: indexPath) as? ErrorCellCollectionViewCell else {
+        case let .error(message):
+            guard let cell = mensaCollectionView.dequeueReusableCell(
+                withReuseIdentifier: ErrorCellCollectionViewCell.identifier,
+                for: indexPath
+            ) as? ErrorCellCollectionViewCell
+            else {
                 return UICollectionViewCell()
             }
             cell.text = message
             return cell
         case .empty:
-            guard let cell = mensaCollectionView.dequeueReusableCell(withReuseIdentifier: ErrorCellCollectionViewCell.identifier, for: indexPath) as? ErrorCellCollectionViewCell else {
+            guard let cell = mensaCollectionView.dequeueReusableCell(
+                withReuseIdentifier: ErrorCellCollectionViewCell.identifier,
+                for: indexPath
+            ) as? ErrorCellCollectionViewCell
+            else {
                 return UICollectionViewCell()
             }
             cell.text = NSLocalizedString("emptyMenu", comment: "no menu")
@@ -142,6 +151,7 @@ extension MensaViewController: MensaCollectionViewCellDelegate {
     func didTapMealDetails(meal: MensaMealCellViewModel) {
         performSegue(withIdentifier: SegueIdentifiers.toMealDetails, sender: meal)
     }
+
     func didTapLocationDetails() {
         performSegue(withIdentifier: SegueIdentifiers.toLocationDetails, sender: self)
     }
@@ -149,26 +159,30 @@ extension MensaViewController: MensaCollectionViewCellDelegate {
 
 extension MensaViewController: UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+        CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        0
     }
+
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let currentPage = Int(scrollView.contentOffset.x) / Int(scrollView.frame.width)
         pageControl.currentPage = currentPage
     }
 }
 
-extension MensaViewController: SingleButtonDialogPresenter { }
+extension MensaViewController: SingleButtonDialogPresenter {}
 
 extension MensaViewController: FilterMensaViewDelegate {
     func didUpdateNoticesData() {
         mensaMenuViewModel.isFilterdCacheUpdated = true
     }
+
     func didUpdateNoticesFilter() {
         mensaCollectionView.reloadData()
     }
+
     func didChangeLocationFilter() {
         load()
     }

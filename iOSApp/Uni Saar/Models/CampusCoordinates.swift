@@ -25,7 +25,7 @@ final class CampusCoordinatesModel {
             let json = try JSON(data: data)
             let root = json["mapInfo"].arrayValue
             updateTime = json["updateTime"].stringValue
-            mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue)}
+            mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue) }
         } catch {
             updateTime = ""
             mapInfo = []
@@ -35,7 +35,7 @@ final class CampusCoordinatesModel {
     init(json: JSON) {
         let root = json["mapInfo"].arrayValue
         updateTime = json["updateTime"].stringValue
-        mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue)}
+        mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue) }
     }
 }
 

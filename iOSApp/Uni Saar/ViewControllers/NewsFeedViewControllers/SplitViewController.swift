@@ -1,5 +1,5 @@
 //
-//  NewsSplitViewController.swift
+//  SplitViewController.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 1/23/20.
@@ -7,22 +7,24 @@
 //
 
 import UIKit
-// add customization to spilt view for iPad's and mac's and remove the default behavior for iPhone's
+
+/// add customization to spilt view for iPad's and mac's and remove the default behavior for iPhone's
 @MainActor
 class SplitViewController: UISplitViewController, UISplitViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.preferredDisplayMode = .oneBesideSecondary
-        self.maximumPrimaryColumnWidth = UIScreen.main.bounds.width/2
-        self.minimumPrimaryColumnWidth = UIScreen.main.bounds.width/3
-        self.preferredPrimaryColumnWidthFraction = 0.42
-        self.delegate = self
+        preferredDisplayMode = .oneBesideSecondary
+        maximumPrimaryColumnWidth = UIScreen.main.bounds.width / 2
+        minimumPrimaryColumnWidth = UIScreen.main.bounds.width / 3
+        preferredPrimaryColumnWidthFraction = 0.42
+        delegate = self
     }
 
     func splitViewController(
         _ splitViewController: UISplitViewController,
         collapseSecondary secondaryViewController: UIViewController,
-        onto primaryViewController: UIViewController) -> Bool {
+        onto primaryViewController: UIViewController
+    ) -> Bool {
         // Return true to prevent UIKit from applying its default behavior for iPhone's
         if UIDevice.current.userInterfaceIdiom == .phone {
             return true

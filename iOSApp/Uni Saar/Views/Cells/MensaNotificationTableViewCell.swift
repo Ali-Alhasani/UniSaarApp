@@ -9,7 +9,7 @@
 import UIKit
 
 class MensaNotificationTableViewCell: UITableViewCell {
-    @IBOutlet weak var notificationTimeLabel: UILabel!
+    @IBOutlet var notificationTimeLabel: UILabel!
 
     var notificationSelectedTime: Date? {
         didSet {

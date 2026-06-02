@@ -14,27 +14,31 @@ final class MensaFilterModel: Sendable {
     let notices: [Notices]
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        self.locations = jsonFromated["locations"].arrayValue.map {Locations(json: $0.dictionaryValue)}
-        self.notices = jsonFromated["notices"].arrayValue.map {Notices(json: $0.dictionaryValue)}
+        locations = jsonFromated["locations"].arrayValue.map { Locations(json: $0.dictionaryValue) }
+        notices = jsonFromated["notices"].arrayValue.map { Notices(json: $0.dictionaryValue) }
     }
+
     init() {
         locations = []
         notices = []
     }
 }
+
 final class Locations: Sendable {
     let locationID: String
     let name: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        self.locationID = jsonFromated["locationID"].stringValue
-        self.name = jsonFromated["name"].stringValue
+        locationID = jsonFromated["locationID"].stringValue
+        name = jsonFromated["name"].stringValue
     }
+
     init(locationID: String, name: String) {
         self.locationID = locationID
         self.name = name
     }
 }
+
 final class Notices: Sendable {
     let noticeID: String
     let name: String
@@ -42,11 +46,12 @@ final class Notices: Sendable {
     let isNegated: Bool
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        self.noticeID = jsonFromated["noticeID"].stringValue
-        self.name = jsonFromated["name"].stringValue
-        self.isAllergen = jsonFromated["isAllergen"].boolValue
-        self.isNegated = jsonFromated["isNegated"].boolValue
+        noticeID = jsonFromated["noticeID"].stringValue
+        name = jsonFromated["name"].stringValue
+        isAllergen = jsonFromated["isAllergen"].boolValue
+        isNegated = jsonFromated["isNegated"].boolValue
     }
+
     init(noticeID: String, name: String, isAllergen: Bool, isNegated: Bool) {
         self.noticeID = noticeID
         self.name = name
@@ -54,11 +59,13 @@ final class Notices: Sendable {
         self.isNegated = isNegated
     }
 }
-//this just mock model to gives us a  clear perspective on the API design, by getting into the mindset of being a client of the API before it exists.
+
+/// this just mock model to gives us a  clear perspective on the API design, by getting into the mindset of being a client of the API before it exists.
 class FilterList {
     enum Filter: Int, CaseIterable {
         case location, dispalyAllergen, allergenList
     }
+
     private var mensaLocationsList: [ChecklistItem] = []
     private var emptyList: [ChecklistItem] = []
     private var isDispalyAllergen: Bool = true
@@ -98,14 +105,15 @@ class FilterList {
         emptyList = [row20Item]
         allergenList = [row4Item, row5Item, row6Item, row7Item, row8Item, row9Item, row10Item, row11Item, row12Item, row13Item]
     }
+
     func filterList(for fliter: Filter) -> [ChecklistItem] {
         switch fliter {
         case .location:
-            return mensaLocationsList
+            mensaLocationsList
         case .dispalyAllergen:
-            return  emptyList
+            emptyList
         case .allergenList:
-            return allergenList
+            allergenList
         }
     }
 }

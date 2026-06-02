@@ -6,8 +6,8 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import UIKit
 import CoreData
+import UIKit
 
 @MainActor
 protocol FilterMensaViewDelegate: AnyObject {
@@ -18,18 +18,19 @@ protocol FilterMensaViewDelegate: AnyObject {
 
 @MainActor
 class FilterMensaViewController: UIViewController {
-    @IBOutlet weak var filterTableView: UITableView! {
+    @IBOutlet var filterTableView: UITableView! {
         didSet {
             let refreshControl = filterTableView.setUpRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.refershLoad), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
             filterTableView.refreshControl = refreshControl
         }
     }
-    lazy var filterMensaViewModel: FilterMensaViewModel = FilterMensaViewModel()
+
+    lazy var filterMensaViewModel: FilterMensaViewModel = .init()
     weak var delegate: FilterMensaViewDelegate?
 
     private func filterForSectionIndex(_ index: Int) -> FilterMensaViewModel.Filter? {
-        return FilterMensaViewModel.Filter(rawValue: index)
+        FilterMensaViewModel.Filter(rawValue: index)
     }
 
     override func viewDidLoad() {
@@ -39,12 +40,11 @@ class FilterMensaViewController: UIViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        filterMensaViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
+        if filterMensaViewModel.showLoadingIndicator { filterTableView.showingLoadingView() } else { filterTableView.hideLoadingView() }
         if filterMensaViewModel.didUpdatefilterList {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -117,8 +117,7 @@ class FilterMensaViewController: UIViewController {
             do {
                 try context.save()
                 delegate?.didUpdateNoticesFilter()
-            } catch {
-            }
+            } catch {}
         }
     }
 
@@ -133,7 +132,8 @@ class FilterMensaViewController: UIViewController {
     }
 
     // MARK: - Navigation
-    internal struct SegueIdentifiers {
+
+    enum SegueIdentifiers {
         static let toNotificationTime = "NotificationTime"
     }
 
@@ -147,6 +147,7 @@ class FilterMensaViewController: UIViewController {
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if let filter = filterForSectionIndex(section) {
@@ -207,7 +208,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        return FilterMensaViewModel.Filter.allCases.count
+        FilterMensaViewModel.Filter.allCases.count
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -228,7 +229,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        var title: String = ""
+        var title = ""
         if let priority = filterForSectionIndex(section) {
             switch priority {
             case .location:
@@ -263,7 +264,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if indexPath.section == 1 && indexPath.row == 1 && filterMensaViewModel.isFoodAlarmEnabled == false {
+        if indexPath.section == 1, indexPath.row == 1, filterMensaViewModel.isFoodAlarmEnabled == false {
             // Returning exactly 0.0 makes UIKit add a hard height==0 constraint that conflicts
             // with UIDatePicker's internal constraints. leastNormalMagnitude collapses the row
             // visually without triggering that constraint.
@@ -273,15 +274,15 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func getDefultHieght(_ indexPath: IndexPath, tableview: UITableView) -> CGFloat {
-        return tableview.rowHeight
+        tableview.rowHeight
     }
 }
 
-extension FilterMensaViewController: SingleButtonDialogPresenter { }
+extension FilterMensaViewController: SingleButtonDialogPresenter {}
 
 extension FilterMensaViewController: MensaFilterCellDelegate {
     func didSwitchOnFilter(indexPath: IndexPath?) {
-        if let indexPath = indexPath {
+        if let indexPath {
             if indexPath.section == 1 {
                 filterMensaViewModel.checkNotificationStatus()
             } else {
@@ -293,7 +294,7 @@ extension FilterMensaViewController: MensaFilterCellDelegate {
     }
 
     func didSwitchOffFilter(indexPath: IndexPath?) {
-        if let indexPath = indexPath {
+        if let indexPath {
             if indexPath.section == 1 {
                 filterMensaViewModel.isFoodAlarmEnabled = false
                 updateTableView()

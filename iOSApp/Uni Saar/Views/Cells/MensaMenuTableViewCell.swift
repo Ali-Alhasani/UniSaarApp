@@ -9,43 +9,52 @@
 import UIKit
 
 class MensaMenuTableViewCell: UITableViewCell {
-    @IBOutlet weak var counterNameLabel: UILabel!
-    @IBOutlet weak var mealNameLabel: UILabel!
-    @IBOutlet weak var componentsLabel: UILabel!
-    @IBOutlet weak var openingHoursLabel: UILabel!
-    @IBOutlet weak var outerView: UIView!
-    @IBOutlet weak var colorView: UIView!
-    @IBOutlet weak var noticesLabel: UILabel!
+    @IBOutlet var counterNameLabel: UILabel!
+    @IBOutlet var mealNameLabel: UILabel!
+    @IBOutlet var componentsLabel: UILabel!
+    @IBOutlet var openingHoursLabel: UILabel!
+    @IBOutlet var outerView: UIView!
+    @IBOutlet var colorView: UIView!
+    @IBOutlet var noticesLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        setUpLayout()
+        MainActor.assumeIsolated {
+            setUpLayout()
+        }
     }
+
     @MainActor func setUpLayout() {
         outerView.setAsCircle(cornerRadius: 5)
         colorView.layer.cornerRadius = 5
         colorView.backgroundColor = .systemRed
-        //if the language is RTL it should be switch to [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+        // if the language is RTL it should be switch to [.layerMaxXMinYCorner, .layerMaxXMaxYCorner]
         colorView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
         outerView.setAllSideShadow()
     }
 }
+
 extension MensaMenuTableViewCell: MensaMenuViewModelView {
     var counterLabel: UILabel? {
-        return counterNameLabel
+        counterNameLabel
     }
+
     var mealDisplayNameLabel: UILabel? {
-        return mealNameLabel
+        mealNameLabel
     }
+
     var hoursLabel: UILabel? {
-        return openingHoursLabel
+        openingHoursLabel
     }
+
     var mealsLabel: UILabel? {
-        return componentsLabel
+        componentsLabel
     }
+
     var counterColorView: UIView? {
-        return colorView
+        colorView
     }
+
     var noticeLabel: UILabel? {
-        return noticesLabel
+        noticesLabel
     }
 }

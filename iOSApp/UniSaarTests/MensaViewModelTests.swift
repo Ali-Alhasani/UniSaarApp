@@ -6,12 +6,11 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 final class MensaViewModelTests: XCTestCase {
-
     func testMensaModel() {
         let testSuccessfulJSON = MensaMenuModel.deomJSON
         XCTAssertNotNil(MensaMenuModel(json: testSuccessfulJSON))
@@ -27,7 +26,7 @@ final class MensaViewModelTests: XCTestCase {
         dataClient.getMensaResult = .success(MensaMenuModel.menuDemoData)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
         await viewModel.loadGetMensaMenu()
-        guard case .normal(_) = viewModel.daysMenus.first else {
+        guard case .normal = viewModel.daysMenus.first else {
             XCTFail("mensa menu should have values")
             return
         }
@@ -49,7 +48,7 @@ final class MensaViewModelTests: XCTestCase {
         dataClient.getMensaResult = .failure(MyError.customError)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
         await viewModel.loadGetMensaMenu()
-        guard case .error(_) = viewModel.daysMenus.first else {
+        guard case .error = viewModel.daysMenus.first else {
             XCTFail("Mensa request should be failed and return error message")
             return
         }
@@ -62,14 +61,14 @@ final class MensaViewModelTests: XCTestCase {
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
         await viewModel.loadGetMensaMenu()
         switch viewModel.daysMenus.first {
-        case .normal(let cellViewModel):
+        case let .normal(cellViewModel):
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.mealDispalyName, cellViewModel.mealsCells.first?.mealName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.counterDisplayName, cellViewModel.mealsCells.first?.counterDisplayName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.openingHoursText, cellViewModel.mealsCells.first?.openingHoursText)
             if let countersMeal = menu.daysMenus.first?.countersMeals, let color = countersMeal.first?.color {
                 XCTAssertEqual(AppStyle.mensaCounterColor(color), cellViewModel.mealsCells.first?.counterColor)
             }
-        case .error(let message):
+        case let .error(message):
             XCTAssertNotNil(message)
         case .empty:
             break
@@ -122,6 +121,7 @@ final class MensaViewModelTests: XCTestCase {
     }
 
     // MARK: - MensaMealsModel demo data
+
     // Note: mensaDemoData uses legacy JSON keys (mealDispalyName, openiningHours, meals)
     // that predate the current parser (mealName, openingHours, components).
     // Tests here verify the array initialises from the stored fixture and that

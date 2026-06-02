@@ -8,12 +8,12 @@
 
 import Foundation
 import UIKit
+
 struct AlertAction {
     let buttonTitle: String = NSLocalizedString("AlertOkActionTitle", comment: "")
     let tryAgainButtonTitle: String = NSLocalizedString("tryAgain", comment: "")
     let handler: (() -> Void)?
     let tryAgainHandler: (() -> Void)?
-
 }
 
 struct SingleButtonAlert {
@@ -21,13 +21,14 @@ struct SingleButtonAlert {
     let message: String?
     let action: AlertAction
 }
-extension UIViewController {
 
+extension UIViewController {
     func errorAlert(_ errorMessage: String) -> UIAlertController {
         let alert = UIAlertController(title: NSLocalizedString("AlertTitle", comment: ""), message: errorMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("AlertOkActionTitle", comment: ""), style: .default, handler: nil))
         return alert
     }
+
     func succesAlertWithHandler(_ errorMessage: String, _ handler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
         let alert = UIAlertController(title: NSLocalizedString("AlertTitle", comment: ""), message: errorMessage, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: NSLocalizedString("AlertOkActionTitle", comment: ""), style: .default, handler: handler))

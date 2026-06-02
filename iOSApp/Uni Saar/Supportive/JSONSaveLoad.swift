@@ -8,11 +8,11 @@
 
 import Foundation
 import SwiftyJSON
-/**
-Extension to save/load a JSON object by filename. (".json" extension is assumed and automatically added.)
- */
-extension Data {
 
+/**
+ Extension to save/load a JSON object by filename. (".json" extension is assumed and automatically added.)
+  */
+extension Data {
     static func dataFromFile(withFilename filename: String) -> Data? {
         let fileManager = FileManager.default
         let urls = fileManager.urls(for: .documentDirectory, in: .userDomainMask)
@@ -20,10 +20,9 @@ extension Data {
             var fileURL = documentsURL.appendingPathComponent(filename)
             fileURL = fileURL.appendingPathExtension("json")
             if !fileManager.fileExists(atPath: fileURL.path) {
-                self.copyFileFromBundleToDocumentsFolder(sourceFile: "Campus_Map_Coord.json")
+                copyFileFromBundleToDocumentsFolder(sourceFile: "Campus_Map_Coord.json")
             }
-            let data = try? Data(contentsOf: fileURL)
-            return data
+            return try? Data(contentsOf: fileURL)
         }
         return nil
     }
@@ -31,7 +30,7 @@ extension Data {
     static func copyFileFromBundleToDocumentsFolder(sourceFile: String, destinationFile: String = "") {
         let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
 
-        if let documentsURL = documentsURL {
+        if let documentsURL {
             let sourceURL = Bundle.main.bundleURL.appendingPathComponent(sourceFile)
 
             // Use the same filename if destination filename is not specified
@@ -40,7 +39,7 @@ extension Data {
             do {
                 try FileManager.default.copyItem(at: sourceURL, to: destURL)
                 print("\(sourceFile) was copied successfully.")
-            } catch let error {
+            } catch {
                 print(error)
             }
         }

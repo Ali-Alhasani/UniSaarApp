@@ -10,14 +10,15 @@ import UIKit
 
 @MainActor
 class HelpfulContactsViewController: UIViewController {
-    @IBOutlet weak var directoryTableView: UITableView! {
+    @IBOutlet var directoryTableView: UITableView! {
         didSet {
             let refreshControl = directoryTableView.setUpRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.refershLoad), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
             directoryTableView.refreshControl = refreshControl
         }
     }
-    lazy var directoryViewModel: DirectoryViewModel = DirectoryViewModel()
+
+    lazy var directoryViewModel: DirectoryViewModel = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,12 +27,11 @@ class HelpfulContactsViewController: UIViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+        if directoryViewModel.showLoadingIndicator { directoryTableView.showingLoadingView() } else { directoryTableView.hideLoadingView() }
         if let alert = directoryViewModel.currentAlert {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -56,26 +56,27 @@ class HelpfulContactsViewController: UIViewController {
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension HelpfulContactsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return directoryViewModel.helpfulNumbersCells.count
+        directoryViewModel.helpfulNumbersCells.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return getHelpfulNumbersCell(indexPath: indexPath)
+        getHelpfulNumbersCell(indexPath: indexPath)
     }
 
     func getHelpfulNumbersCell(indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
         switch directoryViewModel.helpfulNumbersCells[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             guard let cell = directoryTableView.dequeueReusableCell(withIdentifier: HelpfulNumbersTableViewCell.identifier, for: indexPath) as? HelpfulNumbersTableViewCell else {
                 return defaultCell
             }
             cell.viewModel = viewModel
             cell.selectionStyle = .none
             return cell
-        case .error(let message):
+        case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
             return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyResults", comment: ""))
@@ -85,8 +86,8 @@ extension HelpfulContactsViewController: UITableViewDelegate, UITableViewDataSou
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return NSLocalizedString("HelpfulNumbers", comment: "")
+        NSLocalizedString("HelpfulNumbers", comment: "")
     }
 }
 
-extension HelpfulContactsViewController: SingleButtonDialogPresenter { }
+extension HelpfulContactsViewController: SingleButtonDialogPresenter {}

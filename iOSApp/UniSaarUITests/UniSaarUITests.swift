@@ -8,13 +8,13 @@
 
 import XCTest
 
-// @unchecked Sendable: XCTestCase (ObjC base) can't auto-derive Sendable, but
-// @MainActor final class guarantees serialised access — the conformance is safe.
+/// @unchecked Sendable: XCTestCase (ObjC base) can't auto-derive Sendable, but
+/// @MainActor final class guarantees serialised access — the conformance is safe.
 @MainActor
 final class UniSaarUITests: XCTestCase, @unchecked Sendable {
     var app: XCUIApplication!
 
-    nonisolated override func setUpWithError() throws {
+    override nonisolated func setUpWithError() throws {
         try super.setUpWithError()
         // XCTest calls lifecycle methods on the main thread — MainActor.assumeIsolated is safe here
         MainActor.assumeIsolated {
@@ -25,8 +25,8 @@ final class UniSaarUITests: XCTestCase, @unchecked Sendable {
             addUIInterruptionMonitor(withDescription: "System alert") { alert in
                 let allow = alert.buttons["Allow"]
                 if allow.exists { allow.tap(); return true }
-                let ok = alert.buttons["OK"]
-                if ok.exists { ok.tap(); return true }
+                let okButton = alert.buttons["OK"]
+                if okButton.exists { okButton.tap(); return true }
                 return false
             }
 
@@ -35,7 +35,7 @@ final class UniSaarUITests: XCTestCase, @unchecked Sendable {
         }
     }
 
-    nonisolated override func tearDownWithError() throws {
+    override nonisolated func tearDownWithError() throws {
         // XCTest calls lifecycle methods on the main thread — MainActor.assumeIsolated is safe here
         MainActor.assumeIsolated { app = nil }
         try super.tearDownWithError()
@@ -54,7 +54,9 @@ final class UniSaarUITests: XCTestCase, @unchecked Sendable {
         app.swipeUp()
     }
 
-    private var tabBar: XCUIElement { app.tabBars.firstMatch }
+    private var tabBar: XCUIElement {
+        app.tabBars.firstMatch
+    }
 
     // MARK: - Tab bar structure
 

@@ -10,16 +10,17 @@ import UIKit
 
 @MainActor
 class DirectoryViewController: UIViewController {
-    @IBOutlet weak var directoryTableView: UITableView! {
+    @IBOutlet var directoryTableView: UITableView! {
         didSet {
             let refreshControl = directoryTableView.setUpRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.refershLoad), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
             directoryTableView.refreshControl = refreshControl
         }
     }
-    @IBOutlet weak var helpfulContactsView: UIView!
-    @IBOutlet weak var outerView: UIView!
-    lazy var directoryViewModel: DirectoryViewModel = DirectoryViewModel()
+
+    @IBOutlet var helpfulContactsView: UIView!
+    @IBOutlet var outerView: UIView!
+    lazy var directoryViewModel: DirectoryViewModel = .init()
     let searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {
@@ -31,12 +32,11 @@ class DirectoryViewController: UIViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        directoryViewModel.showLoadingIndicator ? directoryTableView.showingLoadingView() : directoryTableView.hideLoadingView()
+        if directoryViewModel.showLoadingIndicator { directoryTableView.showingLoadingView() } else { directoryTableView.hideLoadingView() }
         if let alert = directoryViewModel.currentAlert {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -75,7 +75,7 @@ class DirectoryViewController: UIViewController {
     }
 
     var isSearchBarEmpty: Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
+        searchController.searchBar.text?.isEmpty ?? true
     }
 
     var isSearching: Bool {
@@ -83,7 +83,7 @@ class DirectoryViewController: UIViewController {
         return searchController.isActive && (!isSearchBarEmpty || searchBarScopeIsFiltering)
     }
 
-    internal struct SegueIdentifiers {
+    enum SegueIdentifiers {
         static let toStaffDetails = "toStaffDetails"
     }
 
@@ -106,16 +106,17 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
         }
         return 1
     }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
         switch directoryViewModel.searchResutlsCells[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: StaffSearchResultTableViewCell.identifier, for: indexPath) as? StaffSearchResultTableViewCell else {
                 return defaultCell
             }
             cell.viewModel = viewModel
             return cell
-        case .error(let message):
+        case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
             return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyResults", comment: ""))
@@ -123,17 +124,18 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
             return defaultCell
         }
     }
+
     func getHelpfulNumbersCell(indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
         switch directoryViewModel.helpfulNumbersCells[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             guard let cell = directoryTableView.dequeueReusableCell(withIdentifier: HelpfulNumbersTableViewCell.identifier, for: indexPath) as? HelpfulNumbersTableViewCell else {
                 return defaultCell
             }
             cell.viewModel = viewModel
             cell.selectionStyle = .none
             return cell
-        case .error(let message):
+        case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
             return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyResults", comment: ""))
@@ -141,14 +143,16 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
             return defaultCell
         }
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch directoryViewModel.searchResutlsCells[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             performSegue(withIdentifier: SegueIdentifiers.toStaffDetails, sender: viewModel.staffId)
         case .empty, .error, .none:
             break
         }
     }
+
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if !isSearching { return NSLocalizedString("HelpfulNumbers", comment: "") }
         return ""
@@ -162,6 +166,7 @@ extension DirectoryViewController: UISearchResultsUpdating {
             Task { [weak self] in await self?.directoryViewModel.loadGetSearchResults(searchQuery: searchText) }
         }
     }
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         directoryTableView.isHidden = true
         outerView.isHidden = false
@@ -189,7 +194,7 @@ extension DirectoryViewController {
     }
 }
 
-extension DirectoryViewController: SingleButtonDialogPresenter { }
+extension DirectoryViewController: SingleButtonDialogPresenter {}
 
 extension DirectoryViewController {
     private func observeKeyboardEvents() {

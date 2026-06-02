@@ -6,13 +6,12 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 import SwiftyJSON
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 final class MoreViewModelTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Prevent CoreData pre-load so mock network responses control cell state
@@ -35,7 +34,7 @@ final class MoreViewModelTests: XCTestCase {
         dataClient.getMoreLinksResult = .success(MoreModel.demoData)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
         await viewModel.loadGetMoreLinks()
-        guard case .normal(_) = viewModel.linksCells.first else {
+        guard case .normal = viewModel.linksCells.first else {
             XCTFail("More Links should have value")
             return
         }
@@ -54,7 +53,7 @@ final class MoreViewModelTests: XCTestCase {
         dataClient.getMoreLinksResult = .failure(MyError.customError)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
         await viewModel.loadGetMoreLinks()
-        if case .error(_) = viewModel.linksCells.first {
+        if case .error = viewModel.linksCells.first {
             return
         }
         guard viewModel.fetchedResultsController.fetchedObjects?.count == 0 else {
@@ -70,11 +69,11 @@ final class MoreViewModelTests: XCTestCase {
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
         await viewModel.loadGetMoreLinks()
         switch viewModel.linksCells.first {
-        case .normal(let cellViewModel):
+        case let .normal(cellViewModel):
             let linkItem = moreLinksResults.links.first
             XCTAssertEqual(linkItem?.displayName, cellViewModel.nameText)
             XCTAssertEqual(URL(string: linkItem?.url ?? ""), cellViewModel.linkURL)
-        case .error(let message):
+        case let .error(message):
             XCTAssertNotNil(message)
         case .empty:
             break

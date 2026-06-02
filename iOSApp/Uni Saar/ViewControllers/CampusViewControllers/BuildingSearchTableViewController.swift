@@ -6,30 +6,28 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import UIKit
 import MapKit
+import UIKit
 
 @MainActor
 protocol HandleMapSearch: AnyObject {
     func dropPinZoomIn(placemark: MapPin)
     func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool)
 }
+
 @MainActor
 class BuildingSearchTableViewController: UITableViewController {
     weak var handleMapSearchDelegate: HandleMapSearch?
     var matchingItems: [MapInfoModel] = []
     var campusCoordinates: [MapInfoModel] = []
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-
 }
+
 extension BuildingSearchTableViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         guard var searchBarText = searchController.searchBar.text else { return }
         searchBarText = searchBarText.replacingOccurrences(of: "Gebäude ", with: "")
         let withoutSpeace = searchBarText.replacingOccurrences(of: " ", with: "")
-        self.matchingItems = campusCoordinates.filter { (item) -> Bool in
+        matchingItems = campusCoordinates.filter { item -> Bool in
             if item.name.range(of: searchBarText, options: .caseInsensitive) != nil {
                 return true
             } else {
@@ -42,13 +40,15 @@ extension BuildingSearchTableViewController: UISearchResultsUpdating {
             }
             return false
         }
-        self.tableView.reloadData()
+        tableView.reloadData()
     }
 }
+
 extension BuildingSearchTableViewController {
     // MARK: - Table view data source
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return matchingItems.count
+        matchingItems.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -63,8 +63,8 @@ extension BuildingSearchTableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedItem = matchingItems[indexPath.row]
-        if selectedItem.campus !=  AppSessionManager.shared.selectedCampus {
-            handleMapSearchDelegate?.didChangeLocationFilter(selectedCampus: selectedItem.campus ??  AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
+        if selectedItem.campus != AppSessionManager.shared.selectedCampus {
+            handleMapSearchDelegate?.didChangeLocationFilter(selectedCampus: selectedItem.campus ?? AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
         }
         if let latitude = CLLocationDegrees(selectedItem.latitude), let longitude = CLLocationDegrees(selectedItem.longitude) {
             let coordinate2D = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -77,6 +77,6 @@ extension BuildingSearchTableViewController {
 
 extension BuildingSearchTableViewController: CampusViewControllerDelegate {
     func didUpdateCoordinatesCache(coordinates: [MapInfoModel]) {
-        self.campusCoordinates = coordinates
+        campusCoordinates = coordinates
     }
 }

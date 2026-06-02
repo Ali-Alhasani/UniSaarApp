@@ -15,9 +15,10 @@ final class HelpfulNumbersModel: Sendable {
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
         numbersLastChanged = jsonFromated["numbersLastChanged"].stringValue
-        numbers = jsonFromated["numbers"].arrayValue.map {NumberModel(json: $0)}
+        numbers = jsonFromated["numbers"].arrayValue.map { NumberModel(json: $0) }
     }
 }
+
 final class NumberModel: Sendable {
     let name: String?
     let number: String?
@@ -30,10 +31,12 @@ final class NumberModel: Sendable {
         mail = json["mail"].string
     }
 }
+
 extension NumberModel {
     nonisolated(unsafe) static let deomJSON: [String: Any] = ["name": "Student office", "number": "0681 302-5491", "link":
         "https://www.uni-saarland.de/studium/beratung/studierendensekretariat.html", "mail": "anmeldung@univw.uni-saarland.de"]
 }
+
 extension HelpfulNumbersModel {
     static let helpfulNumbersDemoData = HelpfulNumbersModel(json: ["numbersLastChanged": "2020-01-26 22:54:42.457799", "numbers": [
         [
@@ -56,5 +59,5 @@ extension HelpfulNumbersModel {
             "name": "Library",
             "number": "+49 681 302 3076"
         ]
-        ]])
+    ]])
 }

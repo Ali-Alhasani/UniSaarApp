@@ -6,8 +6,8 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import UIKit
 import MapKit
+import UIKit
 
 @MainActor
 protocol CampusViewControllerDelegate: AnyObject {
@@ -16,7 +16,7 @@ protocol CampusViewControllerDelegate: AnyObject {
 
 @MainActor
 class CampusViewController: UIViewController {
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet var mapView: MKMapView!
     var searchController: UISearchController!
     var campusCoor = CampusModel(filename: AppSessionManager.shared.selectedCampus.mapCoorFileName)
     var selectedPin: MapPin?
@@ -43,6 +43,7 @@ class CampusViewController: UIViewController {
     }
 
     // MARK: - Add methods
+
     func addOverlay() {
         let overlay = CampusMapOverlay(campus: campusCoor)
         mapView.addOverlay(overlay)
@@ -93,7 +94,7 @@ class CampusViewController: UIViewController {
     }
 
     @objc func getDirections() {
-        guard let selectedPin = selectedPin else { return }
+        guard let selectedPin else { return }
         let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: selectedPin.coordinate))
         mapItem.name = selectedPin.title
         mapItem.openInMaps(launchOptions: nil)
@@ -109,25 +110,25 @@ class CampusViewController: UIViewController {
     }
 
     func updateCoordinateCache(lastChangedDate: String) {
-        let vm = MapViewModel()
-        vm.coordinatesLastChanged = lastChangedDate
-        mapViewModel = vm
+        let mapVM = MapViewModel()
+        mapVM.coordinatesLastChanged = lastChangedDate
+        mapViewModel = mapVM
         Task { [weak self] in await self?.mapViewModel?.loadGetMapData() }
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        guard let vm = mapViewModel, let updatedCoor = vm.updatedCoordinates else { return }
+        guard let mapVM = mapViewModel, let updatedCoor = mapVM.updatedCoordinates else { return }
         let campusCoordinatesModel = CampusCoordinatesModel(json: updatedCoor)
         campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
         mapViewModel = nil
     }
 
     // MARK: - Navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let destination = segue.destination as? UINavigationController,
            let destinationViewController = destination.topViewController as? ChooseCampusViewController {
@@ -137,6 +138,7 @@ class CampusViewController: UIViewController {
 }
 
 // MARK: - MKMapViewDelegate
+
 extension CampusViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         if overlay is CampusMapOverlay {
@@ -147,19 +149,22 @@ extension CampusViewController: MKMapViewDelegate {
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         guard !(annotation is MKUserLocation) else { return nil }
-        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier, for: annotation) as? MKMarkerAnnotationView ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+        let reuseID = MKMapViewDefaultAnnotationViewReuseIdentifier
+        let annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseID, for: annotation) as? MKMarkerAnnotationView
+            ?? MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: reuseID)
         annotationView.canShowCallout = true
         var config = UIButton.Configuration.plain()
         config.image = UIImage(systemName: "car")
         let button = UIButton(configuration: config)
         button.frame = CGRect(origin: .zero, size: CGSize(width: 35, height: 30))
-        button.addTarget(self, action: #selector(self.getDirections), for: .touchUpInside)
+        button.addTarget(self, action: #selector(getDirections), for: .touchUpInside)
         annotationView.rightCalloutAccessoryView = button
         return annotationView
     }
 }
 
 // MARK: - ChooseCampusDelegate
+
 extension CampusViewController: ChooseCampusDelegate {
     func didChangeLocationFilter(selectedCampus: Campus, regionNeedUpdate: Bool) {
         mapView.removeAnnotations(mapView.annotations)
@@ -174,6 +179,7 @@ extension CampusViewController: ChooseCampusDelegate {
 }
 
 // MARK: - HandleMapSearch
+
 extension CampusViewController: HandleMapSearch {
     func dropPinZoomIn(placemark: MapPin) {
         selectedPin = placemark

@@ -11,7 +11,7 @@ import Observation
 
 @Observable
 class StaffDetailsViewModel: ParentViewModel {
-    var staffDetails: StaffViewModel = StaffViewModel()
+    var staffDetails: StaffViewModel = .init()
 
     override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
@@ -33,17 +33,20 @@ class StaffDetailsViewModel: ParentViewModel {
 class StaffViewModel {
     var staffDetailsModel: StaffDetailsModel?
     var fullName: String {
-        return (staffDetailsModel?.firstName ?? "") + " " + (staffDetailsModel?.lastName ?? "")
+        (staffDetailsModel?.firstName ?? "") + " " + (staffDetailsModel?.lastName ?? "")
     }
+
     var titleText: String {
-        return staffDetailsModel?.title ?? ""
+        staffDetailsModel?.title ?? ""
     }
+
     var address: String {
         let firstLine = (staffDetailsModel?.building ?? "") + " - " + (staffDetailsModel?.office ?? "")
         let secondLine = staffDetailsModel?.street ?? "" + ", " + (staffDetailsModel?.postalCode ?? "")
         let thirdLine = staffDetailsModel?.city
         return firstLine + "\n" + secondLine + "\n" + (thirdLine ?? "")
     }
+
     var contactText: String? {
         var contactString = ""
         if let phoneNumber = staffDetailsModel?.phoneNumber, phoneNumber != "" {
@@ -60,18 +63,22 @@ class StaffViewModel {
         }
         return contactString
     }
+
     var email: String? {
         if let email = staffDetailsModel?.email, email != "" {
             return "✉︎   " + email
         }
         return ""
     }
+
     var imageURL: URL? {
-        return URL(string: staffDetailsModel?.image ?? "")
+        URL(string: staffDetailsModel?.image ?? "")
     }
+
     var remarkText: String? {
-        return staffDetailsModel?.remarks
+        staffDetailsModel?.remarks
     }
+
     var genderText: String {
         var string = ""
         string += staffDetailsModel?.gender ?? ""
@@ -80,8 +87,10 @@ class StaffViewModel {
         }
         return string
     }
+
     init(_ staffDetailsModel: StaffDetailsModel) {
         self.staffDetailsModel = staffDetailsModel
     }
-    public init() { }
+
+    init() {}
 }

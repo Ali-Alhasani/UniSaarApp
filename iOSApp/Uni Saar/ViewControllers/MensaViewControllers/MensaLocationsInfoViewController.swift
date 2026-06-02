@@ -10,13 +10,12 @@ import UIKit
 
 @MainActor
 class MensaLocationsInfoViewController: UIViewController {
-
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var descriptionLabel: UILabel!
     var mensaLocationTitle: String?
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let mensaLocationTitle = mensaLocationTitle {
+        if let mensaLocationTitle {
             title = mensaLocationTitle
         }
         loadAPI()
@@ -42,8 +41,9 @@ class MensaLocationsInfoViewController: UIViewController {
             }
         }
     }
-     func loadAgain() {
-        self.loadAPI()
+
+    func loadAgain() {
+        loadAPI()
     }
     /*
      // MARK: - Navigation
@@ -54,6 +54,6 @@ class MensaLocationsInfoViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
-
 }
+
 extension MensaLocationsInfoViewController: SingleButtonDialogPresenter {}

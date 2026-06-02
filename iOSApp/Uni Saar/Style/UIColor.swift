@@ -8,43 +8,55 @@
 
 import Foundation
 import UIKit
+
 public extension UIColor {
     class var uniMainColorDrak: UIColor {
-        return UIColor(named: "uniColor") ?? appSystemBackgroundColor
+        UIColor(named: "uniColor") ?? appSystemBackgroundColor
     }
+
     class var uniMainColorLight: UIColor {
-        return UIColor(named: "uniColorLight") ?? appSystemBackgroundColor
+        UIColor(named: "uniColorLight") ?? appSystemBackgroundColor
     }
+
     class var uniHeadlineColor: UIColor {
-        return UIColor(named: "uniHeadlineColor") ?? appSystemLabelColor
+        UIColor(named: "uniHeadlineColor") ?? appSystemLabelColor
     }
+
     class var uniTintColor: UIColor {
-        return UIColor(named: "uniColorTint") ?? appSystemBackgroundColor
+        UIColor(named: "uniColorTint") ?? appSystemBackgroundColor
     }
+
     class var backNavgationTintColor: UIColor {
-        return UIColor(named: "barColorTint") ?? appSystemBackgroundColor
+        UIColor(named: "barColorTint") ?? appSystemBackgroundColor
     }
+
     class var appSystemBackgroundColor: UIColor {
-        return UIColor.systemBackground
+        UIColor.systemBackground
     }
+
     class var appSystemLabelColor: UIColor {
-        return UIColor.label
+        UIColor.label
     }
+
     class var flatGray: UIColor {
-        return UIColor.systemGroupedBackground
+        UIColor.systemGroupedBackground
     }
+
     class var secondaryFillColor: UIColor {
-        return UIColor.secondarySystemFill
+        UIColor.secondarySystemFill
     }
+
     class var flatDarkGray: UIColor {
-        return UIColor { traitCollection in
+        UIColor { traitCollection in
             traitCollection.userInterfaceStyle == .dark ? systemGray4 : systemGray3
         }
     }
+
     class var labelCustomColor: UIColor {
-        return UIColor.label
+        UIColor.label
     }
+
     class var lightLabelCustomColor: UIColor {
-        return UIColor.lightText
+        UIColor.lightText
     }
 }

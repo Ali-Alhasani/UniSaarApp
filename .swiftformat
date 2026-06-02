@@ -1,8 +1,10 @@
 # 1. Formatting Configuration Blueprint
+--swiftversion 6.0         # Enables Swift 6 formatting rules
 --allman false             # Enforces clean, standard Egyptian brace style (func() {)
 --indent 4                 # Matches Xcode default 4-space indent rule
 --trimwhitespace always    # Automatically strips out stray trailing spaces
---stripunusedargs closures # Cleans up unused parameters inside closure blocks
+--stripunusedargs closure-only # Cleans up unused parameters inside closure blocks
+--disable trailingCommas,wrapMultilineStatementBraces # SwiftLint rules take precedence: trailing_comma forbids commas, opening_brace forbids )\n{
 
 # 2. Exclude files that shouldn't be automatically rewritten
 --exclude .build,DerivedData,Pods,Carthage

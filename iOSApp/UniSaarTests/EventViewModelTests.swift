@@ -6,18 +6,17 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 final class EventViewModelTests: XCTestCase {
-
     func testNormalEventCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getEventsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = EventViewModel(dataClient: dataClient)
         await viewModel.loadGetEvents(month: "12", year: "2019")
-        guard case .normal(_) = viewModel.eventCells.first else {
+        guard case .normal = viewModel.eventCells.first else {
             XCTFail("Event cells should have values")
             return
         }
@@ -39,7 +38,7 @@ final class EventViewModelTests: XCTestCase {
         dataClient.getEventsResult = .failure(MyError.customError)
         let viewModel = EventViewModel(dataClient: dataClient)
         await viewModel.loadGetEvents(month: "12", year: "2019")
-        guard case .error(_) = viewModel.eventCells.first else {
+        guard case .error = viewModel.eventCells.first else {
             XCTFail("Event cells should have error")
             return
         }

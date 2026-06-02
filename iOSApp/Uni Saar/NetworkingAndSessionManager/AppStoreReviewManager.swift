@@ -16,15 +16,14 @@ enum AppStoreReviewManager {
 
     @MainActor
     static func requestReviewIfAppropriate(presentedView: UIViewController) {
-
         let defaults = UserDefaults.standard
         let today = Date().timeIntervalSince1970
 
         let lastDate = defaults.double(forKey: .lastOpenDate)
-        if let lastDate = lastDate {
+        if let lastDate {
             // print("The app was first opened on \(lastOpenDate)")
-            //86400 number of seconds in a day
-            if lastDate + 86400  > today {
+            // 86400 number of seconds in a day
+            if lastDate + 86400 > today {
                 return
             }
         }
@@ -34,7 +33,7 @@ enum AppStoreReviewManager {
         var actionCount = defaults.integer(forKey: .reviewWorthyActionCount)
         actionCount += 1
         defaults.set(actionCount, forKey: .reviewWorthyActionCount)
-        //open the app reivew after minimumReviewWorthyActionCount times
+        // open the app reivew after minimumReviewWorthyActionCount times
         guard actionCount >= minimumReviewWorthyActionCount else {
             return
         }
@@ -59,7 +58,6 @@ enum AppStoreReviewManager {
 
         defaults.set(0, forKey: .reviewWorthyActionCount)
         defaults.set(currentVersion, forKey: .lastReviewRequestAppVersions)
-
     }
 
     @MainActor
@@ -79,15 +77,15 @@ extension UserDefaults {
     }
 
     func integer(forKey key: Key) -> Int {
-        return integer(forKey: key.rawValue)
+        integer(forKey: key.rawValue)
     }
 
     func string(forKey key: Key) -> String? {
-        return string(forKey: key.rawValue)
+        string(forKey: key.rawValue)
     }
 
     func double(forKey key: Key) -> Double? {
-        return double(forKey: key.rawValue)
+        double(forKey: key.rawValue)
     }
 
     func set(_ integer: Int, forKey key: Key) {

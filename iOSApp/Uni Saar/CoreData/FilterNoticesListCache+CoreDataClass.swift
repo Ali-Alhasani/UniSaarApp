@@ -1,15 +1,13 @@
 //
 //  FilterNoticesListCache+CoreDataClass.swift
-//  
+//
 //
 //  Created by Ali Al-Hasani on 12/19/19.
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(FilterNoticesListCache)
-public class FilterNoticesListCache: NSManagedObject {
-
-}
+public class FilterNoticesListCache: NSManagedObject {}

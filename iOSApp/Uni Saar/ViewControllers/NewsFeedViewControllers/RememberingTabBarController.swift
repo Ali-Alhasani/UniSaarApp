@@ -8,22 +8,23 @@
 
 import Foundation
 import UIKit
+
 @MainActor
 class RememberingTabBarController: UITabBarController, UITabBarControllerDelegate {
     let lastOpenTabScreen = "selectedTabIndex"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.delegate = self
+        delegate = self
 
         // Load the last selected tab if the key exists in the UserDefaults
-        if let lastOpenTab = UserDefaults.standard.object(forKey: self.lastOpenTabScreen) as? Int {
-            self.selectedIndex = lastOpenTab
+        if let lastOpenTab = UserDefaults.standard.object(forKey: lastOpenTabScreen) as? Int {
+            selectedIndex = lastOpenTab
         }
     }
 
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         // Save the selected index to the UserDefaults
-        UserDefaults.standard.set(self.selectedIndex, forKey: self.lastOpenTabScreen)
+        UserDefaults.standard.set(selectedIndex, forKey: lastOpenTabScreen)
     }
 }

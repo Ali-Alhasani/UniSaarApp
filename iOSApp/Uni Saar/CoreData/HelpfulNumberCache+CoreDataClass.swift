@@ -7,10 +7,8 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(HelpfulNumberCache)
-public class HelpfulNumberCache: NSManagedObject {
-
-}
+public class HelpfulNumberCache: NSManagedObject {}

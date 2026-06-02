@@ -6,11 +6,10 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 class AlertControllerTest: XCTestCase {
-
     func testAlert() {
         var handlerCalled = false
 
@@ -21,7 +20,7 @@ class AlertControllerTest: XCTestCase {
             }, tryAgainHandler: nil)
         )
 
-        alert.action.handler!()
+        alert.action.handler?()
 
         XCTAssertTrue(handlerCalled, "Alert action handler should be called")
     }

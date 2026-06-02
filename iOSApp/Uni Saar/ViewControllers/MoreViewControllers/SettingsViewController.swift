@@ -10,25 +10,18 @@ import UIKit
 
 @MainActor
 class SettingsViewController: UITableViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        //setTheAlertTime()
-        // Do any additional setup after loading the view.
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if AppSessionManager.shared.selectedCampus == Campus.saarbruken {
-            tableView.selectRow(at: IndexPath.init(row: 0, section: 0), animated: false, scrollPosition: .none)
-            if let cell = tableView.cellForRow(at: IndexPath.init(row: 0, section: 0)) {
+            tableView.selectRow(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .none)
+            if let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) {
                 cell.accessoryType = .checkmark
             }
         } else {
-            tableView.selectRow(at: IndexPath.init(row: 1, section: 0), animated: false, scrollPosition: .none)
+            tableView.selectRow(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .none)
         }
     }
+
     /*
      // MARK: - Navigation
 
@@ -41,11 +34,11 @@ class SettingsViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
-            if indexPath.section == 0 && indexPath.row == 0 {
+            if indexPath.section == 0, indexPath.row == 0 {
                 cell.accessoryType = .checkmark
                 AppSessionManager.shared.selectedCampus = Campus.saarbruken
                 notifyCampusView()
-            } else if indexPath.section == 0 && indexPath.row == 1 {
+            } else if indexPath.section == 0, indexPath.row == 1 {
                 cell.accessoryType = .checkmark
                 AppSessionManager.shared.selectedCampus = Campus.homburg
                 notifyCampusView()

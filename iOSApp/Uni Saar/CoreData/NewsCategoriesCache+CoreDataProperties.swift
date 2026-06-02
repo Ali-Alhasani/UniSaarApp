@@ -7,17 +7,15 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
-extension NewsCategoriesCache {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<NewsCategoriesCache> {
-        return NSFetchRequest<NewsCategoriesCache>(entityName: "NewsCategoriesCache")
+public extension NewsCategoriesCache {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<NewsCategoriesCache> {
+        NSFetchRequest<NewsCategoriesCache>(entityName: "NewsCategoriesCache")
     }
 
-    @NSManaged public var categoryID: Int32
-    @NSManaged public var isSelected: Bool
-    @NSManaged public var name: String?
-
+    @NSManaged var categoryID: Int32
+    @NSManaged var isSelected: Bool
+    @NSManaged var name: String?
 }

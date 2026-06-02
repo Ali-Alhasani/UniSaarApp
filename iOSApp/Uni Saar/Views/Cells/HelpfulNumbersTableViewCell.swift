@@ -9,7 +9,7 @@
 import UIKit
 
 class HelpfulNumbersTableViewCell: UITableViewCell {
-    @IBOutlet weak var textView: UITextView!
+    @IBOutlet var textView: UITextView!
     var viewModel: HelpfulNumbersCellViewModel? {
         didSet {
             textView.text = viewModel?.fortmatedText

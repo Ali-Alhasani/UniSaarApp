@@ -27,6 +27,6 @@ extension SingleButtonDialogPresenter where Self: UIViewController {
                                                     style: .default,
                                                     handler: { _ in tryAgainHandler() }))
         }
-        self.present(alertController, animated: true, completion: nil)
+        present(alertController, animated: true, completion: nil)
     }
 }

@@ -9,9 +9,8 @@
 import UIKit
 
 class StaffSearchResultTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var fullNameLabel: UILabel!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var fullNameLabel: UILabel!
     var viewModel: DirectorySearchResutlsCellViewModel? {
         didSet {
             titleLabel.text = viewModel?.titleText

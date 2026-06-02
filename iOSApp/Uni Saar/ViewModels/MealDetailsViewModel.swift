@@ -7,12 +7,12 @@
 //
 
 import Foundation
-import UIKit
 import Observation
+import UIKit
 
 @Observable
 class MealDetailsViewModel: ParentViewModel {
-    var mealDetails: MealViewModel = MealViewModel()
+    var mealDetails: MealViewModel = .init()
     var noticesText: [FilterNoticesListCache]?
 
     override init(dataClient: any AppDataClient = DataClient()) {
@@ -40,32 +40,34 @@ class MealViewModel {
     var mealDetailsModel: MealDetailsModel?
     var noticesText: [FilterNoticesListCache]?
     var mealCounterDescription: String {
-        return mealDetailsModel?.counterDescription ?? ""
+        mealDetailsModel?.counterDescription ?? ""
     }
+
     var generalNoticesText: NSAttributedString {
-        if let mealDetailsModel = mealDetailsModel, mealDetailsModel.generalNotices.count > 0 {
-            if let noticesText = noticesText, noticesText.count > 0 {
+        if let mealDetailsModel, mealDetailsModel.generalNotices.count > 0 {
+            if let noticesText, noticesText.count > 0 {
                 let mutableAttributedString = NSMutableAttributedString()
                 for (index, notice) in mealDetailsModel.generalNotices.enumerated() {
                     mutableAttributedString.append(
-                        getNoticesAttributedString(selectedNotices: noticesText, notice: notice, listItemNormalStyle: AppStyle.square, listItemWarningStyle: AppStyle.triangle))
+                        getNoticesAttributedString(selectedNotices: noticesText, notice: notice, listItemNormalStyle: AppStyle.square, listItemWarningStyle: AppStyle.triangle)
+                    )
                     if index != mealDetailsModel.generalNotices.endIndex {
                         mutableAttributedString.append(NSMutableAttributedString(string: AppStyle.newLine, attributes: AppStyle.regularAttributes))
                     }
                 }
                 return mutableAttributedString
             } else {
-                return NSMutableAttributedString(string: AppStyle.square + mealDetailsModel.generalNotices.map {
-                    $0.noticeDispalyName}.joined(separator: AppStyle.newLineSquare),
+                return NSMutableAttributedString(string: AppStyle.square + mealDetailsModel.generalNotices.map(\.noticeDispalyName).joined(separator: AppStyle.newLineSquare),
                                                  attributes: AppStyle.regularAttributes)
             }
         } else {
             return NSMutableAttributedString(string: "", attributes: AppStyle.regularAttributes)
         }
     }
+
     var mealComponetsText: NSAttributedString {
-        if let mealDetailsModel = mealDetailsModel, mealDetailsModel.mealComponets.count > 0 {
-            if let noticesText = noticesText, noticesText.count > 0 {
+        if let mealDetailsModel, mealDetailsModel.mealComponets.count > 0 {
+            if let noticesText, noticesText.count > 0 {
                 let mutableAttributedString = NSMutableAttributedString()
                 for meal in mealDetailsModel.mealComponets {
                     let componentName = NSMutableAttributedString(string: AppStyle.square + meal.componentName, attributes: AppStyle.regularAttributes)
@@ -73,33 +75,39 @@ class MealViewModel {
                     for notice in meal.componentNotices {
                         mutableAttributedString.append(
                             getNoticesAttributedString(selectedNotices: noticesText, notice: notice, listItemNormalStyle: AppStyle.BULLET, listItemWarningStyle:
-                                AppStyle.newLineTabFLAG))
+                                AppStyle.newLineTabFLAG)
+                        )
                     }
                     mutableAttributedString.append(NSMutableAttributedString(string: AppStyle.newLine, attributes: AppStyle.regularAttributes))
                 }
                 return mutableAttributedString
             } else {
-                return NSMutableAttributedString(string: AppStyle.square + mealDetailsModel.mealComponets.map {$0.componentName +
-                    $0.componentNotices.map {AppStyle.BULLET + $0.noticeDispalyName }.joined()}.joined(separator: AppStyle.newLineSquare),
-                                                 attributes: AppStyle.regularAttributes)
+                return NSMutableAttributedString(string: AppStyle.square + mealDetailsModel.mealComponets.map { $0.componentName +
+                                                     $0.componentNotices.map { AppStyle.BULLET + $0.noticeDispalyName }.joined()
+                }.joined(separator: AppStyle.newLineSquare),
+                attributes: AppStyle.regularAttributes)
             }
         } else {
             return NSMutableAttributedString(string: "", attributes: AppStyle.regularAttributes)
         }
     }
+
     var priceTagNamesText: String {
-        return mealDetailsModel?.prices.map {$0.priceTagName + "\n"}.joined() ?? ""
+        mealDetailsModel?.prices.map { $0.priceTagName + "\n" }.joined() ?? ""
     }
+
     var priceValuesText: String {
-        return mealDetailsModel?.prices.map {$0.price + " € \n"}.joined() ?? ""
+        mealDetailsModel?.prices.map { $0.price + " € \n" }.joined() ?? ""
     }
+
     var mealName: String {
-        return mealDetailsModel?.mealName ?? ""
+        mealDetailsModel?.mealName ?? ""
     }
+
     func getNoticesAttributedString(selectedNotices: [FilterNoticesListCache], notice: MealNotices, listItemNormalStyle: String, listItemWarningStyle: String)
         -> NSMutableAttributedString {
         let mutableAttributedString = NSMutableAttributedString()
-        if selectedNotices.contains(where: {$0.noticeID == notice.noticeTag}) {
+        if selectedNotices.contains(where: { $0.noticeID == notice.noticeTag }) {
             let redNotices = NSMutableAttributedString(string: listItemWarningStyle + notice.noticeDispalyName,
                                                        attributes: AppStyle.redAttributes)
             mutableAttributedString.append(redNotices)
@@ -110,11 +118,11 @@ class MealViewModel {
         }
         return mutableAttributedString
     }
+
     init(_ mealDetailsModel: MealDetailsModel, noticesText: [FilterNoticesListCache]? = nil) {
         self.mealDetailsModel = mealDetailsModel
         self.noticesText = noticesText
     }
 
-    public init() {
-    }
+    init() {}
 }

@@ -6,12 +6,11 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 final class FilterMensaViewModelTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         AppSessionManager.shared.isFoodAlarmEnabled = false

@@ -10,14 +10,15 @@ import UIKit
 
 @MainActor
 class NewsFeedViewController: UIViewController {
-    @IBOutlet weak var newsTable: UITableView! {
+    @IBOutlet var newsTable: UITableView! {
         didSet {
             let refreshControl = newsTable.setUpRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.refershLoad), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
             newsTable.refreshControl = refreshControl
         }
     }
-    lazy var newsViewModel: NewsFeedViewModel = NewsFeedViewModel()
+
+    lazy var newsViewModel: NewsFeedViewModel = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,12 +27,11 @@ class NewsFeedViewController: UIViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        newsViewModel.showLoadingIndicator ? newsTable.showingLoadingView() : newsTable.hideLoadingView()
+        if newsViewModel.showLoadingIndicator { newsTable.showingLoadingView() } else { newsTable.hideLoadingView() }
         if newsViewModel.isFreshLoad {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -68,7 +68,7 @@ class NewsFeedViewController: UIViewController {
         if UIDevice.current.userInterfaceIdiom == .pad {
             let initialIndexPath = IndexPath(row: 0, section: 0)
             switch newsViewModel.newsCells[safe: initialIndexPath.row] {
-            case .normal(let viewModel):
+            case let .normal(viewModel):
                 performSegue(withIdentifier: SegueIdentifiers.toNewsDetails, sender: viewModel)
                 newsTable.selectRow(at: initialIndexPath, animated: true, scrollPosition: .none)
             case .empty, .error, .none:
@@ -77,7 +77,7 @@ class NewsFeedViewController: UIViewController {
         }
     }
 
-    internal struct SegueIdentifiers {
+    enum SegueIdentifiers {
         static let toNewsDetails = "toNewsReader"
         static let toEventDetails = "toEventsReader"
     }
@@ -98,12 +98,13 @@ class NewsFeedViewController: UIViewController {
 
 extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsViewModel.newsCells.count
+        newsViewModel.newsCells.count
     }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
         switch newsViewModel.newsCells[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.identifier, for: indexPath) as? NewsFeedTableViewCell else {
                 return defaultCell
             }
@@ -117,7 +118,7 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
             cell.selectionStyle = .none
             return cell
-        case .error(let message):
+        case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
             return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyNews", comment: ""))
@@ -125,9 +126,10 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
             return defaultCell
         }
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch newsViewModel.newsCells[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             performSegue(withIdentifier: SegueIdentifiers.toNewsDetails, sender: viewModel)
         case .empty, .error, .none:
             break
@@ -145,15 +147,17 @@ extension NewsFeedViewController {
     }
 }
 
-extension NewsFeedViewController: SingleButtonDialogPresenter { }
+extension NewsFeedViewController: SingleButtonDialogPresenter {}
 
 extension NewsFeedViewController: FilterNewsFeedViewDelegate {
     func didSelectFilterAll() {
         load(filterCatgroies: [])
     }
+
     func scrollUp() {
         newsTable.scrollToTop(animated: true)
     }
+
     func didSelectCustomFiltering(newsCatgroies: [Int]) {
         scrollUp()
         load(filterCatgroies: newsCatgroies)

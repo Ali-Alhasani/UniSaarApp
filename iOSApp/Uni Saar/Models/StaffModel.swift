@@ -15,22 +15,24 @@ final class StaffModel: Sendable {
     let hasNextPage: Bool
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        staffResults = jsonFromated["results"].arrayValue.map {StaffResultsModel(json: $0.dictionaryValue)}
+        staffResults = jsonFromated["results"].arrayValue.map { StaffResultsModel(json: $0.dictionaryValue) }
         staffItemCount = jsonFromated["itemCount"].intValue
         hasNextPage = jsonFromated["hasNextPage"].boolValue
     }
 }
+
 final class StaffResultsModel: Sendable {
     let title: String
     let fullName: String
     let staffID: Int
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        self.title = jsonFromated["title"].stringValue
-        self.staffID = jsonFromated["pid"].intValue
-        self.fullName = jsonFromated["name"].stringValue
+        title = jsonFromated["title"].stringValue
+        staffID = jsonFromated["pid"].intValue
+        fullName = jsonFromated["name"].stringValue
     }
 }
+
 final class StaffDetailsModel: Sendable {
     let email: String?
     let phoneNumber: String?
@@ -58,10 +60,10 @@ final class StaffDetailsModel: Sendable {
         phoneNumber = jsonFromated["phone"].string
         gender = jsonFromated["gender"].string
         websiteURL = jsonFromated["webpage"].string
-        office =  jsonFromated["office"].string
-        building =  jsonFromated["building"].string
-        street =  jsonFromated["street"].string
-        postalCode =  jsonFromated["postalCode"].string
+        office = jsonFromated["office"].string
+        building = jsonFromated["building"].string
+        street = jsonFromated["street"].string
+        postalCode = jsonFromated["postalCode"].string
         city = jsonFromated["city"].string
         fax = jsonFromated["fax"].string
         remarks = jsonFromated["remark"].string
@@ -69,6 +71,7 @@ final class StaffDetailsModel: Sendable {
         officeHour = jsonFromated["officeHour"].string
     }
 }
+
 final class StaffFavoritesModel: @unchecked Sendable {
     let staffResults: [StaffResultsModel]
     let staffItemCount: Int
@@ -81,13 +84,12 @@ final class StaffFavoritesModel: @unchecked Sendable {
         hasNextPage = jsonFromated["hasNextPage"].boolValue
     }
 }
+
 extension StaffModel {
     // nonisolated(unsafe) is required when the type is not Sendable (e.g. [String: Any] — because Any isn't Sendable).
     // Sendable types (like StaffModel) don't need it; Swift verifies safety on its own.
     nonisolated(unsafe) static let deomJSON: [String: Any] = ["name": "Ali Baylan", "title": "", "pid": 9091]
     static let staffDemoData = StaffModel(json: ["itemCount": 3, "results": [["name": "Ali Baylan", "title": "", "pid": 9091],
-                                                             ["name": "Galina Baron", "title": "", "pid": 16776],
-                                                             ["name": "Paanteha Kamali-Moghadam", "title": "M. Sc", "pid": 14477]]
-        ]
-    )
+                                                                             ["name": "Galina Baron", "title": "", "pid": 16776],
+                                                                             ["name": "Paanteha Kamali-Moghadam", "title": "M. Sc", "pid": 14477]]])
 }

@@ -15,7 +15,7 @@ final class MoreModel: Sendable {
 
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        self.linksLastChanged = jsonFromated["linksLastChanged"].stringValue
+        linksLastChanged = jsonFromated["linksLastChanged"].stringValue
         let arrayLinks = jsonFromated["links"].arrayValue
         var tempLinks: [MoreLinksModel] = []
         for (index, link) in arrayLinks.enumerated() {
@@ -31,8 +31,8 @@ final class MoreLinksModel: Sendable {
     let index: Int
     init(json: JSON, index: Int) {
         let jsonFromated = JSON(json)
-        self.displayName = jsonFromated["name"].stringValue
-        self.url = jsonFromated["link"].stringValue
+        displayName = jsonFromated["name"].stringValue
+        url = jsonFromated["link"].stringValue
         self.index = index
     }
 }
@@ -40,26 +40,26 @@ final class MoreLinksModel: Sendable {
 extension MoreModel {
     static let demoData = MoreModel(json: ["linksLastChanged": "2020-01-20 17:42:14",
                                            "language": "de", "links": [
-                                            [
-                                                "name": "Welcome Centre",
-                                                "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
-                                            ],
-                                            [
-                                                "name": "AStA",
-                                                "link": "https://asta.uni-saarland.de/en/"
-                                            ],
-                                            [
-                                                "name": "Busfahrplan",
-                                                "link": "https://www.saarfahrplan.de"
-                                            ],
-                                            [
-                                                "name": "Hochschulsport",
-                                                "link": "https://www.uni-saarland.de/en/institution/sports.html"
-                                            ]
-        ]])
+                                               [
+                                                   "name": "Welcome Centre",
+                                                   "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
+                                               ],
+                                               [
+                                                   "name": "AStA",
+                                                   "link": "https://asta.uni-saarland.de/en/"
+                                               ],
+                                               [
+                                                   "name": "Busfahrplan",
+                                                   "link": "https://www.saarfahrplan.de"
+                                               ],
+                                               [
+                                                   "name": "Hochschulsport",
+                                                   "link": "https://www.uni-saarland.de/en/institution/sports.html"
+                                               ]
+                                           ]])
 }
+
 extension MoreLinksModel {
     static let deomJSON = ["name": "Welcome Centre",
-                           "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
-    ]
+                           "link": "https://www.uni-saarland.de/en/global/welcome-center.html"]
 }

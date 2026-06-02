@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import UserNotifications
+@preconcurrency import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -19,6 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         return true
     }
+
     func setupNavigationBarColor() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithDefaultBackground()
@@ -35,11 +36,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     // MARK: UISceneSession Lifecycle
+
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+        UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
+
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
@@ -47,7 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //         CoreDataStack.sharedInstance.saveContext()
         //         AppSessionManager.saveMensafiltersStatus()
     }
-    // Fallback on earlier versions
+
+    /// Fallback on earlier versions
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         CoreDataStack.sharedInstance.saveContext()
@@ -57,15 +61,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppSessionManager.saveHelpfulNumberStatus()
         AppSessionManager.saveFoodAlarmStatus()
     }
-
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @Sendable @escaping () -> Void) {
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @Sendable @escaping () -> Void
+    ) {
         Task { @MainActor in
             if let window = UIApplication.shared.connectedScenes
                 .compactMap({ $0 as? UIWindowScene })
-                .flatMap({ $0.windows })
+                .flatMap(\.windows)
                 .first(where: { $0.isKeyWindow }) {
                 MediatorDelegate.navigateToMensaScreen(window: window)
             }

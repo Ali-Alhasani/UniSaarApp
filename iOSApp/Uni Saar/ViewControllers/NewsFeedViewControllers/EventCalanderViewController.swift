@@ -6,20 +6,21 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import UIKit
 import FSCalendar
+import UIKit
 
 @MainActor
 class EventCalanderViewController: UIViewController {
-    @IBOutlet weak var calendar: FSCalendar!
-    @IBOutlet weak var tableView: UITableView! {
+    @IBOutlet var calendar: FSCalendar!
+    @IBOutlet var tableView: UITableView! {
         didSet {
             let refreshControl = tableView.setUpRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.load), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(load), for: .valueChanged)
             tableView.refreshControl = refreshControl
         }
     }
-    lazy var eventViewModel: EventViewModel = EventViewModel()
+
+    lazy var eventViewModel: EventViewModel = .init()
 
     fileprivate let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -35,12 +36,11 @@ class EventCalanderViewController: UIViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        eventViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
+        if eventViewModel.showLoadingIndicator { tableView.showingLoadingView() } else { tableView.hideLoadingView() }
         if let alert = eventViewModel.currentAlert {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -50,7 +50,7 @@ class EventCalanderViewController: UIViewController {
         }
         calendar.reloadData()
         tableView.reloadData()
-        if !eventViewModel.eventCells.isEmpty && eventViewModel.selectedDateEvents.isEmpty {
+        if !eventViewModel.eventCells.isEmpty, eventViewModel.selectedDateEvents.isEmpty {
             Task { @MainActor [weak self] in
                 self?.eventViewModel.getDayEvents(day: self?.calendar.today)
             }
@@ -72,8 +72,8 @@ class EventCalanderViewController: UIViewController {
     }
 
     func getCurrentDate() -> (month: String, year: String) {
-        return (month: String(Calendar.current.component(.month, from: calendar.currentPage)),
-                year: String(Calendar.current.component(.year, from: calendar.currentPage)))
+        (month: String(Calendar.current.component(.month, from: calendar.currentPage)),
+         year: String(Calendar.current.component(.year, from: calendar.currentPage)))
     }
 
     func setupTableView() {
@@ -84,11 +84,12 @@ class EventCalanderViewController: UIViewController {
     }
 
     func getNumberOfEvents(date: Date) -> Int {
-        return eventViewModel.countDayEvents(day: date)
+        eventViewModel.countDayEvents(day: date)
     }
 
     // MARK: - Navigation
-    internal struct SegueIdentifiers {
+
+    enum SegueIdentifiers {
         static let toEventDetails = "toEventsReader"
     }
 
@@ -103,6 +104,7 @@ class EventCalanderViewController: UIViewController {
 }
 
 // MARK: - FSCalendarDelegate
+
 extension EventCalanderViewController: @preconcurrency FSCalendarDelegate, @preconcurrency FSCalendarDataSource {
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         load()
@@ -118,20 +120,21 @@ extension EventCalanderViewController: @preconcurrency FSCalendarDelegate, @prec
     }
 
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        return getNumberOfEvents(date: date)
+        getNumberOfEvents(date: date)
     }
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension EventCalanderViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return eventViewModel.selectedDateEvents.count
+        eventViewModel.selectedDateEvents.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
         switch eventViewModel.selectedDateEvents[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.identifier, for: indexPath) as? NewsFeedTableViewCell else {
                 return defaultCell
             }
@@ -145,7 +148,7 @@ extension EventCalanderViewController: UITableViewDelegate, UITableViewDataSourc
             }
             cell.selectionStyle = .none
             return cell
-        case .error(let message):
+        case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
             return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyEvents", comment: ""))
@@ -156,7 +159,7 @@ extension EventCalanderViewController: UITableViewDelegate, UITableViewDataSourc
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch eventViewModel.selectedDateEvents[safe: indexPath.row] {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             performSegue(withIdentifier: SegueIdentifiers.toEventDetails, sender: viewModel)
         case .empty, .error, .none:
             break
@@ -164,4 +167,4 @@ extension EventCalanderViewController: UITableViewDelegate, UITableViewDataSourc
     }
 }
 
-extension EventCalanderViewController: SingleButtonDialogPresenter { }
+extension EventCalanderViewController: SingleButtonDialogPresenter {}

@@ -6,8 +6,8 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 import Observation
 
 @Observable
@@ -17,9 +17,8 @@ class FilterNewsViewModel: ParentViewModel {
     @ObservationIgnored var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(FilterNoticesListCache.isSelected), ascending: false)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-        return frc
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
+                                          sectionNameKeyPath: nil, cacheName: nil)
     }()
 
     enum Filter: Int, CaseIterable {
@@ -63,7 +62,7 @@ class FilterNewsViewModel: ParentViewModel {
     }
 
     func getOldSelectedCategories(newViewModel: FilterCategoriesCellViewModel) -> [FilterIntElement] {
-        let oldSelectedCategories = fetchedResultsController.fetchedObjects?.filter {!$0.isSelected}.map {$0.categoryID}
+        let oldSelectedCategories = fetchedResultsController.fetchedObjects?.filter { !$0.isSelected }.map(\.categoryID)
         guard let selectedCategories = oldSelectedCategories, selectedCategories.count > 0 else {
             return newViewModel.categoriesText
         }
@@ -91,7 +90,8 @@ class FilterCategoriesCellViewModel {
     var categoriesText = [FilterIntElement]()
     var isFilterAll = true
     init(newsFilterModel: [NewsCategories]) {
-        categoriesText = newsFilterModel.compactMap {FilterIntElement(filterName: $0.categoryName, filterID: $0.categoryID, isSelected: true) }
+        categoriesText = newsFilterModel.compactMap { FilterIntElement(filterName: $0.categoryName, filterID: $0.categoryID, isSelected: true) }
     }
-    init() { }
+
+    init() {}
 }

@@ -16,14 +16,15 @@ protocol FilterNewsFeedViewDelegate: AnyObject {
 
 @MainActor
 class FilterNewsFeedViewController: UIViewController {
-    @IBOutlet weak var filterTableView: UITableView! {
+    @IBOutlet var filterTableView: UITableView! {
         didSet {
             let refreshControl = filterTableView.setUpRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.refershLoad), for: .valueChanged)
+            refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
             filterTableView.refreshControl = refreshControl
         }
     }
-    lazy var filterNewsViewModel: FilterNewsViewModel = FilterNewsViewModel()
+
+    lazy var filterNewsViewModel: FilterNewsViewModel = .init()
     weak var delegate: FilterNewsFeedViewDelegate?
 
     override func viewDidLoad() {
@@ -33,12 +34,11 @@ class FilterNewsFeedViewController: UIViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        filterNewsViewModel.showLoadingIndicator ? filterTableView.showingLoadingView() : filterTableView.hideLoadingView()
+        if filterNewsViewModel.showLoadingIndicator { filterTableView.showingLoadingView() } else { filterTableView.hideLoadingView() }
         if filterNewsViewModel.didUpdatefilterList {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -72,8 +72,8 @@ class FilterNewsFeedViewController: UIViewController {
 
     @IBAction func doneButtonAction(_ sender: Any) {
         dismissView()
-        let custumFiltitedCategories = filterNewsViewModel.fetchedResultsController.fetchedObjects?.compactMap { $0 }.filter { !$0.isSelected }
-        if let custumFiltitedCategories = custumFiltitedCategories {
+        let custumFiltitedCategories = filterNewsViewModel.fetchedResultsController.fetchedObjects?.compactMap(\.self).filter { !$0.isSelected }
+        if let custumFiltitedCategories {
             let filtitedCategoriesId = custumFiltitedCategories.compactMap { Int($0.categoryID) }
             delegate?.didSelectCustomFiltering(newsCatgroies: filtitedCategoriesId)
         }
@@ -85,9 +85,10 @@ class FilterNewsFeedViewController: UIViewController {
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension FilterNewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filterNewsViewModel.fetchedResultsController.fetchedObjects?.count ?? 0
+        filterNewsViewModel.fetchedResultsController.fetchedObjects?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -102,12 +103,13 @@ extension FilterNewsFeedViewController: UITableViewDelegate, UITableViewDataSour
     }
 }
 
-extension FilterNewsFeedViewController: SingleButtonDialogPresenter { }
+extension FilterNewsFeedViewController: SingleButtonDialogPresenter {}
 
 // MARK: - NewsFilterViewCellDelegate
+
 extension FilterNewsFeedViewController: NewsFilterViewCellDelegate {
     func didSwitchOnFilter(indexPath: IndexPath?) {
-        if let indexPath = indexPath {
+        if let indexPath {
             let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
             if let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: categoryEntry.objectID) as? NewsCategoriesCache {
                 childEntry.isSelected = true
@@ -116,7 +118,7 @@ extension FilterNewsFeedViewController: NewsFilterViewCellDelegate {
     }
 
     func didSwitchOffFilter(indexPath: IndexPath?) {
-        if let indexPath = indexPath {
+        if let indexPath {
             let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
             if let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: categoryEntry.objectID) as? NewsCategoriesCache {
                 childEntry.isSelected = false

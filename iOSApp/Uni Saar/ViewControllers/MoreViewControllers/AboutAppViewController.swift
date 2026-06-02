@@ -10,15 +10,16 @@ import UIKit
 
 @MainActor
 class AboutAppViewController: UIViewController {
-    @IBOutlet weak var gitHubText: UITextView!
+    @IBOutlet var gitHubText: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
         setupGitHubLink()
         // Do any additional setup after loading the view.
     }
+
     /*
      // MARK: - Navigation
-     
+
      // In a storyboard-based application, you will often want to do a little preparation before navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
      // Get the new view controller using segue.destination.
@@ -28,7 +29,7 @@ class AboutAppViewController: UIViewController {
 
     func setupGitHubLink() {
         let fullString = NSLocalizedString("GitHubLinkText", comment: "")
-        let gitHubLinkRange = (fullString as NSString).range(of: (NSLocalizedString("GitHub", comment: "")))
+        let gitHubLinkRange = (fullString as NSString).range(of: NSLocalizedString("GitHub", comment: ""))
         let attributedStr = NSMutableAttributedString(string: fullString)
         attributedStr.addAttribute(.link, value: "gitHubLink", range: gitHubLinkRange)
         gitHubText.delegate = self
@@ -41,7 +42,7 @@ class AboutAppViewController: UIViewController {
 
 extension AboutAppViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, primaryActionFor textItem: UITextItem, defaultAction: UIAction) -> UIAction? {
-        if case .link(let url) = textItem.content, url.absoluteString == "gitHubLink" {
+        if case let .link(url) = textItem.content, url.absoluteString == "gitHubLink" {
             return UIAction { [weak self] _ in self?.openLink() }
         }
         return defaultAction

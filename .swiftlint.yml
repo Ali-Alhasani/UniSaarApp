@@ -1,17 +1,18 @@
-# 1. Paths to completely ignore during linting passes
+included:
+  - iOSApp
+
 excluded:
-  - Carthage
-  - Pods
-  - .build
-  - DerivedData
+  - iOSApp/Pods
+  - iOSApp/.build
 
-# 2. Turn off rules that cause unnecessary warnings in UIKit codebases
 disabled_rules:
-  - trailing_whitespace        # Ignores stray spaces at the end of lines
-  - empty_count               # Allows using .count == 0 instead of forcing .isEmpty
-  - line_length                # Stops warning you if a long line exceeds 120 characters
+  - trailing_whitespace
+  - empty_count
+  - line_length
 
-# 3. Configure specific thresholds for clean code
+large_tuple:
+  warning: 4
+
 type_body_length:
   warning: 400
   error: 600

@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UIKit
 import Observation
+import UIKit
 
 @Observable
 class MensaMenuViewModel: ParentViewModel {
@@ -56,7 +56,7 @@ class MensaMenuViewModel: ParentViewModel {
     func isMenuUpdated() {
         let firstMenuDay = daysMenus.first
         switch firstMenuDay {
-        case .normal(let viewModel):
+        case let .normal(viewModel):
             if viewModel.dateValue != getDateFormater(date: Date()) {
                 Task { await self.loadGetMensaMenu() }
             }
@@ -77,7 +77,7 @@ class MensaDayMenuViewModel {
     var dateValue: String
     var mealsCells: [MensaMealCellViewModel]
     init(mensaDayModel: MensaDayModel) {
-        let splitedDate = mensaDayModel.date.split {$0 == " "}
+        let splitedDate = mensaDayModel.date.split { $0 == " " }
         let mutableAttributedString = NSMutableAttributedString()
         let dayText = String(splitedDate.first ?? "")
         dateValue = String(splitedDate.last ?? "")
@@ -85,8 +85,8 @@ class MensaDayMenuViewModel {
         let date = NSMutableAttributedString(string: dateValue, attributes: AppStyle.calloutAttributes)
         mutableAttributedString.append(dayName)
         mutableAttributedString.append(date)
-        self.dateText = mutableAttributedString
-        self.mealsCells = mensaDayModel.countersMeals
+        dateText = mutableAttributedString
+        mealsCells = mensaDayModel.countersMeals
     }
 }
 
@@ -96,7 +96,7 @@ class MensaDayMenuViewModel {
     @objc optional var hoursLabel: UILabel? { get }
     @objc optional var mealsLabel: UILabel? { get }
     @objc optional var noticeLabel: UILabel? { get }
-    @objc optional var counterColorView: UIView? { get}
+    @objc optional var counterColorView: UIView? { get }
 }
 
 @MainActor
@@ -114,48 +114,54 @@ protocol MensaMealCellViewModel {
 @MainActor
 extension MensaMealsModel: MensaMealCellViewModel {
     var mensaMealsModel: MensaMealsModel {
-        return self
+        self
     }
+
     var counterDisplayName: String {
-        return counterName
+        counterName
     }
+
     var mealName: String {
-        return mealDispalyName
+        mealDispalyName
     }
+
     var openingHoursText: String {
-        return openiningHours
+        openiningHours
     }
+
     var counterColor: UIColor {
-        return AppStyle.mensaCounterColor(color)
+        AppStyle.mensaCounterColor(color)
     }
+
     var mealsText: String {
-        return meals.compactMap {$0}.joined(separator: "\n")
+        meals.compactMap(\.self).joined(separator: "\n")
     }
+
     @MainActor var noticesList: [FilterNoticesListCache] {
-        return checkMealNotices()
+        checkMealNotices()
     }
+
     @MainActor var noticesText: String {
         if noticesList.count > 0 {
-            return AppStyle.warningTriangle + NSLocalizedString("contains", comment: "") + noticesList.compactMap {$0.name}.joined(separator: ", ")
+            AppStyle.warningTriangle + NSLocalizedString("contains", comment: "") + noticesList.compactMap(\.name).joined(separator: ", ")
         } else {
-            return ""
+            ""
         }
     }
 
     @MainActor func checkMealNotices() -> [FilterNoticesListCache] {
         let selectedNotices = getSelectedNotices()
-        if let selectedNotices = selectedNotices, selectedNotices.count > 0 {
-            let intersectionNotices = selectedNotices.filter { (item) -> Bool in
+        if let selectedNotices, selectedNotices.count > 0 {
+            return selectedNotices.filter { item -> Bool in
                 guard let noticeID = item.noticeID else { return false }
                 return mensaMealsModel.notices.contains(noticeID)
             }
-            return intersectionNotices
         }
         return []
     }
 
     @MainActor func getSelectedNotices() -> [FilterNoticesListCache]? {
-        return Cache.shared.fetchedResultsController.fetchedObjects?.filter { $0.isSelected }
+        Cache.shared.fetchedResultsController.fetchedObjects?.filter(\.isSelected)
     }
 }
 

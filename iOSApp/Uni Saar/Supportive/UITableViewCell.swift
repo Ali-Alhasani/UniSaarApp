@@ -8,14 +8,17 @@
 
 import Foundation
 import UIKit
-//commonly used TableViewCell configuration functions in the app
+
+/// commonly used TableViewCell configuration functions in the app
 extension UITableViewCell {
     static var nib: UINib {
-        return UINib(nibName: identifier, bundle: nil)
+        UINib(nibName: identifier, bundle: nil)
     }
+
     static var identifier: String {
-        return String(describing: self)
+        String(describing: self)
     }
+
     func setupEmptyCell(message: String) -> UITableViewCell {
         isUserInteractionEnabled = false
         var content = defaultContentConfiguration()
@@ -28,9 +31,10 @@ extension UITableViewCell {
 
 extension UICollectionViewCell {
     static var nib: UINib {
-        return UINib(nibName: identifier, bundle: nil)
+        UINib(nibName: identifier, bundle: nil)
     }
+
     static var identifier: String {
-        return String(describing: self)
+        String(describing: self)
     }
 }

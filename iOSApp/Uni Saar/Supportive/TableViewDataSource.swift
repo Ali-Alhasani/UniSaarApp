@@ -8,7 +8,8 @@
 
 import Foundation
 import UIKit
-//not applied yet in the app because of some errors
+
+/// not applied yet in the app because of some errors
 class TableViewDataSource<Model>: NSObject, UITableViewDataSource {
     typealias CellConfigurator = (Model, UITableViewCell) -> Void
     var models: [Model]
@@ -21,10 +22,12 @@ class TableViewDataSource<Model>: NSObject, UITableViewDataSource {
         self.reuseIdentifier = reuseIdentifier
         self.cellConfigurator = cellConfigurator
     }
+
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
-        return models.count
+        models.count
     }
+
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = models[indexPath.row]
@@ -46,13 +49,15 @@ class SectionedTableViewDataSource: NSObject {
 
 extension SectionedTableViewDataSource: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return dataSources.count
+        dataSources.count
     }
+
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
         let dataSource = dataSources[section]
         return dataSource.tableView(tableView, numberOfRowsInSection: 0)
     }
+
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let dataSource = dataSources[indexPath.section]

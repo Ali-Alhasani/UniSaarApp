@@ -1,5 +1,5 @@
 //
-//  RootViewModel.swift
+//  ParentViewModel.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 12/19/19.

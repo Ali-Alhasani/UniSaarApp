@@ -10,7 +10,7 @@ import UIKit
 
 @MainActor
 class MoreLinksViewController: UITableViewController {
-    lazy var moreLinksViewModel: MoreLinksViewModel = MoreLinksViewModel()
+    lazy var moreLinksViewModel: MoreLinksViewModel = .init()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,12 +19,11 @@ class MoreLinksViewController: UITableViewController {
     }
 
     override func updateProperties() {
-        super.updateProperties()
         updateUI()
     }
 
     private func updateUI() {
-        moreLinksViewModel.showLoadingIndicator ? tableView.showingLoadingView() : tableView.hideLoadingView()
+        if moreLinksViewModel.showLoadingIndicator { tableView.showingLoadingView() } else { tableView.hideLoadingView() }
         if let alert = moreLinksViewModel.currentAlert {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -38,7 +37,7 @@ class MoreLinksViewController: UITableViewController {
 
     func setRefreshControl() {
         let refreshControl = tableView.setUpRefreshControl()
-        refreshControl.addTarget(self, action: #selector(self.refershLoad), for: .valueChanged)
+        refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
         tableView.refreshControl = refreshControl
     }
 
@@ -51,7 +50,8 @@ class MoreLinksViewController: UITableViewController {
     }
 
     // MARK: - Navigation
-    internal struct SegueIdentifiers {
+
+    enum SegueIdentifiers {
         static let toLinkDetails = "toLinkDetails"
         static let toSettings = "toSettings"
         static let toAboutApp = "toAboutApp"
@@ -67,6 +67,7 @@ class MoreLinksViewController: UITableViewController {
 }
 
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension MoreLinksViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
@@ -85,14 +86,14 @@ extension MoreLinksViewController {
             return cell
         } else {
             switch moreLinksViewModel.linksCells[safe: indexPath.row] {
-            case .normal(let viewModel):
+            case let .normal(viewModel):
                 let cell = tableView.dequeueReusableCell(withIdentifier: "moreLinksCell", for: indexPath)
                 var content = cell.defaultContentConfiguration()
                 content.text = viewModel.nameText
                 content.textProperties.numberOfLines = 0
                 cell.contentConfiguration = content
                 return cell
-            case .error(let message):
+            case let .error(message):
                 return defaultCell.setupEmptyCell(message: message)
             case .empty:
                 return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyLinks", comment: ""))
@@ -103,13 +104,13 @@ extension MoreLinksViewController {
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        2
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
             switch moreLinksViewModel.linksCells[safe: indexPath.row] {
-            case .normal(let viewModel):
+            case let .normal(viewModel):
                 performSegue(withIdentifier: SegueIdentifiers.toLinkDetails, sender: viewModel)
             case .empty, .error, .none:
                 break

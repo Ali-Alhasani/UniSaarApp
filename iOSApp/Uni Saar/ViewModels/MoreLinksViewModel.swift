@@ -6,8 +6,8 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
 import Observation
 
 @Observable
@@ -16,10 +16,10 @@ class MoreLinksViewModel: ParentViewModel {
     @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<MoreLinksCache> = {
         let fetchRequest = NSFetchRequest<MoreLinksCache>(entityName: String(describing: MoreLinksCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "orderIndex", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-        return frc
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
+                                          sectionNameKeyPath: nil, cacheName: nil)
     }()
+
     let extraCells = [NSLocalizedString("AboutApp", comment: ""), NSLocalizedString("AppSettings", comment: "")]
 
     override init(dataClient: any AppDataClient = DataClient()) {
@@ -70,15 +70,25 @@ class MoreLinksViewModel: ParentViewModel {
 
 protocol MoreLinksCellViewModel {
     var linkURL: URL? { get }
-    var nameText: String {get }
+    var nameText: String { get }
 }
 
 extension MoreLinksModel: MoreLinksCellViewModel {
-    var linkURL: URL? { return URL(string: url) }
-    var nameText: String { return displayName }
+    var linkURL: URL? {
+        URL(string: url)
+    }
+
+    var nameText: String {
+        displayName
+    }
 }
 
 extension MoreLinksCache: MoreLinksCellViewModel {
-    var linkURL: URL? { return URL(string: link ?? "") }
-    var nameText: String { return name ?? "" }
+    var linkURL: URL? {
+        URL(string: link ?? "")
+    }
+
+    var nameText: String {
+        name ?? ""
+    }
 }

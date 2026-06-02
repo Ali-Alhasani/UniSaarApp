@@ -6,12 +6,11 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 final class NewsViewModelTests: XCTestCase {
-
     func testNewsModel() {
         let testSuccessfulJSON = NewsModel.deomJSON
         XCTAssertNotNil(NewsModel(json: testSuccessfulJSON))
@@ -56,7 +55,7 @@ final class NewsViewModelTests: XCTestCase {
         dataClient.getNewsResult = .success(news)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
         await viewModel.loadGetNews(filterCatgroies: [])
-        guard case .normal(let cell) = viewModel.newsCells.first else { XCTFail("Expected normal cell"); return }
+        guard case let .normal(cell) = viewModel.newsCells.first else { XCTFail("Expected normal cell"); return }
         XCTAssertEqual(news.newsList.first?.title, cell.titleText)
         XCTAssertEqual(news.newsList.first?.subTitle, cell.subTitleText)
         XCTAssertEqual(news.newsList.first?.annoucementDate, cell.newsDate)

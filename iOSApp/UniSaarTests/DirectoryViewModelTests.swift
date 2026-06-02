@@ -6,13 +6,12 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 import SwiftyJSON
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 final class DirectoryViewModelTests: XCTestCase {
-
     override func setUp() {
         super.setUp()
         // Prevent CoreData pre-load so mock network responses control cell state
@@ -36,7 +35,7 @@ final class DirectoryViewModelTests: XCTestCase {
         dataClient.getSearchDirectoryResult = .success(StaffModel.staffDemoData)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetSearchResults(searchQuery: "Ali")
-        guard case .normal(_) = viewModel.searchResutlsCells.first else {
+        guard case .normal = viewModel.searchResutlsCells.first else {
             XCTFail("Directory should have value")
             return
         }
@@ -58,7 +57,7 @@ final class DirectoryViewModelTests: XCTestCase {
         dataClient.getSearchDirectoryResult = .failure(MyError.customError)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetSearchResults(searchQuery: "")
-        guard case .error(_) = viewModel.searchResutlsCells.first else {
+        guard case .error = viewModel.searchResutlsCells.first else {
             XCTFail("Directory should be in failed")
             return
         }
@@ -71,11 +70,11 @@ final class DirectoryViewModelTests: XCTestCase {
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetSearchResults(searchQuery: "Ali")
         switch viewModel.searchResutlsCells.first {
-        case .normal(let cellViewModel):
+        case let .normal(cellViewModel):
             XCTAssertEqual(staffResults.staffResults.first?.fullName, cellViewModel.nameText)
             XCTAssertEqual(staffResults.staffResults.first?.title, cellViewModel.titleText)
             XCTAssertEqual(staffResults.staffResults.first?.staffID, cellViewModel.staffId)
-        case .error(let message):
+        case let .error(message):
             XCTAssertNotNil(message)
         case .empty:
             break
@@ -97,7 +96,7 @@ final class DirectoryViewModelTests: XCTestCase {
         dataClient.getHelpfulNumbersResult = .success(HelpfulNumbersModel.helpfulNumbersDemoData)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetHelpHelpfulNumbers()
-        guard case .normal(_) = viewModel.helpfulNumbersCells.first else {
+        guard case .normal = viewModel.helpfulNumbersCells.first else {
             XCTFail("Helpful Numbers should have value")
             return
         }
@@ -116,25 +115,25 @@ final class DirectoryViewModelTests: XCTestCase {
         dataClient.getHelpfulNumbersResult = .failure(MyError.customError)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetHelpHelpfulNumbers()
-        guard case .error(_) = viewModel.helpfulNumbersCells.first else {
+        guard case .error = viewModel.helpfulNumbersCells.first else {
             XCTFail("Helpful Numbers should be in failed")
             return
         }
     }
 
-    func testHelpfulNumberViewModelValues() async {
+    func testHelpfulNumberViewModelValues() async throws {
         let dataClient = MockAppDataClient()
         let helpfulNumberResults = HelpfulNumbersModel.helpfulNumbersDemoData
         dataClient.getHelpfulNumbersResult = .success(helpfulNumberResults)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetHelpHelpfulNumbers()
         switch viewModel.helpfulNumbersCells.first {
-        case .normal(let cellViewModel):
+        case let .normal(cellViewModel):
             let numberItem = helpfulNumberResults.numbers.first
-            var itemFormatted = (numberItem!.name ?? "") + "\n" + (numberItem!.number ?? "") + "\n"
-            itemFormatted += (numberItem!.link ?? "") + "\n" + (numberItem!.mail ?? "")
+            var itemFormatted = try (XCTUnwrap(numberItem?.name) ?? "") + "\n" + (XCTUnwrap(numberItem?.number) ?? "") + "\n"
+            try itemFormatted += (XCTUnwrap(numberItem?.link) ?? "") + "\n" + (XCTUnwrap(numberItem?.mail) ?? "")
             XCTAssertEqual(itemFormatted, cellViewModel.fortmatedText)
-        case .error(let message):
+        case let .error(message):
             XCTAssertNotNil(message)
         case .empty:
             break

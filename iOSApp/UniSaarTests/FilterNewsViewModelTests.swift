@@ -6,12 +6,11 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 final class FilterNewsViewModelTests: XCTestCase {
-
     func testDidUpdateFilterListOnSuccess() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .success([

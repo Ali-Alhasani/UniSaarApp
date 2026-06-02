@@ -6,23 +6,23 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import UIKit
 import AlamofireImage
+import UIKit
+
 class NewsFeedTableViewCell: UITableViewCell {
-    @IBOutlet weak var newsDateLabel: UILabel!
-    @IBOutlet weak var newsTitleLabel: UILabel!
-    @IBOutlet weak var newsSubTitleLabel: UILabel!
-    @IBOutlet weak var newsImageView: UIImageView!
-    @IBOutlet weak var outerView: UIView!
+    @IBOutlet var newsDateLabel: UILabel!
+    @IBOutlet var newsTitleLabel: UILabel!
+    @IBOutlet var newsSubTitleLabel: UILabel!
+    @IBOutlet var newsImageView: UIImageView!
+    @IBOutlet var outerView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        outerView.setAsCircle(cornerRadius: 4)
-        outerView.setAllSideShadow(shadowOpacity: 0.8)
+        MainActor.assumeIsolated {
+            outerView.setAsCircle(cornerRadius: 4)
+            outerView.setAllSideShadow(shadowOpacity: 0.8)
+        }
     }
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
+
     override func prepareForReuse() {
         newsImageView.af.cancelImageRequest()
         newsImageView.image = nil
@@ -31,12 +31,14 @@ class NewsFeedTableViewCell: UITableViewCell {
 
 extension NewsFeedTableViewCell: NewsFeedViewModelView {
     var titleLabel: UILabel? {
-        return newsTitleLabel
+        newsTitleLabel
     }
+
     var subTitleLabel: UILabel? {
-        return newsSubTitleLabel
+        newsSubTitleLabel
     }
+
     var dateLabel: UILabel? {
-        return newsDateLabel
+        newsDateLabel
     }
 }

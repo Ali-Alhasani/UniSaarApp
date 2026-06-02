@@ -1,5 +1,5 @@
 //
-//  tableView.swift
+//  TableView.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 12/7/19.
@@ -8,10 +8,11 @@
 
 import Foundation
 import UIKit
-//commonly used Table View configuration functions in the app
-extension UITableView {
-    public func showingLoadingView() {
-        guard let refreshControl = self.refreshControl, !refreshControl.isRefreshing else { return }
+
+/// commonly used Table View configuration functions in the app
+public extension UITableView {
+    func showingLoadingView() {
+        guard let refreshControl, !refreshControl.isRefreshing else { return }
         let spinner = UIActivityIndicatorView(style: .large)
         spinner.color = AppStyle.appGlobalTintColor
         spinner.startAnimating()
@@ -20,34 +21,37 @@ extension UITableView {
         tableFooterView?.isHidden = false
     }
 
-    public func hideLoadingView() {
+    func hideLoadingView() {
         tableFooterView = nil
         endRefreshing()
     }
-    public func endRefreshing() {
+
+    func endRefreshing() {
         refreshControl?.endRefreshing()
     }
-    public func setUpRefreshControl() -> UIRefreshControl {
+
+    func setUpRefreshControl() -> UIRefreshControl {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = AppStyle.appGlobalTintColor
         return refreshControl
     }
-    func layoutTableView(tableBackgroundColor: UIColor = AppStyle.tableViewBackgroundColor, withOutSeparator: Bool = true) {
-        self.estimatedRowHeight = 300
-        self.rowHeight = UITableView.automaticDimension
-        self.backgroundColor = tableBackgroundColor
+
+    internal func layoutTableView(tableBackgroundColor: UIColor = AppStyle.tableViewBackgroundColor, withOutSeparator: Bool = true) {
+        estimatedRowHeight = 300
+        rowHeight = UITableView.automaticDimension
+        backgroundColor = tableBackgroundColor
         if withOutSeparator {
-            self.separatorStyle = .none
+            separatorStyle = .none
         } else {
-            self.tableFooterView = UIView()
+            tableFooterView = UIView()
         }
     }
 
-    func reloadRowAt() {
+    internal func reloadRowAt() {
         performBatchUpdates(nil)
     }
 
-    func scrollToTop(animated: Bool) {
+    internal func scrollToTop(animated: Bool) {
         setContentOffset(.zero, animated: animated)
     }
 }

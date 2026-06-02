@@ -6,27 +6,30 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 @MainActor
 class FilterNewsFeedViewControllerTests: XCTestCase {
     var viewControllerUnderTest: FilterNewsFeedViewController!
     override func setUp() async throws {
         let storyboard = UIStoryboard(name: "NewsStoryboard", bundle: nil)
-        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "FilterNewsFeedViewController") as? FilterNewsFeedViewController
-        self.viewControllerUnderTest.loadView()
-        self.viewControllerUnderTest.viewDidLoad()
-        self.viewControllerUnderTest.setupTableView()
+        viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "FilterNewsFeedViewController") as? FilterNewsFeedViewController
+        viewControllerUnderTest.loadView()
+        viewControllerUnderTest.viewDidLoad()
+        viewControllerUnderTest.setupTableView()
     }
+
     override func tearDown() {
         viewControllerUnderTest = nil
         super.tearDown()
     }
+
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+
     func testHasATableView() {
         XCTAssertNotNil(viewControllerUnderTest.filterTableView)
     }
@@ -60,17 +63,16 @@ class FilterNewsFeedViewControllerTests: XCTestCase {
 
     func testTableCellHasCorrectLabelText() {
         let cell0 = viewControllerUnderTest.tableView(viewControllerUnderTest.filterTableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? FilterUISwitchTableViewCell
-        XCTAssertEqual(cell0?.cellTitle, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects![safe: 0]?.name )
-        XCTAssertEqual(cell0?.switchValue, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects![safe: 0]?.isSelected )
+        XCTAssertEqual(cell0?.cellTitle, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: 0]?.name)
+        XCTAssertEqual(cell0?.switchValue, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: 0]?.isSelected)
 
         let cell1 = viewControllerUnderTest.tableView(viewControllerUnderTest.filterTableView, cellForRowAt: IndexPath(row: 1, section: 0)) as? FilterUISwitchTableViewCell
-        XCTAssertEqual(cell1?.cellTitle, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects![safe: 1]?.name )
+        XCTAssertEqual(cell1?.cellTitle, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: 1]?.name)
 
-        XCTAssertEqual(cell1?.switchValue, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects![safe: 1]?.isSelected )
+        XCTAssertEqual(cell1?.switchValue, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: 1]?.isSelected)
 
         let cell2 = viewControllerUnderTest.tableView(viewControllerUnderTest.filterTableView, cellForRowAt: IndexPath(row: 2, section: 0)) as? FilterUISwitchTableViewCell
-        XCTAssertEqual(cell2?.cellTitle, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects![safe: 2]?.name )
-        XCTAssertEqual(cell2?.switchValue, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects![safe: 2]?.isSelected )
+        XCTAssertEqual(cell2?.cellTitle, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: 2]?.name)
+        XCTAssertEqual(cell2?.switchValue, viewControllerUnderTest.filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: 2]?.isSelected)
     }
-
 }

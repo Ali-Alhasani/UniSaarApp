@@ -6,13 +6,15 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import Alamofire
-//All App API's
+import Foundation
+
+/// All App API's
 public enum URLRouter: URLRequestConvertible {
     enum Constants {
         static let baseURLPath = "http://unisaar-test.cs.uni-saarland.de:3000"
     }
+
     case directorySearch(Int, Int, String)
     case mensa(String)
     case mealDetails(Int)
@@ -26,67 +28,71 @@ public enum URLRouter: URLRequestConvertible {
     case helpfulNumbers(String)
     case mapCoordinate(String)
     var method: HTTPMethod {
-        return .get
+        .get
     }
+
     var language: String {
-        return Locale.current.language.languageCode?.identifier ?? "en"
+        Locale.current.language.languageCode?.identifier ?? "en"
     }
+
     var path: String {
         switch self {
         case .newsFeed:
-            return "/news/mainScreen"
+            "/news/mainScreen"
         case .mensa:
-            return "/mensa/mainScreen"
+            "/mensa/mainScreen"
         case .moreLinks:
-            return "/more"
+            "/more"
         case .directorySearch:
-            return "directory/search"
+            "directory/search"
         case .mealDetails:
-            return "mensa/mealDetail"
+            "mensa/mealDetail"
         case .mensaInfo:
-            return "mensa/info"
+            "mensa/info"
         case .mensaFilters:
-            return "mensa/filters"
+            "mensa/filters"
         case .newsFeedCategories:
-            return "news/categories"
+            "news/categories"
         case .staffDetails:
-            return "directory/personDetails"
+            "directory/personDetails"
         case .events:
-            return "events/mainScreen"
+            "events/mainScreen"
         case .helpfulNumbers:
-            return "directory/helpfulNumbers"
+            "directory/helpfulNumbers"
         case .mapCoordinate:
-            return "map/"
+            "map/"
         }
     }
+
     var parameters: [String: Any] {
         switch self {
-        case .mensa(let location):
-            return ["language": self.language, "location": location]
-        case .mealDetails(let mealId):
-            return ["meal": mealId, "language": self.language]
-        case .mensaInfo(let location ):
-            return ["location": location, "language": self.language]
-        case .directorySearch(let pageNumber, let numberofItem, let query):
-            return ["page": pageNumber, "pageSize": numberofItem, "query": query, "language": language]
-        case .newsFeed(let pageNumber, let numberofItem, let filter):
-            return ["page": pageNumber, "pageSize": numberofItem, "language": language, "negFilter": filter]
+        case let .mensa(location):
+            ["language": language, "location": location]
+        case let .mealDetails(mealId):
+            ["meal": mealId, "language": language]
+        case let .mensaInfo(location):
+            ["location": location, "language": language]
+        case let .directorySearch(pageNumber, numberofItem, query):
+            ["page": pageNumber, "pageSize": numberofItem, "query": query, "language": language]
+        case let .newsFeed(pageNumber, numberofItem, filter):
+            ["page": pageNumber, "pageSize": numberofItem, "language": language, "negFilter": filter]
         case .mensaFilters:
-            return ["language": language]
+            ["language": language]
         case .newsFeedCategories:
-            return ["language": language]
-        case .staffDetails(let staffID):
-            return ["pid": staffID, "language": language]
-        case .events(let month, let year):
-            return ["month": month, "year": year, "language": language]
-        case .moreLinks(let lastUpdate):
-            return ["language": language, "lastUpdated": lastUpdate]
-        case .helpfulNumbers(let lastUpdate):
-            return ["language": language, "lastUpdated": lastUpdate]
-        case .mapCoordinate(let lastUpdate):
-            return ["lastUpdated": lastUpdate]
+            ["language": language]
+        case let .staffDetails(staffID):
+            ["pid": staffID, "language": language]
+        case let .events(month, year):
+            ["month": month, "year": year, "language": language]
+        case let .moreLinks(lastUpdate):
+            ["language": language, "lastUpdated": lastUpdate]
+        case let .helpfulNumbers(lastUpdate):
+            ["language": language, "lastUpdated": lastUpdate]
+        case let .mapCoordinate(lastUpdate):
+            ["lastUpdated": lastUpdate]
         }
     }
+
     public func asURLRequest() throws -> URLRequest {
         let base = try Constants.baseURLPath.asURL()
         var components = URLComponents(url: base.appendingPathComponent(path), resolvingAgainstBaseURL: true)!
@@ -98,7 +104,7 @@ public enum URLRouter: URLRequestConvertible {
         }
         var request = URLRequest(url: components.url ?? base)
         request.httpMethod = method.rawValue
-        request.timeoutInterval = 10_000
+        request.timeoutInterval = 10000
         return request
     }
 }

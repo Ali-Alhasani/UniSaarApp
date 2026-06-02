@@ -6,14 +6,14 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
+import SafariServices
 import UIKit
 import WebKit
-import SafariServices
 
 @MainActor
 class NewsReaderViewController: UIViewController {
-    @IBOutlet weak var webView: WKWebView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet var webView: WKWebView!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     var newsItemViewModel: NewsFeedCellViewModel?
 
     override func viewDidLoad() {
@@ -81,8 +81,6 @@ extension NewsReaderViewController: WKNavigationDelegate, WKScriptMessageHandler
             configuration.barCollapsingEnabled = false
             let safariVC = SFSafariViewController(url: url, configuration: configuration)
             safariVC.delegate = self
-            safariVC.preferredBarTintColor = AppStyle.appNavgationMainColor
-            safariVC.preferredControlTintColor = .white
             present(safariVC, animated: true)
         }
         return .allow
@@ -90,6 +88,7 @@ extension NewsReaderViewController: WKNavigationDelegate, WKScriptMessageHandler
 }
 
 // MARK: - SFSafariViewControllerDelegate
+
 extension NewsReaderViewController: @preconcurrency SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true)

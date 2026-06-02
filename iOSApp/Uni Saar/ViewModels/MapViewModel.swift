@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import SwiftyJSON
 import Observation
+import SwiftyJSON
 
 @Observable
 class MapViewModel: ParentViewModel {

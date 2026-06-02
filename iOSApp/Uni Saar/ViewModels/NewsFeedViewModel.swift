@@ -6,10 +6,10 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
-import UIKit
 import CoreData
+import Foundation
 import Observation
+import UIKit
 
 @Observable
 class NewsFeedViewModel: ParentViewModel {
@@ -21,9 +21,8 @@ class NewsFeedViewModel: ParentViewModel {
     @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: #keyPath(FilterNoticesListCache.isSelected), ascending: false)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-        return frc
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
+                                          sectionNameKeyPath: nil, cacheName: nil)
     }()
 
     override init(dataClient: any AppDataClient = DataClient()) {
@@ -35,7 +34,7 @@ class NewsFeedViewModel: ParentViewModel {
         var filterCatgroies = filterCatgroies
         if filterCatgroies.count == 0 {
             fetchNewsFilterFromStorage()
-            filterCatgroies = fetchedResultsController.fetchedObjects?.filter {!$0.isSelected}.compactMap {Int($0.categoryID)} ?? []
+            filterCatgroies = fetchedResultsController.fetchedObjects?.filter { !$0.isSelected }.compactMap { Int($0.categoryID) } ?? []
         }
         do {
             let news = try await dataClient.getNews(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, filter: filterCatgroies)
@@ -80,7 +79,7 @@ class NewsFeedViewModel: ParentViewModel {
     @objc var titleLabel: UILabel? { get }
     @objc optional var subTitleLabel: UILabel? { get }
     @objc optional var dateLabel: UILabel? { get }
-    @objc optional var newsImage: UIImageView? { get}
+    @objc optional var newsImage: UIImageView? { get }
 }
 
 protocol NewsFeedCellViewModel {
@@ -88,29 +87,34 @@ protocol NewsFeedCellViewModel {
     var titleText: String { get }
     var subTitleText: String { get }
     var imageURL: URL? { get }
-    var newsDate: String {get }
+    var newsDate: String { get }
     var newsHeader: String { get }
     var isEvent: Bool { get }
 }
 
 extension NewsModel: NewsFeedCellViewModel {
     var newsItem: NewsModel {
-        return self
+        self
     }
+
     var titleText: String {
-        return title
+        title
     }
+
     var subTitleText: String {
-        return subTitle ?? ""
+        subTitle ?? ""
     }
+
     var imageURL: URL? {
-        return (imageURLString != nil) ? URL(string: imageURLString!) : nil
+        (imageURLString != nil) ? URL(string: imageURLString!) : nil
     }
+
     var newsDate: String {
-        return annoucementDate
+        annoucementDate
     }
+
     var newsHeader: String {
-        return annoucementDate + " | " + categoryName.values.map {$0}.joined(separator: ", ")
+        annoucementDate + " | " + categoryName.values.map(\.self).joined(separator: ", ")
     }
 }
 

@@ -1,15 +1,15 @@
 //
-//  directoryViewModel.swift
+//  DirectoryViewModel.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 1/10/20.
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import UIKit
+import Foundation
 import Observation
+import UIKit
 
 @Observable
 class DirectoryViewModel: ParentViewModel {
@@ -18,10 +18,10 @@ class DirectoryViewModel: ParentViewModel {
     @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<HelpfulNumberCache> = {
         let fetchRequest = NSFetchRequest<HelpfulNumberCache>(entityName: String(describing: HelpfulNumberCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-        return frc
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
+                                          sectionNameKeyPath: nil, cacheName: nil)
     }()
+
     var apiPageNumber = 0
     let numberOfItemPerPage = UIDevice.current.userInterfaceIdiom == .pad ? 16 : 10
     var hasNextPage = false
@@ -31,7 +31,7 @@ class DirectoryViewModel: ParentViewModel {
     }
 
     func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) async {
-        if !hasNextPage && isFirstTime == false {
+        if !hasNextPage, isFirstTime == false {
             return
         }
         showLoadingIndicator = true
@@ -92,7 +92,7 @@ class DirectoryViewModel: ParentViewModel {
         Task { await self.loadGetHelpHelpfulNumbers() }
     }
 
-    func loadGetMockSearchResults() { }
+    func loadGetMockSearchResults() {}
 
     func fetchMoreLinksFromStorage() {
         do {
@@ -114,18 +114,26 @@ protocol HelpfulNumbersCellViewModel {
 }
 
 extension StaffResultsModel: DirectorySearchResutlsCellViewModel {
-    var titleText: String { return title }
-    var nameText: String { return fullName }
-    var staffId: Int { return staffID }
+    var titleText: String {
+        title
+    }
+
+    var nameText: String {
+        fullName
+    }
+
+    var staffId: Int {
+        staffID
+    }
 }
 
 extension NumberModel: HelpfulNumbersCellViewModel {
     var fortmatedText: String {
         var finalText = ""
-        if let name = name { finalText += name + "\n" }
-        if let number = number { finalText += number + "\n" }
-        if let link = link { finalText += link + "\n" }
-        if let mail = mail { finalText += mail + "\n" }
+        if let name { finalText += name + "\n" }
+        if let number { finalText += number + "\n" }
+        if let link { finalText += link + "\n" }
+        if let mail { finalText += mail + "\n" }
         finalText.removeLast()
         return finalText
     }
@@ -134,10 +142,10 @@ extension NumberModel: HelpfulNumbersCellViewModel {
 extension HelpfulNumberCache: HelpfulNumbersCellViewModel {
     var fortmatedText: String {
         var finalText = ""
-        if let name = name { finalText += name + "\n" }
-        if let number = number { finalText += number + "\n" }
-        if let link = link { finalText += link + "\n" }
-        if let mail = mail { finalText += mail + "\n" }
+        if let name { finalText += name + "\n" }
+        if let number { finalText += number + "\n" }
+        if let link { finalText += link + "\n" }
+        if let mail { finalText += mail + "\n" }
         finalText.removeLast()
         return finalText
     }

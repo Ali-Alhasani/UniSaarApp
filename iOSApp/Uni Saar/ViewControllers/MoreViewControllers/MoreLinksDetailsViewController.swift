@@ -12,8 +12,8 @@ import WebKit
 @MainActor
 class MoreLinksDetailsViewController: UIViewController {
     var linkItem: MoreLinksCellViewModel?
-    @IBOutlet weak var webView: WKWebView!
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet var webView: WKWebView!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
         setUplayout()
@@ -21,27 +21,30 @@ class MoreLinksDetailsViewController: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+
     func load() {
-        self.activityIndicator.startAnimating()
+        activityIndicator.startAnimating()
         if let urlRequest = getItemURL() {
-            self.webView.load(urlRequest)
+            webView.load(urlRequest)
         }
     }
+
     func setUplayout() {
         webView.scrollView.isScrollEnabled = true
         webView.navigationDelegate = self
         webView.isOpaque = false
         webView.backgroundColor = .clear
         webView.allowsBackForwardNavigationGestures = true
-        self.title = linkItem?.nameText
+        title = linkItem?.nameText
     }
+
     func getItemURL() -> URLRequest? {
         if let url = linkItem?.linkURL {
             return URLRequest(url: url)
         }
         return nil
-
     }
+
     @IBAction func openLinkAction(_ sender: Any) {
         guard let url = linkItem?.linkURL else { return }
         UIApplication.shared.open(url)
@@ -55,8 +58,8 @@ class MoreLinksDetailsViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
-
 }
+
 extension MoreLinksDetailsViewController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         activityIndicator.stopAnimating()

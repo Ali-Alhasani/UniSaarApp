@@ -9,8 +9,7 @@
 import UIKit
 
 class ErrorCellCollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet var textLabel: UILabel!
     var text: String? {
         didSet {
             textLabel.text = text

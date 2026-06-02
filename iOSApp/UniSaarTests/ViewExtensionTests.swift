@@ -6,8 +6,8 @@
 //  Copyright © 2026 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
 // MARK: - UITableView loading indicator
 
@@ -71,7 +71,6 @@ class UICollectionViewLoadingTests: XCTestCase {
 
 @MainActor
 class UITableViewCellEmptyStateTests: XCTestCase {
-
     func testSetupEmptyCellSetsText() {
         let cell = UITableViewCell()
         _ = cell.setupEmptyCell(message: "No results found")
@@ -97,13 +96,12 @@ class UITableViewCellEmptyStateTests: XCTestCase {
 
 @MainActor
 final class LoadingIndicatorTests: XCTestCase {
-
     func testLoadingStartsTrueAndClearsAfterLoad() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
         let task = Task { await viewModel.loadGetNews(filterCatgroies: []) }
-        await Task.yield()  // let Task start and execute synchronous preamble
+        await Task.yield() // let Task start and execute synchronous preamble
         XCTAssertTrue(viewModel.showLoadingIndicator, "showLoadingIndicator should be true while loading")
         await task.value
         XCTAssertFalse(viewModel.showLoadingIndicator, "showLoadingIndicator should be false after load completes")

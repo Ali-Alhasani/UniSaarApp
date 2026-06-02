@@ -11,7 +11,6 @@ import UIKit
 private nonisolated(unsafe) var loadingOverlayKey: UInt8 = 0
 
 extension UIViewController {
-
     private var loadingOverlay: UIView? {
         get { objc_getAssociatedObject(self, &loadingOverlayKey) as? UIView }
         set { objc_setAssociatedObject(self, &loadingOverlayKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
@@ -53,7 +52,7 @@ extension UIViewController {
             stack.topAnchor.constraint(equalTo: blurView.contentView.topAnchor, constant: 28),
             stack.bottomAnchor.constraint(equalTo: blurView.contentView.bottomAnchor, constant: -28),
             stack.leadingAnchor.constraint(equalTo: blurView.contentView.leadingAnchor, constant: 28),
-            stack.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -28),
+            stack.trailingAnchor.constraint(equalTo: blurView.contentView.trailingAnchor, constant: -28)
         ])
 
         loadingOverlay = blurView

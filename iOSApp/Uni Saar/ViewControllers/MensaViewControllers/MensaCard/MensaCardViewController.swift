@@ -1,27 +1,26 @@
 //
-//  ViewController.swift
+//  MensaCardViewController.swift
 //  Mensa-Guthaben
 //
 //  Created by Georg on 11.08.19.
 //  Copyright © 2019 Georg Sieber. All rights reserved.
 //
 
-import UIKit
 import CoreNFC
 import SQLite3
+import UIKit
 
 private let kNFCAppID: Int = 0x5F8415
 private let kNFCFileID: UInt8 = 1
 
 @MainActor
 class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
-
     enum Commands: UInt8 {
-        case selectApp = 0x5a
-        case readValue = 0x6c
-        case getFileSettings = 0xf5
-
+        case selectApp = 0x5A
+        case readValue = 0x6C
+        case getFileSettings = 0xF5
     }
+
     var session: NFCTagReaderSession?
 
     override func viewDidLoad() {
@@ -34,13 +33,13 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         dismissNFC()
     }
 
-    @IBOutlet public weak var labelCurrentBalance: UILabel!
-    @IBOutlet public weak var labelLastTransaction: UILabel!
-    @IBOutlet public weak var labelCardID: UILabel!
-    @IBOutlet public weak var labelDate: UILabel!
-    @IBOutlet public weak var viewCardBackground: UIView!
+    @IBOutlet var labelCurrentBalance: UILabel!
+    @IBOutlet var labelLastTransaction: UILabel!
+    @IBOutlet var labelCardID: UILabel!
+    @IBOutlet var labelDate: UILabel!
+    @IBOutlet var viewCardBackground: UIView!
 
-    @IBAction public func scanCardAction() {
+    @IBAction func scanCardAction() {
         guard NFCTagReaderSession.readingAvailable else {
             let alertController = UIAlertController(
                 title: NSLocalizedString("NFC Scanning Not Supported", comment: ""),
@@ -48,7 +47,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
                 preferredStyle: .alert
             )
             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            self.present(alertController, animated: true)
+            present(alertController, animated: true)
             return
         }
 
@@ -57,11 +56,12 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         session?.begin()
     }
 
-    nonisolated func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {
-    }
+    nonisolated func tagReaderSessionDidBecomeActive(_ session: NFCTagReaderSession) {}
+
     nonisolated func tagReaderSession(_ session: NFCTagReaderSession, didInvalidateWithError error: Error) {
         print(error.localizedDescription)
     }
+
     nonisolated func tagReaderSession(_ session: NFCTagReaderSession, didDetect tags: [NFCTag]) {
         if tags.count != 1 {
             print("MULTIPLE TAGS! ABORT.")
@@ -69,10 +69,9 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         }
 
         if let firstTag = tags.first, case let NFCTag.miFare(tag) = firstTag {
-
             session.connect(to: firstTag) { (error: Error?) in
-                if let error = error {
-                    print("CONNECTION ERROR : " + error.localizedDescription )
+                if let error {
+                    print("CONNECTION ERROR : " + error.localizedDescription)
                     return
                 }
 
@@ -86,8 +85,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
                         command: Commands.selectApp.rawValue, // command : select app
                         parameter: [UInt8(appIdBuff[0]), UInt8(appIdBuff[1]), UInt8(appIdBuff[2])] // appId as byte array
                     )),
-                    completion: { (_) -> Void in
-
+                    completion: { _ in
                         // 2nd command : read value (balance)
                         self.send(
                             tag: tag,
@@ -95,10 +93,9 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
                                 command: Commands.readValue.rawValue, // command : read value
                                 parameter: [kNFCFileID] // file id : 1
                             )),
-                            completion: { (balanceData) -> Void in
-
+                            completion: { balanceData in
                                 // parse balance response
-                                _ =  self.parseBalanceResponse(data: balanceData)
+                                _ = self.parseBalanceResponse(data: balanceData)
 
                                 // 3rd command : read last trans
                                 self.send(
@@ -107,25 +104,27 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
                                         command: Commands.getFileSettings.rawValue, // command : get file settings
                                         parameter: [kNFCFileID] // file id : 1
                                     )),
-                                    completion: { (transactionData) -> Void in
-
+                                    completion: { transactionData in
                                         _ = self.parseTransactionResponse(data: transactionData)
 
                                         // insert into history
-                                        //self.saveBalanceHistory(currentBalanceValue: currentBalanceValue, lastTransaction: lastTransactionValue, cardID: idInt)
+                                        // self.saveBalanceHistory(currentBalanceValue: currentBalanceValue, lastTransaction: lastTransactionValue, cardID: idInt)
 
                                         // dismiss iOS NFC window
                                         self.dismissNFC()
-
-                                    })
-                            })
-                    })
+                                    }
+                                )
+                            }
+                        )
+                    }
+                )
             }
 
         } else {
             print("INVALID CARD")
         }
     }
+
     nonisolated func parseIDNumberResponse(tag: NFCMiFareTag) -> Int {
         var idData = tag.identifier
         if idData.count == 7 {
@@ -135,8 +134,8 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
             $0.load(as: Int.self)
         }
         print("CONNECTED TO CARD")
-        print("CARD-TYPE:"+String(tag.mifareFamily.rawValue))
-        print("CARD-ID hex:"+idData.hexEncodedString())
+        print("CARD-TYPE:" + String(tag.mifareFamily.rawValue))
+        print("CARD-ID hex:" + idData.hexEncodedString())
         Task { @MainActor [weak self] in
             self?.labelCardID.text = String(idInt)
         }
@@ -198,18 +197,20 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
     }
 
     nonisolated func byteArrayToInt(buf: [UInt8]) -> Int {
-        var rawValue: Int = 0
+        var rawValue = 0
         for byte in buf {
             rawValue = rawValue << 8
             rawValue = rawValue | Int(byte)
         }
         return rawValue
     }
+
     nonisolated func intToEuro(value: Int) -> Double {
-        return (Double(value)/1000).rounded(toPlaces: 2)
+        (Double(value) / 1000).rounded(toPlaces: 2)
     }
+
     nonisolated func getColorByEuro(euro: Double) -> UIColor {
-        return UIColor.systemGreen.withAlphaComponent(0.5)
+        UIColor.systemGreen.withAlphaComponent(0.5)
     }
 
     nonisolated func getDateString() -> String {
@@ -218,7 +219,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         return dateFormatterGet.string(from: Date())
     }
 
-    func wrap(command: UInt8, parameter: [UInt8]?) -> [UInt8] {
+    nonisolated func wrap(command: UInt8, parameter: [UInt8]?) -> [UInt8] {
         var buff: [UInt8] = []
         buff.append(0x90)
         buff.append(command)
@@ -233,22 +234,22 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         buff.append(0x00)
         return buff
     }
-    nonisolated func send(tag: NFCMiFareTag, data: Data, completion: @escaping (_ data: Data) -> Void) {
-        print("COMMAND TO CARD => "+data.hexEncodedString())
+
+    nonisolated func send(tag: NFCMiFareTag, data: Data, completion: @Sendable @escaping (_ data: Data) -> Void) {
+        print("COMMAND TO CARD => " + data.hexEncodedString())
         tag.sendMiFareCommand(commandPacket: data, completionHandler: { (data: Data, error: Error?) in
-            if let error = error {
-                print("COMMAND ERROR : "+error.localizedDescription)
+            if let error {
+                print("COMMAND ERROR : " + error.localizedDescription)
                 return
             }
-            print("CARD RESPONSE <= "+data.hexEncodedString())
+            print("CARD RESPONSE <= " + data.hexEncodedString())
             completion(data)
         })
     }
 
     @IBAction func doneAction(_ sender: Any) {
-        self.dismiss(animated: true)
+        dismiss(animated: true)
     }
-
 }
 
 extension Data {
@@ -262,8 +263,9 @@ extension Data {
         return map { String(format: format, $0) }.joined()
     }
 }
+
 extension Double {
-    // Rounds the double to decimal places value
+    /// Rounds the double to decimal places value
     func rounded(toPlaces places: Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor

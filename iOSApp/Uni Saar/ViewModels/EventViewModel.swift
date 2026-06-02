@@ -36,9 +36,9 @@ class EventViewModel: ParentViewModel {
     }
 
     func getDayEvents(day: Date?) {
-        selectedDateEvents = eventCells.filter { (item) -> Bool in
+        selectedDateEvents = eventCells.filter { item -> Bool in
             switch item {
-            case .normal(let event):
+            case let .normal(event):
                 if convertDate(strDate: event.newsDate) == day {
                     return true
                 }
@@ -50,9 +50,9 @@ class EventViewModel: ParentViewModel {
     }
 
     func countDayEvents(day: Date) -> Int {
-        let events = eventCells.filter { (item) -> Bool in
+        let events = eventCells.filter { item -> Bool in
             switch item {
-            case .normal(let event):
+            case let .normal(event):
                 if convertDate(strDate: event.newsDate) == day {
                     return true
                 }
