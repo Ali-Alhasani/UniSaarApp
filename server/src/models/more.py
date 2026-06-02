@@ -8,6 +8,7 @@ class MoreLink(BaseModel):
 
     name: str
     link: str
+    importance: int = 0
 
 
 class MoreLinksResponse(BaseModel):

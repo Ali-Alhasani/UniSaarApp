@@ -32,7 +32,13 @@ _MENU_WITH_PRICING_NOTICE = (
 async def _fetch_menu(menu_json: str = _MENU_SB) -> object:
     # _fetch_base_data is called first, then fetch_menu – both use self.fetch
     fetch_mock = AsyncMock(side_effect=[_BASE_DATA, menu_json])
-    with patch.object(BaseScraper, "fetch", fetch_mock):
+    with (
+        patch.object(BaseScraper, "fetch", fetch_mock),
+        patch(
+            "src.services.mensa_scraper.settings.mensa_api_key.get_secret_value",
+            return_value="test-key",
+        ),
+    ):
         scraper = MensaScraper()
         return await scraper.fetch_menu("sb", "de")
 
@@ -153,7 +159,13 @@ async def test_fetch_menu_multiple_days() -> None:
 async def test_fetch_menu_missing_price_tiers_falls_back_to_tier_id() -> None:
     base_no_tiers = "{}"
     fetch_mock = AsyncMock(side_effect=[base_no_tiers, _MENU_SB])
-    with patch.object(BaseScraper, "fetch", fetch_mock):
+    with (
+        patch.object(BaseScraper, "fetch", fetch_mock),
+        patch(
+            "src.services.mensa_scraper.settings.mensa_api_key.get_secret_value",
+            return_value="test-key",
+        ),
+    ):
         scraper = MensaScraper()
         menu = await scraper.fetch_menu("sb", "de")
     prices = menu.days[0].meals[0].prices

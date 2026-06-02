@@ -5,6 +5,9 @@
 # DiskCache data directory
 .cache/
 
+# Log files written by setup_logging()
+logs/
+
 # Python
 __pycache__/
 *.py[cod]

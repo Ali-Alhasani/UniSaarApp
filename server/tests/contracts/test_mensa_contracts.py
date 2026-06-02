@@ -113,6 +113,7 @@ class TestMensaMenuContract:
 class TestMensaMealDetailContract:
     def test_ios_keys(self) -> None:
         detail = MensaMealDetail(
+            id=42,
             meal_name="Spaghetti",
             description="Pasta counter",
             color=MensaColor(r=0, g=0, b=0),
@@ -121,6 +122,7 @@ class TestMensaMealDetailContract:
             meal_components=[],
         )
         data = detail.model_dump(by_alias=True)
+        assert "id" in data
         assert "mealName" in data
         assert "description" in data
         assert "color" in data

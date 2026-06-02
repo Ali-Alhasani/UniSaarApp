@@ -69,6 +69,7 @@ class MensaMealDetail(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
+    id: int
     meal_name: str = Field(serialization_alias="mealName")
     description: str
     color: MensaColor = Field(default_factory=MensaColor)
@@ -86,3 +87,26 @@ class MensaInfo(BaseModel):
     name: str
     description: str
     image_link: str = Field(serialization_alias="imageLink")
+
+
+class MensaFilterLocation(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    location_id: str = Field(serialization_alias="locationID")
+    name: str
+
+
+class MensaFilterNotice(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    notice_id: str = Field(serialization_alias="noticeID")
+    name: str
+    is_allergen: bool = Field(serialization_alias="isAllergen")
+    is_negated: bool = Field(serialization_alias="isNegated")
+
+
+class MensaFilters(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    locations: list[MensaFilterLocation]
+    notices: list[MensaFilterNotice]

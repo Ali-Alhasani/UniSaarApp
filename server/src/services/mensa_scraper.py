@@ -5,21 +5,39 @@ from datetime import UTC, datetime
 
 from src.core.config import settings
 from src.core.constants import MENSA_BASE_URL, MENSA_MENU_URL
-from src.models.mensa import MensaColor, MensaDay, MensaMeal, MensaMenu, MensaPrice
-from src.services.base_scraper import BaseScraper
+from src.models.mensa import (
+    MensaColor,
+    MensaComponent,
+    MensaDay,
+    MensaFilterLocation,
+    MensaFilterNotice,
+    MensaFilters,
+    MensaMeal,
+    MensaMealDetail,
+    MensaMenu,
+    MensaNotice,
+    MensaPrice,
+)
+from src.services.base_scraper import BaseScraper, ScraperError
 from src.services.date_service import format_mensa_date
 
 
 class MensaScraper(BaseScraper):
     def __init__(self) -> None:
         super().__init__()
-        self._price_tiers: dict[str, str] = {}  # tierID → displayName
+        self._price_tiers: dict[str, str] = {}
+        self._notices: dict[str, object] = {}
+        self._filter_locations: list[MensaFilterLocation] = []
+        self._meal_details: dict[int, MensaMealDetail] = {}
 
     async def _fetch_base_data(self, lang: str) -> None:
         api_key = settings.mensa_api_key.get_secret_value()
+        if not api_key:
+            raise ScraperError("MENSA_API_KEY is not set in .secrets")
         url = MENSA_BASE_URL.format(api_key=api_key, lang=lang)
         raw = await self.fetch(url)
         data: dict[str, object] = json.loads(raw)
+
         tiers = data.get("priceTiers", {})
         if isinstance(tiers, dict):
             self._price_tiers = {
@@ -30,6 +48,32 @@ class MensaScraper(BaseScraper):
                 )
                 for tier_id, info in tiers.items()
             }
+
+        raw_notices = data.get("notices", {})
+        self._notices = raw_notices if isinstance(raw_notices, dict) else {}
+
+        raw_locs = data.get("locations", {})
+        if isinstance(raw_locs, dict):
+            self._filter_locations = [
+                MensaFilterLocation(
+                    location_id=loc_id,
+                    name=(
+                        str(info.get("displayName") or loc_id)
+                        if isinstance(info, dict)
+                        else str(loc_id)
+                    ),
+                )
+                for loc_id, info in raw_locs.items()
+            ]
+
+    def _notice_obj(self, notice_id: str) -> MensaNotice:
+        info = self._notices.get(str(notice_id))
+        display_name = (
+            str(info.get("displayName") or notice_id)
+            if isinstance(info, dict)
+            else str(notice_id)
+        )
+        return MensaNotice(notice=str(notice_id), display_name=display_name)
 
     @staticmethod
     def _parse_opening_hours(hours: object) -> str:
@@ -48,6 +92,7 @@ class MensaScraper(BaseScraper):
         self,
         meal_data: dict[str, object],
         counter_name: str,
+        counter_desc: str,
         opening_hours: str,
         color: MensaColor,
         meal_id: int,
@@ -58,17 +103,27 @@ class MensaScraper(BaseScraper):
         )
 
         components: list[str] = []
+        rich_components: list[MensaComponent] = []
         raw_components = meal_data.get("components", [])
         if isinstance(raw_components, list):
             for comp in raw_components:
                 if not isinstance(comp, dict):
                     continue
                 comp_name = str(comp.get("name", "")).replace("\xa0", " ").strip()
+                comp_notice_ids = comp.get("notices", [])
+                if isinstance(comp_notice_ids, list):
+                    all_notices.update(str(n) for n in comp_notice_ids)
+                    comp_notices = [self._notice_obj(str(n)) for n in comp_notice_ids]
+                else:
+                    comp_notices = []
                 if comp_name:
                     components.append(comp_name)
-                comp_notices = comp.get("notices", [])
-                if isinstance(comp_notices, list):
-                    all_notices.update(str(n) for n in comp_notices)
+                    rich_components.append(
+                        MensaComponent(
+                            component_name=comp_name,
+                            notices=comp_notices,
+                        )
+                    )
 
         name = str(meal_data.get("name", "")).replace("\xa0", " ").strip()
         pricing_notice_raw = meal_data.get("pricingNotice")
@@ -88,6 +143,18 @@ class MensaScraper(BaseScraper):
                     for tier_id, price_str in raw_prices.items()
                 ]
 
+        general_notices = [self._notice_obj(n_id) for n_id in sorted(all_notices)]
+        self._meal_details[meal_id] = MensaMealDetail(
+            id=meal_id,
+            meal_name=name,
+            description=counter_desc,
+            color=color,
+            general_notices=general_notices,
+            prices=prices,
+            pricing_notice=pricing_notice,
+            meal_components=rich_components,
+        )
+
         return MensaMeal(
             id=meal_id,
             meal_name=name,
@@ -100,10 +167,40 @@ class MensaScraper(BaseScraper):
             pricing_notice=pricing_notice,
         )
 
+    def get_meal_details(self) -> dict[int, MensaMealDetail]:
+        return dict(self._meal_details)
+
+    def build_filters(self) -> MensaFilters:
+        notices = [
+            MensaFilterNotice(
+                notice_id=n_id,
+                name=(
+                    str(info.get("displayName") or n_id)
+                    if isinstance(info, dict)
+                    else str(n_id)
+                ),
+                is_allergen=(
+                    bool(info.get("isAllergen", False))
+                    if isinstance(info, dict)
+                    else False
+                ),
+                is_negated=(
+                    bool(info.get("isNegated", False))
+                    if isinstance(info, dict)
+                    else False
+                ),
+            )
+            for n_id, info in self._notices.items()
+        ]
+        return MensaFilters(locations=self._filter_locations, notices=notices)
+
     async def fetch_menu(self, location: str, lang: str = "de") -> MensaMenu:
         await self._fetch_base_data(lang)
+        self._meal_details = {}
 
         api_key = settings.mensa_api_key.get_secret_value()
+        if not api_key:
+            raise ScraperError("MENSA_API_KEY is not set in .secrets")
         url = MENSA_MENU_URL.format(api_key=api_key, lang=lang, location=location)
         raw = await self.fetch(url)
         data: dict[str, object] = json.loads(raw)
@@ -136,6 +233,9 @@ class MensaScraper(BaseScraper):
                 counter_name = (
                     str(counter.get("displayName", "")).replace("\xa0", " ").strip()
                 )
+                counter_desc = (
+                    str(counter.get("description", "")).replace("\xa0", " ").strip()
+                )
                 opening_hours = self._parse_opening_hours(counter.get("openingHours"))
                 color_raw = counter.get("color")
                 if isinstance(color_raw, dict):
@@ -155,7 +255,12 @@ class MensaScraper(BaseScraper):
                         continue
                     meals.append(
                         self._parse_meal(
-                            meal_data, counter_name, opening_hours, color, meal_id
+                            meal_data,
+                            counter_name,
+                            counter_desc,
+                            opening_hours,
+                            color,
+                            meal_id,
                         )
                     )
                     meal_id += 1

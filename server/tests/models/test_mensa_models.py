@@ -86,6 +86,7 @@ class TestMensaMealDetail:
             notices=[MensaNotice(notice="L", display_name="Laktose")],
         )
         detail = MensaMealDetail(
+            id=1,
             meal_name="Spaghetti",
             description="Pasta counter",
             color=MensaColor(r=255, g=0, b=0),
@@ -93,6 +94,7 @@ class TestMensaMealDetail:
             prices=[MensaPrice(price_tag="Stud.", price="2.50")],
             meal_components=[component],
         )
+        assert detail.id == 1
         assert detail.meal_name == "Spaghetti"
         assert detail.general_notices[0].notice == "G"
 

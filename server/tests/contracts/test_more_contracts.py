@@ -15,7 +15,7 @@ class TestMoreLinkContract:
         data = MoreLink(name="AStA", link="https://asta.uni-saarland.de/").model_dump(
             by_alias=True
         )
-        assert set(data.keys()) == {"name", "link"}
+        assert set(data.keys()) == {"name", "link", "importance"}
 
 
 class TestMoreLinksResponseContract:

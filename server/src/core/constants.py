@@ -2,7 +2,7 @@ from __future__ import annotations
 
 NEWSFEED_LANGUAGES: list[str] = ["de", "en", "fr"]
 MENSA_LANGUAGES: list[str] = ["de", "en", "fr"]
-MENSA_LOCATIONS: list[str] = ["sb", "hom", "forum", "mensagarten"]
+MENSA_LOCATIONS: list[str] = ["sb", "hom", "mensagarten"]
 
 NEWS_URLS: dict[str, str] = {
     "de": "https://www.uni-saarland.de/universitaet/aktuell/news/feed.rss",

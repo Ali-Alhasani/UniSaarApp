@@ -22,7 +22,7 @@ class BaseScraper:
         proxy = settings.proxy_url or None
         self._client = httpx.AsyncClient(
             proxy=proxy,
-            timeout=30.0,
+            timeout=settings.http_timeout_seconds,
             follow_redirects=True,
         )
 
@@ -43,6 +43,7 @@ class BaseScraper:
                 response = await self._client.get(url)
                 response.raise_for_status()
                 html = response.text
+                encoding_used = response.encoding or "utf-8"
                 # German pages sometimes serve ISO-8859-1/Windows-1252 with a wrong
                 # UTF-8 charset header. Try both common encodings before giving up.
                 if "â€" in html or "Ã" in html:
@@ -51,9 +52,18 @@ class BaseScraper:
                             candidate = response.content.decode(enc)
                             if "â€" not in candidate and "Ã" not in candidate:
                                 html = candidate
+                                encoding_used = enc
                                 break
                         except (UnicodeDecodeError, LookupError):
                             pass
+                _html_len = len(html)
+                logger.opt(lazy=True).trace(
+                    "[fetch] url={} status={} encoding={} size={}b",
+                    lambda _u=url: _u,
+                    lambda _s=response.status_code: _s,
+                    lambda _e=encoding_used: _e,
+                    lambda _l=_html_len: _l,
+                )
                 return html
             except httpx.HTTPError as exc:
                 if attempt == self._MAX_RETRIES - 1:
@@ -61,12 +71,13 @@ class BaseScraper:
                         f"All {self._MAX_RETRIES} attempts failed for {url}"
                     ) from exc
                 wait = self._BACKOFF_BASE * (2**attempt)
+                exc_msg = str(exc).strip() or type(exc).__name__
                 logger.warning(
                     "Attempt {}/{} failed for {}: {}. Retrying in {:.1f}s",
                     attempt + 1,
                     self._MAX_RETRIES,
                     url,
-                    exc,
+                    exc_msg,
                     wait,
                 )
                 await asyncio.sleep(wait)
