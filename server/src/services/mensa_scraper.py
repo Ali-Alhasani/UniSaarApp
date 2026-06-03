@@ -4,7 +4,12 @@ import json
 from datetime import UTC, datetime
 
 from src.core.config import settings
-from src.core.constants import MENSA_BASE_URL, MENSA_MENU_URL
+from src.core.constants import (
+    CAMPUS_CITY_NAMES,
+    MENSA_BASE_URL,
+    MENSA_CAMPUS_LOCATIONS,
+    MENSA_MENU_URL,
+)
 from src.models.mensa import (
     MensaColor,
     MensaComponent,
@@ -76,6 +81,26 @@ class MensaScraper(BaseScraper):
         return MensaNotice(notice=str(notice_id), display_name=display_name)
 
     @staticmethod
+    def _clean(raw: str) -> str:
+        """Normalize a string field from the mensa API.
+
+        Reverses UTF-8-as-Latin-1 double-encoding present in some API strings.
+        E.g. "\u00c3\u00a9" (two Latin-1 code points) re-decodes as UTF-8 to "e\u0301".
+        Correctly stored German umlauts are preserved: their single Latin-1
+        bytes (0xfc for u with umlaut, etc.) are not valid standalone UTF-8,
+        so the except branch returns them unchanged.
+        """
+        text = raw.replace("\xa0", " ").strip()
+        try:
+            return text.encode("latin-1").decode("utf-8")
+        except (UnicodeEncodeError, UnicodeDecodeError):
+            return text
+
+    @staticmethod
+    def _has_control_chars(text: str) -> bool:
+        return any(ord(c) < 0x20 for c in text)
+
+    @staticmethod
     def _parse_opening_hours(hours: object) -> str:
         if not isinstance(hours, dict):
             return ""
@@ -109,7 +134,7 @@ class MensaScraper(BaseScraper):
             for comp in raw_components:
                 if not isinstance(comp, dict):
                     continue
-                comp_name = str(comp.get("name", "")).replace("\xa0", " ").strip()
+                comp_name = self._clean(str(comp.get("name", "")))
                 comp_notice_ids = comp.get("notices", [])
                 if isinstance(comp_notice_ids, list):
                     all_notices.update(str(n) for n in comp_notice_ids)
@@ -117,15 +142,18 @@ class MensaScraper(BaseScraper):
                 else:
                     comp_notices = []
                 if comp_name:
-                    components.append(comp_name)
                     rich_components.append(
                         MensaComponent(
                             component_name=comp_name,
                             notices=comp_notices,
                         )
                     )
+                    if not self._has_control_chars(comp_name) and len(components) < 5:
+                        components.append(comp_name)
 
-        name = str(meal_data.get("name", "")).replace("\xa0", " ").strip()
+        name = self._clean(str(meal_data.get("name", "")))
+        if len(name) > 80:
+            name = name[:80].rsplit(" ", 1)[0] + "…"
         pricing_notice_raw = meal_data.get("pricingNotice")
         pricing_notice: str | None = (
             str(pricing_notice_raw) if pricing_notice_raw is not None else None
@@ -192,9 +220,20 @@ class MensaScraper(BaseScraper):
             )
             for n_id, info in self._notices.items()
         ]
-        return MensaFilters(locations=self._filter_locations, notices=notices)
+        campus_ids = set(MENSA_CAMPUS_LOCATIONS)
+        locations = [
+            MensaFilterLocation(
+                location_id=loc.location_id,
+                name=CAMPUS_CITY_NAMES.get(loc.location_id, loc.name),
+            )
+            for loc in self._filter_locations
+            if loc.location_id in campus_ids
+        ]
+        return MensaFilters(locations=locations, notices=notices)
 
-    async def fetch_menu(self, location: str, lang: str = "de") -> MensaMenu:
+    async def fetch_menu(
+        self, location: str, lang: str = "de", starting_meal_id: int = 0
+    ) -> MensaMenu:
         await self._fetch_base_data(lang)
         self._meal_details = {}
 
@@ -205,7 +244,7 @@ class MensaScraper(BaseScraper):
         raw = await self.fetch(url)
         data: dict[str, object] = json.loads(raw)
 
-        meal_id = 0
+        meal_id = starting_meal_id
         days: list[MensaDay] = []
 
         raw_days = data.get("days", [])
@@ -230,12 +269,8 @@ class MensaScraper(BaseScraper):
             for counter in counters:
                 if not isinstance(counter, dict):
                     continue
-                counter_name = (
-                    str(counter.get("displayName", "")).replace("\xa0", " ").strip()
-                )
-                counter_desc = (
-                    str(counter.get("description", "")).replace("\xa0", " ").strip()
-                )
+                counter_name = self._clean(str(counter.get("displayName", "")))
+                counter_desc = self._clean(str(counter.get("description", "")))
                 opening_hours = self._parse_opening_hours(counter.get("openingHours"))
                 color_raw = counter.get("color")
                 if isinstance(color_raw, dict):

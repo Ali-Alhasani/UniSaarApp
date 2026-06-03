@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Query, Request
+from fastapi import APIRouter, BackgroundTasks, Query, Request
 from fastapi.responses import JSONResponse, Response
 
 from src.api._html import preferred_lang, render_detail_html, render_error_html
-from src.services.article_scraper import ArticleScraper
+from src.services.article_scraper import scrape_and_cache_article
 from src.storage.cache import cache
 
 router = APIRouter()
@@ -103,12 +103,11 @@ async def get_event_categories(language: str = "de") -> Response:
     return JSONResponse(categories)
 
 
-_ARTICLE_BODY_TTL = 86_400  # 24 hours
-
-
 @router.get("/events/details")
 @router.get("/v1/events/details")
-async def get_event_detail(id: int, request: Request) -> Response:
+async def get_event_detail(
+    id: int, request: Request, background_tasks: BackgroundTasks
+) -> Response:
     lang = preferred_lang(request.headers.get("accept-language", ""))
     result = await _find_event_item(id, lang)
     if result is None:
@@ -120,12 +119,11 @@ async def get_event_detail(id: int, request: Request) -> Response:
     if article_body is None:
         link = str(item.get("link") or "")
         if link:
-            async with ArticleScraper() as scraper:
-                article_body = await scraper.fetch_article_body(link)
-            if article_body:
-                await cache.set_async(cache_key, article_body, expire=_ARTICLE_BODY_TTL)
+            background_tasks.add_task(scrape_and_cache_article, link, cache_key)
 
     return Response(
-        content=render_detail_html(item, lang, is_event=True, article_body=article_body),
+        content=render_detail_html(
+            item, lang, is_event=True, article_body=article_body
+        ),
         media_type="text/html",
     )

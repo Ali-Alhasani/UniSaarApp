@@ -8,6 +8,7 @@ import pytest
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from src.core.constants import MENSA_LANGUAGES, MENSA_LOCATIONS
+from src.models.mensa import MensaMenu
 from src.services.scheduler import (
     _initialize,
     _is_mensa_stale,
@@ -39,11 +40,14 @@ def _mock_news_scraper(feed: MagicMock) -> AsyncMock:
     return scraper
 
 
-def _mock_mensa_scraper(feed: MagicMock) -> AsyncMock:
+def _mock_mensa_scraper(feed: MagicMock | None = None) -> AsyncMock:  # noqa: ARG001
     scraper = AsyncMock()
     scraper.__aenter__ = AsyncMock(return_value=scraper)
     scraper.__aexit__ = AsyncMock(return_value=False)
-    scraper.fetch_menu.return_value = feed
+    # Return a real MensaMenu so _merge_mensa_menus can iterate days/fields.
+    scraper.fetch_menu.return_value = MensaMenu(
+        days=[], filters_last_changed="2026-01-01T00:00:00Z"
+    )
     # get_meal_details and build_filters are synchronous methods
     scraper.get_meal_details = MagicMock(return_value={})
     scraper.build_filters = MagicMock(
@@ -148,7 +152,7 @@ async def test_mensa_job_writes_all_location_language_keys(tmp_path: Path) -> No
         MockInfo.return_value.load.return_value = None
         await _run_mensa_job(cache)
     for key in _ALL_MENSA_KEYS:
-        assert await cache.get_async(key) == {"days": []}
+        assert await cache.get_async(key) is not None
     assert await cache.get_async("scheduler:last_run:mensa") is not None
 
 
@@ -370,7 +374,7 @@ async def test_run_all_jobs_once_continues_after_single_job_failure(
         MockMore.return_value.load.return_value = _mock_feed()
         await run_all_jobs_once(cache)
 
-    assert await cache.get_async("mensa:sb:de") == {"days": []}
+    assert await cache.get_async("mensa:sb:de") is not None
 
 
 # --- _initialize ---

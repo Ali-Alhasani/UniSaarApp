@@ -42,7 +42,7 @@ async def search_directory(
             media_type="text/plain",
         )
     items = result.results if result.results is not None else []
-    start = (page - 1) * pageSize
+    start = page * pageSize
     end = start + pageSize
     page_items = items[start:end]
     payload = {
@@ -55,15 +55,14 @@ async def search_directory(
 
 @router.get("/directory/personDetails")
 @router.get("/v1/directory/personDetails")
-async def get_person_details(pid: int, language: str = "de") -> Response:
+async def get_person_details(pid: int, language: str = "de") -> JSONResponse:
     try:
         async with StaffScraper() as scraper:
             details = await scraper.fetch_details(pid)
     except ScraperError:
-        return Response(
+        return JSONResponse(
             status_code=503,
-            content="The staff directory is not available right now.",
-            media_type="text/plain",
+            content={"available": False, "reason": "directory_unavailable"},
         )
     return JSONResponse(details.model_dump(by_alias=True, mode="json"))
 

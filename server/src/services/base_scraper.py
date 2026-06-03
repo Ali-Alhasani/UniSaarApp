@@ -17,6 +17,15 @@ class ScraperError(Exception):
 class BaseScraper:
     _MAX_RETRIES = 3
     _BACKOFF_BASE = 1.0  # seconds
+    _HEADERS = {
+        "User-Agent": (
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/125.0.0.0 Safari/537.36"
+        ),
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "de,en;q=0.9",
+    }
 
     def __init__(self) -> None:
         proxy = settings.proxy_url or None
@@ -24,6 +33,7 @@ class BaseScraper:
             proxy=proxy,
             timeout=settings.http_timeout_seconds,
             follow_redirects=True,
+            headers=self._HEADERS,
         )
 
     async def __aenter__(self) -> Self:

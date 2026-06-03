@@ -6,6 +6,7 @@ from pathlib import Path
 
 from loguru import logger
 
+from src.core.constants import CAMPUS_CITY_NAMES
 from src.models.map import MapEntry, MapResponse
 
 _DEFAULT_PATH = (
@@ -30,7 +31,12 @@ class MapService:
                 try:
                     entries.append(
                         MapEntry(
-                            campus=str(item.get("campus", "")),
+                            campus=CAMPUS_CITY_NAMES.get(
+                                "sb"
+                                if item.get("campus") == "saar"
+                                else str(item.get("campus", "")),
+                                str(item.get("campus", "")),
+                            ),
                             name=str(item.get("name", "")),
                             function=str(item.get("function", "")),
                             latitude=str(item.get("latitude", "")),

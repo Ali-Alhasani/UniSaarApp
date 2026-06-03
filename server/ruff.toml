@@ -3,6 +3,7 @@ target-version = "py313"
 src = ["src", "tests"]
 # Legacy files — excluded until migrated and removed in PRs 3–5
 exclude = [
+    "main.py",
     "source/",
     "tests/DirectoryParserUnitTest.py",
     "tests/MensaParserUnitTest.py",
@@ -14,6 +15,10 @@ exclude = [
 
 [lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[lint.per-file-ignores]
+# CSS/HTML template strings inside triple-quoted literals cannot be wrapped
+"src/api/_html.py" = ["E501"]
 
 [lint.isort]
 known-first-party = ["src"]

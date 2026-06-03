@@ -6,6 +6,9 @@ from html.parser import HTMLParser as _StdParser
 from selectolax.parser import HTMLParser
 
 from src.services.base_scraper import BaseScraper, ScraperError
+from src.storage.cache import cache as _cache
+
+ARTICLE_BODY_TTL = 86_400  # 24 hours
 
 _UDS_BASE = "https://www.uni-saarland.de"
 
@@ -41,7 +44,18 @@ _STRIP_SELECTORS = [
 ]
 
 # Allowed HTML tags in the sanitised output.
-_BLOCK_TAGS = {"p", "h2", "h3", "h4", "ul", "ol", "li", "blockquote", "figure", "figcaption"}
+_BLOCK_TAGS = {
+    "p",
+    "h2",
+    "h3",
+    "h4",
+    "ul",
+    "ol",
+    "li",
+    "blockquote",
+    "figure",
+    "figcaption",
+}
 _INLINE_TAGS = {"strong", "em", "b", "i", "span"}
 _VOID_TAGS = {"br", "img"}
 _LINK_TAGS = {"a"}
@@ -154,6 +168,7 @@ class ArticleScraper(BaseScraper):
         # Override with a short timeout — article scraping is best-effort;
         # we fall back to the RSS summary if the page is unreachable.
         import httpx
+
         from src.core.config import settings
 
         proxy = settings.proxy_url or None
@@ -172,3 +187,10 @@ class ArticleScraper(BaseScraper):
             return _extract(html)
         except Exception:
             return None
+
+
+async def scrape_and_cache_article(url: str, cache_key: str) -> None:
+    async with ArticleScraper() as scraper:
+        body = await scraper.fetch_article_body(url)
+    if body:
+        await _cache.set_async(cache_key, body, expire=ARTICLE_BODY_TTL)

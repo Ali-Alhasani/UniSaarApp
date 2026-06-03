@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import re
 import xml.etree.ElementTree as ET
+import zlib
 from datetime import date
 from email.utils import parsedate_to_datetime
 
@@ -17,8 +18,6 @@ class NewsAndEventsScraper(BaseScraper):
         if channel is None:
             return []
 
-        category_id_map: dict[str, int] = {}
-        next_category_id = 0
         next_item_id = 0
 
         items: list[NewsItem] = []
@@ -56,12 +55,8 @@ class NewsAndEventsScraper(BaseScraper):
             for cat_el in item_el.findall("category"):
                 cat_name = (cat_el.text or "").strip()
                 if cat_name and cat_name not in seen_names:
-                    if cat_name not in category_id_map:
-                        category_id_map[cat_name] = next_category_id
-                        next_category_id += 1
-                    categories.append(
-                        Category(id=category_id_map[cat_name], name=cat_name)
-                    )
+                    cat_id = zlib.crc32(cat_name.encode()) & 0x7FFF_FFFF
+                    categories.append(Category(id=cat_id, name=cat_name))
                     seen_names.add(cat_name)
 
             image_url: str | None = None
@@ -88,10 +83,22 @@ class NewsAndEventsScraper(BaseScraper):
 
         return items
 
+    _MAX_ITEMS = 200
+
+    @staticmethod
+    def _sort_news(items: list[NewsItem]) -> list[NewsItem]:
+        return sorted(items, key=lambda i: i.published_date or date.min, reverse=True)
+
+    @staticmethod
+    def _sort_events(items: list[NewsItem]) -> list[NewsItem]:
+        return sorted(items, key=lambda i: i.happening_date or date.max)
+
     async def fetch_news(self, lang: str = "de") -> NewsFeed:
         url = NEWS_URLS.get(lang, NEWS_URLS["de"])
         xml_text = await self.fetch(url)
-        items = self._parse_feed(xml_text, is_event=False)
+        items = self._sort_news(self._parse_feed(xml_text, is_event=False))[
+            : self._MAX_ITEMS
+        ]
         return NewsFeed(
             item_count=len(items),
             categories_last_changed="",
@@ -102,7 +109,7 @@ class NewsAndEventsScraper(BaseScraper):
     async def fetch_events(self, lang: str = "de") -> NewsFeed:
         url = EVENTS_URLS.get(lang, EVENTS_URLS["de"])
         xml_text = await self.fetch(url)
-        items = self._parse_feed(xml_text, is_event=True)
+        items = self._sort_events(self._parse_feed(xml_text, is_event=True))
         return NewsFeed(
             item_count=len(items),
             categories_last_changed="",

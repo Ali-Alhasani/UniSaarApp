@@ -34,6 +34,7 @@ class MoreLinksService:
                             importance=int(item.get("importance", 0)),
                         )
                     )
+        links.sort(key=lambda lnk: lnk.importance)
         return MoreLinksResponse(
             links_last_changed=str(data.get("linksLastChanged", "")),
             language=str(data.get("language", lang)),

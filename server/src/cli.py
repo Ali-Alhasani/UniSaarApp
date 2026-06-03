@@ -216,7 +216,7 @@ def cmd_run(args: argparse.Namespace) -> None:
     logger.remove()
     logger.add(
         sys.stderr,
-        level="INFO",
+        level=settings.log_level,
         format="{time:HH:mm:ss} | <level>{level: <8}</level> | {message}",
         colorize=True,
     )

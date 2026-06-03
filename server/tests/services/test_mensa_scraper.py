@@ -128,6 +128,30 @@ async def test_fetch_menu_unknown_tier_uses_tier_id_as_label() -> None:
     assert prices[0].price_tag == "x"
 
 
+async def test_fetch_menu_mojibake_meal_name_fixed() -> None:
+    # "FlambÃ©e" is UTF-8 bytes for "é" decoded as Latin-1 → "Ã©"
+    menu_json = (
+        '{"days":[{"date":"2019-12-16T00:00:00.000Z","counters":[{'
+        '"id":"k","displayName":"Kiosk","color":{"r":0,"g":0,"b":0},'
+        '"meals":[{"name":"Tarte FlambÃ©e","notices":[],"components":[],'
+        '"prices":{"s":"3,50"}}]}]}]}'
+    )
+    menu = await _fetch_menu(menu_json)
+    assert menu.days[0].meals[0].meal_name == "Tarte Flambée"
+
+
+async def test_fetch_menu_correct_umlaut_preserved() -> None:
+    # Correctly stored "ü" must not be corrupted by the encoding fix
+    menu_json = (
+        '{"days":[{"date":"2019-12-16T00:00:00.000Z","counters":[{'
+        '"id":"k","displayName":"Kiosk","color":{"r":0,"g":0,"b":0},'
+        '"meals":[{"name":"Saarbrücker Spezialität","notices":[],"components":[],'
+        '"prices":{"s":"3,50"}}]}]}]}'
+    )
+    menu = await _fetch_menu(menu_json)
+    assert menu.days[0].meals[0].meal_name == "Saarbrücker Spezialität"
+
+
 async def test_fetch_menu_nbsp_in_name_normalised() -> None:
     menu_json = (
         '{"days":[{"date":"2019-12-16T00:00:00.000Z","counters":[{'
@@ -154,6 +178,90 @@ async def test_fetch_menu_multiple_days() -> None:
     assert len(menu.days) == 2
     assert menu.days[0].date == "Montag 16.12."
     assert menu.days[1].date == "Dienstag 17.12."
+
+
+async def test_main_screen_components_capped_at_five() -> None:
+    comps = ",".join(f'{{"name":"C{i}","notices":[]}}' for i in range(8))
+    menu_json = (
+        '{"days":[{"date":"2019-12-16T00:00:00.000Z","counters":[{'
+        '"id":"k","displayName":"Kiosk","color":{"r":0,"g":0,"b":0},'
+        '"meals":[{"name":"Big Meal","notices":[],"components":['
+        + comps
+        + '],"prices":{"s":"1,00"}}]}]}]}'
+    )
+    fetch_mock = AsyncMock(side_effect=[_BASE_DATA, menu_json])
+    with (
+        patch.object(BaseScraper, "fetch", fetch_mock),
+        patch(
+            "src.services.mensa_scraper.settings.mensa_api_key.get_secret_value",
+            return_value="test-key",
+        ),
+    ):
+        scraper = MensaScraper()
+        menu = await scraper.fetch_menu("sb", "de")
+
+    assert len(menu.days[0].meals[0].components) == 5
+    assert len(scraper.get_meal_details()[0].meal_components) == 8
+
+
+async def test_component_with_tab_filtered_from_main_not_detail() -> None:
+    menu_json = (
+        '{"days":[{"date":"2019-12-16T00:00:00.000Z","counters":[{'
+        '"id":"k","displayName":"Kiosk","color":{"r":0,"g":0,"b":0},'
+        '"meals":[{"name":"Salatbuffet","notices":[],"components":['
+        '{"name":"Tomatensalat","notices":[]},'
+        '{"name":"Dummy\\tRez.Nr.\\tSort.","notices":[]}'
+        '],"prices":{"s":"1,00"}}]}]}]}'
+    )
+    fetch_mock = AsyncMock(side_effect=[_BASE_DATA, menu_json])
+    with (
+        patch.object(BaseScraper, "fetch", fetch_mock),
+        patch(
+            "src.services.mensa_scraper.settings.mensa_api_key.get_secret_value",
+            return_value="test-key",
+        ),
+    ):
+        scraper = MensaScraper()
+        menu = await scraper.fetch_menu("sb", "de")
+
+    main_components = menu.days[0].meals[0].components
+    assert "Tomatensalat" in main_components
+    assert not any("\t" in c for c in main_components)
+
+    detail_names = [
+        mc.component_name for mc in scraper.get_meal_details()[0].meal_components
+    ]
+    assert any("\t" in n for n in detail_names)
+
+
+async def test_component_with_newline_filtered_from_main_not_detail() -> None:
+    menu_json = (
+        '{"days":[{"date":"2019-12-16T00:00:00.000Z","counters":[{'
+        '"id":"k","displayName":"Kiosk","color":{"r":0,"g":0,"b":0},'
+        '"meals":[{"name":"Gulasch","notices":[],"components":['
+        '{"name":"Kartoffeln","notices":[]},'
+        '{"name":"line1\\nline2","notices":[]}'
+        '],"prices":{"s":"2,50"}}]}]}]}'
+    )
+    fetch_mock = AsyncMock(side_effect=[_BASE_DATA, menu_json])
+    with (
+        patch.object(BaseScraper, "fetch", fetch_mock),
+        patch(
+            "src.services.mensa_scraper.settings.mensa_api_key.get_secret_value",
+            return_value="test-key",
+        ),
+    ):
+        scraper = MensaScraper()
+        menu = await scraper.fetch_menu("sb", "de")
+
+    main_components = menu.days[0].meals[0].components
+    assert "Kartoffeln" in main_components
+    assert not any("\n" in c for c in main_components)
+
+    detail_names = [
+        mc.component_name for mc in scraper.get_meal_details()[0].meal_components
+    ]
+    assert any("\n" in n for n in detail_names)
 
 
 async def test_fetch_menu_missing_price_tiers_falls_back_to_tier_id() -> None:

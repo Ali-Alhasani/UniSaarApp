@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from typing import Any
 
-from fastapi import APIRouter, Query, Request
+from fastapi import APIRouter, BackgroundTasks, Query, Request
 from fastapi.responses import JSONResponse, Response
 
 from src.api._html import preferred_lang, render_detail_html, render_error_html
-from src.services.article_scraper import ArticleScraper
+from src.services.article_scraper import scrape_and_cache_article
 from src.storage.cache import cache
 
 router = APIRouter()
@@ -55,7 +55,7 @@ def _paginate_feed(
                 if isinstance(cat, dict)
             )
         ]
-    start = (page - 1) * page_size
+    start = page * page_size
     end = start + page_size
     page_items = items[start:end]
     return {
@@ -69,7 +69,7 @@ def _paginate_feed(
 @router.get("/news/mainScreen")
 @router.get("/v1/news/mainScreen")
 async def get_news(
-    page: int = 1,
+    page: int = 0,
     pageSize: int = 10,
     language: str = "de",
     negFilter: list[int] = Query(default=[]),  # noqa: B008
@@ -96,12 +96,11 @@ async def get_news_categories(language: str = "de") -> Response:
     return JSONResponse(categories)
 
 
-_ARTICLE_BODY_TTL = 86_400  # 24 hours
-
-
 @router.get("/news/details")
 @router.get("/v1/news/details")
-async def get_news_detail(id: int, request: Request) -> Response:
+async def get_news_detail(
+    id: int, request: Request, background_tasks: BackgroundTasks
+) -> Response:
     lang = preferred_lang(request.headers.get("accept-language", ""))
     result = await _find_news_item(id, lang)
     if result is None:
@@ -113,12 +112,11 @@ async def get_news_detail(id: int, request: Request) -> Response:
     if article_body is None:
         link = str(item.get("link") or "")
         if link:
-            async with ArticleScraper() as scraper:
-                article_body = await scraper.fetch_article_body(link)
-            if article_body:
-                await cache.set_async(cache_key, article_body, expire=_ARTICLE_BODY_TTL)
+            background_tasks.add_task(scrape_and_cache_article, link, cache_key)
 
     return Response(
-        content=render_detail_html(item, lang, is_event=False, article_body=article_body),
+        content=render_detail_html(
+            item, lang, is_event=False, article_body=article_body
+        ),
         media_type="text/html",
     )

@@ -127,7 +127,7 @@ class TestNewsMainScreen:
             "src.api.news.cache.get_async",
             _cache_returning(_NEWS_FEED),
         ):
-            r = await client.get("/news/mainScreen?page=1&pageSize=10&language=de")
+            r = await client.get("/news/mainScreen?page=0&pageSize=10&language=de")
         assert r.status_code == 200
         assert "items" in r.json()
 
@@ -136,12 +136,12 @@ class TestNewsMainScreen:
             "src.api.news.cache.get_async",
             _cache_returning(_NEWS_FEED),
         ):
-            r = await client.get("/v1/news/mainScreen?page=1&pageSize=10&language=de")
+            r = await client.get("/v1/news/mainScreen?page=0&pageSize=10&language=de")
         assert r.status_code == 200
 
     async def test_missing_cache_returns_503(self, client: AsyncClient) -> None:
         with patch("src.api.news.cache.get_async", _cache_returning(None)):
-            r = await client.get("/news/mainScreen?page=1&pageSize=10&language=de")
+            r = await client.get("/news/mainScreen?page=0&pageSize=10&language=de")
         assert r.status_code == 503
         assert "starting up" in r.text
 
@@ -154,7 +154,7 @@ class TestNewsMainScreen:
             _cache_returning(_NEWS_FEED),
         ):
             r = await client.get(
-                "/news/mainScreen?page=1&pageSize=10&language=de&negFilter=5"
+                "/news/mainScreen?page=0&pageSize=10&language=de&negFilter=5"
             )
         data = r.json()
         assert all(
@@ -167,7 +167,7 @@ class TestNewsMainScreen:
             "src.api.news.cache.get_async",
             _cache_returning(_NEWS_FEED),
         ):
-            r = await client.get("/news/mainScreen?page=1&pageSize=1&language=de")
+            r = await client.get("/news/mainScreen?page=0&pageSize=1&language=de")
         assert len(r.json()["items"]) == 1
 
     async def test_has_next_page_set_correctly(self, client: AsyncClient) -> None:
@@ -175,7 +175,7 @@ class TestNewsMainScreen:
             "src.api.news.cache.get_async",
             _cache_returning(_NEWS_FEED),
         ):
-            r = await client.get("/news/mainScreen?page=1&pageSize=1&language=de")
+            r = await client.get("/news/mainScreen?page=0&pageSize=1&language=de")
         assert r.json()["hasNextPage"] is True
 
 
@@ -406,11 +406,11 @@ class TestRouteGenerationHeader:
 
 class TestDirectorySearchValidation:
     async def test_query_shorter_than_3_returns_400(self, client: AsyncClient) -> None:
-        r = await client.get("/directory/search?query=ab&page=1&pageSize=10")
+        r = await client.get("/directory/search?query=ab&page=0&pageSize=10")
         assert r.status_code == 400
 
     async def test_single_char_returns_400(self, client: AsyncClient) -> None:
-        r = await client.get("/directory/search?query=a&page=1&pageSize=10")
+        r = await client.get("/directory/search?query=a&page=0&pageSize=10")
         assert r.status_code == 400
 
     @pytest.mark.asyncio
@@ -421,5 +421,122 @@ class TestDirectorySearchValidation:
         with patch("src.api.directory.StaffScraper") as MockScraper:
             instance = MockScraper.return_value.__aenter__.return_value
             instance.search = AsyncMock(return_value=mock_result)
-            r = await client.get("/directory/search?query=Schmidt&page=1&pageSize=10")
+            r = await client.get("/directory/search?query=Schmidt&page=0&pageSize=10")
         assert r.status_code == 200
+
+
+# ---------------------------------------------------------------------------
+# News detail
+# ---------------------------------------------------------------------------
+
+
+class TestNewsDetail:
+    async def test_unknown_id_returns_error_html(self, client: AsyncClient) -> None:
+        with patch("src.api.news.cache.get_async", _cache_returning(None)):
+            r = await client.get("/news/details?id=9999")
+        assert r.status_code == 200
+        assert r.headers["content-type"].startswith("text/html")
+        assert "error-owl" in r.text
+
+    async def test_known_id_no_cached_body_returns_rss_fallback(
+        self, client: AsyncClient
+    ) -> None:
+        side_effects = {
+            "news:de": _NEWS_FEED,
+            "article_body:1:de": None,
+        }
+
+        async def _cache_side_effect(key: str) -> object:
+            return side_effects.get(key)
+
+        with (
+            patch("src.api.news.cache.get_async", side_effect=_cache_side_effect),
+            patch("src.api.news.scrape_and_cache_article"),
+        ):
+            r = await client.get(
+                "/news/details?id=1", headers={"Accept-Language": "de"}
+            )
+        assert r.status_code == 200
+        assert r.headers["content-type"].startswith("text/html")
+        assert "News A" in r.text
+        assert "summary" in r.text
+
+    async def test_known_id_with_cached_body_returns_full_article(
+        self, client: AsyncClient
+    ) -> None:
+        side_effects = {
+            "news:de": _NEWS_FEED,
+            "article_body:1:de": "<p>Full article content.</p>",
+        }
+
+        async def _cache_side_effect(key: str) -> object:
+            return side_effects.get(key)
+
+        with patch("src.api.news.cache.get_async", side_effect=_cache_side_effect):
+            r = await client.get(
+                "/news/details?id=1", headers={"Accept-Language": "de"}
+            )
+        assert r.status_code == 200
+        assert "article-body" in r.text
+        assert "Full article content." in r.text
+
+    async def test_v1_path_works(self, client: AsyncClient) -> None:
+        with patch("src.api.news.cache.get_async", _cache_returning(None)):
+            r = await client.get("/v1/news/details?id=9999")
+        assert r.status_code == 200
+        assert "error-owl" in r.text
+
+
+# ---------------------------------------------------------------------------
+# Events detail
+# ---------------------------------------------------------------------------
+
+
+class TestEventsDetail:
+    async def test_unknown_id_returns_error_html(self, client: AsyncClient) -> None:
+        with patch("src.api.events.cache.get_async", _cache_returning(None)):
+            r = await client.get("/events/details?id=9999")
+        assert r.status_code == 200
+        assert r.headers["content-type"].startswith("text/html")
+        assert "error-owl" in r.text
+
+    async def test_known_id_no_cached_body_returns_rss_fallback(
+        self, client: AsyncClient
+    ) -> None:
+        side_effects = {
+            "events:de": _EVENTS_FEED,
+            "article_body:10:de": None,
+        }
+
+        async def _cache_side_effect(key: str) -> object:
+            return side_effects.get(key)
+
+        with (
+            patch("src.api.events.cache.get_async", side_effect=_cache_side_effect),
+            patch("src.api.events.scrape_and_cache_article"),
+        ):
+            r = await client.get(
+                "/events/details?id=10", headers={"Accept-Language": "de"}
+            )
+        assert r.status_code == 200
+        assert "Event A" in r.text
+        assert "summary" in r.text
+
+    async def test_known_id_with_cached_body_returns_full_article(
+        self, client: AsyncClient
+    ) -> None:
+        side_effects = {
+            "events:de": _EVENTS_FEED,
+            "article_body:10:de": "<p>Full event description.</p>",
+        }
+
+        async def _cache_side_effect(key: str) -> object:
+            return side_effects.get(key)
+
+        with patch("src.api.events.cache.get_async", side_effect=_cache_side_effect):
+            r = await client.get(
+                "/events/details?id=10", headers={"Accept-Language": "de"}
+            )
+        assert r.status_code == 200
+        assert "article-body" in r.text
+        assert "Full event description." in r.text

@@ -15,6 +15,7 @@ from loguru import logger
 from src.core.config import settings
 from src.core.constants import MENSA_LANGUAGES, MENSA_LOCATIONS, NEWSFEED_LANGUAGES
 from src.core.logging import setup_logging
+from src.models.mensa import MensaDay, MensaMealDetail, MensaMenu
 from src.services.helpful_numbers_service import HelpfulNumbersService
 from src.services.map_service import MapService
 from src.services.mensa_info_service import MensaInfoService
@@ -48,6 +49,31 @@ def _is_mensa_stale(last_run_iso: str | None) -> bool:
         return last.date() < datetime.now(UTC).date()
     except ValueError:
         return True
+
+
+def _merge_mensa_menus(primary: MensaMenu, secondary: MensaMenu) -> MensaMenu:
+    """Merge secondary days into primary by date.
+
+    Days that share the same formatted date string have their meal lists
+    concatenated (secondary appended after primary). Days present only in
+    secondary (e.g. mensagarten dinner slots) are appended at the end in
+    their original order.
+    """
+    days_by_date: dict[str, MensaDay] = {day.date: day for day in primary.days}
+    secondary_only: list[MensaDay] = []
+    for sec_day in secondary.days:
+        if sec_day.date in days_by_date:
+            pri_day = days_by_date[sec_day.date]
+            days_by_date[sec_day.date] = MensaDay(
+                date=pri_day.date, meals=pri_day.meals + sec_day.meals
+            )
+        else:
+            secondary_only.append(sec_day)
+    primary_days = [days_by_date[day.date] for day in primary.days]
+    return MensaMenu(
+        days=primary_days + secondary_only,
+        filters_last_changed=primary.filters_last_changed,
+    )
 
 
 async def _run_news_job(cache: CacheClient) -> None:
@@ -84,8 +110,21 @@ async def _run_mensa_job(cache: CacheClient) -> None:
     try:
         async with MensaScraper() as scraper:
             for lang in MENSA_LANGUAGES:
+                sb_menu: MensaMenu | None = None
+                sb_meal_details: dict[int, MensaMealDetail] = {}
+
                 for location in MENSA_LOCATIONS:
-                    menu = await scraper.fetch_menu(location, lang)
+                    # Offset mensagarten IDs so they don't collide with sb IDs
+                    # when both are merged into the sb cache key.
+                    offset = (
+                        sum(len(d.meals) for d in sb_menu.days)
+                        if location == "mensagarten" and sb_menu is not None
+                        else 0
+                    )
+                    menu = await scraper.fetch_menu(
+                        location, lang, starting_meal_id=offset
+                    )
+                    meal_details = scraper.get_meal_details()
                     logger.info(
                         "fetched mensa:{}:{} → {} days → cached",
                         location,
@@ -102,7 +141,6 @@ async def _run_mensa_job(cache: CacheClient) -> None:
                         f"mensa:{location}:{lang}",
                         menu.model_dump(by_alias=True, mode="json"),
                     )
-                    meal_details = scraper.get_meal_details()
                     logger.trace(
                         "extracted mensa:{}:{} meal details → {} meals → cached",
                         location,
@@ -116,6 +154,32 @@ async def _run_mensa_job(cache: CacheClient) -> None:
                             for k, v in meal_details.items()
                         },
                     )
+
+                    if location == "sb":
+                        sb_menu = menu
+                        sb_meal_details = dict(meal_details)
+                    elif location == "mensagarten" and sb_menu is not None:
+                        merged = _merge_mensa_menus(sb_menu, menu)
+                        merged_details = {**sb_meal_details, **meal_details}
+                        logger.info(
+                            "merged mensa:mensagarten:{} into mensa:sb:{}"
+                            " → {} days → cached",
+                            lang,
+                            lang,
+                            len(merged.days),
+                        )
+                        await cache.set_async(
+                            f"mensa:sb:{lang}",
+                            merged.model_dump(by_alias=True, mode="json"),
+                        )
+                        await cache.set_async(
+                            f"mensa:meal:sb:{lang}",
+                            {
+                                str(k): v.model_dump(by_alias=True, mode="json")
+                                for k, v in merged_details.items()
+                            },
+                        )
+
                 filters = scraper.build_filters()
                 logger.trace(
                     "built mensa:filters:{} → {} locations, {} notices → cached",

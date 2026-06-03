@@ -50,11 +50,38 @@ async def test_fetch_events_item_id_and_date() -> None:
     with _patch(_read("eventsfeed.xml")):
         feed = await NewsAndEventsScraper().fetch_events("de")
     assert feed.item_count >= 1
-    item = feed.items[0]
-    assert item.id == 21323
+    item = next(i for i in feed.items if i.id == 21323)
     assert item.is_event is True
     assert item.published_date is None
     assert str(item.happening_date) == "2020-05-16"
+
+
+async def test_fetch_events_all_months_cached() -> None:
+    # Past, present, and future events are all kept — the endpoint filters by month.
+    xml = """<?xml version="1.0" encoding="utf-8"?>
+    <rss version="2.0"><channel>
+        <item>
+            <guid isPermaLink="false">event-1</guid>
+            <pubDate>Wed, 15 Apr 2020 10:00:00 +0200</pubDate>
+            <title>Past event</title><link>http://example.com/1</link><description/>
+        </item>
+        <item>
+            <guid isPermaLink="false">event-2</guid>
+            <pubDate>Sat, 02 May 2020 10:00:00 +0200</pubDate>
+            <title>Current event</title><link>http://example.com/2</link><description/>
+        </item>
+        <item>
+            <guid isPermaLink="false">event-3</guid>
+            <pubDate>Mon, 01 Jun 2020 10:00:00 +0200</pubDate>
+            <title>Future event</title><link>http://example.com/3</link><description/>
+        </item>
+    </channel></rss>"""
+    with _patch(xml):
+        feed = await NewsAndEventsScraper().fetch_events("de")
+    dates = [str(i.happening_date) for i in feed.items]
+    assert "2020-04-15" in dates
+    assert "2020-05-02" in dates
+    assert "2020-06-01" in dates
 
 
 async def test_fetch_news_empty_feed() -> None:
@@ -99,11 +126,14 @@ async def test_fetch_news_shared_category_ids_across_items() -> None:
     </channel></rss>"""
     with _patch(xml):
         feed = await NewsAndEventsScraper().fetch_news("de")
-    science_id_item1 = feed.items[0].categories[0].id
-    science_id_item2 = feed.items[1].categories[0].id
-    campus_id = feed.items[1].categories[1].id
-    assert science_id_item1 == science_id_item2
-    assert campus_id != science_id_item1
+    # After DESC sort: item B (03 Jan, newer) is first, item A (02 Jan) is second
+    item_b = feed.items[0]  # newer item with Science + Campus
+    item_a = feed.items[1]  # older item with Science only
+    science_id_b = item_b.categories[0].id
+    science_id_a = item_a.categories[0].id
+    campus_id = item_b.categories[1].id
+    assert science_id_b == science_id_a
+    assert campus_id != science_id_b
 
 
 async def test_fetch_news_fallback_id_when_no_guid() -> None:

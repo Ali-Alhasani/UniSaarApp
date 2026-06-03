@@ -26,18 +26,15 @@ _VIEW_EVENT: dict[str, str] = {
     "en": "View event details",
     "fr": "Voir les détails de l'événement",
 }
-_FALLBACK_NOTICE: dict[str, str] = {
-    "de": "Der vollständige Artikel konnte nicht geladen werden.",
-    "en": "The full article couldn't be loaded.",
-    "fr": "L'article complet n'a pas pu être chargé.",
-}
 _ERROR_TITLE: dict[str, str] = {
     "de": "Inhalt nicht verfügbar",
     "en": "Content unavailable",
     "fr": "Contenu indisponible",
 }
 _ERROR_BODY: dict[str, str] = {
-    "de": "Dieser Artikel konnte nicht gefunden werden. Bitte versuche es später erneut.",
+    "de": (
+        "Dieser Artikel konnte nicht gefunden werden. Bitte versuche es später erneut."
+    ),
     "en": "This article could not be found. Please try again later.",
     "fr": "Cet article est introuvable. Veuillez réessayer plus tard.",
 }
@@ -259,6 +256,7 @@ _ERROR_TEMPLATE = """\
 
 # ── Public API ────────────────────────────────────────────────────────────────
 
+
 def render_detail_html(
     item: dict[str, object],
     lang: str,
@@ -292,11 +290,7 @@ def render_detail_html(
         )
     else:
         # Fallback: RSS summary + prominent CTA
-        notice = _html.escape(_FALLBACK_NOTICE.get(lang, _FALLBACK_NOTICE["en"]))
-        body_section = (
-            f'<div class="fallback-notice"><span class="icon">⚠️</span>{notice}</div>'
-            f'<p class="summary">{description}</p>'
-        )
+        body_section = f'<p class="summary">{description}</p>'
         read_more = (
             f'<a class="read-more" href="{_html.escape(link)}">{btn_label}</a>'
             if link

@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     cache_dir: str = ".cache"
     http_timeout_seconds: float = 30.0
     news_update_interval_min: int = 30
-    mensa_update_cron: str = "0 6 * * *"
+    mensa_update_cron: str = "0 7,13 * * *"
     helpful_numbers_update_cron: str = "0 7 * * *"
     map_update_cron: str = "0 8 * * *"
 

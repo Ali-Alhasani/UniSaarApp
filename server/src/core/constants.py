@@ -3,6 +3,14 @@ from __future__ import annotations
 NEWSFEED_LANGUAGES: list[str] = ["de", "en", "fr"]
 MENSA_LANGUAGES: list[str] = ["de", "en", "fr"]
 MENSA_LOCATIONS: list[str] = ["sb", "hom", "mensagarten"]
+# Campus IDs exposed to iOS clients via /mensa/filters — mensagarten is scraped
+# internally but not surfaced as a separate picker entry.
+MENSA_CAMPUS_LOCATIONS: list[str] = ["sb", "hom"]
+# Maps internal location/campus shortcodes to display city names.
+CAMPUS_CITY_NAMES: dict[str, str] = {
+    "sb": "Saarbrücken",
+    "hom": "Homburg",
+}
 
 NEWS_URLS: dict[str, str] = {
     "de": "https://www.uni-saarland.de/universitaet/aktuell/news/feed.rss",
