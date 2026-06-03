@@ -1,16 +1,21 @@
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter
+from fastapi.responses import JSONResponse, Response
 
+from src.services.base_scraper import ScraperError
 from src.services.staff_scraper import StaffScraper, StaffSearchTooVagueError
 from src.storage.cache import cache
 
 router = APIRouter()
 
-_UNAVAILABLE = JSONResponse(
-    status_code=503, content={"available": False, "reason": "data_pending"}
-)
+
+def _unavailable() -> Response:
+    return Response(
+        status_code=503,
+        content="Service is starting up. Please try again in a moment.",
+        media_type="text/plain",
+    )
 
 
 @router.get("/directory/search")
@@ -20,20 +25,22 @@ async def search_directory(
     page: int = 1,
     pageSize: int = 10,
     language: str = "de",
-) -> JSONResponse:
+) -> Response:
     if len(query.strip()) < 3:
-        raise HTTPException(
+        return Response(
             status_code=400,
-            detail="Search query must be at least 3 characters.",
+            content="Search query must be at least 3 characters.",
+            media_type="text/plain",
         )
     try:
         async with StaffScraper() as scraper:
             result = await scraper.search(query)
-    except StaffSearchTooVagueError as exc:
-        raise HTTPException(
+    except StaffSearchTooVagueError:
+        return Response(
             status_code=400,
-            detail="Search query returned too many results. Please be more specific.",
-        ) from exc
+            content="Search query returned too many results. Please be more specific.",
+            media_type="text/plain",
+        )
     items = result.results if result.results is not None else []
     start = (page - 1) * pageSize
     end = start + pageSize
@@ -48,9 +55,16 @@ async def search_directory(
 
 @router.get("/directory/personDetails")
 @router.get("/v1/directory/personDetails")
-async def get_person_details(pid: int, language: str = "de") -> JSONResponse:
-    async with StaffScraper() as scraper:
-        details = await scraper.fetch_details(pid)
+async def get_person_details(pid: int, language: str = "de") -> Response:
+    try:
+        async with StaffScraper() as scraper:
+            details = await scraper.fetch_details(pid)
+    except ScraperError:
+        return Response(
+            status_code=503,
+            content="The staff directory is not available right now.",
+            media_type="text/plain",
+        )
     return JSONResponse(details.model_dump(by_alias=True, mode="json"))
 
 
@@ -59,8 +73,8 @@ async def get_person_details(pid: int, language: str = "de") -> JSONResponse:
 async def get_helpful_numbers(
     language: str = "de",
     lastUpdated: str = "never",
-) -> JSONResponse:
+) -> Response:
     data = await cache.get_async(f"helpful_numbers:{language}")
     if data is None:
-        return _UNAVAILABLE
+        return _unavailable()
     return JSONResponse(data)

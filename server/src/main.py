@@ -1,7 +1,7 @@
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import Response
 
 from src.api.directory import router as directory_router
@@ -21,6 +21,18 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
 
 
 app = FastAPI(title="UniSaarApp Server", lifespan=lifespan)
+
+
+@app.exception_handler(HTTPException)
+async def plain_text_http_exception_handler(
+    request: Request, exc: HTTPException
+) -> Response:
+    return Response(
+        status_code=exc.status_code,
+        content=str(exc.detail),
+        media_type="text/plain",
+    )
+
 
 app.include_router(health_router)
 app.include_router(news_router)

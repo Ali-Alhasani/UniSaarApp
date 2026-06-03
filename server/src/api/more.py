@@ -1,15 +1,19 @@
 from __future__ import annotations
 
 from fastapi import APIRouter
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 
 from src.storage.cache import cache
 
 router = APIRouter()
 
-_UNAVAILABLE = JSONResponse(
-    status_code=503, content={"available": False, "reason": "data_pending"}
-)
+
+def _unavailable() -> Response:
+    return Response(
+        status_code=503,
+        content="Service is starting up. Please try again in a moment.",
+        media_type="text/plain",
+    )
 
 
 @router.get("/more")
@@ -17,8 +21,8 @@ _UNAVAILABLE = JSONResponse(
 async def get_more_links(
     language: str = "de",
     lastUpdated: str = "never",
-) -> JSONResponse:
+) -> Response:
     data = await cache.get_async(f"more:{language}")
     if data is None:
-        return _UNAVAILABLE
+        return _unavailable()
     return JSONResponse(data)

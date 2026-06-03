@@ -143,7 +143,7 @@ class TestNewsMainScreen:
         with patch("src.api.news.cache.get_async", _cache_returning(None)):
             r = await client.get("/news/mainScreen?page=1&pageSize=10&language=de")
         assert r.status_code == 503
-        assert r.json()["available"] is False
+        assert "starting up" in r.text
 
     async def test_negfilter_excludes_matching_category(
         self, client: AsyncClient

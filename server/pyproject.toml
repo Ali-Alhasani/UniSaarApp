@@ -5,6 +5,9 @@ description = "UniSaarApp Server — Phase 2 Refactor"
 authors = ["Ali-Alhasani"]
 packages = [{include = "src"}]
 
+[tool.poetry.scripts]
+manage = "src.cli:main"
+
 [tool.poetry.dependencies]
 python = ">=3.13,<3.15"
 fastapi = "^0.136.0"

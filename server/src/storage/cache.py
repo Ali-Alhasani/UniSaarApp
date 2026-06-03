@@ -27,11 +27,11 @@ class CacheClient:
         # timeout=10 reduces SQLite lock contention under concurrent readers
         self._cache = diskcache.Cache(directory=directory, timeout=10)
 
-    async def set_async(self, key: str, value: Any) -> None:
+    async def set_async(self, key: str, value: Any, expire: int | None = None) -> None:
         # Snapshot summary before the await — captures object state at call time,
         # not whenever loguru decides to format the message.
         _snap = _summarize(value)
-        await asyncio.to_thread(self._cache.set, key, value)
+        await asyncio.to_thread(self._cache.set, key, value, expire)
         logger.opt(lazy=True).trace(
             "[cache] set key={} value={}",
             lambda _k=key: _k,
