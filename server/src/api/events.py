@@ -44,6 +44,7 @@ def _filter_events_by_month(
     neg_filter: list[int],
 ) -> dict[str, Any]:
     items = feed.get("items", [])
+    neg_set = set(neg_filter)
     filtered = []
     for item in items:
         hd = item.get("happeningDate")
@@ -56,13 +57,9 @@ def _filter_events_by_month(
             continue
         if item_year != year or item_month != month:
             continue
-        if neg_filter:
-            neg_set = set(neg_filter)
-            if any(
-                cat.get("id") in neg_set
-                for cat in (item.get("categories") or [])
-                if isinstance(cat, dict)
-            ):
+        if neg_set:
+            cats = [c for c in (item.get("categories") or []) if isinstance(c, dict)]
+            if cats and all(c.get("id") in neg_set for c in cats):
                 continue
         filtered.append(item)
     return {

@@ -49,10 +49,13 @@ def _paginate_feed(
         items = [
             it
             for it in items
-            if not any(
-                cat.get("id") in neg_set
-                for cat in (it.get("categories") or [])
-                if isinstance(cat, dict)
+            if not (
+                (
+                    cats := [
+                        c for c in (it.get("categories") or []) if isinstance(c, dict)
+                    ]
+                )
+                and all(c.get("id") in neg_set for c in cats)
             )
         ]
     start = page * page_size
