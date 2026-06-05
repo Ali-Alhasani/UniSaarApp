@@ -17,5 +17,5 @@ class MapEntry(BaseModel):
 class MapResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    map_info: list[MapEntry] = Field(serialization_alias="mapInfo")
-    update_time: str = Field(serialization_alias="updateTime")
+    map_info: list[MapEntry] = Field(alias="mapInfo")
+    update_time: str = Field(alias="updateTime")

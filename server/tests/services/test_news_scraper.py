@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
 
+from src.core.enums import Language
 from src.services.base_scraper import BaseScraper
 from src.services.news_scraper import NewsAndEventsScraper
 
@@ -19,18 +20,16 @@ def _patch(xml: str) -> object:
 
 async def test_fetch_news_item_id_and_date() -> None:
     with _patch(_read("exampleNewsfeed.xml")):
-        feed = await NewsAndEventsScraper().fetch_news("de")
+        feed = await NewsAndEventsScraper().fetch_news(Language.DE)
     assert feed.item_count == 1
     item = feed.items[0]
     assert item.id == 21414
     assert str(item.published_date) == "2020-01-02"
-    assert item.is_event is False
-    assert item.happening_date is None
 
 
 async def test_fetch_news_title_link_description() -> None:
     with _patch(_read("exampleNewsfeed.xml")):
-        feed = await NewsAndEventsScraper().fetch_news("de")
+        feed = await NewsAndEventsScraper().fetch_news(Language.DE)
     item = feed.items[0]
     assert item.title == "Title"
     assert item.link == "Link"
@@ -39,7 +38,7 @@ async def test_fetch_news_title_link_description() -> None:
 
 async def test_fetch_news_image_and_categories_deduped() -> None:
     with _patch(_read("exampleNewsfeed.xml")):
-        feed = await NewsAndEventsScraper().fetch_news("de")
+        feed = await NewsAndEventsScraper().fetch_news(Language.DE)
     item = feed.items[0]
     assert item.image_url == "imagelink"
     assert len(item.categories) == 1
@@ -48,11 +47,9 @@ async def test_fetch_news_image_and_categories_deduped() -> None:
 
 async def test_fetch_events_item_id_and_date() -> None:
     with _patch(_read("eventsfeed.xml")):
-        feed = await NewsAndEventsScraper().fetch_events("de")
+        feed = await NewsAndEventsScraper().fetch_events(Language.DE)
     assert feed.item_count >= 1
     item = next(i for i in feed.items if i.id == 21323)
-    assert item.is_event is True
-    assert item.published_date is None
     assert str(item.happening_date) == "2020-05-16"
 
 
@@ -77,7 +74,7 @@ async def test_fetch_events_all_months_cached() -> None:
         </item>
     </channel></rss>"""
     with _patch(xml):
-        feed = await NewsAndEventsScraper().fetch_events("de")
+        feed = await NewsAndEventsScraper().fetch_events(Language.DE)
     dates = [str(i.happening_date) for i in feed.items]
     assert "2020-04-15" in dates
     assert "2020-05-02" in dates
@@ -86,12 +83,12 @@ async def test_fetch_events_all_months_cached() -> None:
 
 async def test_fetch_news_empty_feed() -> None:
     with _patch(_read("emptyNewsfeed.xml")):
-        feed = await NewsAndEventsScraper().fetch_news("de")
+        feed = await NewsAndEventsScraper().fetch_news(Language.DE)
     assert feed.item_count == 0
     assert feed.items == []
 
 
-async def test_fetch_news_missing_pubdate_leaves_dates_none() -> None:
+async def test_fetch_news_missing_pubdate_leaves_date_none() -> None:
     xml = """<?xml version="1.0" encoding="utf-8"?>
     <rss version="2.0"><channel>
         <item>
@@ -101,10 +98,9 @@ async def test_fetch_news_missing_pubdate_leaves_dates_none() -> None:
         </item>
     </channel></rss>"""
     with _patch(xml):
-        feed = await NewsAndEventsScraper().fetch_news("de")
+        feed = await NewsAndEventsScraper().fetch_news(Language.DE)
     item = feed.items[0]
     assert item.published_date is None
-    assert item.happening_date is None
 
 
 async def test_fetch_news_shared_category_ids_across_items() -> None:
@@ -125,7 +121,7 @@ async def test_fetch_news_shared_category_ids_across_items() -> None:
         </item>
     </channel></rss>"""
     with _patch(xml):
-        feed = await NewsAndEventsScraper().fetch_news("de")
+        feed = await NewsAndEventsScraper().fetch_news(Language.DE)
     # After DESC sort: item B (03 Jan, newer) is first, item A (02 Jan) is second
     item_b = feed.items[0]  # newer item with Science + Campus
     item_a = feed.items[1]  # older item with Science only
@@ -151,7 +147,7 @@ async def test_fetch_news_fallback_id_when_no_guid() -> None:
         </item>
     </channel></rss>"""
     with _patch(xml):
-        feed = await NewsAndEventsScraper().fetch_news("de")
+        feed = await NewsAndEventsScraper().fetch_news(Language.DE)
     assert feed.item_count == 2
     assert feed.items[0].id == 0
     assert feed.items[1].id == 1

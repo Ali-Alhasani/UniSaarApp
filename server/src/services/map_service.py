@@ -7,7 +7,16 @@ from pathlib import Path
 from loguru import logger
 
 from src.core.constants import CAMPUS_CITY_NAMES
+from src.core.enums import MensaLocation
 from src.models.map import MapEntry, MapResponse
+
+
+def _campus_city(raw: str) -> str:
+    try:
+        return CAMPUS_CITY_NAMES[MensaLocation(raw)]
+    except (KeyError, ValueError):
+        return raw
+
 
 _DEFAULT_PATH = (
     Path(__file__).parent.parent.parent / "source" / "map_data" / "campus_map_data"
@@ -31,11 +40,10 @@ class MapService:
                 try:
                     entries.append(
                         MapEntry(
-                            campus=CAMPUS_CITY_NAMES.get(
+                            campus=_campus_city(
                                 "sb"
                                 if item.get("campus") == "saar"
-                                else str(item.get("campus", "")),
-                                str(item.get("campus", "")),
+                                else str(item.get("campus", ""))
                             ),
                             name=str(item.get("name", "")),
                             function=str(item.get("function", "")),

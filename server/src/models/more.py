@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from src.core.enums import Language
+
 
 class MoreLink(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
@@ -14,6 +16,6 @@ class MoreLink(BaseModel):
 class MoreLinksResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    links_last_changed: str = Field(serialization_alias="linksLastChanged")
-    language: str
+    links_last_changed: str = Field(alias="linksLastChanged")
+    language: Language
     links: list[MoreLink]

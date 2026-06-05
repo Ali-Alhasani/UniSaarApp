@@ -1,26 +1,32 @@
 from __future__ import annotations
 
-NEWSFEED_LANGUAGES: list[str] = ["de", "en", "fr"]
-MENSA_LANGUAGES: list[str] = ["de", "en", "fr"]
-MENSA_LOCATIONS: list[str] = ["sb", "hom", "mensagarten"]
-# Campus IDs exposed to iOS clients via /mensa/filters — mensagarten is scraped
-# internally but not surfaced as a separate picker entry.
-MENSA_CAMPUS_LOCATIONS: list[str] = ["sb", "hom"]
-# Maps internal location/campus shortcodes to display city names.
-CAMPUS_CITY_NAMES: dict[str, str] = {
-    "sb": "Saarbrücken",
-    "hom": "Homburg",
+from src.core.enums import Language, MensaLocation
+
+NEWSFEED_LANGUAGES: list[Language] = [Language.DE, Language.EN, Language.FR]
+MENSA_LANGUAGES: list[Language] = [Language.DE, Language.EN, Language.FR]
+MENSA_LOCATIONS: list[MensaLocation] = [
+    MensaLocation.SB,
+    MensaLocation.HOM,
+    MensaLocation.MENSAGARTEN,
+]
+# Campus locations exposed to iOS clients via /mensa/filters.
+# MENSAGARTEN is scraped internally but not surfaced as a separate picker entry.
+MENSA_CAMPUS_LOCATIONS: list[MensaLocation] = [MensaLocation.SB, MensaLocation.HOM]
+# Maps location shortcodes to display city names.
+CAMPUS_CITY_NAMES: dict[MensaLocation, str] = {
+    MensaLocation.SB: "Saarbrücken",
+    MensaLocation.HOM: "Homburg",
 }
 
-NEWS_URLS: dict[str, str] = {
-    "de": "https://www.uni-saarland.de/universitaet/aktuell/news/feed.rss",
-    "en": "https://www.uni-saarland.de/en/university/news/news/feed.rss",
-    "fr": "https://www.uni-saarland.de/fr/universite/actualite/actualites/feed.rss",
+NEWS_URLS: dict[Language, str] = {
+    Language.DE: "https://www.uni-saarland.de/universitaet/aktuell/news/feed.rss",
+    Language.EN: "https://www.uni-saarland.de/en/university/news/news/feed.rss",
+    Language.FR: "https://www.uni-saarland.de/fr/universite/actualite/actualites/feed.rss",
 }
-EVENTS_URLS: dict[str, str] = {
-    "de": "https://www.uni-saarland.de/universitaet/aktuell/veranstaltungen/feed.rss",
-    "en": "https://www.uni-saarland.de/en/university/news/events/feed.rss",
-    "fr": "https://www.uni-saarland.de/fr/universite/actualite/manifestations/feed.rss",
+EVENTS_URLS: dict[Language, str] = {
+    Language.DE: "https://www.uni-saarland.de/universitaet/aktuell/veranstaltungen/feed.rss",
+    Language.EN: "https://www.uni-saarland.de/en/university/news/events/feed.rss",
+    Language.FR: "https://www.uni-saarland.de/fr/universite/actualite/manifestations/feed.rss",
 }
 
 MENSA_BASE_URL = "https://mensaar.de/api/1/{api_key}/1/{lang}/getBaseData"

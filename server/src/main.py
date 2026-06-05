@@ -7,7 +7,7 @@ from fastapi.responses import Response
 from src.api.directory import router as directory_router
 from src.api.events import router as events_router
 from src.api.health import router as health_router
-from src.api.map import router as map_router
+from src.api.campus_map import router as map_router
 from src.api.mensa import router as mensa_router
 from src.api.more import router as more_router
 from src.api.news import router as news_router
@@ -34,13 +34,19 @@ async def plain_text_http_exception_handler(
     )
 
 
-app.include_router(health_router)
-app.include_router(news_router)
-app.include_router(events_router)
-app.include_router(mensa_router)
-app.include_router(directory_router)
-app.include_router(map_router)
-app.include_router(more_router)
+app.include_router(health_router, prefix="/v1")
+
+_versioned_routers = [
+    news_router,
+    events_router,
+    mensa_router,
+    directory_router,
+    map_router,
+    more_router,
+]
+for _router in _versioned_routers:
+    app.include_router(_router)
+    app.include_router(_router, prefix="/v1")
 
 
 @app.middleware("http")

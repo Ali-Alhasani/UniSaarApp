@@ -106,7 +106,7 @@ _MENSA_FILTERS = {
     ],
 }
 
-_MAP = {"entries": [], "lastChanged": "2024-01-01T00:00:00Z"}
+_MAP = {"mapInfo": [], "updateTime": "2024-01-01"}
 _MORE = {"linksLastChanged": "2024-01-01", "language": "de", "links": []}
 _HELPFUL = {"numbers": []}
 
@@ -143,7 +143,7 @@ class TestNewsMainScreen:
         with patch("src.api.news.cache.get_async", _cache_returning(None)):
             r = await client.get("/news/mainScreen?page=0&pageSize=10&language=de")
         assert r.status_code == 503
-        assert "starting up" in r.text
+        assert "gestartet" in r.text  # German because language=de
 
     async def test_negfilter_excludes_matching_category(
         self, client: AsyncClient
@@ -330,17 +330,17 @@ class TestMensaFilters:
 
 class TestMap:
     async def test_returns_map(self, client: AsyncClient) -> None:
-        with patch("src.api.map.cache.get_async", _cache_returning(_MAP)):
+        with patch("src.api.campus_map.cache.get_async", _cache_returning(_MAP)):
             r = await client.get("/map/")
         assert r.status_code == 200
 
     async def test_v1_path_works(self, client: AsyncClient) -> None:
-        with patch("src.api.map.cache.get_async", _cache_returning(_MAP)):
+        with patch("src.api.campus_map.cache.get_async", _cache_returning(_MAP)):
             r = await client.get("/v1/map/")
         assert r.status_code == 200
 
     async def test_missing_cache_returns_503(self, client: AsyncClient) -> None:
-        with patch("src.api.map.cache.get_async", _cache_returning(None)):
+        with patch("src.api.campus_map.cache.get_async", _cache_returning(None)):
             r = await client.get("/map/")
         assert r.status_code == 503
 
@@ -389,12 +389,12 @@ class TestHelpfulNumbers:
 
 class TestRouteGenerationHeader:
     async def test_legacy_path_gets_legacy_header(self, client: AsyncClient) -> None:
-        with patch("src.api.map.cache.get_async", _cache_returning(_MAP)):
+        with patch("src.api.campus_map.cache.get_async", _cache_returning(_MAP)):
             r = await client.get("/map/")
         assert r.headers.get("x-route-generation") == "legacy"
 
     async def test_v1_path_gets_v1_header(self, client: AsyncClient) -> None:
-        with patch("src.api.map.cache.get_async", _cache_returning(_MAP)):
+        with patch("src.api.campus_map.cache.get_async", _cache_returning(_MAP)):
             r = await client.get("/v1/map/")
         assert r.headers.get("x-route-generation") == "v1"
 

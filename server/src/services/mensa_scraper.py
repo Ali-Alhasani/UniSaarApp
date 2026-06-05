@@ -10,6 +10,7 @@ from src.core.constants import (
     MENSA_CAMPUS_LOCATIONS,
     MENSA_MENU_URL,
 )
+from src.core.enums import Language, MensaLocation
 from src.models.mensa import (
     MensaColor,
     MensaComponent,
@@ -35,7 +36,7 @@ class MensaScraper(BaseScraper):
         self._filter_locations: list[MensaFilterLocation] = []
         self._meal_details: dict[int, MensaMealDetail] = {}
 
-    async def _fetch_base_data(self, lang: str) -> None:
+    async def _fetch_base_data(self, lang: Language) -> None:
         api_key = settings.mensa_api_key.get_secret_value()
         if not api_key:
             raise ScraperError("MENSA_API_KEY is not set in .secrets")
@@ -224,7 +225,7 @@ class MensaScraper(BaseScraper):
         locations = [
             MensaFilterLocation(
                 location_id=loc.location_id,
-                name=CAMPUS_CITY_NAMES.get(loc.location_id, loc.name),
+                name=CAMPUS_CITY_NAMES.get(MensaLocation(loc.location_id), loc.name),
             )
             for loc in self._filter_locations
             if loc.location_id in campus_ids
@@ -232,7 +233,10 @@ class MensaScraper(BaseScraper):
         return MensaFilters(locations=locations, notices=notices)
 
     async def fetch_menu(
-        self, location: str, lang: str = "de", starting_meal_id: int = 0
+        self,
+        location: MensaLocation,
+        lang: Language = Language.DE,
+        starting_meal_id: int = 0,
     ) -> MensaMenu:
         await self._fetch_base_data(lang)
         self._meal_details = {}

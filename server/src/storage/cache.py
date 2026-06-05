@@ -1,12 +1,16 @@
 from __future__ import annotations
 
 import asyncio
-from typing import Any
+from typing import Any, TypeVar
 
 import diskcache
+import sentry_sdk
 from loguru import logger
+from pydantic import BaseModel, ValidationError
 
 from src.core.config import settings
+
+T = TypeVar("T", bound=BaseModel)
 
 
 def _summarize(value: Any) -> str:
@@ -37,6 +41,18 @@ class CacheClient:
             lambda _k=key: _k,
             lambda _s=_snap: _s,
         )
+
+    async def get_model(self, key: str, model: type[T]) -> T | None:
+        data = await self.get_async(key)
+        if data is None:
+            return None
+        try:
+            return model.model_validate(data)
+        except ValidationError as exc:
+            logger.error("Schema drift on cache key '{}': {}", key, exc)
+            if settings.sentry_dsn.get_secret_value():
+                sentry_sdk.capture_exception(exc)
+            return None
 
     async def get_async(self, key: str) -> Any:
         value = await asyncio.to_thread(self._cache.get, key)

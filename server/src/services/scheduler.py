@@ -14,6 +14,7 @@ from loguru import logger
 
 from src.core.config import settings
 from src.core.constants import MENSA_LANGUAGES, MENSA_LOCATIONS, NEWSFEED_LANGUAGES
+from src.core.enums import Language, MensaLocation
 from src.core.logging import setup_logging
 from src.models.mensa import MensaDay, MensaMealDetail, MensaMenu
 from src.services.helpful_numbers_service import HelpfulNumbersService
@@ -22,6 +23,7 @@ from src.services.mensa_info_service import MensaInfoService
 from src.services.mensa_scraper import MensaScraper
 from src.services.more_links_service import MoreLinksService
 from src.services.news_scraper import NewsAndEventsScraper
+from src.storage import cache_keys
 from src.storage.cache import CacheClient
 
 _JobFn = Callable[[CacheClient], Awaitable[None]]
@@ -87,13 +89,11 @@ async def _run_news_job(cache: CacheClient) -> None:
                 feed.items[0].model_dump(by_alias=True) if feed.items else None,
             )
             await cache.set_async(
-                f"news:{lang}", feed.model_dump(by_alias=True, mode="json")
+                cache_keys.news(lang), feed.model_dump(by_alias=True, mode="json")
             )
             events = await scraper.fetch_events(lang)
             logger.info(
-                "fetched events:{} → {} items → cached",
-                lang,
-                len(events.items),
+                "fetched events:{} → {} items → cached", lang, len(events.items)
             )
             logger.trace(
                 "parsed events:{} — first item: {}",
@@ -101,115 +101,131 @@ async def _run_news_job(cache: CacheClient) -> None:
                 events.items[0].model_dump(by_alias=True) if events.items else None,
             )
             await cache.set_async(
-                f"events:{lang}", events.model_dump(by_alias=True, mode="json")
+                cache_keys.events(lang), events.model_dump(by_alias=True, mode="json")
             )
-    await cache.set_async("scheduler:last_run:news", _now_iso())
+    await cache.set_async(cache_keys.scheduler_last_run("news"), _now_iso())
+
+
+async def _cache_mensa_location(
+    cache: CacheClient,
+    scraper: MensaScraper,
+    location: MensaLocation,
+    lang: Language,
+    sb_menu: MensaMenu | None,
+    sb_meal_details: dict[int, MensaMealDetail],
+) -> tuple[MensaMenu | None, dict[int, MensaMealDetail]]:
+    # Offset mensagarten IDs so they don't collide with sb IDs
+    # when both are merged into the sb cache key.
+    offset = (
+        sum(len(d.meals) for d in sb_menu.days)
+        if location == MensaLocation.MENSAGARTEN and sb_menu is not None
+        else 0
+    )
+    menu = await scraper.fetch_menu(location, lang, starting_meal_id=offset)
+    meal_details = scraper.get_meal_details()
+    logger.info(
+        "fetched mensa:{}:{} → {} days → cached", location, lang, len(menu.days)
+    )
+    logger.trace(
+        "parsed mensa:{}:{} — first day: {}",
+        location,
+        lang,
+        menu.days[0].date if menu.days else None,
+    )
+    await cache.set_async(
+        cache_keys.mensa_menu(location, lang),
+        menu.model_dump(by_alias=True, mode="json"),
+    )
+    logger.trace(
+        "extracted mensa:{}:{} meal details → {} meals → cached",
+        location,
+        lang,
+        len(meal_details),
+    )
+    await cache.set_async(
+        cache_keys.mensa_meal(location, lang),
+        {
+            str(k): v.model_dump(by_alias=True, mode="json")
+            for k, v in meal_details.items()
+        },
+    )
+
+    if location == MensaLocation.SB:
+        return menu, dict(meal_details)
+
+    if location == MensaLocation.MENSAGARTEN and sb_menu is not None:
+        merged = _merge_mensa_menus(sb_menu, menu)
+        merged_details = {**sb_meal_details, **meal_details}
+        logger.info(
+            "merged mensa:mensagarten:{} into mensa:sb:{} → {} days → cached",
+            lang,
+            lang,
+            len(merged.days),
+        )
+        await cache.set_async(
+            cache_keys.mensa_menu("sb", lang),
+            merged.model_dump(by_alias=True, mode="json"),
+        )
+        await cache.set_async(
+            cache_keys.mensa_meal("sb", lang),
+            {
+                str(k): v.model_dump(by_alias=True, mode="json")
+                for k, v in merged_details.items()
+            },
+        )
+
+    return sb_menu, sb_meal_details
+
+
+async def _cache_mensa_for_lang(
+    cache: CacheClient, scraper: MensaScraper, lang: Language
+) -> None:
+    sb_menu: MensaMenu | None = None
+    sb_meal_details: dict[int, MensaMealDetail] = {}
+    for location in MENSA_LOCATIONS:
+        sb_menu, sb_meal_details = await _cache_mensa_location(
+            cache, scraper, location, lang, sb_menu, sb_meal_details
+        )
+    filters = scraper.build_filters()
+    logger.trace(
+        "built mensa:filters:{} → {} locations, {} notices → cached",
+        lang,
+        len(filters.locations),
+        len(filters.notices),
+    )
+    await cache.set_async(
+        cache_keys.mensa_filters(lang), filters.model_dump(by_alias=True, mode="json")
+    )
+
+
+async def _cache_mensa_info(cache: CacheClient) -> None:
+    info_service = MensaInfoService()
+    for location in MENSA_LOCATIONS:
+        for lang in MENSA_LANGUAGES:
+            info = info_service.load(location, lang)
+            _outcome = "cached" if info is not None else "not found, skipped"
+            logger.trace("read mensa:info:{}:{} → {}", location, lang, _outcome)
+            if info is not None:
+                await cache.set_async(
+                    cache_keys.mensa_info(location, lang),
+                    info.model_dump(by_alias=True, mode="json"),
+                )
 
 
 async def _run_mensa_job(cache: CacheClient) -> None:
     try:
         async with MensaScraper() as scraper:
             for lang in MENSA_LANGUAGES:
-                sb_menu: MensaMenu | None = None
-                sb_meal_details: dict[int, MensaMealDetail] = {}
-
-                for location in MENSA_LOCATIONS:
-                    # Offset mensagarten IDs so they don't collide with sb IDs
-                    # when both are merged into the sb cache key.
-                    offset = (
-                        sum(len(d.meals) for d in sb_menu.days)
-                        if location == "mensagarten" and sb_menu is not None
-                        else 0
-                    )
-                    menu = await scraper.fetch_menu(
-                        location, lang, starting_meal_id=offset
-                    )
-                    meal_details = scraper.get_meal_details()
-                    logger.info(
-                        "fetched mensa:{}:{} → {} days → cached",
-                        location,
-                        lang,
-                        len(menu.days),
-                    )
-                    logger.trace(
-                        "parsed mensa:{}:{} — first day: {}",
-                        location,
-                        lang,
-                        menu.days[0].date if menu.days else None,
-                    )
-                    await cache.set_async(
-                        f"mensa:{location}:{lang}",
-                        menu.model_dump(by_alias=True, mode="json"),
-                    )
-                    logger.trace(
-                        "extracted mensa:{}:{} meal details → {} meals → cached",
-                        location,
-                        lang,
-                        len(meal_details),
-                    )
-                    await cache.set_async(
-                        f"mensa:meal:{location}:{lang}",
-                        {
-                            str(k): v.model_dump(by_alias=True, mode="json")
-                            for k, v in meal_details.items()
-                        },
-                    )
-
-                    if location == "sb":
-                        sb_menu = menu
-                        sb_meal_details = dict(meal_details)
-                    elif location == "mensagarten" and sb_menu is not None:
-                        merged = _merge_mensa_menus(sb_menu, menu)
-                        merged_details = {**sb_meal_details, **meal_details}
-                        logger.info(
-                            "merged mensa:mensagarten:{} into mensa:sb:{}"
-                            " → {} days → cached",
-                            lang,
-                            lang,
-                            len(merged.days),
-                        )
-                        await cache.set_async(
-                            f"mensa:sb:{lang}",
-                            merged.model_dump(by_alias=True, mode="json"),
-                        )
-                        await cache.set_async(
-                            f"mensa:meal:sb:{lang}",
-                            {
-                                str(k): v.model_dump(by_alias=True, mode="json")
-                                for k, v in merged_details.items()
-                            },
-                        )
-
-                filters = scraper.build_filters()
-                logger.trace(
-                    "built mensa:filters:{} → {} locations, {} notices → cached",
-                    lang,
-                    len(filters.locations),
-                    len(filters.notices),
-                )
-                await cache.set_async(
-                    f"mensa:filters:{lang}",
-                    filters.model_dump(by_alias=True, mode="json"),
-                )
-        info_service = MensaInfoService()
-        for location in MENSA_LOCATIONS:
-            for lang in MENSA_LANGUAGES:
-                info = info_service.load(location, lang)
-                _outcome = "cached" if info is not None else "not found, skipped"
-                logger.trace("read mensa:info:{}:{} → {}", location, lang, _outcome)
-                if info is not None:
-                    await cache.set_async(
-                        f"mensa:info:{location}:{lang}",
-                        info.model_dump(by_alias=True, mode="json"),
-                    )
+                await _cache_mensa_for_lang(cache, scraper, lang)
+        await _cache_mensa_info(cache)
     except Exception:
-        last_run = await cache.get_async("scheduler:last_run:mensa")
+        last_run = await cache.get_async(cache_keys.scheduler_last_run("mensa"))
         if _is_mensa_stale(last_run):
             for location in MENSA_LOCATIONS:
                 for lang in MENSA_LANGUAGES:
-                    await cache.set_async(f"mensa:{location}:{lang}", None)
+                    await cache.set_async(cache_keys.mensa_menu(location, lang), None)
         raise
-    await cache.set_async("scheduler:last_run:mensa", _now_iso())
+    await cache.set_async(cache_keys.scheduler_last_run("mensa"), _now_iso())
 
 
 async def _run_helpful_numbers_job(cache: CacheClient) -> None:
@@ -223,7 +239,7 @@ async def _run_helpful_numbers_job(cache: CacheClient) -> None:
             len(data.numbers),
         )
         await cache.set_async(
-            f"helpful_numbers:{lang}",
+            cache_keys.helpful_numbers(lang),
             data.model_dump(by_alias=True, mode="json"),
         )
         more = more_service.load(lang)
@@ -234,17 +250,19 @@ async def _run_helpful_numbers_job(cache: CacheClient) -> None:
             more.links_last_changed,
         )
         await cache.set_async(
-            f"more:{lang}",
+            cache_keys.more(lang),
             more.model_dump(by_alias=True, mode="json"),
         )
-    await cache.set_async("scheduler:last_run:helpful_numbers", _now_iso())
+    await cache.set_async(cache_keys.scheduler_last_run("helpful_numbers"), _now_iso())
 
 
 async def _run_map_job(cache: CacheClient) -> None:
     data = MapService().load()
     logger.info("loaded map → {} entries → cached", len(data.map_info))
-    await cache.set_async("map", data.model_dump(by_alias=True, mode="json"))
-    await cache.set_async("scheduler:last_run:map", _now_iso())
+    await cache.set_async(
+        cache_keys.campus_map(), data.model_dump(by_alias=True, mode="json")
+    )
+    await cache.set_async(cache_keys.scheduler_last_run("map"), _now_iso())
 
 
 async def run_all_jobs_once(cache: CacheClient) -> None:
@@ -273,7 +291,7 @@ async def _initialize(cache: CacheClient, scheduler: AsyncIOScheduler) -> None:
     scheduler.start()
     logger.info("Scheduler started.")
     await run_all_jobs_once(cache)
-    await cache.set_async("scheduler:status", "ready")
+    await cache.set_async(cache_keys.scheduler_status(), "ready")
     logger.info("Scheduler ready.")
 
 

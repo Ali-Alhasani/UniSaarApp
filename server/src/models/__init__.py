@@ -1,3 +1,5 @@
+from src.models.category import Category
+from src.models.event import EventFeed, EventItem
 from src.models.helpful_numbers import HelpfulNumber, HelpfulNumbersResponse
 from src.models.map import MapEntry, MapResponse
 from src.models.mensa import (
@@ -12,11 +14,13 @@ from src.models.mensa import (
     MensaPrice,
 )
 from src.models.more import MoreLink, MoreLinksResponse
-from src.models.news import Category, NewsFeed, NewsItem
+from src.models.news import NewsFeed, NewsItem
 from src.models.staff import StaffDetails, StaffFunction, StaffItem, StaffList
 
 __all__ = [
     "Category",
+    "EventFeed",
+    "EventItem",
     "HelpfulNumber",
     "HelpfulNumbersResponse",
     "MapEntry",

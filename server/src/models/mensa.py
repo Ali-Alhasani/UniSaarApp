@@ -14,7 +14,7 @@ class MensaColor(BaseModel):
 class MensaPrice(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    price_tag: str = Field(serialization_alias="priceTag")
+    price_tag: str = Field(alias="priceTag")
     price: str
 
 
@@ -22,13 +22,13 @@ class MensaNotice(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     notice: str
-    display_name: str = Field(serialization_alias="displayName")
+    display_name: str = Field(alias="displayName")
 
 
 class MensaComponent(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    component_name: str = Field(serialization_alias="componentName")
+    component_name: str = Field(alias="componentName")
     notices: list[MensaNotice]
 
 
@@ -38,16 +38,14 @@ class MensaMeal(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     id: int
-    meal_name: str = Field(serialization_alias="mealName")
-    counter_name: str = Field(serialization_alias="counterName")
-    opening_hours: str = Field(serialization_alias="openingHours")
+    meal_name: str = Field(alias="mealName")
+    counter_name: str = Field(alias="counterName")
+    opening_hours: str = Field(alias="openingHours")
     color: MensaColor = Field(default_factory=MensaColor)
     components: list[str]
     notices: list[str]
     prices: list[MensaPrice] | None = None
-    pricing_notice: str | None = Field(
-        default=None, serialization_alias="pricingNotice"
-    )
+    pricing_notice: str | None = Field(default=None, alias="pricingNotice")
 
 
 class MensaDay(BaseModel):
@@ -61,7 +59,7 @@ class MensaMenu(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     days: list[MensaDay]
-    filters_last_changed: str = Field(serialization_alias="filtersLastChanged")
+    filters_last_changed: str = Field(alias="filtersLastChanged")
 
 
 class MensaMealDetail(BaseModel):
@@ -70,15 +68,13 @@ class MensaMealDetail(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     id: int
-    meal_name: str = Field(serialization_alias="mealName")
+    meal_name: str = Field(alias="mealName")
     description: str
     color: MensaColor = Field(default_factory=MensaColor)
-    general_notices: list[MensaNotice] = Field(serialization_alias="generalNotices")
+    general_notices: list[MensaNotice] = Field(alias="generalNotices")
     prices: list[MensaPrice] | None = None
-    pricing_notice: str | None = Field(
-        default=None, serialization_alias="pricingNotice"
-    )
-    meal_components: list[MensaComponent] = Field(serialization_alias="mealComponents")
+    pricing_notice: str | None = Field(default=None, alias="pricingNotice")
+    meal_components: list[MensaComponent] = Field(alias="mealComponents")
 
 
 class MensaInfo(BaseModel):
@@ -86,23 +82,23 @@ class MensaInfo(BaseModel):
 
     name: str
     description: str
-    image_link: str = Field(serialization_alias="imageLink")
+    image_link: str = Field(alias="imageLink")
 
 
 class MensaFilterLocation(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    location_id: str = Field(serialization_alias="locationID")
+    location_id: str = Field(alias="locationID")
     name: str
 
 
 class MensaFilterNotice(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    notice_id: str = Field(serialization_alias="noticeID")
+    notice_id: str = Field(alias="noticeID")
     name: str
-    is_allergen: bool = Field(serialization_alias="isAllergen")
-    is_negated: bool = Field(serialization_alias="isNegated")
+    is_allergen: bool = Field(alias="isAllergen")
+    is_negated: bool = Field(alias="isNegated")
 
 
 class MensaFilters(BaseModel):

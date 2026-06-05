@@ -15,7 +15,5 @@ class HelpfulNumber(BaseModel):
 class HelpfulNumbersResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    numbers_last_changed: str | None = Field(
-        default=None, serialization_alias="numbersLastChanged"
-    )
+    numbers_last_changed: str | None = Field(default=None, alias="numbersLastChanged")
     numbers: list[HelpfulNumber]

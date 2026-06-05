@@ -1,11 +1,15 @@
 """Cache management CLI for UniSaarApp server.
 
 Usage (after poetry install):
+    poetry run manage config
     poetry run manage status
+    poetry run manage validate
     poetry run manage list
     poetry run manage get <key>
     poetry run manage clear
     poetry run manage clear <key>
+    poetry run manage clear --job <job>
+    poetry run manage run <job>
 """
 
 from __future__ import annotations
@@ -22,34 +26,39 @@ from loguru import logger
 
 from src.core.config import settings
 from src.core.constants import MENSA_LANGUAGES, MENSA_LOCATIONS, NEWSFEED_LANGUAGES
+from src.storage import cache_keys
 
 # ---------------------------------------------------------------------------
 # All cache keys the scheduler is expected to populate
 # ---------------------------------------------------------------------------
 
 _SCHEDULER_KEYS = [
-    "scheduler:status",
-    "scheduler:last_run:news",
-    "scheduler:last_run:mensa",
-    "scheduler:last_run:helpful_numbers",
-    "scheduler:last_run:map",
+    cache_keys.scheduler_status(),
+    cache_keys.scheduler_last_run("news"),
+    cache_keys.scheduler_last_run("mensa"),
+    cache_keys.scheduler_last_run("helpful_numbers"),
+    cache_keys.scheduler_last_run("map"),
 ]
 
 _DATA_KEYS: list[str] = (
-    ["map"]
-    + [f"news:{lang}" for lang in NEWSFEED_LANGUAGES]
-    + [f"events:{lang}" for lang in NEWSFEED_LANGUAGES]
-    + [f"helpful_numbers:{lang}" for lang in NEWSFEED_LANGUAGES]
-    + [f"more:{lang}" for lang in NEWSFEED_LANGUAGES]
-    + [f"mensa:{loc}:{lang}" for loc in MENSA_LOCATIONS for lang in MENSA_LANGUAGES]
+    [cache_keys.campus_map()]
+    + [cache_keys.news(lang) for lang in NEWSFEED_LANGUAGES]
+    + [cache_keys.events(lang) for lang in NEWSFEED_LANGUAGES]
+    + [cache_keys.helpful_numbers(lang) for lang in NEWSFEED_LANGUAGES]
+    + [cache_keys.more(lang) for lang in NEWSFEED_LANGUAGES]
     + [
-        f"mensa:meal:{loc}:{lang}"
+        cache_keys.mensa_menu(loc, lang)
         for loc in MENSA_LOCATIONS
         for lang in MENSA_LANGUAGES
     ]
-    + [f"mensa:filters:{lang}" for lang in MENSA_LANGUAGES]
     + [
-        f"mensa:info:{loc}:{lang}"
+        cache_keys.mensa_meal(loc, lang)
+        for loc in MENSA_LOCATIONS
+        for lang in MENSA_LANGUAGES
+    ]
+    + [cache_keys.mensa_filters(lang) for lang in MENSA_LANGUAGES]
+    + [
+        cache_keys.mensa_info(loc, lang)
         for loc in MENSA_LOCATIONS
         for lang in MENSA_LANGUAGES
     ]
@@ -57,6 +66,42 @@ _DATA_KEYS: list[str] = (
 
 ALL_EXPECTED_KEYS = _SCHEDULER_KEYS + _DATA_KEYS
 
+# Keys that belong to each job — used by `clear --job`
+_JOB_KEYS: dict[str, list[str]] = {
+    "news": (
+        [cache_keys.news(lang) for lang in NEWSFEED_LANGUAGES]
+        + [cache_keys.events(lang) for lang in NEWSFEED_LANGUAGES]
+        + [cache_keys.scheduler_last_run("news")]
+    ),
+    "mensa": (
+        [
+            cache_keys.mensa_menu(loc, lang)
+            for loc in MENSA_LOCATIONS
+            for lang in MENSA_LANGUAGES
+        ]
+        + [
+            cache_keys.mensa_meal(loc, lang)
+            for loc in MENSA_LOCATIONS
+            for lang in MENSA_LANGUAGES
+        ]
+        + [cache_keys.mensa_filters(lang) for lang in MENSA_LANGUAGES]
+        + [
+            cache_keys.mensa_info(loc, lang)
+            for loc in MENSA_LOCATIONS
+            for lang in MENSA_LANGUAGES
+        ]
+        + [cache_keys.scheduler_last_run("mensa")]
+    ),
+    "helpful-numbers": (
+        [cache_keys.helpful_numbers(lang) for lang in NEWSFEED_LANGUAGES]
+        + [cache_keys.more(lang) for lang in NEWSFEED_LANGUAGES]
+        + [cache_keys.scheduler_last_run("helpful_numbers")]
+    ),
+    "map": [cache_keys.campus_map(), cache_keys.scheduler_last_run("map")],
+    # "articles" has dynamic keys — handled by prefix scan in cmd_clear
+}
+
+_ARTICLE_KEY_PREFIX = "article_body:"
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -131,11 +176,111 @@ def cmd_status(_args: argparse.Namespace) -> None:
     total = len(_DATA_KEYS)
     print(f"\n  {total - missing}/{total} data keys populated")
     if missing:
-        print(f"  {missing} key(s) missing — run the worker to populate them\n")
-    else:
-        print("  Cache fully populated\n")
+        print(f"  {missing} key(s) missing — run the worker to populate them")
+
+    article_count = sum(
+        1 for k in cache if isinstance(k, str) and k.startswith(_ARTICLE_KEY_PREFIX)
+    )
+    print("\n── Article body cache ─────────────────────────────────")
+    print(f"  {article_count} article(s) cached")
+    print()
 
     cache.close()
+
+
+def cmd_validate(_args: argparse.Namespace) -> None:
+    """Validate every cached value against its current model schema."""
+    from pydantic import ValidationError
+
+    from src.models.event import EventFeed
+    from src.models.helpful_numbers import HelpfulNumbersResponse
+    from src.models.map import MapResponse
+    from src.models.mensa import MensaFilters, MensaInfo, MensaMealDetail, MensaMenu
+    from src.models.more import MoreLinksResponse
+    from src.models.news import NewsFeed
+
+    key_model_map: dict[str, Any] = {
+        **{cache_keys.news(lang): NewsFeed for lang in NEWSFEED_LANGUAGES},
+        **{cache_keys.events(lang): EventFeed for lang in NEWSFEED_LANGUAGES},
+        **{
+            cache_keys.helpful_numbers(lang): HelpfulNumbersResponse
+            for lang in NEWSFEED_LANGUAGES
+        },
+        **{cache_keys.more(lang): MoreLinksResponse for lang in NEWSFEED_LANGUAGES},
+        **{
+            cache_keys.mensa_menu(loc, lang): MensaMenu
+            for loc in MENSA_LOCATIONS
+            for lang in MENSA_LANGUAGES
+        },
+        **{cache_keys.mensa_filters(lang): MensaFilters for lang in MENSA_LANGUAGES},
+        **{
+            cache_keys.mensa_info(loc, lang): MensaInfo
+            for loc in MENSA_LOCATIONS
+            for lang in MENSA_LANGUAGES
+        },
+        cache_keys.campus_map(): MapResponse,
+    }
+
+    meal_keys = {
+        cache_keys.mensa_meal(loc, lang)
+        for loc in MENSA_LOCATIONS
+        for lang in MENSA_LANGUAGES
+    }
+
+    cache = _open_cache()
+    ok = missing = drift = 0
+
+    print(f"\nValidating cache against current schemas ({settings.cache_dir})\n")
+
+    for key, model in key_model_map.items():
+        value = cache.get(key)
+        if value is None:
+            print(f"  —  {key}")
+            missing += 1
+            continue
+        try:
+            model.model_validate(value)
+            print(f"  ✓  {key}")
+            ok += 1
+        except ValidationError as exc:
+            first = exc.errors()[0]
+            print(f"  ✗  {key}  [{first['loc']} — {first['msg']}]")
+            drift += 1
+
+    for key in meal_keys:
+        value = cache.get(key)
+        if value is None:
+            print(f"  —  {key}")
+            missing += 1
+            continue
+        if not isinstance(value, dict):
+            print(f"  ✗  {key}  [expected dict, got {type(value).__name__}]")
+            drift += 1
+            continue
+        key_drift = 0
+        for meal_id, raw in value.items():
+            try:
+                MensaMealDetail.model_validate(raw)
+            except ValidationError as exc:
+                first = exc.errors()[0]
+                print(f"  ✗  {key}[{meal_id}]  [{first['loc']} — {first['msg']}]")
+                key_drift += 1
+        if key_drift:
+            drift += 1
+        else:
+            print(f"  ✓  {key}  ({len(value)} meals)")
+            ok += 1
+
+    cache.close()
+    total = ok + missing + drift
+    print(f"\n  {ok}/{total} valid   {missing} missing   {drift} schema drift")
+    if drift:
+        print("  Run 'manage run all' to refresh stale entries.\n")
+        sys.exit(1)
+    elif missing:
+        print("  Run 'manage run all' to populate missing entries.\n")
+    else:
+        print("  All entries match current schemas.\n")
 
 
 def cmd_list(_args: argparse.Namespace) -> None:
@@ -169,16 +314,45 @@ def cmd_get(args: argparse.Namespace) -> None:
 
 
 def cmd_clear(args: argparse.Namespace) -> None:
-    """Clear one key or the entire cache."""
+    """Clear one key, all keys for a job, or the entire cache."""
     cache = _open_cache()
 
-    if args.key:
+    if args.job:
+        if args.job == "articles":
+            targets = [
+                k
+                for k in cache
+                if isinstance(k, str) and k.startswith(_ARTICLE_KEY_PREFIX)
+            ]
+        else:
+            targets = _JOB_KEYS[args.job]
+
+        if not targets:
+            print(f"No keys found for job '{args.job}'.")
+            cache.close()
+            return
+
+        if not args.yes:
+            print(f"Keys to clear ({len(targets)}):")
+            for t in targets:
+                print(f"  {t}")
+            answer = input("Confirm? Type 'yes' to proceed: ")
+            if answer.strip().lower() != "yes":
+                print("Aborted.")
+                cache.close()
+                return
+
+        cleared = sum(1 for t in targets if cache.delete(t))
+        print(f"Cleared {cleared} key(s) for job '{args.job}'.")
+
+    elif args.key:
         if cache.get(args.key) is None:
             print(f"Key not found: {args.key}")
             cache.close()
             return
         del cache[args.key]
         print(f"Cleared: {args.key}")
+
     else:
         if not args.yes:
             answer = input(
@@ -297,14 +471,23 @@ def main() -> None:
 
     sub.add_parser("config", help="show resolved config values (secrets masked)")
     sub.add_parser("status", help="show scheduler state and key presence")
+    sub.add_parser(
+        "validate", help="validate every cached value against its current model schema"
+    )
     sub.add_parser("list", help="list all keys currently in the cache")
 
     get_p = sub.add_parser("get", help="print the value of a cache key as JSON")
     get_p.add_argument("key", help="cache key (e.g. news:de, mensa:sb:de)")
 
-    clear_p = sub.add_parser("clear", help="clear one key or the entire cache")
+    clear_p = sub.add_parser("clear", help="clear one key, a job's keys, or all")
     clear_p.add_argument(
         "key", nargs="?", default=None, help="key to clear (omit to clear all)"
+    )
+    clear_p.add_argument(
+        "--job",
+        choices=[*_JOB_KEYS, "articles"],
+        metavar="JOB",
+        help=("clear all keys for a job: " + " | ".join([*_JOB_KEYS, "articles"])),
     )
     clear_p.add_argument("--yes", action="store_true", help="skip confirmation prompt")
 
@@ -319,6 +502,7 @@ def main() -> None:
     dispatch = {
         "config": cmd_config,
         "status": cmd_status,
+        "validate": cmd_validate,
         "list": cmd_list,
         "get": cmd_get,
         "clear": cmd_clear,

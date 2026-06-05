@@ -2,42 +2,22 @@ from __future__ import annotations
 
 import html as _html
 
-_SUPPORTED_LANGS = {"de", "en", "fr"}
+from src.core.enums import Language
+from src.core.locale import ERROR_BODY, ERROR_TITLE, READ_MORE, VIEW_EVENT
+from src.models.event import EventItem
+from src.models.news import NewsItem
 
 
-def preferred_lang(accept_language: str) -> str:
+def preferred_lang(accept_language: str) -> Language:
     """Pick the best supported language from an Accept-Language header value."""
     for part in accept_language.split(","):
         tag = part.split(";")[0].strip()[:2].lower()
-        if tag in _SUPPORTED_LANGS:
-            return tag
-    return "de"
+        try:
+            return Language(tag)
+        except ValueError:
+            pass
+    return Language.DE
 
-
-# ── Localised strings ─────────────────────────────────────────────────────────
-
-_READ_MORE: dict[str, str] = {
-    "de": "Vollständigen Artikel lesen",
-    "en": "Read full article",
-    "fr": "Lire l'article complet",
-}
-_VIEW_EVENT: dict[str, str] = {
-    "de": "Veranstaltungsdetails ansehen",
-    "en": "View event details",
-    "fr": "Voir les détails de l'événement",
-}
-_ERROR_TITLE: dict[str, str] = {
-    "de": "Inhalt nicht verfügbar",
-    "en": "Content unavailable",
-    "fr": "Contenu indisponible",
-}
-_ERROR_BODY: dict[str, str] = {
-    "de": (
-        "Dieser Artikel konnte nicht gefunden werden. Bitte versuche es später erneut."
-    ),
-    "en": "This article could not be found. Please try again later.",
-    "fr": "Cet article est introuvable. Veuillez réessayer plus tard.",
-}
 
 # ── Shared CSS ────────────────────────────────────────────────────────────────
 
@@ -258,19 +238,20 @@ _ERROR_TEMPLATE = """\
 
 
 def render_detail_html(
-    item: dict[str, object],
-    lang: str,
+    item: NewsItem | EventItem,
+    lang: Language,
     *,
     is_event: bool,
     article_body: str | None = None,
 ) -> str:
-    title = _html.escape(str(item.get("title") or ""))
-    description = _html.escape(str(item.get("description") or ""))
-    image_url = str(item.get("imageURL") or "")
-    link = str(item.get("link") or "")
-    date_str = _html.escape(
-        str(item.get("happeningDate") or item.get("publishedDate") or "")
-    )
+    title = _html.escape(item.title)
+    description = _html.escape(item.description)
+    image_url = item.image_url or ""
+    link = item.link
+    if isinstance(item, EventItem):
+        date_str = _html.escape(str(item.happening_date) if item.happening_date else "")
+    else:
+        date_str = _html.escape(str(item.published_date) if item.published_date else "")
 
     hero = (
         f'<img class="hero" src="{_html.escape(image_url)}" alt="" loading="eager">'
@@ -278,7 +259,7 @@ def render_detail_html(
         else ""
     )
 
-    btn_label = (_VIEW_EVENT if is_event else _READ_MORE).get(lang, "Read more")
+    btn_label = (VIEW_EVENT if is_event else READ_MORE)[lang]
 
     if article_body:
         # Happy path: full scraped article
@@ -307,9 +288,9 @@ def render_detail_html(
     )
 
 
-def render_error_html(lang: str) -> str:
+def render_error_html(lang: Language) -> str:
     return _ERROR_TEMPLATE.format(
         css=_CSS,
-        title=_html.escape(_ERROR_TITLE.get(lang, _ERROR_TITLE["en"])),
-        body=_html.escape(_ERROR_BODY.get(lang, _ERROR_BODY["en"])),
+        title=_html.escape(ERROR_TITLE[lang]),
+        body=_html.escape(ERROR_BODY[lang]),
     )

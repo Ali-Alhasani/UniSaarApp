@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta
 
-_WEEKDAY_NAMES: dict[str, list[str]] = {
-    "de": [
+from src.core.enums import Language
+
+_WEEKDAY_NAMES: dict[Language, list[str]] = {
+    Language.DE: [
         "Montag",
         "Dienstag",
         "Mittwoch",
@@ -12,7 +14,7 @@ _WEEKDAY_NAMES: dict[str, list[str]] = {
         "Samstag",
         "Sonntag",
     ],
-    "en": [
+    Language.EN: [
         "Monday",
         "Tuesday",
         "Wednesday",
@@ -21,7 +23,7 @@ _WEEKDAY_NAMES: dict[str, list[str]] = {
         "Saturday",
         "Sunday",
     ],
-    "fr": [
+    Language.FR: [
         "Lundi",
         "Mardi",
         "Mercredi",
@@ -54,7 +56,6 @@ def mensa_target_date(now: datetime) -> date:
     return current
 
 
-def format_mensa_date(d: date, lang: str = "de") -> str:
+def format_mensa_date(d: date, lang: Language = Language.DE) -> str:
     """Format a date as 'Weekday DD.MM.' in the given language."""
-    names = _WEEKDAY_NAMES.get(lang, _WEEKDAY_NAMES["de"])
-    return f"{names[d.weekday()]} {d.day:02}.{d.month:02}."
+    return f"{_WEEKDAY_NAMES[lang][d.weekday()]} {d.day:02}.{d.month:02}."

@@ -4,6 +4,7 @@ from datetime import date, datetime
 
 import pytest
 
+from src.core.enums import Language
 from src.services.date_service import format_mensa_date, mensa_target_date
 
 
@@ -24,21 +25,19 @@ def test_mensa_target_date(now: datetime, expected: date) -> None:
     assert mensa_target_date(now) == expected
 
 
-def test_format_mensa_date_german() -> None:
-    assert format_mensa_date(date(2020, 1, 6), "de") == "Montag 06.01."
-
-
-def test_format_mensa_date_english() -> None:
-    assert format_mensa_date(date(2020, 1, 6), "en") == "Monday 06.01."
-
-
-def test_format_mensa_date_french() -> None:
-    assert format_mensa_date(date(2020, 1, 6), "fr") == "Lundi 06.01."
-
-
-def test_format_mensa_date_unknown_lang_falls_back_to_german() -> None:
-    assert format_mensa_date(date(2020, 1, 6), "xx") == "Montag 06.01."
+@pytest.mark.parametrize(
+    "lang, expected",
+    [
+        (Language.DE, "Montag 06.01."),
+        (Language.EN, "Monday 06.01."),
+        (Language.FR, "Lundi 06.01."),
+    ],
+)
+def test_format_mensa_date_all_supported_languages(
+    lang: Language, expected: str
+) -> None:
+    assert format_mensa_date(date(2020, 1, 6), lang) == expected
 
 
 def test_format_mensa_date_zero_pad_day_and_month() -> None:
-    assert format_mensa_date(date(2020, 3, 2), "de") == "Montag 02.03."
+    assert format_mensa_date(date(2020, 3, 2), Language.DE) == "Montag 02.03."

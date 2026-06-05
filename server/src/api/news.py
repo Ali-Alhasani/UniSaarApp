@@ -1,106 +1,72 @@
 from __future__ import annotations
 
-from typing import Any
-
 from fastapi import APIRouter, BackgroundTasks, Query, Request
 from fastapi.responses import JSONResponse, Response
 
 from src.api._html import preferred_lang, render_detail_html, render_error_html
+from src.api._responses import cache_not_ready
+from src.core.enums import Language
+from src.core.routes import Route
+from src.models.news import NewsFeed, NewsItem
 from src.services.article_scraper import scrape_and_cache_article
+from src.services.feed_service import apply_neg_filter, paginate_items
+from src.storage import cache_keys
 from src.storage.cache import cache
 
 router = APIRouter()
 
-_LANGS = ["de", "en", "fr"]
-
 
 async def _find_news_item(
-    item_id: int, language: str
-) -> tuple[dict[str, object], str] | None:
-    langs = [language] + [lg for lg in _LANGS if lg != language]
+    item_id: int, language: Language
+) -> tuple[NewsItem, Language] | None:
+    langs = [language] + [lg for lg in Language if lg != language]
     for lang in langs:
-        data = await cache.get_async(f"news:{lang}")
-        if data:
-            item = next(
-                (i for i in data.get("items", []) if i.get("id") == item_id), None
-            )
+        feed = await cache.get_model(cache_keys.news(lang), NewsFeed)
+        if feed is not None:
+            item = next((i for i in feed.items if i.id == item_id), None)
             if item is not None:
                 return item, lang
     return None
 
 
-def _unavailable() -> Response:
-    return Response(
-        status_code=503,
-        content="Service is starting up. Please try again in a moment.",
-        media_type="text/plain",
-    )
-
-
-def _paginate_feed(
-    feed: dict[str, Any],
-    page: int,
-    page_size: int,
-    neg_filter: list[int],
-) -> dict[str, Any]:
-    items = feed.get("items", [])
-    if neg_filter:
-        neg_set = set(neg_filter)
-        items = [
-            it
-            for it in items
-            if not (
-                (
-                    cats := [
-                        c for c in (it.get("categories") or []) if isinstance(c, dict)
-                    ]
-                )
-                and all(c.get("id") in neg_set for c in cats)
-            )
-        ]
-    start = page * page_size
-    end = start + page_size
-    page_items = items[start:end]
-    return {
-        **feed,
-        "items": page_items,
-        "itemCount": len(items),
-        "hasNextPage": end < len(items),
-    }
-
-
-@router.get("/news/mainScreen")
-@router.get("/v1/news/mainScreen")
+@router.get(Route.NEWS_MAIN_SCREEN)
 async def get_news(
     page: int = 0,
     pageSize: int = 10,
-    language: str = "de",
+    language: Language = Language.DE,
     negFilter: list[int] = Query(default=[]),  # noqa: B008
 ) -> Response:
-    data = await cache.get_async(f"news:{language}")
-    if data is None:
-        return _unavailable()
-    return JSONResponse(_paginate_feed(data, page, pageSize, negFilter))
+    feed = await cache.get_model(cache_keys.news(language), NewsFeed)
+    if feed is None:
+        return cache_not_ready(language)
+    filtered = apply_neg_filter(feed.items, negFilter)
+    page_items, has_next = paginate_items(filtered, page, pageSize)
+    return JSONResponse(
+        NewsFeed(
+            item_count=len(filtered),
+            categories_last_changed=feed.categories_last_changed,
+            has_next_page=has_next,
+            items=page_items,
+        ).model_dump(by_alias=True, mode="json")
+    )
 
 
-@router.get("/news/categories")
-@router.get("/v1/news/categories")
-async def get_news_categories(language: str = "de") -> Response:
-    data = await cache.get_async(f"news:{language}")
-    if data is None:
-        return _unavailable()
+@router.get(Route.NEWS_CATEGORIES)
+async def get_news_categories(language: Language = Language.DE) -> Response:
+    feed = await cache.get_model(cache_keys.news(language), NewsFeed)
+    if feed is None:
+        return cache_not_ready(language)
     seen: set[int] = set()
     categories = []
-    for item in data.get("items", []):
-        for cat in item.get("categories") or []:
-            if isinstance(cat, dict) and cat.get("id") not in seen:
-                seen.add(cat["id"])
-                categories.append(cat)
+    for item in feed.items:
+        for cat in item.categories:
+            if cat.id not in seen:
+                seen.add(cat.id)
+                categories.append(cat.model_dump())
     return JSONResponse(categories)
 
 
-@router.get("/news/details")
-@router.get("/v1/news/details")
+@router.get(Route.NEWS_DETAILS)
 async def get_news_detail(
     id: int, request: Request, background_tasks: BackgroundTasks
 ) -> Response:
@@ -110,12 +76,11 @@ async def get_news_detail(
         return Response(content=render_error_html(lang), media_type="text/html")
     item, lang = result
 
-    cache_key = f"article_body:{id}:{lang}"
-    article_body: str | None = await cache.get_async(cache_key)
-    if article_body is None:
-        link = str(item.get("link") or "")
-        if link:
-            background_tasks.add_task(scrape_and_cache_article, link, cache_key)
+    article_body: str | None = await cache.get_async(cache_keys.article_body(id, lang))
+    if article_body is None and item.link:
+        background_tasks.add_task(
+            scrape_and_cache_article, item.link, cache_keys.article_body(id, lang)
+        )
 
     return Response(
         content=render_detail_html(
