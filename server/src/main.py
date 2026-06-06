@@ -24,7 +24,13 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None]:
     yield
 
 
-app = FastAPI(title="UniSaarApp Server", lifespan=lifespan)
+app = FastAPI(
+    title="UniSaarApp Server",
+    lifespan=lifespan,
+    docs_url=None,
+    redoc_url=None,
+    openapi_url=None,
+)
 app.state.limiter = limiter
 
 
