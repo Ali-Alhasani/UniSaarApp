@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse, Response
 
 from src.api._responses import cache_not_ready
@@ -10,6 +10,7 @@ from src.core.locale import (
     DIRECTORY_QUERY_TOO_SHORT,
     DIRECTORY_UNAVAILABLE,
 )
+from src.core.rate_limits import RateLimit, limiter
 from src.core.routes import Route
 from src.models.helpful_numbers import HelpfulNumbersResponse
 from src.services.base_scraper import ScraperError
@@ -21,7 +22,9 @@ router = APIRouter()
 
 
 @router.get(Route.DIRECTORY_SEARCH)
+@limiter.limit(RateLimit.DIRECTORY_SEARCH)
 async def search_directory(
+    request: Request,
     query: str,
     page: int = 1,
     pageSize: int = 10,
@@ -55,7 +58,10 @@ async def search_directory(
 
 
 @router.get(Route.DIRECTORY_PERSON_DETAILS)
-async def get_person_details(pid: int, language: Language = Language.DE) -> Response:
+@limiter.limit(RateLimit.DIRECTORY_PERSON)
+async def get_person_details(
+    request: Request, pid: int, language: Language = Language.DE
+) -> Response:
     try:
         async with StaffScraper() as scraper:
             details = await scraper.fetch_details(pid)

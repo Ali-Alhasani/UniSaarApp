@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse, Response
 from src.api._html import preferred_lang, render_detail_html, render_error_html
 from src.api._responses import cache_not_ready
 from src.core.enums import Language
+from src.core.rate_limits import RateLimit, limiter
 from src.core.routes import Route
 from src.models.news import NewsFeed, NewsItem
 from src.services.article_scraper import scrape_and_cache_article
@@ -67,6 +68,7 @@ async def get_news_categories(language: Language = Language.DE) -> Response:
 
 
 @router.get(Route.NEWS_DETAILS)
+@limiter.limit(RateLimit.DETAIL_PAGE)
 async def get_news_detail(
     id: int, request: Request, background_tasks: BackgroundTasks
 ) -> Response:
