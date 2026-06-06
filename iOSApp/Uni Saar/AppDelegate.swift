@@ -13,7 +13,9 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        #if DEBUG
+            if AppEnvironment.isUITesting { UIView.setAnimationsEnabled(false) }
+        #endif
         setupNavigationBarColor()
         UNUserNotificationCenter.current().delegate = self
 

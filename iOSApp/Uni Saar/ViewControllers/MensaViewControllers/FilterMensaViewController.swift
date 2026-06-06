@@ -45,21 +45,6 @@ class FilterMensaViewController: UIViewController {
 
     private func updateUI() {
         if filterMensaViewModel.showLoadingIndicator { filterTableView.showingLoadingView() } else { filterTableView.hideLoadingView() }
-        if filterMensaViewModel.didUpdatefilterList {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                filterMensaViewModel.didUpdatefilterList = false
-                filterTableView.reloadData()
-            }
-        }
-        if filterMensaViewModel.didUpdateFoodAlarmStatus {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                filterMensaViewModel.didUpdateFoodAlarmStatus = false
-                updateTableView()
-            }
-        }
-        reloadFoodAlramSection()
         if let alert = filterMensaViewModel.currentAlert {
             Task { @MainActor [weak self] in
                 guard let self else { return }
@@ -67,6 +52,7 @@ class FilterMensaViewController: UIViewController {
                 presentSingleButtonDialog(alert: alert)
             }
         }
+        filterTableView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -84,17 +70,14 @@ class FilterMensaViewController: UIViewController {
         view.backgroundColor = UIColor.flatGray
     }
 
-    func reloadFoodAlramSection() {
-        filterTableView.reloadSections(IndexSet(integer: 1), with: .automatic)
-    }
-
     @objc private func refershLoad() {
         filterMensaViewModel.isFilterdCacheUpdated = false
         Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
     }
 
     @IBAction func doneButtonAction(_ sender: Any) {
-        actionAfterChangeCampus()
+        // Campus change already dismisses; don't fall through to a second dismiss.
+        if actionAfterChangeCampus() { return }
         saveContext()
         saveFoodAlramTime()
         if filterMensaViewModel.isFilterdCacheUpdated {
@@ -103,12 +86,14 @@ class FilterMensaViewController: UIViewController {
         dismissView()
     }
 
-    func actionAfterChangeCampus() {
-        if filterMensaViewModel.mensaLocation != AppSessionManager.shared.selectedMensaLocation {
-            AppSessionManager.shared.selectedMensaLocation = filterMensaViewModel.mensaLocation
-            delegate?.didChangeLocationFilter()
-            dismissView()
-        }
+    /// Returns `true` if a campus change was detected and the VC was dismissed.
+    @discardableResult
+    func actionAfterChangeCampus() -> Bool {
+        guard filterMensaViewModel.mensaLocation != AppSessionManager.shared.selectedMensaLocation else { return false }
+        AppSessionManager.shared.selectedMensaLocation = filterMensaViewModel.mensaLocation
+        delegate?.didChangeLocationFilter()
+        dismissView()
+        return true
     }
 
     func saveContext() {
@@ -297,7 +282,8 @@ extension FilterMensaViewController: MensaFilterCellDelegate {
         if let indexPath {
             if indexPath.section == 1 {
                 filterMensaViewModel.isFoodAlarmEnabled = false
-                updateTableView()
+                // @Observable triggers updateProperties() → reloadData(), which re-evaluates
+                // heightForRowAt and collapses the time-picker row via leastNormalMagnitude.
             } else {
                 let noticeEntry = Cache.shared.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
                 let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: noticeEntry.objectID) as? FilterNoticesListCache
