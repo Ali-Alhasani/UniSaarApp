@@ -83,7 +83,7 @@ class MensaDayMenuViewModel {
     }
 }
 
-struct MensaColor: Sendable, Equatable {
+struct MensaColor: Equatable {
     let red: Float
     let green: Float
     let blue: Float
