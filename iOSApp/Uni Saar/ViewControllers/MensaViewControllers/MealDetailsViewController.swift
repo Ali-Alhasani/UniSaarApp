@@ -24,7 +24,7 @@ class MealDetailsViewController: UIViewController {
         super.viewDidLoad()
         title = mealItemViewModel?.counterDisplayName
         colorView.setAsCircle(cornerRadius: colorView.frame.height / 2)
-        colorView.backgroundColor = mealItemViewModel?.counterColor
+        colorView.backgroundColor = mealItemViewModel.map { AppStyle.mensaCounterColor($0.colorModel) }
 
         setupInitialState()
     }
@@ -43,9 +43,8 @@ class MealDetailsViewController: UIViewController {
 
         if let mealID = mealItemViewModel?.mensaMealsModel.mealID {
             meal.noticesText = mealItemViewModel?.noticesList
-            // Clean Swift 6: Asynchronous loader called directly inside isolated Task context
-            Task {
-                await meal.loadGetMealDetails(mealId: mealID)
+            Task { [weak self] in
+                await self?.meal.loadGetMealDetails(mealId: mealID)
             }
         }
     }
@@ -67,8 +66,8 @@ class MealDetailsViewController: UIViewController {
 
         mealDispalyNameLabel.text = meal.mealDetails.mealName
         counterEntranceLabel.text = meal.mealDetails.mealCounterDescription
-        generalNoticesLabel.attributedText = meal.mealDetails.generalNoticesText
-        componentsLabel.attributedText = meal.mealDetails.mealComponetsText
+        generalNoticesLabel.setAttributedText(makeGeneralNoticesText(from: meal.mealDetails.generalNoticeItems))
+        componentsLabel.setAttributedText(makeMealComponentsText(from: meal.mealDetails.mealComponentItems))
         priceTagNamesLabel.text = meal.mealDetails.priceTagNamesText
         pricesLabel.text = meal.mealDetails.priceValuesText
 
@@ -81,3 +80,30 @@ class MealDetailsViewController: UIViewController {
 }
 
 extension MealDetailsViewController: SingleButtonDialogPresenter {}
+
+private extension MealDetailsViewController {
+    func makeGeneralNoticesText(from items: [NoticeItem]) -> AttributedString {
+        guard !items.isEmpty else { return AttributedString() }
+        let newline = AttributedString(AppStyle.newLine, attributes: AppStyle.regularContainer)
+        return items.reduce(into: AttributedString()) { result, item in
+            if !result.characters.isEmpty { result += newline }
+            let bullet = item.isWarning ? AppStyle.triangle : AppStyle.square
+            result += AttributedString(bullet + item.text,
+                                       attributes: item.isWarning ? AppStyle.warningContainer : AppStyle.regularContainer)
+        }
+    }
+
+    func makeMealComponentsText(from items: [MealComponentItem]) -> AttributedString {
+        guard !items.isEmpty else { return AttributedString() }
+        let newline = AttributedString(AppStyle.newLine, attributes: AppStyle.regularContainer)
+        return items.reduce(into: AttributedString()) { result, item in
+            if !result.characters.isEmpty { result += newline }
+            result += AttributedString(AppStyle.square + item.name, attributes: AppStyle.regularContainer)
+            for notice in item.notices {
+                let bullet = notice.isWarning ? AppStyle.newLineTabFLAG : AppStyle.BULLET
+                result += AttributedString(bullet + notice.text,
+                                           attributes: notice.isWarning ? AppStyle.warningContainer : AppStyle.regularContainer)
+            }
+        }
+    }
+}

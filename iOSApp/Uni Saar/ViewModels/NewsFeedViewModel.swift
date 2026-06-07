@@ -9,7 +9,6 @@
 import CoreData
 import Foundation
 import Observation
-import UIKit
 
 @Observable
 class NewsFeedViewModel: ParentViewModel {
@@ -75,13 +74,6 @@ class NewsFeedViewModel: ParentViewModel {
     }
 }
 
-@MainActor @objc public protocol NewsFeedViewModelView {
-    @objc var titleLabel: UILabel? { get }
-    @objc optional var subTitleLabel: UILabel? { get }
-    @objc optional var dateLabel: UILabel? { get }
-    @objc optional var newsImage: UIImageView? { get }
-}
-
 protocol NewsFeedCellViewModel {
     var newsItem: NewsModel { get }
     var titleText: String { get }
@@ -115,13 +107,5 @@ extension NewsModel: NewsFeedCellViewModel {
 
     var newsHeader: String {
         annoucementDate + " | " + categoryName.values.map(\.self).joined(separator: ", ")
-    }
-}
-
-extension NewsFeedCellViewModel {
-    @MainActor public func configure(_ view: NewsFeedViewModelView) {
-        view.titleLabel?.text = titleText
-        view.subTitleLabel??.text = subTitleText
-        view.dateLabel??.text = newsHeader
     }
 }

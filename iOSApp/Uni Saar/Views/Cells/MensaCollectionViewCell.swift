@@ -26,12 +26,10 @@ class MensaCollectionViewCell: UICollectionViewCell {
     weak var delegate: MensaCollectionViewCellDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
-        MainActor.assumeIsolated {
-            setupTableView()
-        }
+        setupTableView()
     }
 
-    @MainActor func setupTableView() {
+    func setupTableView() {
         mensaTable.register(MensaMenuTableViewCell.nib, forCellReuseIdentifier: MensaMenuTableViewCell.identifier)
         mensaTable.register(MensaDateHeaderSectionTableViewCell.nib, forHeaderFooterViewReuseIdentifier: MensaDateHeaderSectionTableViewCell.identifier)
         mensaTable.delegate = self
@@ -50,7 +48,7 @@ extension MensaCollectionViewCell: UITableViewDelegate, UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: MensaMenuTableViewCell.identifier, for: indexPath) as? MensaMenuTableViewCell else {
                 return UITableViewCell()
             }
-            viewModel.configure(cell)
+            cell.configure(with: viewModel)
             cell.selectionStyle = .none
             return cell
         }

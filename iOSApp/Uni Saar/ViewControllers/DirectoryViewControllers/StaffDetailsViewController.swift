@@ -43,8 +43,8 @@ class StaffDetailsViewController: UIViewController {
 
         // 2. Safe Interception of Alert Triggers (Runs outside the mutation cycle)
         if let alert = staff.currentAlert {
-            // Defer property mutation slightly to avoid overlapping write contexts
-            Task { @MainActor in
+            Task { @MainActor [weak self] in
+                guard let self else { return }
                 staff.currentAlert = nil
                 presentSingleButtonDialog(alert: alert)
             }

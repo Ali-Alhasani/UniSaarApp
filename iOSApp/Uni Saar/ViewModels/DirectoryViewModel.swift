@@ -9,7 +9,6 @@
 import CoreData
 import Foundation
 import Observation
-import UIKit
 
 @Observable
 class DirectoryViewModel: ParentViewModel {
@@ -23,10 +22,11 @@ class DirectoryViewModel: ParentViewModel {
     }()
 
     var apiPageNumber = 0
-    let numberOfItemPerPage = UIDevice.current.userInterfaceIdiom == .pad ? 16 : 10
+    let numberOfItemPerPage: Int
     var hasNextPage = false
 
-    override init(dataClient: any AppDataClient = DataClient()) {
+    init(dataClient: any AppDataClient = DataClient(), pageSize: Int = 10) {
+        numberOfItemPerPage = pageSize
         super.init(dataClient: dataClient)
     }
 

@@ -12,7 +12,12 @@ class MensaDateHeaderSectionTableViewCell: UITableViewHeaderFooterView, UIGestur
     @IBOutlet var dayLabel: UILabel!
     var dayMenuViewModel: MensaDayMenuViewModel? {
         didSet {
-            dayLabel.attributedText = dayMenuViewModel?.dateText
+            guard let dayMenu = dayMenuViewModel else { return }
+            var dayPart = AttributedString(dayMenu.dayName + " ")
+            dayPart.uiKit.font = AppStyle.title1Font
+            var datePart = AttributedString(dayMenu.dateValue)
+            datePart.uiKit.font = AppStyle.calloutFont
+            dayLabel.setAttributedText(dayPart + datePart)
         }
     }
 

@@ -18,12 +18,10 @@ class MensaMenuTableViewCell: UITableViewCell {
     @IBOutlet var noticesLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
-        MainActor.assumeIsolated {
-            setUpLayout()
-        }
+        setUpLayout()
     }
 
-    @MainActor func setUpLayout() {
+    func setUpLayout() {
         outerView.setAsCircle(cornerRadius: 5)
         colorView.layer.cornerRadius = 5
         colorView.backgroundColor = .systemRed
@@ -33,28 +31,14 @@ class MensaMenuTableViewCell: UITableViewCell {
     }
 }
 
-extension MensaMenuTableViewCell: MensaMenuViewModelView {
-    var counterLabel: UILabel? {
-        counterNameLabel
-    }
-
-    var mealDisplayNameLabel: UILabel? {
-        mealNameLabel
-    }
-
-    var hoursLabel: UILabel? {
-        openingHoursLabel
-    }
-
-    var mealsLabel: UILabel? {
-        componentsLabel
-    }
-
-    var counterColorView: UIView? {
-        colorView
-    }
-
-    var noticeLabel: UILabel? {
-        noticesLabel
+extension MensaMenuTableViewCell {
+    func configure(with viewModel: some MensaMealCellViewModel) {
+        let color = AppStyle.mensaCounterColor(viewModel.colorModel)
+        counterNameLabel.text = viewModel.counterDisplayName
+        mealNameLabel.text = viewModel.mealName
+        openingHoursLabel.text = viewModel.openingHoursText
+        componentsLabel.text = viewModel.mealsText
+        noticesLabel.text = viewModel.noticesText
+        colorView.backgroundColor = viewModel.noticesText.isEmpty ? color : color.withAlphaComponent(0.2)
     }
 }

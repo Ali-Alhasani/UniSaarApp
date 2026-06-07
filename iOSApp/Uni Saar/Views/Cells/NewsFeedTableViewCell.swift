@@ -17,10 +17,8 @@ class NewsFeedTableViewCell: UITableViewCell {
     @IBOutlet var outerView: UIView!
     override func awakeFromNib() {
         super.awakeFromNib()
-        MainActor.assumeIsolated {
-            outerView.setAsCircle(cornerRadius: 4)
-            outerView.setAllSideShadow(shadowOpacity: 0.8)
-        }
+        outerView.setAsCircle(cornerRadius: 4)
+        outerView.setAllSideShadow(shadowOpacity: 0.8)
     }
 
     override func prepareForReuse() {
@@ -29,16 +27,10 @@ class NewsFeedTableViewCell: UITableViewCell {
     }
 }
 
-extension NewsFeedTableViewCell: NewsFeedViewModelView {
-    var titleLabel: UILabel? {
-        newsTitleLabel
-    }
-
-    var subTitleLabel: UILabel? {
-        newsSubTitleLabel
-    }
-
-    var dateLabel: UILabel? {
-        newsDateLabel
+extension NewsFeedTableViewCell {
+    func configure(with viewModel: some NewsFeedCellViewModel) {
+        newsTitleLabel.text = viewModel.titleText
+        newsSubTitleLabel.text = viewModel.subTitleText
+        newsDateLabel.text = viewModel.newsHeader
     }
 }

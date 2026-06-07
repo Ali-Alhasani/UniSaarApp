@@ -72,19 +72,6 @@ final class StaffDetailsModel: Sendable {
     }
 }
 
-final class StaffFavoritesModel: @unchecked Sendable {
-    let staffResults: [StaffResultsModel]
-    let staffItemCount: Int
-    let hasNextPage: Bool
-    var isFavorited: Bool?
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        staffResults = jsonFromated["results"].arrayValue.map { StaffResultsModel(json: $0.dictionaryValue) }
-        staffItemCount = jsonFromated["itemCount"].intValue
-        hasNextPage = jsonFromated["hasNextPage"].boolValue
-    }
-}
-
 extension StaffModel {
     // nonisolated(unsafe) is required when the type is not Sendable (e.g. [String: Any] — because Any isn't Sendable).
     // Sendable types (like StaffModel) don't need it; Swift verifies safety on its own.

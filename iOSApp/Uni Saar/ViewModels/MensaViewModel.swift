@@ -8,7 +8,6 @@
 
 import Foundation
 import Observation
-import UIKit
 
 @Observable
 class MensaMenuViewModel: ParentViewModel {
@@ -73,30 +72,21 @@ class MensaMenuViewModel: ParentViewModel {
 }
 
 class MensaDayMenuViewModel {
-    var dateText: NSMutableAttributedString
-    var dateValue: String
+    let dayName: String
+    let dateValue: String
     var mealsCells: [MensaMealCellViewModel]
     init(mensaDayModel: MensaDayModel) {
         let splitedDate = mensaDayModel.date.split { $0 == " " }
-        let mutableAttributedString = NSMutableAttributedString()
-        let dayText = String(splitedDate.first ?? "")
+        dayName = String(splitedDate.first ?? "")
         dateValue = String(splitedDate.last ?? "")
-        let dayName = NSMutableAttributedString(string: dayText + " ", attributes: AppStyle.largeTitleAttributes)
-        let date = NSMutableAttributedString(string: dateValue, attributes: AppStyle.calloutAttributes)
-        mutableAttributedString.append(dayName)
-        mutableAttributedString.append(date)
-        dateText = mutableAttributedString
         mealsCells = mensaDayModel.countersMeals
     }
 }
 
-@MainActor @objc public protocol MensaMenuViewModelView {
-    @objc var counterLabel: UILabel? { get }
-    @objc optional var mealDisplayNameLabel: UILabel? { get }
-    @objc optional var hoursLabel: UILabel? { get }
-    @objc optional var mealsLabel: UILabel? { get }
-    @objc optional var noticeLabel: UILabel? { get }
-    @objc optional var counterColorView: UIView? { get }
+struct MensaColor: Sendable, Equatable {
+    let red: Float
+    let green: Float
+    let blue: Float
 }
 
 @MainActor
@@ -105,7 +95,7 @@ protocol MensaMealCellViewModel {
     var counterDisplayName: String { get }
     var mealName: String { get }
     var openingHoursText: String { get }
-    var counterColor: UIColor { get }
+    var colorModel: MensaColor { get }
     var mealsText: String { get }
     var noticesText: String { get }
     var noticesList: [FilterNoticesListCache] { get }
@@ -129,8 +119,8 @@ extension MensaMealsModel: MensaMealCellViewModel {
         openiningHours
     }
 
-    var counterColor: UIColor {
-        AppStyle.mensaCounterColor(color)
+    var colorModel: MensaColor {
+        MensaColor(red: color.red, green: color.green, blue: color.blue)
     }
 
     var mealsText: String {
@@ -162,20 +152,5 @@ extension MensaMealsModel: MensaMealCellViewModel {
 
     @MainActor func getSelectedNotices() -> [FilterNoticesListCache]? {
         Cache.shared.fetchedResultsController.fetchedObjects?.filter(\.isSelected)
-    }
-}
-
-extension MensaMealCellViewModel {
-    public func configure(_ view: MensaMenuViewModelView) {
-        view.counterLabel?.text = counterDisplayName
-        view.mealDisplayNameLabel??.text = mealName
-        view.hoursLabel??.text = openingHoursText
-        view.mealsLabel??.text = mealsText
-        if noticesText != "" {
-            view.counterColorView??.backgroundColor = counterColor.withAlphaComponent(0.2)
-        } else {
-            view.counterColorView??.backgroundColor = counterColor
-        }
-        view.noticeLabel??.text = noticesText
     }
 }

@@ -8,7 +8,6 @@
 
 import CoreData
 import Foundation
-import UIKit
 
 public enum FilterCacheKeys {
     static let noticesEntityName = "FilterNoticesListCache"

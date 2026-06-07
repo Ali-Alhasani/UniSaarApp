@@ -7,7 +7,6 @@
 //
 
 import MapKit
-import UIKit
 
 class CampusModel {
     var name: String?

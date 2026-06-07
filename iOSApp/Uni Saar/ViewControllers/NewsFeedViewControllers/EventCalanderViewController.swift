@@ -138,11 +138,11 @@ extension EventCalanderViewController: UITableViewDelegate, UITableViewDataSourc
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.identifier, for: indexPath) as? NewsFeedTableViewCell else {
                 return defaultCell
             }
-            viewModel.configure(cell)
+            cell.configure(with: viewModel)
             if let imageURL = viewModel.imageURL {
-                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(systemName: "arrow.2.circlepath.circle.fill"), completion: { response in
+                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(systemName: "arrow.2.circlepath.circle.fill"), completion: { [weak self] response in
                     if response.response != nil {
-                        self.tableView.reloadRowAt()
+                        self?.tableView.reloadRowAt()
                     }
                 })
             }

@@ -20,7 +20,11 @@ class DirectoryViewController: UIViewController {
 
     @IBOutlet var helpfulContactsView: UIView!
     @IBOutlet var outerView: UIView!
-    lazy var directoryViewModel: DirectoryViewModel = .init()
+    private var pageSize: Int {
+        UIDevice.current.userInterfaceIdiom == .pad ? 16 : 10
+    }
+
+    lazy var directoryViewModel: DirectoryViewModel = .init(pageSize: pageSize)
     let searchController = UISearchController(searchResultsController: nil)
 
     override func viewDidLoad() {

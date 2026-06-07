@@ -65,8 +65,9 @@ final class MensaViewModelTests: XCTestCase {
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.mealDispalyName, cellViewModel.mealsCells.first?.mealName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.counterDisplayName, cellViewModel.mealsCells.first?.counterDisplayName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.openingHoursText, cellViewModel.mealsCells.first?.openingHoursText)
-            if let countersMeal = menu.daysMenus.first?.countersMeals, let color = countersMeal.first?.color {
-                XCTAssertEqual(AppStyle.mensaCounterColor(color), cellViewModel.mealsCells.first?.counterColor)
+            if let countersMeal = menu.daysMenus.first?.countersMeals, let serverColor = countersMeal.first?.color {
+                let expected = MensaColor(red: serverColor.red, green: serverColor.green, blue: serverColor.blue)
+                XCTAssertEqual(expected, cellViewModel.mealsCells.first?.colorModel)
             }
         case let .error(message):
             XCTAssertNotNil(message)
