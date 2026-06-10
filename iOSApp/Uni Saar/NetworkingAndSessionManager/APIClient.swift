@@ -46,7 +46,7 @@ class APIClient {
                 afError.isParameterEncodingError || afError.isResponseValidationError {
                 throw MyError.customError
             }
-            throw afError
+            throw afError.underlyingError ?? MyError.customError
         }
     }
 
