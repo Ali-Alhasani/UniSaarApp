@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, patch
 
+from src.core.enums import MensaLocation
 from src.services.base_scraper import BaseScraper
 from src.services.mensa_scraper import MensaScraper
 
@@ -40,7 +41,7 @@ async def _fetch_menu(menu_json: str = _MENU_SB) -> object:
         ),
     ):
         scraper = MensaScraper()
-        return await scraper.fetch_menu("sb", "de")
+        return await scraper.fetch_menu(MensaLocation.MENSB, "de")
 
 
 async def test_fetch_menu_first_day_date() -> None:
@@ -198,10 +199,11 @@ async def test_main_screen_components_capped_at_five() -> None:
         ),
     ):
         scraper = MensaScraper()
-        menu = await scraper.fetch_menu("sb", "de")
+        menu = await scraper.fetch_menu(MensaLocation.MENSB, "de")
 
+    meal_id = menu.days[0].meals[0].id
     assert len(menu.days[0].meals[0].components) == 5
-    assert len(scraper.get_meal_details()[0].meal_components) == 8
+    assert len(scraper.get_meal_details()[meal_id].meal_components) == 8
 
 
 async def test_component_with_tab_filtered_from_main_not_detail() -> None:
@@ -222,14 +224,15 @@ async def test_component_with_tab_filtered_from_main_not_detail() -> None:
         ),
     ):
         scraper = MensaScraper()
-        menu = await scraper.fetch_menu("sb", "de")
+        menu = await scraper.fetch_menu(MensaLocation.MENSB, "de")
 
     main_components = menu.days[0].meals[0].components
     assert "Tomatensalat" in main_components
     assert not any("\t" in c for c in main_components)
 
+    meal_id = menu.days[0].meals[0].id
     detail_names = [
-        mc.component_name for mc in scraper.get_meal_details()[0].meal_components
+        mc.component_name for mc in scraper.get_meal_details()[meal_id].meal_components
     ]
     assert any("\t" in n for n in detail_names)
 
@@ -252,14 +255,15 @@ async def test_component_with_newline_filtered_from_main_not_detail() -> None:
         ),
     ):
         scraper = MensaScraper()
-        menu = await scraper.fetch_menu("sb", "de")
+        menu = await scraper.fetch_menu(MensaLocation.MENSB, "de")
 
     main_components = menu.days[0].meals[0].components
     assert "Kartoffeln" in main_components
     assert not any("\n" in c for c in main_components)
 
+    meal_id = menu.days[0].meals[0].id
     detail_names = [
-        mc.component_name for mc in scraper.get_meal_details()[0].meal_components
+        mc.component_name for mc in scraper.get_meal_details()[meal_id].meal_components
     ]
     assert any("\n" in n for n in detail_names)
 
@@ -275,7 +279,7 @@ async def test_fetch_menu_missing_price_tiers_falls_back_to_tier_id() -> None:
         ),
     ):
         scraper = MensaScraper()
-        menu = await scraper.fetch_menu("sb", "de")
+        menu = await scraper.fetch_menu(MensaLocation.MENSB, "de")
     prices = menu.days[0].meals[0].prices
     assert prices is not None
     tags = {p.price_tag for p in prices}

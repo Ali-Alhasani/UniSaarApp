@@ -81,8 +81,8 @@ _MENSA_MENU = {
 }
 
 _MEAL_MAP = {
-    "0": {
-        "id": 0,
+    "10202601010000": {
+        "id": 10202601010000,
         "mealName": "Spaghetti",
         "description": "Pasta counter",
         "color": {"r": 0, "g": 0, "b": 0},
@@ -269,7 +269,7 @@ class TestMensaMealDetail:
             "src.api.mensa.cache.get_async",
             _cache_returning(_MEAL_MAP),
         ):
-            r = await client.get("/mensa/mealDetail?meal=0&location=sb&language=de")
+            r = await client.get("/mensa/mealDetail?meal=10202601010000&language=de")
         assert r.status_code == 200
         data = r.json()
         assert data["mealName"] == "Spaghetti"
@@ -281,12 +281,12 @@ class TestMensaMealDetail:
             "src.api.mensa.cache.get_async",
             _cache_returning(_MEAL_MAP),
         ):
-            r = await client.get("/mensa/mealDetail?meal=999&location=sb&language=de")
+            r = await client.get("/mensa/mealDetail?meal=10202601019999&language=de")
         assert r.status_code == 404
 
     async def test_missing_cache_returns_503(self, client: AsyncClient) -> None:
         with patch("src.api.mensa.cache.get_async", _cache_returning(None)):
-            r = await client.get("/mensa/mealDetail?meal=0&location=sb&language=de")
+            r = await client.get("/mensa/mealDetail?meal=10202601010000&language=de")
         assert r.status_code == 503
 
 

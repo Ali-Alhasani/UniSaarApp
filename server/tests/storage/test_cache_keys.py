@@ -16,7 +16,7 @@ def test_mensa_menu_key_format() -> None:
 
 
 def test_mensa_meal_key_format() -> None:
-    assert cache_keys.mensa_meal("hom", "fr") == "mensa:meal:hom:fr"
+    assert cache_keys.mensa_meal("hom", "fr") == "mensa_meal_v1:hom:fr"
 
 
 def test_mensa_filters_key_format() -> None:

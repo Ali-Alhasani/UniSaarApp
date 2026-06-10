@@ -1,27 +1,29 @@
 from __future__ import annotations
 
+from src.core.enums import CampusLocation, Language
 
-def news(lang: str) -> str:
+
+def news(lang: Language) -> str:
     return f"news:{lang}"
 
 
-def events(lang: str) -> str:
+def events(lang: Language) -> str:
     return f"events:{lang}"
 
 
-def mensa_menu(location: str, lang: str) -> str:
+def mensa_menu(location: CampusLocation, lang: Language) -> str:
     return f"mensa:{location}:{lang}"
 
 
-def mensa_meal(location: str, lang: str) -> str:
-    return f"mensa:meal:{location}:{lang}"
+def mensa_meal(location: CampusLocation, lang: Language) -> str:
+    return f"mensa_meal_v1:{location}:{lang}"
 
 
-def mensa_filters(lang: str) -> str:
+def mensa_filters(lang: Language) -> str:
     return f"mensa:filters:{lang}"
 
 
-def mensa_info(location: str, lang: str) -> str:
+def mensa_info(location: CampusLocation, lang: Language) -> str:
     return f"mensa:info:{location}:{lang}"
 
 
