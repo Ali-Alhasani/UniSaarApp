@@ -23,6 +23,7 @@ class HelpfulContactsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        directoryViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
         refershLoad()
     }
 
@@ -32,13 +33,6 @@ class HelpfulContactsViewController: UIViewController {
 
     private func updateUI() {
         if directoryViewModel.showLoadingIndicator { directoryTableView.showingLoadingView() } else { directoryTableView.hideLoadingView() }
-        if let alert = directoryViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                directoryViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
         directoryTableView.reloadData()
     }
 

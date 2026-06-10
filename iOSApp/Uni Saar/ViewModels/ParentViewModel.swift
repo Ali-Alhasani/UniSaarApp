@@ -13,18 +13,18 @@ import Observation
 @Observable
 class ParentViewModel {
     @ObservationIgnored var dataClient: any AppDataClient
+    @ObservationIgnored var onAlert: (@MainActor (SingleButtonAlert) -> Void)?
     var showLoadingIndicator: Bool = false
-    var currentAlert: SingleButtonAlert?
 
     init(dataClient: any AppDataClient = DataClient()) {
         self.dataClient = dataClient
     }
 
     func showError(error: Error?, tryAgainHandler: (() -> Void)? = nil) {
-        currentAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: tryAgainHandler))
+        onAlert?(SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: tryAgainHandler)))
     }
 
     func showError(error: LLError?) {
-        currentAlert = SingleButtonAlert(message: error?.message, action: AlertAction(handler: nil, tryAgainHandler: nil))
+        onAlert?(SingleButtonAlert(message: error?.message, action: AlertAction(handler: nil, tryAgainHandler: nil)))
     }
 }

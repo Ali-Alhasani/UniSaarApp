@@ -25,12 +25,11 @@ class StaffDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigateButton.isHidden = true
+        staff.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
         setupInitialDataLoad()
     }
 
-    /// MODERN CONCURRENCY PATTERN: Native reactive UI pipeline
-    /// The runtime automatically intercepts any @Observable read here, tracks it,
-    /// and triggers updates safely across frame boundaries without recursive closures.
+    /// NATIVE iOS 26 API: The framework automatically tracks any @Observable referenced inside here.
     override func updateProperties() {
         renderUI()
     }
@@ -41,16 +40,7 @@ class StaffDetailsViewController: UIViewController {
         // 1. Manage Global Overlays
         if staff.showLoadingIndicator { showLoadingActivity() } else { hideLoadingActivity() }
 
-        // 2. Safe Interception of Alert Triggers (Runs outside the mutation cycle)
-        if let alert = staff.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                staff.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
-
-        // 3. Update Presentation Strings Safely
+        // 2. Update Presentation Strings Safely
         guard staffInfo.staffDetailsModel != nil else { return }
 
         staffTitleLabel.text = staffInfo.titleText

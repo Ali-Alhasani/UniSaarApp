@@ -224,19 +224,20 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         viewController.loadView()
         viewController.viewDidLoad()
 
+        var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
         dataClient.getMealResult = .failure(MyError.customError)
         viewController.meal = MealDetailsViewModel(dataClient: dataClient)
+        viewController.meal.onAlert = { capturedAlert = $0 }
         await viewController.meal.loadGetMealDetails(mealId: 1)
 
         viewController.setNeedsUpdateProperties()
         viewController.view.layoutIfNeeded()
 
-        // updateUI() defers the mutation via Task — currentAlert is still set when layoutIfNeeded() returns
         XCTAssertNil(viewController.meal.mealDetails.mealDetailsModel,
                      "mealDetailsModel should be nil after a failed load")
-        XCTAssertNotNil(viewController.meal.currentAlert,
-                        "An alert should be queued when the network request fails")
+        XCTAssertNotNil(capturedAlert,
+                        "An alert should be fired when the network request fails")
     }
 
     // MARK: - StaffDetailsViewController
@@ -275,9 +276,11 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         viewController.loadView()
         viewController.viewDidLoad()
 
+        var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
         dataClient.getStaffDetailsResult = .failure(MyError.customError)
         viewController.staff = StaffDetailsViewModel(dataClient: dataClient)
+        viewController.staff.onAlert = { capturedAlert = $0 }
         await viewController.staff.loadGetStaffDetails(staffId: 1)
 
         viewController.setNeedsUpdateProperties()
@@ -285,7 +288,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
 
         XCTAssertNil(viewController.staff.staffDetails.staffDetailsModel,
                      "staffDetailsModel should be nil after a failed network request")
-        XCTAssertNotNil(viewController.staff.currentAlert,
-                        "An alert should be queued so updateUI() can present it")
+        XCTAssertNotNil(capturedAlert,
+                        "An alert should be fired when the network request fails")
     }
 }

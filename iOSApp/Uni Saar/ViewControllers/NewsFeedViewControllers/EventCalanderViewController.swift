@@ -32,6 +32,7 @@ class EventCalanderViewController: UIViewController {
         super.viewDidLoad()
         setUpCalander()
         setupTableView()
+        eventViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
         load()
     }
 
@@ -41,13 +42,6 @@ class EventCalanderViewController: UIViewController {
 
     private func updateUI() {
         if eventViewModel.showLoadingIndicator { tableView.showingLoadingView() } else { tableView.hideLoadingView() }
-        if let alert = eventViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                eventViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
         calendar.reloadData()
         tableView.reloadData()
         if !eventViewModel.eventCells.isEmpty, eventViewModel.selectedDateEvents.isEmpty {

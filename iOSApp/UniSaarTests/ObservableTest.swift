@@ -12,18 +12,22 @@ import XCTest
 @MainActor
 final class ObservationTests: XCTestCase {
     /// showError is synchronous — no async needed
-    func testCurrentAlertSetOnError() {
+    func testOnAlertFiredOnError() {
+        var capturedAlert: SingleButtonAlert?
         let viewModel = NewsFeedViewModel()
+        viewModel.onAlert = { capturedAlert = $0 }
         viewModel.showError(error: MyError.customError)
-        XCTAssertNotNil(viewModel.currentAlert)
-        XCTAssertNotNil(viewModel.currentAlert?.message)
+        XCTAssertNotNil(capturedAlert)
+        XCTAssertNotNil(capturedAlert?.message)
     }
 
-    func testCurrentAlertSetOnLLError() {
+    func testOnAlertFiredOnLLError() {
+        var capturedAlert: SingleButtonAlert?
         let viewModel = NewsFeedViewModel()
+        viewModel.onAlert = { capturedAlert = $0 }
         viewModel.showError(error: LLError(status: false, message: "test error"))
-        XCTAssertNotNil(viewModel.currentAlert)
-        XCTAssertNotNil(viewModel.currentAlert?.message)
+        XCTAssertNotNil(capturedAlert)
+        XCTAssertNotNil(capturedAlert?.message)
     }
 
     /// Verifies that MockAppDataClient is properly injected and drives ViewModel state
