@@ -7,58 +7,44 @@
 //
 
 import UIKit
-import UserNotifications
+@preconcurrency import UserNotifications
 
-@UIApplicationMain
+@main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
-        if #available(iOS 13.0, *) {
-            setupNavigationBarColor()
-        } else {
-            // Fallback on earlier versions
-            window?.tintColor  = AppStyle.appGlobalTintColor
-            setupNavigationBarColor2()
-            // do iOS 12 specific window setup
-            MediatorDelegate.configureRootViewController(window: window)
-        }
+        #if DEBUG
+            if AppEnvironment.isUITesting { UIView.setAnimationsEnabled(false) }
+        #endif
+        setupNavigationBarColor()
         UNUserNotificationCenter.current().delegate = self
 
         return true
     }
-    @available(iOS 13.0, *)
+
     func setupNavigationBarColor() {
-        let coloredAppearance = UINavigationBarAppearance()
-        //coloredAppearance.configureWithOpaqueBackground()
-        coloredAppearance.backgroundColor = AppStyle.appNavgationMainColor
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.backgroundColor = AppStyle.appNavgationMainColor.withAlphaComponent(0.95)
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().tintColor = AppStyle.backNavgationTintColor
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
         UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = AppStyle.appGlobalTintColor
         let stackViewAppearance = UIStackView.appearance(whenContainedInInstancesOf: [UINavigationBar.self])
         stackViewAppearance.spacing = -2
     }
 
-    func setupNavigationBarColor2() {
-        let navigationBarAppearace = UINavigationBar.appearance()
-        navigationBarAppearace.barTintColor = AppStyle.appNavgationMainColor
-        navigationBarAppearace.tintColor = AppStyle.backNavgationTintColor
-        navigationBarAppearace.isTranslucent = false
-        navigationBarAppearace.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).tintColor = AppStyle.appGlobalTintColor
-
-    }
     // MARK: UISceneSession Lifecycle
-    @available(iOS 13.0, *)
+
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         // Called when a new scene session is being created.
         // Use this method to select a configuration to create the new scene with.
-        return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
+        UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-    @available(iOS 13.0, *)
+
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
         // Called when the user discards a scene session.
         // If any sessions were discarded while the application was not running, this will be called shortly after application:didFinishLaunchingWithOptions.
@@ -66,7 +52,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         //         CoreDataStack.sharedInstance.saveContext()
         //         AppSessionManager.saveMensafiltersStatus()
     }
-    // Fallback on earlier versions
+
+    /// Fallback on earlier versions
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         CoreDataStack.sharedInstance.saveContext()
@@ -76,22 +63,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         AppSessionManager.saveHelpfulNumberStatus()
         AppSessionManager.saveFoodAlarmStatus()
     }
-
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-          if let window = UIApplication.shared.keyWindow {
-              MediatorDelegate.navigateToMensaScreen(window: window)
-          }
-          // you must call the completion handler when you're done
-          completionHandler()
-      }
+    nonisolated func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @Sendable @escaping () -> Void
+    ) {
+        Task { @MainActor in
+            if let window = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .flatMap(\.windows)
+                .first(where: { $0.isKeyWindow }) {
+                MediatorDelegate.navigateToMensaScreen(window: window)
+            }
+            completionHandler()
+        }
+    }
 
-      func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
-                                  withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-          NSLog("userNotificationCenter:willPresent")
-          //...
-          completionHandler([.alert])
-      }
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification,
+                                            withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        NSLog("userNotificationCenter:willPresent")
+        completionHandler([.banner, .list])
+    }
 }

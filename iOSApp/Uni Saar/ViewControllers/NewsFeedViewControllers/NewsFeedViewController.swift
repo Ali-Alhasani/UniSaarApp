@@ -8,121 +8,117 @@
 
 import UIKit
 
+@MainActor
 class NewsFeedViewController: UIViewController {
-    @IBOutlet weak var newsTable: UITableView! {
+    @IBOutlet var newsTable: UITableView! {
         didSet {
-            DispatchQueue.main.async {
-                let refreshControl = self.newsTable.setUpRefreshControl()
-                refreshControl.addTarget(self, action: #selector(self.refershLoad), for: UIControl.Event.valueChanged)
-                self.newsTable.refreshControl = refreshControl
-            }
+            let refreshControl = newsTable.setUpRefreshControl()
+            refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
+            newsTable.refreshControl = refreshControl
         }
     }
-    // MARK: - Instance Properties
-    lazy var newsViewModel: NewsFeedViewModel = NewsFeedViewModel()
+
+    lazy var newsViewModel: NewsFeedViewModel = .init()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         setupTableView()
-        bindViewModel()
-        newsViewModel.loadGetNews(filterCatgroies: [])
-        //just a test mock function without server calling
-        //newsViewModel.loadGetMockNews()
+        Task { [weak self] in await self?.newsViewModel.loadGetNews(filterCatgroies: []) }
     }
+
+    override func updateProperties() {
+        updateUI()
+    }
+
+    private func updateUI() {
+        if newsViewModel.showLoadingIndicator { newsTable.showingLoadingView() } else { newsTable.hideLoadingView() }
+        if newsViewModel.isFreshLoad {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                newsViewModel.isFreshLoad = false
+                initialSelection()
+            }
+        }
+        if let alert = newsViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                newsViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
+            }
+        }
+        newsTable.reloadData()
+    }
+
     @objc private func refershLoad() {
-        self.load(isFirstTime: true, filterCatgroies: [])
+        load(isFirstTime: true, filterCatgroies: [])
     }
+
     @objc func load(isFirstTime: Bool = true, filterCatgroies: [Int]) {
-        newsViewModel.loadGetNews(isFirstTime, filterCatgroies: filterCatgroies)
+        Task { [weak self] in await self?.newsViewModel.loadGetNews(isFirstTime, filterCatgroies: filterCatgroies) }
     }
+
     func setupTableView() {
         newsTable.register(NewsFeedTableViewCell.nib, forCellReuseIdentifier: NewsFeedTableViewCell.identifier)
         newsTable.delegate = self
         newsTable.dataSource = self
         newsTable.layoutTableView()
     }
-    func bindViewModel() {
-        newsViewModel.newsCells.bind { [weak self] _ in
-            if let `self` = self {
-                self.newsTable.reloadData()
-            }
-        }
-        newsViewModel.onShowError = { [weak self] alert in
-            self?.presentSingleButtonDialog(alert: alert)
-        }
-        newsViewModel.showLoadingIndicator.bind { [weak self] visible in
-            if let `self` = self {
-                visible ? self.newsTable.showingLoadingView() : self.newsTable.hideLoadingView()
-            }
-        }
-        newsViewModel.isFreshLoad.bind { [weak self] _ in
-            if let `self` = self {
-                self.initialSelection()
+
+    func initialSelection() {
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            let initialIndexPath = IndexPath(row: 0, section: 0)
+            switch newsViewModel.newsCells[safe: initialIndexPath.row] {
+            case let .normal(viewModel):
+                performSegue(withIdentifier: SegueIdentifiers.toNewsDetails, sender: viewModel)
+                newsTable.selectRow(at: initialIndexPath, animated: true, scrollPosition: .none)
+            case .empty, .error, .none:
+                break
             }
         }
     }
 
-    // select default item in detail view for iPad in SplitViewController
-    func initialSelection() {
-        if UIDevice.current.userInterfaceIdiom == .pad {
-            DispatchQueue.main.async {
-                let initialIndexPath = IndexPath(row: 0, section: 0)
-                switch self.newsViewModel.newsCells.value[safe: initialIndexPath.row] {
-                case .normal(let viewModel):
-                    self.performSegue(withIdentifier: SegueIdentifiers.toNewsDetails, sender: viewModel)
-                    self.newsTable.selectRow(at: initialIndexPath, animated: true, scrollPosition: .none)
-                case .empty, .error, .none:
-                    // nop no click action should be done for empty cell's
-                    break
-                }
-            }
-        }
-    }
-    // MARK: - Navigation
-    internal struct SegueIdentifiers {
+    enum SegueIdentifiers {
         static let toNewsDetails = "toNewsReader"
         static let toEventDetails = "toEventsReader"
     }
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-        if segue.identifier == SegueIdentifiers.toNewsDetails, let destination = segue.destination as? UINavigationController,
-            let destinationViewController = destination.topViewController as? NewsReaderViewController,
-            let viewModel = sender as? NewsFeedCellViewModel {
+        if segue.identifier == SegueIdentifiers.toNewsDetails,
+           let destination = segue.destination as? UINavigationController,
+           let destinationViewController = destination.topViewController as? NewsReaderViewController,
+           let viewModel = sender as? NewsFeedCellViewModel {
             destinationViewController.newsItemViewModel = viewModel
-        } else if let destination = segue.destination as? UINavigationController, let destinationViewController = destination.topViewController as? FilterNewsFeedViewController {
+        } else if let destination = segue.destination as? UINavigationController,
+                  let destinationViewController = destination.topViewController as? FilterNewsFeedViewController {
             destinationViewController.delegate = self
             destinationViewController.filterNewsViewModel.isFilterdCacheUpdated = newsViewModel.isFilterdCacheUpdated
         }
     }
 }
-// MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return newsViewModel.newsCells.value.count
+        newsViewModel.newsCells.count
     }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let defaultCell = UITableViewCell()
-        switch newsViewModel.newsCells.value[safe: indexPath.row] {
-        case .normal(let viewModel):
+        switch newsViewModel.newsCells[safe: indexPath.row] {
+        case let .normal(viewModel):
             guard let cell = tableView.dequeueReusableCell(withIdentifier: NewsFeedTableViewCell.identifier, for: indexPath) as? NewsFeedTableViewCell else {
                 return defaultCell
             }
-            viewModel.configure(cell)
+            cell.configure(with: viewModel)
             if let imageURL = viewModel.imageURL {
-                // async download
-                cell.newsImageView.af_setImage(withURL: imageURL, placeholderImage: UIImage(named: "SF_arrow_2_circlepath_circle_fill"), completion: { response in
-                    // Check if the image isn't already cached
+                cell.newsImageView.af.setImage(withURL: imageURL, placeholderImage: UIImage(systemName: "arrow.2.circlepath.circle.fill"), completion: { [weak self] response in
                     if response.response != nil {
-                        // Force the cell update
-                        self.newsTable.reloadRowAt()
+                        self?.newsTable.reloadRowAt()
                     }
                 })
             }
             cell.selectionStyle = .none
             return cell
-        case .error(let message):
+        case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
             return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyNews", comment: ""))
@@ -130,42 +126,38 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
             return defaultCell
         }
     }
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch newsViewModel.newsCells.value[safe: indexPath.row] {
-        case .normal(let viewModel):
-            self.performSegue(withIdentifier: SegueIdentifiers.toNewsDetails, sender: viewModel)
+        switch newsViewModel.newsCells[safe: indexPath.row] {
+        case let .normal(viewModel):
+            performSegue(withIdentifier: SegueIdentifiers.toNewsDetails, sender: viewModel)
         case .empty, .error, .none:
-            // nop no click action should be done for empty cell's
             break
         }
     }
 }
-// load more news if the user reach the bottom of the screen
+
 extension NewsFeedViewController {
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-
-        // UITableView only moves in one direction, y axis
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
-
-        // the distance from bottom
         if maximumOffset - currentOffset <= 25.0 {
-            self.load(isFirstTime: false, filterCatgroies: [])
+            load(isFirstTime: false, filterCatgroies: [])
         }
     }
 }
-extension NewsFeedViewController: SingleButtonDialogPresenter { }
-// MARK: - FilterNewsFeedViewDelegate
+
+extension NewsFeedViewController: SingleButtonDialogPresenter {}
+
 extension NewsFeedViewController: FilterNewsFeedViewDelegate {
     func didSelectFilterAll() {
         load(filterCatgroies: [])
     }
 
     func scrollUp() {
-        DispatchQueue.main.async {
-            self.newsTable.scrollToTop(animated: true)
-        }
+        newsTable.scrollToTop(animated: true)
     }
+
     func didSelectCustomFiltering(newsCatgroies: [Int]) {
         scrollUp()
         load(filterCatgroies: newsCatgroies)

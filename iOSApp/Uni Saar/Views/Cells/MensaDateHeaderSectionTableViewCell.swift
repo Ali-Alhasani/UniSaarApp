@@ -1,5 +1,5 @@
 //
-//  MensaLocationSectionTableViewCell.swift
+//  MensaDateHeaderSectionTableViewCell.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 12/10/19.
@@ -7,25 +7,25 @@
 //
 
 import UIKit
-import AlamofireImage
 
 class MensaDateHeaderSectionTableViewCell: UITableViewHeaderFooterView, UIGestureRecognizerDelegate {
-    @IBOutlet weak var dayLabel: UILabel!
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    @IBOutlet var dayLabel: UILabel!
     var dayMenuViewModel: MensaDayMenuViewModel? {
         didSet {
-            DispatchQueue.main.async {
-                self.dayLabel.attributedText = self.dayMenuViewModel?.dateText
-            }
+            guard let dayMenu = dayMenuViewModel else { return }
+            var dayPart = AttributedString(dayMenu.dayName + " ")
+            dayPart.uiKit.font = AppStyle.title1Font
+            var datePart = AttributedString(dayMenu.dateValue)
+            datePart.uiKit.font = AppStyle.calloutFont
+            dayLabel.setAttributedText(dayPart + datePart)
         }
     }
+
     static var nib: UINib {
-        return UINib(nibName: identifier, bundle: nil)
+        UINib(nibName: identifier, bundle: nil)
     }
+
     static var identifier: String {
-        return String(describing: self)
+        String(describing: self)
     }
 }

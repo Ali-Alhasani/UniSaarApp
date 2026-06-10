@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24765" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_3" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24743"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,7 +13,7 @@
             <objects>
                 <navigationController storyboardIdentifier="NewsUINavigation" useStoryboardIdentifierAsRestorationIdentifier="YES" id="uha-xN-Bfg" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="l7N-K4-KQf">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="124" width="402" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -29,22 +29,22 @@
             <objects>
                 <viewController storyboardIdentifier="NewsFeedViewControllerTest" useStoryboardIdentifierAsRestorationIdentifier="YES" id="LWW-ba-krt" customClass="NewsFeedViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="aa1-sw-XyG">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="bFE-Ns-mcz">
-                                <rect key="frame" x="0.0" y="89" width="414" height="773"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="0.0" y="1" width="402" height="873"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="V91-Kh-sYA"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="V91-Kh-sYA" firstAttribute="trailing" secondItem="bFE-Ns-mcz" secondAttribute="trailing" id="8fU-UH-vA2"/>
                             <constraint firstItem="V91-Kh-sYA" firstAttribute="bottom" secondItem="bFE-Ns-mcz" secondAttribute="bottom" id="SrN-Nr-KVF"/>
                             <constraint firstItem="bFE-Ns-mcz" firstAttribute="top" secondItem="V91-Kh-sYA" secondAttribute="top" constant="1" id="lzJ-EU-dTM"/>
                             <constraint firstItem="bFE-Ns-mcz" firstAttribute="leading" secondItem="V91-Kh-sYA" secondAttribute="leading" id="rmO-VN-HQg"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="V91-Kh-sYA"/>
                     </view>
                     <navigationItem key="navigationItem" title="News Feed" id="v77-ev-2pc">
                         <barButtonItem key="leftBarButtonItem" title="Item" image="calendar" id="e1z-V1-AF7">
@@ -86,19 +86,20 @@
             <objects>
                 <viewController storyboardIdentifier="EventCalanderViewController" id="YfL-wo-B6h" customClass="EventCalanderViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="2ay-B9-QeY">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="izO-vf-Rnz" customClass="FSCalendar">
-                                <rect key="frame" x="0.0" y="88" width="414" height="358.5"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="0.0" y="178.00000000000003" width="402" height="349.66666666666674"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3Jz-2l-qW9">
-                                <rect key="frame" x="0.0" y="446.5" width="414" height="415.5"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="0.0" y="527.66666666666663" width="402" height="278.33333333333337"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="ZkU-8O-VIu"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="3Jz-2l-qW9" firstAttribute="top" secondItem="izO-vf-Rnz" secondAttribute="bottom" id="EF9-Zh-axp"/>
                             <constraint firstItem="3Jz-2l-qW9" firstAttribute="bottom" secondItem="ZkU-8O-VIu" secondAttribute="bottom" id="Kvz-QR-235"/>
@@ -109,7 +110,6 @@
                             <constraint firstItem="izO-vf-Rnz" firstAttribute="height" secondItem="2ay-B9-QeY" secondAttribute="height" multiplier="0.4" id="rHT-oC-Zil"/>
                             <constraint firstItem="3Jz-2l-qW9" firstAttribute="leading" secondItem="ZkU-8O-VIu" secondAttribute="leading" id="xia-OD-RUp"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="ZkU-8O-VIu"/>
                     </view>
                     <navigationItem key="navigationItem" title="Events" id="XhN-GG-1CP"/>
                     <connections>
@@ -127,22 +127,22 @@
             <objects>
                 <viewController storyboardIdentifier="FilterNewsFeedViewController" id="AcJ-QL-7GT" customClass="FilterNewsFeedViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jFN-v9-5nd">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="0Is-eg-uQm">
-                                <rect key="frame" x="0.0" y="56" width="414" height="752"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <rect key="frame" x="0.0" y="70" width="402" height="742"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="ER6-uq-dDg"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="0Is-eg-uQm" firstAttribute="leading" secondItem="ER6-uq-dDg" secondAttribute="leading" id="DMY-Fp-SDz"/>
                             <constraint firstItem="ER6-uq-dDg" firstAttribute="bottom" secondItem="0Is-eg-uQm" secondAttribute="bottom" id="bjh-oN-eaQ"/>
                             <constraint firstItem="ER6-uq-dDg" firstAttribute="trailing" secondItem="0Is-eg-uQm" secondAttribute="trailing" id="sXk-Ee-v4z"/>
                             <constraint firstItem="0Is-eg-uQm" firstAttribute="top" secondItem="ER6-uq-dDg" secondAttribute="top" id="vhy-Nn-sNm"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="ER6-uq-dDg"/>
                     </view>
                     <navigationItem key="navigationItem" title="Filter Feed" id="dP5-FB-GhC">
                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="12o-lm-I3b">
@@ -164,22 +164,23 @@
             <objects>
                 <viewController id="Sr1-rP-snY" customClass="NewsReaderViewController" customModule="Uni_Saar" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="GEd-wM-3wB">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0gD-4A-jW7">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
-                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <rect key="frame" x="0.0" y="0.0" width="402" height="874"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <wkWebViewConfiguration key="configuration">
                                     <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
                                     <wkPreferences key="preferences"/>
                                 </wkWebViewConfiguration>
                             </wkWebView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="px5-lC-0lA">
-                                <rect key="frame" x="188.5" y="429.5" width="37" height="37"/>
+                                <rect key="frame" x="182.66666666666666" y="418.66666666666669" width="37" height="37"/>
                             </activityIndicatorView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="JGO-IA-Eyo"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="0gD-4A-jW7" firstAttribute="top" secondItem="JGO-IA-Eyo" secondAttribute="top" id="7Q1-4f-F1p"/>
                             <constraint firstItem="JGO-IA-Eyo" firstAttribute="trailing" secondItem="0gD-4A-jW7" secondAttribute="trailing" id="IeR-Yg-cVg"/>
@@ -188,7 +189,6 @@
                             <constraint firstItem="px5-lC-0lA" firstAttribute="centerX" secondItem="GEd-wM-3wB" secondAttribute="centerX" id="hKx-CH-azz"/>
                             <constraint firstItem="0gD-4A-jW7" firstAttribute="leading" secondItem="JGO-IA-Eyo" secondAttribute="leading" id="hNQ-G7-rKd"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="JGO-IA-Eyo"/>
                     </view>
                     <navigationItem key="navigationItem" id="MEz-IX-9uu"/>
                     <connections>
@@ -206,7 +206,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="lHN-px-Rt9" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="R00-kO-0cN">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="16" width="402" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -225,7 +225,7 @@
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="F2x-X1-lDy"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="yZq-mQ-ndy">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="124" width="402" height="54"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -238,11 +238,14 @@
             <point key="canvasLocation" x="-1881" y="887"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="calendar" width="17" height="16"/>
-        <image name="gear" width="19" height="19"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="fQH-NU-FJS"/>
     </inferredMetricsTieBreakers>
+    <resources>
+        <image name="calendar" width="13" height="12"/>
+        <image name="gear" width="15" height="15"/>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+    </resources>
 </document>

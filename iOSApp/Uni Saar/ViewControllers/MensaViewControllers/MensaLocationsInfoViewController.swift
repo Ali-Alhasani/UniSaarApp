@@ -8,45 +8,42 @@
 
 import UIKit
 
+@MainActor
 class MensaLocationsInfoViewController: UIViewController {
-
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var descriptionLabel: UILabel!
+    @IBOutlet var imageView: UIImageView!
+    @IBOutlet var descriptionLabel: UILabel!
     var mensaLocationTitle: String?
     override func viewDidLoad() {
         super.viewDidLoad()
-        DispatchQueue.main.async {
-            if let mensaLocationTitle = self.mensaLocationTitle {
-                self.title = mensaLocationTitle
-            }
-            self.loadAPI()
+        if let mensaLocationTitle {
+            title = mensaLocationTitle
         }
-        // Do any additional setup after loading the view.
+        loadAPI()
     }
 
     func loadAPI() {
         let dataClient = DataClient()
-        dataClient.getMensaInfo { [weak self] result in
-            switch result {
-            case .success(let mensaInfo):
-                guard let self = self else {
-                    return
-                }
-                self.descriptionLabel.text = mensaInfo.description
+        let locationKey = AppSessionManager.shared.selectedMensaLocation.locationKey
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let mensaInfo = try await dataClient.getMensaInfo(locationKey: locationKey)
+                descriptionLabel.text = mensaInfo.description
                 if let imageURL = URL(string: mensaInfo.imageLink) {
-                    self.imageView.af_setImage(withURL: imageURL)
+                    imageView.af.setImage(withURL: imageURL)
                 }
-                self.title = mensaInfo.locationName
-            case .failure(let error):
-                let okAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: {
+                title = mensaInfo.locationName
+            } catch {
+                let okAlert = SingleButtonAlert(message: error.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: { [weak self] in
                     self?.loadAgain()
                 }))
-                self?.presentSingleButtonDialog(alert: okAlert)
+                presentSingleButtonDialog(alert: okAlert)
             }
         }
     }
-     func loadAgain() {
-        self.loadAPI()
+
+    func loadAgain() {
+        loadAPI()
     }
     /*
      // MARK: - Navigation
@@ -57,6 +54,6 @@ class MensaLocationsInfoViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
-
 }
+
 extension MensaLocationsInfoViewController: SingleButtonDialogPresenter {}

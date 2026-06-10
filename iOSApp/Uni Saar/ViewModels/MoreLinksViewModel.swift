@@ -6,90 +6,89 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import CoreData
+import Foundation
+import Observation
+
+@Observable
 class MoreLinksViewModel: ParentViewModel {
-    let linksCells = Bindable([TableViewCellType<MoreLinksCellViewModel>]())
-    lazy var fetchedResultsController: NSFetchedResultsController<MoreLinksCache> = {
+    var linksCells: [TableViewCellType<MoreLinksCellViewModel>] = []
+    @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<MoreLinksCache> = {
         let fetchRequest = NSFetchRequest<MoreLinksCache>(entityName: String(describing: MoreLinksCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "orderIndex", ascending: true)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-        return frc
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
+                                          sectionNameKeyPath: nil, cacheName: nil)
     }()
+
     let extraCells = [NSLocalizedString("AboutApp", comment: ""), NSLocalizedString("AppSettings", comment: "")]
-    override init(dataClient: DataClient = DataClient()) {
+
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetMoreLinks() {
-        showLoadingIndicator.value = true
+    func loadGetMoreLinks() async {
+        showLoadingIndicator = true
         if AppSessionManager.shared.morelinksLastChanged != "never" {
             fetchMoreLinksFromStorage()
             if let fetchedObjects = fetchedResultsController.fetchedObjects {
-                self.linksCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
+                linksCells = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
             }
-            self.showLoadingIndicator.value = false
+            showLoadingIndicator = false
         }
-
-        dataClient.getMoreLinks { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let links):
-                if links.links.count > 0 {
-                    self?.linksCells.value = links.links.map { .normal(cellViewModel: $0) }
-                    AppSessionManager.shared.morelinksLastChanged = links.linksLastChanged
-                    self?.dataClient.clearMoreLinksCache()
-                    self?.dataClient.saveInCoreDataWith(model: links.links)
-                }
-                self?.showLoadingIndicator.value = false
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                // we need to show the error message only if is the first time
-                if AppSessionManager.shared.morelinksLastChanged == "never" {
-                self?.linksCells.value = [.error(message: error?.localizedDescription ?? "Loading failed, check network connection")]
-                }
-                self?.showError(error: error, tryAgainHandler: {
-                    self?.reloadGetApi()
-                })
+        do {
+            let links = try await dataClient.getMoreLinks(cacheLastChanged: AppSessionManager.shared.morelinksLastChanged)
+            showLoadingIndicator = false
+            if links.links.count > 0 {
+                linksCells = links.links.map { .normal(cellViewModel: $0) }
+                AppSessionManager.shared.morelinksLastChanged = links.linksLastChanged
+                dataClient.clearMoreLinksCache()
+                dataClient.saveInCoreDataWith(model: links.links)
             }
+        } catch {
+            showLoadingIndicator = false
+            if AppSessionManager.shared.morelinksLastChanged == "never" {
+                linksCells = [.error(message: error.localizedDescription)]
+            }
+            showError(error: error, tryAgainHandler: { [weak self] in
+                self?.reloadGetApi()
+            })
         }
     }
 
     func reloadGetApi() {
-        loadGetMoreLinks()
+        Task { await self.loadGetMoreLinks() }
     }
+
     func fetchMoreLinksFromStorage() {
         do {
             try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            fatalError("Error: \(error.localizedDescription)")
+        } catch {
+            assertionFailure("CoreData fetch failed: \(error)")
         }
     }
-
 }
 
 protocol MoreLinksCellViewModel {
-    // MARK: - Instance Properties
     var linkURL: URL? { get }
-    var nameText: String {get }
+    var nameText: String { get }
 }
 
 extension MoreLinksModel: MoreLinksCellViewModel {
     var linkURL: URL? {
-        return URL(string: url)
+        URL(string: url)
     }
 
     var nameText: String {
-        return displayName
+        displayName
     }
 }
+
 extension MoreLinksCache: MoreLinksCellViewModel {
     var linkURL: URL? {
-        return URL(string: link ?? "")
+        URL(string: link ?? "")
     }
 
     var nameText: String {
-        return name ?? ""
+        name ?? ""
     }
 }

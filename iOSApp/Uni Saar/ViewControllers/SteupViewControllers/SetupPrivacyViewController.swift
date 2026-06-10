@@ -7,15 +7,11 @@
 //
 
 import UIKit
-// this class is not used!
+
+/// this class is not used!
+@MainActor
 class SetupPrivacyViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-    // for remembering in next opening time to not open setup screen again
+    /// for remembering in next opening time to not open setup screen again
     func nextSessionWelcomeScreen() {
         AppSessionManager.shared.dismissWelcomeScreen = true
         AppSessionManager.saveWelcomeScreenStatus()
@@ -25,12 +21,14 @@ class SetupPrivacyViewController: UIViewController {
         AppSessionManager.shared.isEventEnabled = true
         nextScreen()
     }
+
     @IBAction func refuseShareDataAction(_ sender: Any) {
         AppSessionManager.shared.isEventEnabled = false
         nextScreen()
     }
+
     func nextScreen() {
-        MediatorDelegate.navigateToMainHomeScreen(window: self.view.window)
+        MediatorDelegate.navigateToMainHomeScreen(window: view.window)
         nextSessionWelcomeScreen()
     }
     /*
@@ -42,5 +40,4 @@ class SetupPrivacyViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
-
 }

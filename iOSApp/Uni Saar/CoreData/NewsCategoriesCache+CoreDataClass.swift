@@ -7,10 +7,8 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(NewsCategoriesCache)
-public class NewsCategoriesCache: NSManagedObject {
-
-}
+public class NewsCategoriesCache: NSManagedObject {}

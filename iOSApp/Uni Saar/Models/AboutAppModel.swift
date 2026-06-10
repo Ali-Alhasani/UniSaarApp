@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+
 class AboutAppModel {
     var description: String
     var teamNames: [String]
@@ -15,9 +16,9 @@ class AboutAppModel {
     var contactEmail: String
     init(json: [String: Any]) {
         let jsonFromated = JSON(json)
-        self.description = jsonFromated["description"].stringValue
-        self.teamNames = jsonFromated["teamNames"].arrayObject as? [String] ?? []
-        self.contactNumber = jsonFromated["contactNumber"].stringValue
-        self.contactEmail = jsonFromated["contactEmail"].stringValue
+        description = jsonFromated["description"].stringValue
+        teamNames = jsonFromated["teamNames"].arrayObject as? [String] ?? []
+        contactNumber = jsonFromated["contactNumber"].stringValue
+        contactEmail = jsonFromated["contactEmail"].stringValue
     }
 }

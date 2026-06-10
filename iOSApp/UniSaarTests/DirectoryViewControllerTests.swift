@@ -6,25 +6,22 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
+@MainActor
 class DirectoryViewControllerTests: XCTestCase {
-
     var viewControllerUnderTest: DirectoryViewController!
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() async throws {
         let storyboard = UIStoryboard(name: "DirectoryStoryboard", bundle: nil)
-        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "DirectoryViewControllerTest") as? DirectoryViewController
-
-        self.viewControllerUnderTest.loadView()
-        self.viewControllerUnderTest.viewDidLoad()
-        self.viewControllerUnderTest.setupTableView()
-
+        viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "DirectoryViewControllerTest") as? DirectoryViewController
+        viewControllerUnderTest.loadView()
+        viewControllerUnderTest.viewDidLoad()
+        viewControllerUnderTest.setupTableView()
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewControllerUnderTest = nil
         super.tearDown()
     }
 
@@ -71,28 +68,31 @@ class DirectoryViewControllerTests: XCTestCase {
     }
 
     func testTableCellHasCorrectLabelText() {
-        switch viewControllerUnderTest.directoryViewModel.helpfulNumbersCells.value[safe: 0] {
-        case .normal(let cellViewModel):
-            let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.directoryTableView, cellForRowAt: IndexPath(row: 0, section: 0)) as? HelpfulNumbersTableViewCell
+        // cellForRowAt uses searchResutlsCells; helpful numbers cells are served via getHelpfulNumbersCell
+        switch viewControllerUnderTest.directoryViewModel.helpfulNumbersCells[safe: 0] {
+        case let .normal(cellViewModel):
+            let cell = viewControllerUnderTest.getHelpfulNumbersCell(indexPath: IndexPath(row: 0, section: 0)) as? HelpfulNumbersTableViewCell
             XCTAssertEqual(cell?.textView.text, cellViewModel.fortmatedText)
 
-        case .error(let message):
-            let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.directoryTableView, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, message)
+        case let .error(message):
+            let cell = viewControllerUnderTest.getHelpfulNumbersCell(indexPath: IndexPath(row: 0, section: 0))
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, message)
 
         case .empty:
-            let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.directoryTableView, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, NSLocalizedString("EmptyResults", comment: ""))
+            let cell = viewControllerUnderTest.getHelpfulNumbersCell(indexPath: IndexPath(row: 0, section: 0))
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, NSLocalizedString("EmptyResults", comment: ""))
+
         case .none:
             break
         }
     }
 
-    // utility for finding segues
+    /// utility for finding segues
     func hasSegueWithIdentifier(segueId: String) -> Bool {
-
         let segues = viewControllerUnderTest.value(forKey: "storyboardSegueTemplates") as? [NSObject]
-        let filtered = segues?.filter({ $0.value(forKey: "identifier") as? String == segueId })
+        let filtered = segues?.filter { $0.value(forKey: "identifier") as? String == segueId }
 
         return (filtered?.count ?? 0 > 0)
     }
@@ -101,5 +101,4 @@ class DirectoryViewControllerTests: XCTestCase {
         let targetIdentifier = DirectoryViewController.SegueIdentifiers.toStaffDetails
         XCTAssertTrue(hasSegueWithIdentifier(segueId: targetIdentifier))
     }
-
 }

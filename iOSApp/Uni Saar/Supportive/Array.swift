@@ -7,11 +7,12 @@
 //
 
 import Foundation
-//to avoid out of bound errors
+
+/// to avoid out of bound errors
 public extension Array {
     /// Returns the element at the specified index iff it is within bounds, otherwise nil.
-    subscript (safe index: Index?) -> Element? {
-        guard let index = index else {
+    subscript(safe index: Index?) -> Element? {
+        guard let index else {
             return nil
         }
         return indices.contains(index) ? self[index] : nil

@@ -8,39 +8,30 @@
 
 import Foundation
 import UIKit
-extension UICollectionView {
-    public func showingLoadingView() {
-        DispatchQueue.main.async {
-            guard let refreshControl = self.refreshControl, !refreshControl.isRefreshing else {
-                return
-            }
-            self.refreshControl = refreshControl
-            self.refreshControl?.beginRefreshing()
-        }
+
+public extension UICollectionView {
+    func showingLoadingView() {
+        guard let refreshControl, !refreshControl.isRefreshing else { return }
+        let spinner = UIActivityIndicatorView(style: .large)
+        spinner.color = AppStyle.appGlobalTintColor
+        spinner.startAnimating()
+        backgroundView = spinner
     }
-    public func hideLoadingView() {
-        DispatchQueue.main.async {
-            self.endRefreshing()
+
+    func hideLoadingView() {
+        if backgroundView is UIActivityIndicatorView {
+            backgroundView = nil
         }
-    }
-    public func endRefreshing() {
         refreshControl?.endRefreshing()
     }
-    public func setUpRefreshControl() -> UIRefreshControl {
+
+    func setUpRefreshControl() -> UIRefreshControl {
         let refreshControl = UIRefreshControl()
-        refreshControl.tintColor =  AppStyle.appGlobalTintColor
+        refreshControl.tintColor = AppStyle.appGlobalTintColor
         return refreshControl
     }
-    func layoutCollectionView(collectionBackgroundColor: UIColor = AppStyle.tableViewBackgroundColor) {
-        self.backgroundColor = collectionBackgroundColor
-    }
-}
-extension UIRefreshControl {
-    func refreshManually() {
-        if let scrollView = superview as? UIScrollView {
-            scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentOffset.y - frame.height), animated: false)
-        }
-        beginRefreshing()
-        sendActions(for: .valueChanged)
+
+    internal func layoutCollectionView(collectionBackgroundColor: UIColor = AppStyle.tableViewBackgroundColor) {
+        backgroundColor = collectionBackgroundColor
     }
 }

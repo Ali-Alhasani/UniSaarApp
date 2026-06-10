@@ -7,36 +7,38 @@
 //
 
 import Foundation
+import Observation
+
+@Observable
 class EventViewModel: ParentViewModel {
-    // MARK: - Object Lifecycle
-    let eventCells = Bindable([TableViewCellType<NewsFeedCellViewModel>]())
-    var selectedDateEvents =  Bindable([TableViewCellType<NewsFeedCellViewModel>]())
-    override init(dataClient: DataClient = DataClient()) {
+    var eventCells: [TableViewCellType<NewsFeedCellViewModel>] = []
+    var selectedDateEvents: [TableViewCellType<NewsFeedCellViewModel>] = []
+
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
-    func loadGetEvents(month: String, year: String) {
-        showLoadingIndicator.value = true
-        dataClient.getEvents(month: month, year: year, completion: { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let events):
-                guard events.newsList.count > 0 else {
-                    self?.eventCells.value = [.empty]
-                    return
-                }
-                self?.eventCells.value = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel )}
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.eventCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                self?.showError(error: error)
+
+    func loadGetEvents(month: String, year: String) async {
+        showLoadingIndicator = true
+        do {
+            let events = try await dataClient.getEvents(month: month, year: year)
+            showLoadingIndicator = false
+            guard events.newsList.count > 0 else {
+                eventCells = [.empty]
+                return
             }
-        })
+            eventCells = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+        } catch {
+            showLoadingIndicator = false
+            eventCells = [.error(message: error.localizedDescription)]
+            showError(error: error)
+        }
     }
 
     func getDayEvents(day: Date?) {
-        selectedDateEvents.value = eventCells.value.filter { (item) -> Bool in
+        selectedDateEvents = eventCells.filter { item -> Bool in
             switch item {
-            case .normal(let event):
+            case let .normal(event):
                 if convertDate(strDate: event.newsDate) == day {
                     return true
                 }
@@ -46,10 +48,11 @@ class EventViewModel: ParentViewModel {
             return false
         }
     }
+
     func countDayEvents(day: Date) -> Int {
-        let events = eventCells.value.filter { (item) -> Bool in
+        let events = eventCells.filter { item -> Bool in
             switch item {
-            case .normal(let event):
+            case let .normal(event):
                 if convertDate(strDate: event.newsDate) == day {
                     return true
                 }
@@ -66,5 +69,4 @@ class EventViewModel: ParentViewModel {
         dateFormatter.dateFormat = "yyyy'-'MM'-'dd'"
         return dateFormatter.date(from: strDate)
     }
-
 }

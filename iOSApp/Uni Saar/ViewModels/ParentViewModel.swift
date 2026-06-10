@@ -1,5 +1,5 @@
 //
-//  RootViewModel.swift
+//  ParentViewModel.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 12/19/19.
@@ -7,25 +7,24 @@
 //
 
 import Foundation
-//this class to avoid code duplication in every view model
-//maybye it will need more testing
-class ParentViewModel {
-    var dataClient: DataClient
-    let showLoadingIndicator: Bindable = Bindable(true)
-    var onShowError: ((_ alert: SingleButtonAlert) -> Void)?
+import Observation
 
-    init(dataClient: DataClient = DataClient()) {
+@MainActor
+@Observable
+class ParentViewModel {
+    @ObservationIgnored var dataClient: any AppDataClient
+    var showLoadingIndicator: Bool = false
+    var currentAlert: SingleButtonAlert?
+
+    init(dataClient: any AppDataClient = DataClient()) {
         self.dataClient = dataClient
     }
 
     func showError(error: Error?, tryAgainHandler: (() -> Void)? = nil) {
-        //presnt the error without handler
-        let okAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: tryAgainHandler))
-        onShowError?(okAlert)
+        currentAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: tryAgainHandler))
     }
 
     func showError(error: LLError?) {
-        let okAlert = SingleButtonAlert(message: error?.message, action: AlertAction(handler: nil, tryAgainHandler: nil))
-        onShowError?(okAlert)
+        currentAlert = SingleButtonAlert(message: error?.message, action: AlertAction(handler: nil, tryAgainHandler: nil))
     }
 }

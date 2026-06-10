@@ -6,27 +6,11 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
-class MensaViewModelTests: XCTestCase {
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    //test correctly formatted JSON
+@MainActor
+final class MensaViewModelTests: XCTestCase {
     func testMensaModel() {
         let testSuccessfulJSON = MensaMenuModel.deomJSON
         XCTAssertNotNil(MensaMenuModel(json: testSuccessfulJSON))
@@ -36,102 +20,135 @@ class MensaViewModelTests: XCTestCase {
         let testSuccessfulJSON = MensaDayModel.menuDemoData
         XCTAssertNotNil(MensaDayModel(json: testSuccessfulJSON))
     }
-    func testNormalMensaCells() {
+
+    func testNormalMensaCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMensaResult = .success(payload: MensaMenuModel.menuDemoData)
+        dataClient.getMensaResult = .success(MensaMenuModel.menuDemoData)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
-        viewModel.loadGetMensaMenu()
-        guard case .some(.normal(_)) = viewModel.daysMenus.value.first else {
-            XCTFail("mensa menu should has values")
+        await viewModel.loadGetMensaMenu()
+        guard case .normal = viewModel.daysMenus.first else {
+            XCTFail("mensa menu should have values")
             return
         }
     }
-    func testEmptyMensaCells() {
+
+    func testEmptyMensaCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMensaResult = .success(payload: MensaMenuModel.emptyMenuDemoData)
+        dataClient.getMensaResult = .success(MensaMenuModel.emptyMenuDemoData)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
-        viewModel.loadGetMensaMenu()
-        guard case .some(.empty) = viewModel.daysMenus.value.first else {
-            XCTFail("mensa menu table view should be empty, no data returned ")
+        await viewModel.loadGetMensaMenu()
+        guard case .empty = viewModel.daysMenus.first else {
+            XCTFail("mensa menu table view should be empty, no data returned")
             return
         }
     }
-    func testErrorMensaCells() {
+
+    func testErrorMensaCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getMensaResult = .failure(MyError.customError)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
-        viewModel.loadGetMensaMenu()
-        guard case .some(.error(_)) = viewModel.daysMenus.value.first else {
-            XCTFail("Mensa request should be in faild, and return error message")
+        await viewModel.loadGetMensaMenu()
+        guard case .error = viewModel.daysMenus.first else {
+            XCTFail("Mensa request should be failed and return error message")
             return
         }
     }
-    func testMensaViewModelValues() {
+
+    func testMensaViewModelValues() async {
         let dataClient = MockAppDataClient()
         let menu = MensaMenuModel.menuDemoData
-        dataClient.getMensaResult = .success(payload: menu)
+        dataClient.getMensaResult = .success(menu)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
-        viewModel.loadGetMensaMenu()
-        switch viewModel.daysMenus.value.first {
-        case .normal(let cellViewModel):
+        await viewModel.loadGetMensaMenu()
+        switch viewModel.daysMenus.first {
+        case let .normal(cellViewModel):
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.mealDispalyName, cellViewModel.mealsCells.first?.mealName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.counterDisplayName, cellViewModel.mealsCells.first?.counterDisplayName)
             XCTAssertEqual(menu.daysMenus.first?.countersMeals.first?.openingHoursText, cellViewModel.mealsCells.first?.openingHoursText)
-            if let countersMeal =  menu.daysMenus.first?.countersMeals, let color = countersMeal.first?.color {
-                XCTAssertEqual(AppStyle.mensaCounterColor(color), cellViewModel.mealsCells.first?.counterColor)
+            if let countersMeal = menu.daysMenus.first?.countersMeals, let serverColor = countersMeal.first?.color {
+                let expected = MensaColor(red: serverColor.red, green: serverColor.green, blue: serverColor.blue)
+                XCTAssertEqual(expected, cellViewModel.mealsCells.first?.colorModel)
             }
-        case .some(.error(let message)):
+        case let .error(message):
             XCTAssertNotNil(message)
-        case .some(.empty):
+        case .empty:
             break
         case .none:
             XCTFail("View Model should not be empty!")
         }
     }
 
-    func testNormalMealDetails() {
+    // MARK: - MealDetails
+
+    func testNormalMealDetails() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMealResult = .success(payload: MealDetailsModel.mealDemoData)
+        dataClient.getMealResult = .success(MealDetailsModel.mealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
-        viewModel.loadGetMealDetails(mealId: 1)
-        // they should be identical
-        guard MealDetailsModel.mealDemoData === viewModel.mealDetails.value.mealDetailsModel else {
-            XCTFail("mensa meal should has values")
+        await viewModel.loadGetMealDetails(mealId: 1)
+        guard MealDetailsModel.mealDemoData === viewModel.mealDetails.mealDetailsModel else {
+            XCTFail("mensa meal should have values")
             return
         }
     }
-    func testEmptyMealDetails() {
+
+    func testEmptyMealDetails() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMealResult = .success(payload: MealDetailsModel.emptyMealDemoData)
+        dataClient.getMealResult = .success(MealDetailsModel.emptyMealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
-        viewModel.loadGetMealDetails(mealId: 1)
-        // they should be identical
-        if MealDetailsModel.emptyMealDemoData !== viewModel.mealDetails.value.mealDetailsModel {
-            XCTFail("mensa menu table view should be empty, no data returned ")
-            return
+        await viewModel.loadGetMealDetails(mealId: 1)
+        if MealDetailsModel.emptyMealDemoData !== viewModel.mealDetails.mealDetailsModel {
+            XCTFail("mensa meal details should reflect the returned empty model")
         }
     }
-    func testErrorMealDetails() {
+
+    func testErrorMealDetails() async {
         let dataClient = MockAppDataClient()
         dataClient.getMealResult = .failure(MyError.customError)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
-        viewModel.loadGetMealDetails(mealId: 1)
-        guard viewModel.mealDetails.value.mealDetailsModel == nil else {
-            XCTFail("Mensa meal details request should be in faild and empty, and return error message")
-            return
-        }
+        await viewModel.loadGetMealDetails(mealId: 1)
+        XCTAssertNil(viewModel.mealDetails.mealDetailsModel, "Mensa meal details request should be failed and return empty model")
     }
 
-    func testMealDetailsValues() {
+    func testMealDetailsValues() async {
         let dataClient = MockAppDataClient()
         let model = MealDetailsModel.mealDemoData
-        dataClient.getMealResult = .success(payload: model)
+        dataClient.getMealResult = .success(model)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
-        viewModel.loadGetMealDetails(mealId: 1)
+        await viewModel.loadGetMealDetails(mealId: 1)
+        XCTAssertEqual(viewModel.mealDetails.mealName, model.mealName)
+        XCTAssertEqual(viewModel.mealDetails.mealCounterDescription, model.counterDescription)
+        XCTAssertEqual(viewModel.mealDetails.priceTagNamesText, model.prices.map { $0.priceTagName + "\n" }.joined())
+        XCTAssertEqual(viewModel.mealDetails.priceValuesText, model.prices.map { $0.price + " € \n" }.joined())
+    }
 
-        XCTAssertEqual(viewModel.mealDetails.value.mealName, model.mealName)
-        XCTAssertEqual(viewModel.mealDetails.value.mealCounterDescription, model.counterDescription)
-        XCTAssertEqual(viewModel.mealDetails.value.priceTagNamesText, model.prices.map {$0.priceTagName + "\n"}.joined())
-        XCTAssertEqual(viewModel.mealDetails.value.priceValuesText, model.prices.map {$0.price + " € \n"}.joined())
+    // MARK: - MensaMealsModel demo data
+
+    // Note: mensaDemoData uses legacy JSON keys (mealDispalyName, openiningHours, meals)
+    // that predate the current parser (mealName, openingHours, components).
+    // Tests here verify the array initialises from the stored fixture and that
+    // fields whose keys match the current parser round-trip correctly.
+
+    func testMensaMealsModelDemoDataInitializes() {
+        // Smoke test: the static fixture should produce a valid, non-empty array
+        XCTAssertFalse(MensaMealsModel.mensaDemoData.isEmpty, "mensaDemoData should contain at least one entry")
+    }
+
+    func testMensaMealsModelDemoDataCount() {
+        XCTAssertEqual(MensaMealsModel.mensaDemoData.count, 2, "mensaDemoData should contain exactly 2 meal entries")
+    }
+
+    func testMensaMealsModelDemoDataDescriptionField() {
+        // "description" key matches the current parser — verify it round-trips correctly
+        let firstMeal = MensaMealsModel.mensaDemoData[0]
+        XCTAssertEqual(firstMeal.description, "description",
+                       "description field should parse correctly from the demo payload")
+    }
+
+    func testMensaMealsModelDemoDataColorField() {
+        // color sub-object uses the correct r/g/b keys and should parse regardless of other key mismatches
+        let firstMeal = MensaMealsModel.mensaDemoData[0]
+        XCTAssertEqual(firstMeal.color.red, 217, "color.red should match the demo value")
+        XCTAssertEqual(firstMeal.color.green, 38, "color.green should match the demo value")
+        XCTAssertEqual(firstMeal.color.blue, 26, "color.blue should match the demo value")
     }
 }

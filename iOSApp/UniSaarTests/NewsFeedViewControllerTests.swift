@@ -6,24 +6,22 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
+@MainActor
 class NewsFeedViewControllerTests: XCTestCase {
     var viewControllerUnderTest: NewsFeedViewController!
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() async throws {
         let storyboard = UIStoryboard(name: "NewsStoryboard", bundle: nil)
-        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "NewsFeedViewControllerTest") as? NewsFeedViewController
-
-        self.viewControllerUnderTest.loadView()
-        self.viewControllerUnderTest.viewDidLoad()
-        self.viewControllerUnderTest.setupTableView()
-
+        viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "NewsFeedViewControllerTest") as? NewsFeedViewController
+        viewControllerUnderTest.loadView()
+        viewControllerUnderTest.viewDidLoad()
+        viewControllerUnderTest.setupTableView()
     }
 
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewControllerUnderTest = nil
         super.tearDown()
     }
 
@@ -61,41 +59,42 @@ class NewsFeedViewControllerTests: XCTestCase {
             let expectedReuseIdentifier = "NewsFeedTableViewCell"
             XCTAssertEqual(actualReuseIdentifer, expectedReuseIdentifier)
         }
-
     }
 
     func testTableCellHasCorrectLabelText() {
-        switch viewControllerUnderTest.newsViewModel.newsCells.value[safe: 0] {
-        case .normal(let cellViewModel):
+        switch viewControllerUnderTest.newsViewModel.newsCells[safe: 0] {
+        case let .normal(cellViewModel):
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.newsTable, cellForRowAt: IndexPath(row: 0, section: 0)) as? NewsFeedTableViewCell
             XCTAssertEqual(cell?.newsTitleLabel.text, cellViewModel.titleText)
 
-        case .error(let message):
+        case let .error(message):
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.newsTable, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, message)
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, message)
 
         case .empty:
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.newsTable, cellForRowAt: IndexPath(row: 0, section: 0))
-            XCTAssertEqual(cell.textLabel?.text, NSLocalizedString("EmptyNews", comment: ""))
+            let config = cell.contentConfiguration as? UIListContentConfiguration
+            XCTAssertEqual(config?.text, NSLocalizedString("EmptyNews", comment: ""))
+
         case .none:
             break
         }
     }
 
-    // utility for finding segues
-      func hasSegueWithIdentifier(segueId: String) -> Bool {
+    /// utility for finding segues
+    func hasSegueWithIdentifier(segueId: String) -> Bool {
+        let segues = viewControllerUnderTest.value(forKey: "storyboardSegueTemplates") as? [NSObject]
+        let filtered = segues?.filter { $0.value(forKey: "identifier") as? String == segueId }
 
-          let segues = viewControllerUnderTest.value(forKey: "storyboardSegueTemplates") as? [NSObject]
-          let filtered = segues?.filter({ $0.value(forKey: "identifier") as? String == segueId })
+        return (filtered?.count ?? 0 > 0)
+    }
 
-          return (filtered?.count ?? 0 > 0)
-      }
+    func testHasSegueForTransitioningToDetails() {
+        let targetIdentifier = NewsFeedViewController.SegueIdentifiers.toNewsDetails
+        XCTAssertTrue(hasSegueWithIdentifier(segueId: targetIdentifier))
 
-      func testHasSegueForTransitioningToDetails() {
-          let targetIdentifier = NewsFeedViewController.SegueIdentifiers.toNewsDetails
-          XCTAssertTrue(hasSegueWithIdentifier(segueId: targetIdentifier))
-
-          let targetIdentifier2 = NewsFeedViewController.SegueIdentifiers.toEventDetails
-          XCTAssertTrue(hasSegueWithIdentifier(segueId: targetIdentifier2))
-      }
+        let targetIdentifier2 = NewsFeedViewController.SegueIdentifiers.toEventDetails
+        XCTAssertTrue(hasSegueWithIdentifier(segueId: targetIdentifier2))
+    }
 }

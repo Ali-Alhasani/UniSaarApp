@@ -7,14 +7,14 @@
 //
 
 import Foundation
-import UIKit
 import MapKit
+import UIKit
 
 class CampusMapOverlay: NSObject, MKOverlay {
-  var coordinate: CLLocationCoordinate2D
-  var boundingMapRect: MKMapRect
-  init(campus: CampusModel) {
-    boundingMapRect = campus.overlayBoundingMapRect
-    coordinate = campus.midCoordinate
-  }
+    var coordinate: CLLocationCoordinate2D
+    var boundingMapRect: MKMapRect
+    init(campus: CampusModel) {
+        boundingMapRect = campus.overlayBoundingMapRect
+        coordinate = campus.midCoordinate
+    }
 }

@@ -6,134 +6,136 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
-@testable import Uni_Saar
 import SwiftyJSON
-class DirectoryViewModelTests: XCTestCase {
+@testable import Uni_Saar
+import XCTest
+
+@MainActor
+final class DirectoryViewModelTests: XCTestCase {
     override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        // Prevent CoreData pre-load so mock network responses control cell state
+        AppSessionManager.shared.helpfulNumbersLastChanged = "never"
     }
+
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        AppSessionManager.shared.helpfulNumbersLastChanged = "never"
+        super.tearDown()
     }
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-    //test correctly formatted JSON
+
+    // MARK: - Staff search
+
     func testDirectoryModel() {
         let testSuccessfulJSON = StaffModel.deomJSON
         XCTAssertNotNil(StaffModel(json: testSuccessfulJSON))
     }
-    func testNormalDirectoryCells() {
+
+    func testNormalDirectoryCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getSearchDirectoryResult = .success(payload: StaffModel.staffDemoData)
+        dataClient.getSearchDirectoryResult = .success(StaffModel.staffDemoData)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetSearchResults(searchQuery: "Ali")
-        guard case .some(.normal(_)) = viewModel.searchResutlsCells.value.first else {
+        await viewModel.loadGetSearchResults(searchQuery: "Ali")
+        guard case .normal = viewModel.searchResutlsCells.first else {
             XCTFail("Directory should have value")
             return
         }
     }
-    func testEmptyDirectoryCells() {
+
+    func testEmptyDirectoryCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getSearchDirectoryResult = .success(payload: StaffModel(json: [:]))
+        dataClient.getSearchDirectoryResult = .success(StaffModel(json: [:]))
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetSearchResults(searchQuery: "")
-        guard case .some(.empty) = viewModel.searchResutlsCells.value.first else {
+        await viewModel.loadGetSearchResults(searchQuery: "")
+        guard case .empty = viewModel.searchResutlsCells.first else {
             XCTFail("Directory Cell should be empty")
             return
         }
     }
-    func testErrorDirectoryCells() {
+
+    func testErrorDirectoryCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getSearchDirectoryResult = .failure(MyError.customError)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetSearchResults(searchQuery: "")
-        guard case .some(.error(_)) = viewModel.searchResutlsCells.value.first else {
-            XCTFail("Directory should be in faild")
+        await viewModel.loadGetSearchResults(searchQuery: "")
+        guard case .error = viewModel.searchResutlsCells.first else {
+            XCTFail("Directory should be in failed")
             return
         }
     }
-    func testDirectoryViewModelValues() {
+
+    func testDirectoryViewModelValues() async {
         let dataClient = MockAppDataClient()
-        let staffResutls = StaffModel.staffDemoData
-        dataClient.getSearchDirectoryResult = .success(payload: staffResutls)
+        let staffResults = StaffModel.staffDemoData
+        dataClient.getSearchDirectoryResult = .success(staffResults)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetSearchResults(searchQuery: "Ali")
-        switch viewModel.searchResutlsCells.value.first {
-        case .normal(let cellViewModel):
-            XCTAssertEqual(staffResutls.staffResults.first?.fullName, cellViewModel.nameText)
-            XCTAssertEqual(staffResutls.staffResults.first?.title, cellViewModel.titleText)
-            XCTAssertEqual(staffResutls.staffResults.first?.staffID, cellViewModel.staffId)
-        case .some(.error(let message)):
+        await viewModel.loadGetSearchResults(searchQuery: "Ali")
+        switch viewModel.searchResutlsCells.first {
+        case let .normal(cellViewModel):
+            XCTAssertEqual(staffResults.staffResults.first?.fullName, cellViewModel.nameText)
+            XCTAssertEqual(staffResults.staffResults.first?.title, cellViewModel.titleText)
+            XCTAssertEqual(staffResults.staffResults.first?.staffID, cellViewModel.staffId)
+        case let .error(message):
             XCTAssertNotNil(message)
-        case .some(.empty):
+        case .empty:
             break
         case .none:
             XCTFail("View Model should not be empty!")
         }
     }
 
+    // MARK: - Helpful numbers
+
     func testHelpfulNumberModel() {
         let testSuccessfulJSON = NumberModel.deomJSON
-        let foramtedJSON = JSON(testSuccessfulJSON)
-        XCTAssertNotNil(NumberModel(json: foramtedJSON))
+        let formattedJSON = JSON(testSuccessfulJSON)
+        XCTAssertNotNil(NumberModel(json: formattedJSON))
     }
-    func testNormalHelpfulNumberCells() {
+
+    func testNormalHelpfulNumberCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getHelpfulNumbersResult = .success(payload: HelpfulNumbersModel.helpfulNumbersDemoData)
+        dataClient.getHelpfulNumbersResult = .success(HelpfulNumbersModel.helpfulNumbersDemoData)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetHelpHelpfulNumbers()
-        guard case .some(.normal(_)) = viewModel.helpfulNumbersCells.value.first else {
+        await viewModel.loadGetHelpHelpfulNumbers()
+        guard case .normal = viewModel.helpfulNumbersCells.first else {
             XCTFail("Helpful Numbers should have value")
             return
         }
     }
-    func testEmptyHelpfulCells() {
+
+    func testEmptyHelpfulCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getHelpfulNumbersResult = .success(payload: HelpfulNumbersModel(json: [:]))
+        dataClient.getHelpfulNumbersResult = .success(HelpfulNumbersModel(json: [:]))
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetHelpHelpfulNumbers()
-        guard viewModel.helpfulNumbersCells.value.count == 0 else {
-            XCTFail("Helpful Numbers Cell should be empty")
-            return
-        }
+        await viewModel.loadGetHelpHelpfulNumbers()
+        XCTAssertTrue(viewModel.helpfulNumbersCells.isEmpty, "Helpful Numbers Cell should be empty")
     }
-    func testErrorHelpfulNumberCells() {
+
+    func testErrorHelpfulNumberCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getHelpfulNumbersResult = .failure(MyError.customError)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetHelpHelpfulNumbers()
-        guard case .some(.error(_)) = viewModel.helpfulNumbersCells.value.first else {
-            XCTFail("Helpful Numbers should be in faild")
+        await viewModel.loadGetHelpHelpfulNumbers()
+        guard case .error = viewModel.helpfulNumbersCells.first else {
+            XCTFail("Helpful Numbers should be in failed")
             return
         }
     }
-    func testHelpfulNumberViewModelValues() {
 
+    func testHelpfulNumberViewModelValues() async throws {
         let dataClient = MockAppDataClient()
-        let helpfulNumberResutls = HelpfulNumbersModel.helpfulNumbersDemoData
-        dataClient.getHelpfulNumbersResult = .success(payload: helpfulNumberResutls)
+        let helpfulNumberResults = HelpfulNumbersModel.helpfulNumbersDemoData
+        dataClient.getHelpfulNumbersResult = .success(helpfulNumberResults)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
-        viewModel.loadGetHelpHelpfulNumbers()
-        switch viewModel.helpfulNumbersCells.value.first {
-        case .normal(let cellViewModel):
-            let numberItem = helpfulNumberResutls.numbers.first
-            var itemForamted = (numberItem!.name ?? "") + "\n" + (numberItem!.number ?? "") + "\n"
-            itemForamted += (numberItem!.link ?? "") +
-                "\n" + (numberItem!.mail ?? "")
-
-            XCTAssertEqual(itemForamted, cellViewModel.fortmatedText)
-        case .some(.error(let message)):
+        await viewModel.loadGetHelpHelpfulNumbers()
+        switch viewModel.helpfulNumbersCells.first {
+        case let .normal(cellViewModel):
+            let numberItem = helpfulNumberResults.numbers.first
+            var itemFormatted = try (XCTUnwrap(numberItem?.name) ?? "") + "\n" + (XCTUnwrap(numberItem?.number) ?? "") + "\n"
+            try itemFormatted += (XCTUnwrap(numberItem?.link) ?? "") + "\n" + (XCTUnwrap(numberItem?.mail) ?? "")
+            XCTAssertEqual(itemFormatted, cellViewModel.fortmatedText)
+        case let .error(message):
             XCTAssertNotNil(message)
-        case .some(.empty):
+        case .empty:
             break
         case .none:
             XCTFail("View Model should not be empty!")

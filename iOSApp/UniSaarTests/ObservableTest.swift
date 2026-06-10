@@ -6,38 +6,54 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
-class ObservableTest: XCTestCase {
-
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+@MainActor
+final class ObservationTests: XCTestCase {
+    /// showError is synchronous — no async needed
+    func testCurrentAlertSetOnError() {
+        let viewModel = NewsFeedViewModel()
+        viewModel.showError(error: MyError.customError)
+        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(viewModel.currentAlert?.message)
     }
 
-    func testBindObservable() {
-        let bindable = Bindable(false)
+    func testCurrentAlertSetOnLLError() {
+        let viewModel = NewsFeedViewModel()
+        viewModel.showError(error: LLError(status: false, message: "test error"))
+        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(viewModel.currentAlert?.message)
+    }
 
-        let expectListenerCalled = expectation(description: "Observable is called")
-        bindable.bind { value in
-            XCTAssert(value == true, "testBind failed")
-            expectListenerCalled.fulfill()
+    /// Verifies that MockAppDataClient is properly injected and drives ViewModel state
+    func testMockInjectionDeliversData() async {
+        let dataClient = MockAppDataClient()
+        dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
+        let viewModel = NewsFeedViewModel(dataClient: dataClient)
+        XCTAssertTrue(viewModel.newsCells.isEmpty)
+        await viewModel.loadGetNews(filterCatgroies: [])
+        XCTAssertFalse(viewModel.newsCells.isEmpty)
+        guard case let .normal(cell) = viewModel.newsCells.first else {
+            XCTFail("Expected normal cell from mock")
+            return
         }
-
-        bindable.value = true
-        waitForExpectations(timeout: 0.1, handler: nil)
+        XCTAssertEqual(NewsFeedModel.newsDemoData.newsList.first?.title, cell.titleText)
     }
 
-    func testBindAndFire() {
-        let bindable = Bindable(true)
-
-        let expectListenerCalled = expectation(description: "Observable is called")
-        bindable.bindAndFire { value in
-            XCTAssert(value == true, "testBindAndFire failed")
-            expectListenerCalled.fulfill()
-        }
-
-        waitForExpectations(timeout: 0.1, handler: nil)
+    /// MockAppDataClient is non-isolated — the await inside loadGetNews causes a genuine
+    /// hop off @MainActor, suspending the task there. Task.yield() lets the task start
+    /// and run synchronously up to that suspension point, so showLoadingIndicator = true
+    /// is already set when we reach the assertion.
+    func testLoadingStartsTrueAndClearsAfterLoad() async {
+        let dataClient = MockAppDataClient()
+        dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
+        let viewModel = NewsFeedViewModel(dataClient: dataClient)
+        let loadTask = Task { await viewModel.loadGetNews(filterCatgroies: []) }
+        // Yield to let the task run up to its first await (the actor-hop into MockAppDataClient)
+        await Task.yield()
+        XCTAssertTrue(viewModel.showLoadingIndicator, "showLoadingIndicator should be true while the load is in flight")
+        await loadTask.value
+        XCTAssertFalse(viewModel.showLoadingIndicator, "showLoadingIndicator should clear once the load completes")
     }
-
 }

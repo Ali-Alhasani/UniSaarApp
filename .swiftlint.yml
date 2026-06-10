@@ -1,0 +1,22 @@
+included:
+  - iOSApp
+
+excluded:
+  - iOSApp/Pods
+  - iOSApp/.build
+
+disabled_rules:
+  - trailing_whitespace
+  - empty_count
+  - line_length
+
+large_tuple:
+  warning: 4
+
+type_body_length:
+  warning: 400
+  error: 600
+
+file_length:
+  warning: 1000
+  error: 1500

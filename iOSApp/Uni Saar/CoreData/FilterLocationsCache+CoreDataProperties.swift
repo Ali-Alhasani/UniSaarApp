@@ -1,21 +1,19 @@
 //
 //  FilterLocationsCache+CoreDataProperties.swift
-//  
+//
 //
 //  Created by Ali Al-Hasani on 12/19/19.
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
-extension FilterLocationsCache {
-
-    @nonobjc public class func fetchRequest() -> NSFetchRequest<FilterLocationsCache> {
-        return NSFetchRequest<FilterLocationsCache>(entityName: "FilterLocationsCache")
+public extension FilterLocationsCache {
+    @nonobjc class func fetchRequest() -> NSFetchRequest<FilterLocationsCache> {
+        NSFetchRequest<FilterLocationsCache>(entityName: "FilterLocationsCache")
     }
 
-    @NSManaged public var locationID: String?
-    @NSManaged public var name: String?
-
+    @NSManaged var locationID: String?
+    @NSManaged var name: String?
 }

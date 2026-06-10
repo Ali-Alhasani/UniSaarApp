@@ -7,7 +7,9 @@
 //
 
 import Foundation
-//todo later
+
+/// todo later
+@MainActor
 class AppSessionManager {
     var dismissWelcomeScreen: Bool = false
     var selectedCampus: Campus = .saarbruken
@@ -29,7 +31,8 @@ class AppSessionManager {
         }
         return Static.instance
     }
-    //save the status of first opening setup screens, to not show it later
+
+    // save the status of first opening setup screens, to not show it later
     static let skipWelcomeScreenKey = "skipWelcomeScreen"
     static let mensafiltersLastChangedKey = "mensafiltersLastChanged"
     static let newsFiltersLastChangedKey = "newsFiltersLastChanged"
@@ -39,82 +42,87 @@ class AppSessionManager {
     static let foodAlarmTimeKey = "foodAlarmTimeKey"
     static let selectedCampusKey = "selectedCampusKey"
     static let selectedMensaLocationKey = "selectedMensaLocationKey"
-
 }
-// cache functions
+
+/// cache functions
 extension AppSessionManager {
     class func saveWelcomeScreenStatus() {
-        let skipWelcomeScreen =  AppSessionManager.shared.dismissWelcomeScreen
+        let skipWelcomeScreen = AppSessionManager.shared.dismissWelcomeScreen
         UserDefaults.standard.set(skipWelcomeScreen, forKey: skipWelcomeScreenKey)
     }
+
     class func loadWelcomeScreenStatus() {
-        guard let tempType = UserDefaults.standard.value(forKey: skipWelcomeScreenKey) as? Bool else {return}
-        AppSessionManager.shared.dismissWelcomeScreen = tempType
+        AppSessionManager.shared.dismissWelcomeScreen = UserDefaults.standard.bool(forKey: skipWelcomeScreenKey)
     }
+
     class func saveMensafiltersStatus() {
-        let mensafiltersLastChanged =  AppSessionManager.shared.mensafiltersLastChanged
+        let mensafiltersLastChanged = AppSessionManager.shared.mensafiltersLastChanged
         UserDefaults.standard.set(mensafiltersLastChanged, forKey: mensafiltersLastChangedKey)
     }
+
     class func loadMensafiltersStatus() {
-        guard let tempType = UserDefaults.standard.value(forKey: mensafiltersLastChangedKey) as? String else {return}
+        guard let tempType = UserDefaults.standard.string(forKey: mensafiltersLastChangedKey) else { return }
         AppSessionManager.shared.mensafiltersLastChanged = tempType
     }
+
     class func saveNewsfiltersStatus() {
-        let newsFiltersLastChanged =  AppSessionManager.shared.newsFiltersLastChanged
+        let newsFiltersLastChanged = AppSessionManager.shared.newsFiltersLastChanged
         UserDefaults.standard.set(newsFiltersLastChanged, forKey: newsFiltersLastChangedKey)
     }
+
     class func loadNewsfiltersStatus() {
-        guard let tempType = UserDefaults.standard.value(forKey: newsFiltersLastChangedKey) as? String else {return}
+        guard let tempType = UserDefaults.standard.string(forKey: newsFiltersLastChangedKey) else { return }
         AppSessionManager.shared.newsFiltersLastChanged = tempType
     }
 
     class func saveMoreLinksStatus() {
-        let morelinksLastChanged =  AppSessionManager.shared.morelinksLastChanged
+        let morelinksLastChanged = AppSessionManager.shared.morelinksLastChanged
         UserDefaults.standard.set(morelinksLastChanged, forKey: linksLastChangedKey)
     }
+
     class func loadMoreLinksStatus() {
-        guard let tempType = UserDefaults.standard.value(forKey: linksLastChangedKey) as? String else {return}
+        guard let tempType = UserDefaults.standard.string(forKey: linksLastChangedKey) else { return }
         AppSessionManager.shared.morelinksLastChanged = tempType
     }
 
     class func saveHelpfulNumberStatus() {
-        let helpfulNumbersLastChange =  AppSessionManager.shared.helpfulNumbersLastChanged
+        let helpfulNumbersLastChange = AppSessionManager.shared.helpfulNumbersLastChanged
         UserDefaults.standard.set(helpfulNumbersLastChange, forKey: helpfulNumbersLastChangedKey)
     }
+
     class func loadHelpfulNumberStatus() {
-        guard let tempType = UserDefaults.standard.value(forKey: helpfulNumbersLastChangedKey) as? String else {return}
+        guard let tempType = UserDefaults.standard.string(forKey: helpfulNumbersLastChangedKey) else { return }
         AppSessionManager.shared.helpfulNumbersLastChanged = tempType
     }
+
     class func saveFoodAlarmStatus() {
-        let foodAlarmStatus =  AppSessionManager.shared.isFoodAlarmEnabled
+        let foodAlarmStatus = AppSessionManager.shared.isFoodAlarmEnabled
         UserDefaults.standard.set(foodAlarmStatus, forKey: foodAlarmStatusKey)
 
-        let foodAlarmTime =  AppSessionManager.shared.foodAlarmTime
+        let foodAlarmTime = AppSessionManager.shared.foodAlarmTime
         UserDefaults.standard.set(foodAlarmTime, forKey: foodAlarmTimeKey)
     }
 
     class func loadFoodAlarmTime() {
-        let foodAlarmStatus =  UserDefaults.standard.value(forKey: foodAlarmStatusKey) as? Bool ?? false
-        AppSessionManager.shared.isFoodAlarmEnabled = foodAlarmStatus
-
-        let foodAlarmTime =  UserDefaults.standard.value(forKey: foodAlarmTimeKey) as? Date
-        AppSessionManager.shared.foodAlarmTime = foodAlarmTime
+        AppSessionManager.shared.isFoodAlarmEnabled = UserDefaults.standard.bool(forKey: foodAlarmStatusKey)
+        AppSessionManager.shared.foodAlarmTime = UserDefaults.standard.object(forKey: foodAlarmTimeKey) as? Date
     }
 
     class func saveCampuslocation() {
-        let campuslocation =  AppSessionManager.shared.selectedCampus.locationKey
+        let campuslocation = AppSessionManager.shared.selectedCampus.locationKey
         UserDefaults.standard.set(campuslocation, forKey: selectedCampusKey)
 
-        let mensaLocation =  AppSessionManager.shared.selectedMensaLocation.locationKey
+        let mensaLocation = AppSessionManager.shared.selectedMensaLocation.locationKey
         UserDefaults.standard.set(mensaLocation, forKey: selectedMensaLocationKey)
     }
-    class func loadCampuslocation() {
-        guard let campuslocation = UserDefaults.standard.value(forKey: selectedCampusKey) as? String else {return}
-        AppSessionManager.shared.selectedCampus = Campus.init(rawValue: campuslocation) ?? .saarbruken
 
-        guard let mensaLocation = UserDefaults.standard.value(forKey: selectedMensaLocationKey) as? String else {return}
-        AppSessionManager.shared.selectedMensaLocation = Campus.init(rawValue: mensaLocation) ?? .saarbruken
-        self.notifyCampusView()
+    class func loadCampuslocation() {
+        guard let campuslocation = UserDefaults.standard.string(forKey: selectedCampusKey) else { return }
+        AppSessionManager.shared.selectedCampus = Campus(rawValue: campuslocation) ?? .saarbruken
+
+        guard let mensaLocation = UserDefaults.standard.string(forKey: selectedMensaLocationKey) else { return }
+        AppSessionManager.shared.selectedMensaLocation = Campus(rawValue: mensaLocation) ?? .saarbruken
+        notifyCampusView()
     }
 
     class func notifyCampusView() {

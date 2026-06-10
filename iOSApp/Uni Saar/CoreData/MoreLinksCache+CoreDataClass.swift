@@ -7,10 +7,8 @@
 //
 //
 
-import Foundation
 import CoreData
+import Foundation
 
 @objc(MoreLinksCache)
-public class MoreLinksCache: NSManagedObject {
-
-}
+public class MoreLinksCache: NSManagedObject {}

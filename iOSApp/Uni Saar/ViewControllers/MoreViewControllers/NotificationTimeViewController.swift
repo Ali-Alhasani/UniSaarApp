@@ -7,38 +7,43 @@
 //
 
 import UIKit
-protocol NotificationTimeDelegate: class {
+
+@MainActor
+protocol NotificationTimeDelegate: AnyObject {
     func selectedTime(time: Date)
     func tmpSelectedTime(time: Date)
 }
+
+@MainActor
 class NotificationTimeViewController: UIViewController {
-    @IBOutlet weak var timerPicker: UIDatePicker!
+    @IBOutlet var timerPicker: UIDatePicker!
     var selectedTime: Date?
     weak var delegate: NotificationTimeDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let selectedTime = selectedTime {
+        if let selectedTime {
             timerPicker.date = selectedTime
         }
         // Do any additional setup after loading the view.
     }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         delegate?.selectedTime(time: timerPicker.date)
     }
+
     @IBAction func doneAction(_ sender: Any) {
-        self.navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
     }
 
     /*
-    // MARK: - Navigation
+     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+         // Get the new view controller using segue.destination.
+         // Pass the selected object to the new view controller.
+     }
+     */
 }

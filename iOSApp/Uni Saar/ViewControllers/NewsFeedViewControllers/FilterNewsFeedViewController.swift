@@ -7,32 +7,54 @@
 //
 
 import UIKit
-protocol FilterNewsFeedViewDelegate: class {
+
+@MainActor
+protocol FilterNewsFeedViewDelegate: AnyObject {
     func didSelectFilterAll()
     func didSelectCustomFiltering(newsCatgroies: [Int])
 }
+
+@MainActor
 class FilterNewsFeedViewController: UIViewController {
-    @IBOutlet weak var filterTableView: UITableView! {
+    @IBOutlet var filterTableView: UITableView! {
         didSet {
-            DispatchQueue.main.async {
-                let refreshControl = self.filterTableView.setUpRefreshControl()
-                refreshControl.addTarget(self, action: #selector(self.refershLoad), for: UIControl.Event.valueChanged)
-                self.filterTableView.refreshControl = refreshControl
+            let refreshControl = filterTableView.setUpRefreshControl()
+            refreshControl.addTarget(self, action: #selector(refershLoad), for: .valueChanged)
+            filterTableView.refreshControl = refreshControl
+        }
+    }
+
+    lazy var filterNewsViewModel: FilterNewsViewModel = .init()
+    weak var delegate: FilterNewsFeedViewDelegate?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupTableView()
+        Task { [weak self] in await self?.filterNewsViewModel.loadGetFilterList() }
+    }
+
+    override func updateProperties() {
+        updateUI()
+    }
+
+    private func updateUI() {
+        if filterNewsViewModel.showLoadingIndicator { filterTableView.showingLoadingView() } else { filterTableView.hideLoadingView() }
+        if filterNewsViewModel.didUpdatefilterList {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                filterNewsViewModel.didUpdatefilterList = false
+                filterTableView.reloadData()
+            }
+        }
+        if let alert = filterNewsViewModel.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                filterNewsViewModel.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
             }
         }
     }
-    // MARK: - Instance Properties
-    lazy var filterNewsViewModel: FilterNewsViewModel = FilterNewsViewModel()
-    weak var delegate: FilterNewsFeedViewDelegate?
-    override func viewDidLoad() {
-        super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        setupTableView()
-        bindViewModel()
-        filterNewsViewModel.loadGetFilterList()
-
-    }
     func setupTableView() {
         filterTableView.register(FilterUISwitchTableViewCell.nib, forCellReuseIdentifier: FilterUISwitchTableViewCell.identifier)
         filterTableView.delegate = self
@@ -40,63 +62,37 @@ class FilterNewsFeedViewController: UIViewController {
         filterTableView.layoutTableView()
         filterTableView.rowHeight = UITableView.automaticDimension
         filterTableView.allowsSelection = false
-        self.view.backgroundColor = UIColor.flatGray
-    }
-    func bindViewModel() {
-        filterNewsViewModel.didUpdatefilterList.bind { [weak self] _ in
-            if let `self` = self {
-                self.relaodTableView()
-            }
-        }
-        filterNewsViewModel.onShowError = { [weak self] alert in
-            self?.presentSingleButtonDialog(alert: alert)
-        }
-        filterNewsViewModel.showLoadingIndicator.bind { [weak self] visible in
-            if let `self` = self {
-                visible ? self.filterTableView.showingLoadingView() : self.filterTableView.hideLoadingView()
-            }
-        }
+        view.backgroundColor = UIColor.flatGray
     }
 
-    func relaodTableView() {
-        self.filterTableView.reloadData()
-    }
     @objc private func refershLoad() {
-        // refresh the Categories list from the server
         filterNewsViewModel.isFilterdCacheUpdated = false
-        filterNewsViewModel.loadGetFilterList()
+        Task { [weak self] in await self?.filterNewsViewModel.loadGetFilterList() }
     }
-    /*
-     // MARK: - Navigation
 
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
     @IBAction func doneButtonAction(_ sender: Any) {
         dismissView()
-        //get the index of the filtered Catgroies
-        let custumFiltitedCategories = filterNewsViewModel.fetchedResultsController.fetchedObjects?.compactMap {$0}.filter { !$0.isSelected }
-        if let custumFiltitedCategories = custumFiltitedCategories {
-            let filtitedCategoriesId = custumFiltitedCategories.compactMap {Int($0.categoryID)}
-            self.delegate?.didSelectCustomFiltering(newsCatgroies: filtitedCategoriesId)
+        let custumFiltitedCategories = filterNewsViewModel.fetchedResultsController.fetchedObjects?.compactMap(\.self).filter { !$0.isSelected }
+        if let custumFiltitedCategories {
+            let filtitedCategoriesId = custumFiltitedCategories.compactMap { Int($0.categoryID) }
+            delegate?.didSelectCustomFiltering(newsCatgroies: filtitedCategoriesId)
         }
     }
 
     func dismissView() {
-        self.dismiss(animated: true, completion: nil)
+        dismiss(animated: true)
     }
 }
+
 // MARK: - UITableViewDelegate, UITableViewDataSource
+
 extension FilterNewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return filterNewsViewModel.fetchedResultsController.fetchedObjects?.count ?? 0
+        filterNewsViewModel.fetchedResultsController.fetchedObjects?.count ?? 0
     }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: FilterUISwitchTableViewCell.identifier, for: indexPath) as?  FilterUISwitchTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: FilterUISwitchTableViewCell.identifier, for: indexPath) as? FilterUISwitchTableViewCell
         if let item = filterNewsViewModel.fetchedResultsController.fetchedObjects?[safe: indexPath.row] {
             cell?.cellTitle = item.name
             cell?.delegate = self
@@ -106,13 +102,14 @@ extension FilterNewsFeedViewController: UITableViewDelegate, UITableViewDataSour
         return cell ?? UITableViewCell()
     }
 }
-extension FilterNewsFeedViewController: SingleButtonDialogPresenter { }
+
+extension FilterNewsFeedViewController: SingleButtonDialogPresenter {}
 
 // MARK: - NewsFilterViewCellDelegate
+
 extension FilterNewsFeedViewController: NewsFilterViewCellDelegate {
     func didSwitchOnFilter(indexPath: IndexPath?) {
-        if let indexPath = indexPath {
-            //update the cached news filter value
+        if let indexPath {
             let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
             if let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: categoryEntry.objectID) as? NewsCategoriesCache {
                 childEntry.isSelected = true
@@ -121,8 +118,7 @@ extension FilterNewsFeedViewController: NewsFilterViewCellDelegate {
     }
 
     func didSwitchOffFilter(indexPath: IndexPath?) {
-        if let indexPath = indexPath {
-            // update the cached news filter value
+        if let indexPath {
             let categoryEntry = filterNewsViewModel.fetchedResultsController.object(at: IndexPath(item: indexPath.row, section: 0))
             if let childEntry = CoreDataStack.sharedInstance.persistentContainer.viewContext.object(with: categoryEntry.objectID) as? NewsCategoriesCache {
                 childEntry.isSelected = false

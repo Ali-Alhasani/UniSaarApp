@@ -7,49 +7,41 @@
 //
 
 import UIKit
-protocol FilterCellDelegate: class {
+
+@MainActor
+protocol FilterCellDelegate: AnyObject {
     func didSwitchOnFilter(indexPath: IndexPath?)
     func didSwitchOffFilter(indexPath: IndexPath?)
 }
-protocol NewsFilterViewCellDelegate: FilterCellDelegate {
 
-}
-protocol MensaFilterCellDelegate: FilterCellDelegate {
-
-}
+protocol NewsFilterViewCellDelegate: FilterCellDelegate {}
+protocol MensaFilterCellDelegate: FilterCellDelegate {}
 class FilterUISwitchTableViewCell: UITableViewCell {
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var valueSwitch: UISwitch!
+    @IBOutlet var titleLabel: UILabel!
+    @IBOutlet var valueSwitch: UISwitch!
     var isAlCategories: Bool = false
     weak var delegate: NewsFilterViewCellDelegate?
     weak var mensaDelegate: MensaFilterCellDelegate?
     var indexPath: IndexPath?
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        // Configure the view for the selected state
-    }
     var cellTitle: String? {
         didSet {
-            self.titleLabel.text = cellTitle
+            titleLabel.text = cellTitle
         }
     }
+
     var switchValue: Bool? {
         didSet {
-            self.valueSwitch.isOn = switchValue ?? false
+            valueSwitch.isOn = switchValue ?? false
         }
     }
+
     @IBAction func filterSwitchAction(_ sender: UISwitch) {
         if sender.isOn {
-            self.delegate?.didSwitchOnFilter(indexPath: self.indexPath)
-            self.mensaDelegate?.didSwitchOnFilter(indexPath: self.indexPath)
+            delegate?.didSwitchOnFilter(indexPath: indexPath)
+            mensaDelegate?.didSwitchOnFilter(indexPath: indexPath)
         } else {
-            self.delegate?.didSwitchOffFilter(indexPath: self.indexPath)
-            self.mensaDelegate?.didSwitchOffFilter(indexPath: self.indexPath)
+            delegate?.didSwitchOffFilter(indexPath: indexPath)
+            mensaDelegate?.didSwitchOffFilter(indexPath: indexPath)
         }
     }
 }

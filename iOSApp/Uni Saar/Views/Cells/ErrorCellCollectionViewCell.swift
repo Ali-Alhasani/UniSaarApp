@@ -9,12 +9,7 @@
 import UIKit
 
 class ErrorCellCollectionViewCell: UICollectionViewCell {
-
-    @IBOutlet weak var textLabel: UILabel!
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
+    @IBOutlet var textLabel: UILabel!
     var text: String? {
         didSet {
             textLabel.text = text

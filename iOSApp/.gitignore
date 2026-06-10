@@ -1,0 +1,32 @@
+# Xcode User Settings
+xcuserdata/
+*.xcuserdata
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+
+# DerivedData and Build artifacts
+DerivedData/
+.build/
+build/
+*.moved-aside
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+
+# Swift Package Manager user-specific data
+.swiftpm/xcode/
+
+# Xcode test and build output
+*.xcresult
+*.ipa
+*.dSYM
+*.dSYM.zip
+
+# Certificates and provisioning profiles (never commit these)
+*.p12
+*.cer
+*.mobileprovision
+

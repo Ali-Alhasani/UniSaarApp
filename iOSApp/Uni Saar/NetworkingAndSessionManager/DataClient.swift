@@ -6,195 +6,188 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
-import SwiftyJSON
 import CoreData
-class DataClient {
-    typealias GetNewsResult = CustomResult<NewsFeedModel, Error>
-    typealias GetNewsCompletion = (_ result: GetNewsResult) -> Void
-    func getNews(pageNumber: Int, numberOfItems: Int, filter: [Int], completion: @escaping GetNewsCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.newsFeed(pageNumber, numberOfItems, filter), success: { (response) in
-            if let responseData = response as? JSON {
-                let news = NewsFeedModel(json: responseData.dictionaryValue)
-                completion(.success(payload: news))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-    typealias GetEventsResult = CustomResult<NewsFeedModel, Error>
-    typealias GetEventsCompletion = (_ result: GetEventsResult) -> Void
-    func getEvents(month: String, year: String, completion: @escaping GetNewsCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.events(month, year), success: { (response) in
-            if let responseData = response as? JSON {
-                let news = NewsFeedModel(json: responseData.dictionaryValue)
-                completion(.success(payload: news))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-    typealias GetMensaResult = CustomResult<MensaMenuModel, Error>
-    typealias GetMensaCompletion = (_ result: GetMensaResult) -> Void
-    func getMensaMenu(completion: @escaping GetMensaCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.mensa(AppSessionManager.shared.selectedMensaLocation.locationKey), success: { (response) in
-            if let responseData = response as? JSON {
-                let menu = MensaMenuModel(json: responseData.dictionaryValue)
-                completion(.success(payload: menu))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-    //to get meal deatils
-    typealias GetMealResult = CustomResult<MealDetailsModel, Error>
-    typealias GetMealCompletion = (_ result: GetMealResult) -> Void
-    func getMealDetails(mealId: Int, completion: @escaping GetMealCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.mealDetails(mealId), success: { (response) in
-            if let responseData = response as? JSON {
-                let meal = MealDetailsModel(json: responseData.dictionaryValue)
-                completion(.success(payload: meal))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-    typealias GetMensaInfoResult = CustomResult<MensaInfo, Error>
-    typealias GetMensaInfoCompletion = (_ result: GetMensaInfoResult) -> Void
-    func getMensaInfo(completion: @escaping GetMensaInfoCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.mensaInfo(AppSessionManager.shared.selectedMensaLocation.locationKey), success: { (response) in
-            if let responseData = response as? JSON {
-                let mensaInfo = MensaInfo(json: responseData.dictionaryValue)
-                completion(.success(payload: mensaInfo))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-    //to get mensa filter
-    typealias GetFilterResult = CustomResult<MensaFilterModel, Error>
-    typealias GetFilterCompletion = (_ result: GetFilterResult) -> Void
-    func getMensaFilter(completion: @escaping GetFilterCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.mensaFilters, success: { (response) in
-            if let responseData = response as? JSON {
-                let filterList = MensaFilterModel(json: responseData.dictionaryValue)
-                completion(.success(payload: filterList))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
+import Foundation
+@preconcurrency import SwiftyJSON
 
-    //to get news categories
-    typealias GetNewsCategoriesResult = CustomResult<[NewsCategories], Error>
-    typealias GetNewsCategoriesCompletion = (_ result: GetNewsCategoriesResult) -> Void
-    func getNewsCategories(completion: @escaping GetNewsCategoriesCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.newsFeedCategories, success: { (response) in
-            if let responseData = response as? JSON {
-                let filterList = responseData.arrayValue.map {NewsCategories(json: $0.dictionaryValue)}
-                completion(.success(payload: filterList))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-    //to get staff search resutls
-    typealias GetSearchDirectoryResult = CustomResult<StaffModel, Error>
-    typealias GetSearchDirectoryCompletion = (_ result: GetSearchDirectoryResult) -> Void
-    func getSearchDirectory(pageNumber: Int, numberOfItems: Int, query: String, completion: @escaping GetSearchDirectoryCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.directorySearch(pageNumber, numberOfItems, query), success: { (response) in
-            if let responseData = response as? JSON {
-                let searchResultList =  StaffModel(json: responseData.dictionaryValue)
-                completion(.success(payload: searchResultList))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-
-    //to get staff details
-    typealias GetStaffDetailsResult = CustomResult<StaffDetailsModel, Error>
-    typealias GetStaffDetailsCompletion = (_ result: GetStaffDetailsResult) -> Void
-    func getStaffDetails(staffId: Int, completion: @escaping GetStaffDetailsCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.staffDetails(staffId), success: { (response) in
-            if let responseData = response as? JSON {
-                let staff = StaffDetailsModel(json: responseData.dictionaryValue)
-                completion(.success(payload: staff))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-
-    //to get more links
-    typealias GetMoreLinksResult = CustomResult<MoreModel, Error>
-    typealias GetMoreLinksCompletion = (_ result: GetMoreLinksResult) -> Void
-    func getMoreLinks(completion: @escaping GetMoreLinksCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.moreLinks( AppSessionManager.shared.morelinksLastChanged), success: { (response) in
-            if let responseData = response as? JSON {
-                let moreLinks = MoreModel(json: responseData.dictionaryValue)
-                completion(.success(payload: moreLinks))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-
-    //to get helpful Numbers
-    typealias GetHelpfulNumbersResult = CustomResult<HelpfulNumbersModel, Error>
-    typealias GetHelpfulNumbersCompletion = (_ result: GetHelpfulNumbersResult) -> Void
-    func getDirectoryHelpfulNumbers(completion: @escaping GetHelpfulNumbersCompletion) {
-        APIClient.sendRequest(requestURL: URLRouter.helpfulNumbers( AppSessionManager.shared.helpfulNumbersLastChanged), success: { (response) in
-            if let responseData = response as? JSON {
-                let helpfulNumbers =  HelpfulNumbersModel(json: responseData.dictionaryValue)
-                completion(.success(payload: helpfulNumbers))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-
-    typealias GetMapCoordinatesResult = CustomResult<CoordinatesCacheModel, Error>
-    typealias GetMapCoordinatesCompletion = (_ result: GetMapCoordinatesResult) -> Void
-    func getCampusMapCoordinates(completion: @escaping GetMapCoordinatesCompletion, cacheLastChanged: String) {
-        APIClient.sendRequest(requestURL: URLRouter.mapCoordinate(cacheLastChanged), success: { (response) in
-            if let responseData = response as? JSON {
-                let coordinatesCache = CoordinatesCacheModel(json: responseData)
-                completion(.success(payload: coordinatesCache))
-            }
-        }, failure: { (error) in
-            completion(.failure(error))
-        })
-    }
-
+protocol AppDataClient: AnyObject, Sendable {
+    func getNews(pageNumber: Int, numberOfItems: Int, filter: [Int]) async throws -> NewsFeedModel
+    func getEvents(month: String, year: String) async throws -> NewsFeedModel
+    func getMensaMenu(locationKey: String) async throws -> MensaMenuModel
+    func getMealDetails(mealId: Int) async throws -> MealDetailsModel
+    func getMensaFilter() async throws -> MensaFilterModel
+    func getNewsCategories() async throws -> [NewsCategories]
+    func getSearchDirectory(pageNumber: Int, numberOfItems: Int, query: String) async throws -> StaffModel
+    func getStaffDetails(staffId: Int) async throws -> StaffDetailsModel
+    func getMoreLinks(cacheLastChanged: String) async throws -> MoreModel
+    func getDirectoryHelpfulNumbers(cacheLastChanged: String) async throws -> HelpfulNumbersModel
+    @MainActor func getCampusMapCoordinates(cacheLastChanged: String) async throws -> CoordinatesCacheModel
+    @MainActor func saveInCoreDataWith(model: FilterLocationCellViewModel)
+    @MainActor func saveInCoreDataWith(model: FilterCategoriesCellViewModel)
+    @MainActor func saveInCoreDataWith(model: [MoreLinksModel])
+    @MainActor func saveInCoreDataWith(model: [NumberModel])
+    @MainActor func clearFilterCache()
+    @MainActor func clearNewsCategoriesCache()
+    @MainActor func clearMoreLinksCache()
+    @MainActor func clearHelpfulNumbersCache()
 }
-//this class is used for test purpose only 
-final class MockAppDataClient: DataClient {
-    var getNewsResult: DataClient.GetNewsResult?
-    override func getNews(pageNumber: Int, numberOfItems: Int, filter: [Int], completion: @escaping (DataClient.GetNewsCompletion)) {
-        completion(getNewsResult!)
-    }
-    var getMensaResult: DataClient.GetMensaResult?
-    override func getMensaMenu(completion: @escaping (DataClient.GetMensaCompletion)) {
-        completion(getMensaResult!)
+
+extension AppDataClient {
+    @MainActor func getCampusMapCoordinates(cacheLastChanged: String) async throws -> CoordinatesCacheModel {
+        fatalError("getCampusMapCoordinates not implemented")
     }
 
-    var getMealResult: DataClient.GetMealResult?
-    override func getMealDetails(mealId: Int, completion: @escaping (DataClient.GetMealCompletion)) {
-        completion(getMealResult!)
-    }
-    var getSearchDirectoryResult: DataClient.GetSearchDirectoryResult?
-    override func getSearchDirectory(pageNumber: Int, numberOfItems: Int, query: String, completion: @escaping DataClient.GetSearchDirectoryCompletion) {
-        completion(getSearchDirectoryResult!)
+    @MainActor func saveInCoreDataWith(model: FilterLocationCellViewModel) {}
+    @MainActor func saveInCoreDataWith(model: FilterCategoriesCellViewModel) {}
+    @MainActor func saveInCoreDataWith(model: [MoreLinksModel]) {}
+    @MainActor func saveInCoreDataWith(model: [NumberModel]) {}
+    @MainActor func clearFilterCache() {}
+    @MainActor func clearNewsCategoriesCache() {}
+    @MainActor func clearMoreLinksCache() {}
+    @MainActor func clearHelpfulNumbersCache() {}
+}
+
+final class DataClient: AppDataClient {
+    func getNews(pageNumber: Int, numberOfItems: Int, filter: [Int]) async throws -> NewsFeedModel {
+        let json = try await APIClient.sendRequest(requestURL: .newsFeed(pageNumber, numberOfItems, filter))
+        return NewsFeedModel(json: json.dictionaryValue)
     }
 
-    var getHelpfulNumbersResult: DataClient.GetHelpfulNumbersResult?
-    override func getDirectoryHelpfulNumbers(completion: @escaping DataClient.GetHelpfulNumbersCompletion) {
-        completion(getHelpfulNumbersResult!)
+    func getEvents(month: String, year: String) async throws -> NewsFeedModel {
+        let json = try await APIClient.sendRequest(requestURL: .events(month, year))
+        return NewsFeedModel(json: json.dictionaryValue)
     }
 
-    var getMoreLinksResult: DataClient.GetMoreLinksResult?
-    override func getMoreLinks(completion: @escaping DataClient.GetMoreLinksCompletion) {
-        completion(getMoreLinksResult!)
+    func getMensaMenu(locationKey: String) async throws -> MensaMenuModel {
+        let json = try await APIClient.sendRequest(requestURL: .mensa(locationKey))
+        return MensaMenuModel(json: json.dictionaryValue)
+    }
+
+    func getMealDetails(mealId: Int) async throws -> MealDetailsModel {
+        let json = try await APIClient.sendRequest(requestURL: .mealDetails(mealId))
+        return MealDetailsModel(json: json.dictionaryValue)
+    }
+
+    func getMensaInfo(locationKey: String) async throws -> MensaInfo {
+        let json = try await APIClient.sendRequest(requestURL: .mensaInfo(locationKey))
+        return MensaInfo(json: json.dictionaryValue)
+    }
+
+    func getMensaFilter() async throws -> MensaFilterModel {
+        let json = try await APIClient.sendRequest(requestURL: .mensaFilters)
+        return MensaFilterModel(json: json.dictionaryValue)
+    }
+
+    func getNewsCategories() async throws -> [NewsCategories] {
+        let json = try await APIClient.sendRequest(requestURL: .newsFeedCategories)
+        return json.arrayValue.map { NewsCategories(json: $0.dictionaryValue) }
+    }
+
+    func getSearchDirectory(pageNumber: Int, numberOfItems: Int, query: String) async throws -> StaffModel {
+        let json = try await APIClient.sendRequest(requestURL: .directorySearch(pageNumber, numberOfItems, query))
+        return StaffModel(json: json.dictionaryValue)
+    }
+
+    func getStaffDetails(staffId: Int) async throws -> StaffDetailsModel {
+        let json = try await APIClient.sendRequest(requestURL: .staffDetails(staffId))
+        return StaffDetailsModel(json: json.dictionaryValue)
+    }
+
+    func getMoreLinks(cacheLastChanged: String) async throws -> MoreModel {
+        let json = try await APIClient.sendRequest(requestURL: .moreLinks(cacheLastChanged))
+        return MoreModel(json: json.dictionaryValue)
+    }
+
+    func getDirectoryHelpfulNumbers(cacheLastChanged: String) async throws -> HelpfulNumbersModel {
+        let json = try await APIClient.sendRequest(requestURL: .helpfulNumbers(cacheLastChanged))
+        return HelpfulNumbersModel(json: json.dictionaryValue)
+    }
+
+    func getCampusMapCoordinates(cacheLastChanged: String) async throws -> CoordinatesCacheModel {
+        let json = try await APIClient.sendRequest(requestURL: .mapCoordinate(cacheLastChanged))
+        return CoordinatesCacheModel(json: json)
+    }
+}
+
+/// Used for testing only
+final class MockAppDataClient: AppDataClient, @unchecked Sendable {
+    var getNewsResult: Result<NewsFeedModel, Error>?
+    func getNews(pageNumber: Int, numberOfItems: Int, filter: [Int]) async throws -> NewsFeedModel {
+        switch getNewsResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getMensaResult: Result<MensaMenuModel, Error>?
+    func getMensaMenu(locationKey: String) async throws -> MensaMenuModel {
+        switch getMensaResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getMealResult: Result<MealDetailsModel, Error>?
+    func getMealDetails(mealId: Int) async throws -> MealDetailsModel {
+        switch getMealResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getSearchDirectoryResult: Result<StaffModel, Error>?
+    func getSearchDirectory(pageNumber: Int, numberOfItems: Int, query: String) async throws -> StaffModel {
+        switch getSearchDirectoryResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getHelpfulNumbersResult: Result<HelpfulNumbersModel, Error>?
+    func getDirectoryHelpfulNumbers(cacheLastChanged: String) async throws -> HelpfulNumbersModel {
+        switch getHelpfulNumbersResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getMoreLinksResult: Result<MoreModel, Error>?
+    func getMoreLinks(cacheLastChanged: String) async throws -> MoreModel {
+        switch getMoreLinksResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getEventsResult: Result<NewsFeedModel, Error>?
+    func getEvents(month: String, year: String) async throws -> NewsFeedModel {
+        switch getEventsResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getStaffDetailsResult: Result<StaffDetailsModel, Error>?
+    func getStaffDetails(staffId: Int) async throws -> StaffDetailsModel {
+        switch getStaffDetailsResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getNewsCategoriesResult: Result<[NewsCategories], Error>?
+    func getNewsCategories() async throws -> [NewsCategories] {
+        switch getNewsCategoriesResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
+    }
+
+    var getMensaFilterResult: Result<MensaFilterModel, Error>?
+    func getMensaFilter() async throws -> MensaFilterModel {
+        switch getMensaFilterResult! {
+        case let .success(data): return data
+        case let .failure(error): throw error
+        }
     }
 }

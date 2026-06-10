@@ -1,147 +1,139 @@
 //
-//  directoryViewModel.swift
+//  DirectoryViewModel.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 1/10/20.
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import CoreData
-import UIKit
+import Foundation
+import Observation
 
+@Observable
 class DirectoryViewModel: ParentViewModel {
-    // MARK: - Object Lifecycle
-    let searchResutlsCells = Bindable([TableViewCellType<DirectorySearchResutlsCellViewModel>]())
-    let helpfulNumbersCells = Bindable([TableViewCellType<HelpfulNumbersCellViewModel>]())
-    lazy var fetchedResultsController: NSFetchedResultsController<HelpfulNumberCache> = {
+    var searchResutlsCells: [TableViewCellType<DirectorySearchResutlsCellViewModel>] = []
+    var helpfulNumbersCells: [TableViewCellType<HelpfulNumbersCellViewModel>] = []
+    @ObservationIgnored lazy var fetchedResultsController: NSFetchedResultsController<HelpfulNumberCache> = {
         let fetchRequest = NSFetchRequest<HelpfulNumberCache>(entityName: String(describing: HelpfulNumberCache.self))
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: false)]
-        let frc = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-        return frc
+        return NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: CoreDataStack.sharedInstance.persistentContainer.viewContext,
+                                          sectionNameKeyPath: nil, cacheName: nil)
     }()
+
     var apiPageNumber = 0
-    let numberOfItemPerPage = UIDevice.current.userInterfaceIdiom == .pad ? 16 : 10
+    let numberOfItemPerPage: Int
     var hasNextPage = false
-    override init(dataClient: DataClient = DataClient()) {
+
+    init(dataClient: any AppDataClient = DataClient(), pageSize: Int = 10) {
+        numberOfItemPerPage = pageSize
         super.init(dataClient: dataClient)
     }
-    func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) {
 
-        if !hasNextPage && isFirstTime == false {
+    func loadGetSearchResults(_ isFirstTime: Bool = true, searchQuery: String) async {
+        if !hasNextPage, isFirstTime == false {
             return
         }
-        showLoadingIndicator.value = true
-        dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery) { [weak self] result in
-            self?.showLoadingIndicator.value = false
-            switch result {
-            case .success(let results):
-                if isFirstTime {
-                    guard results.staffItemCount > 0 else {
-                        self?.searchResutlsCells.value = [.empty]
-                        return
-                    }
-                    self?.searchResutlsCells.value = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel )}
-                    self?.apiPageNumber = 0
-                } else {
-                    self?.searchResutlsCells.value.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel)})
+        showLoadingIndicator = true
+        do {
+            let results = try await dataClient.getSearchDirectory(pageNumber: isFirstTime ? 0 : apiPageNumber, numberOfItems: numberOfItemPerPage, query: searchQuery)
+            showLoadingIndicator = false
+            if isFirstTime {
+                guard results.staffItemCount > 0 else {
+                    searchResutlsCells = [.empty]
+                    return
                 }
-                self?.hasNextPage = results.hasNextPage
-                self?.apiPageNumber += 1
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                self?.searchResutlsCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                if !(error is LLError) {
-                    self?.showError(error: error)
-                }
+                searchResutlsCells = results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) }
+                apiPageNumber = 0
+            } else {
+                searchResutlsCells.append(contentsOf: results.staffResults.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel) })
+            }
+            hasNextPage = results.hasNextPage
+            apiPageNumber += 1
+        } catch {
+            showLoadingIndicator = false
+            searchResutlsCells = [.error(message: error.localizedDescription)]
+            if !(error is LLError) {
+                showError(error: error)
             }
         }
     }
-    func loadGetHelpHelpfulNumbers() {
-        showLoadingIndicator.value = true
+
+    func loadGetHelpHelpfulNumbers() async {
+        showLoadingIndicator = true
         if AppSessionManager.shared.helpfulNumbersLastChanged != "never" {
             fetchMoreLinksFromStorage()
             if let fetchedObjects = fetchedResultsController.fetchedObjects {
-                self.helpfulNumbersCells.value = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
+                helpfulNumbersCells = fetchedObjects.compactMap { .normal(cellViewModel: $0) }
             }
-            self.showLoadingIndicator.value = false
+            showLoadingIndicator = false
         }
+        do {
+            let list = try await dataClient.getDirectoryHelpfulNumbers(cacheLastChanged: AppSessionManager.shared.helpfulNumbersLastChanged)
+            if list.numbers.count > 0 {
+                helpfulNumbersCells = list.numbers.map { .normal(cellViewModel: $0) }
+                AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged
+                dataClient.clearHelpfulNumbersCache()
+                dataClient.saveInCoreDataWith(model: list.numbers)
+            }
+            showLoadingIndicator = false
+        } catch {
+            showLoadingIndicator = false
+            if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
+                helpfulNumbersCells = [.error(message: error.localizedDescription)]
+            }
+            showError(error: error, tryAgainHandler: { [weak self] in
+                self?.reloadGetApi()
+            })
+        }
+    }
 
-        dataClient.getDirectoryHelpfulNumbers { [weak self] result in
-            switch result {
-            case .success(let list):
-                if list.numbers.count > 0 {
-                    self?.helpfulNumbersCells.value = list.numbers.map { .normal(cellViewModel: $0) }
-                    AppSessionManager.shared.helpfulNumbersLastChanged = list.numbersLastChanged
-                    self?.dataClient.clearHelpfulNumbersCache()
-                    self?.dataClient.saveInCoreDataWith(model: list.numbers)
-                }
-                self?.showLoadingIndicator.value = false
-            case .failure(let error):
-                self?.showLoadingIndicator.value = false
-                // we need to show the error message only if is the first time
-                if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
-                    self?.helpfulNumbersCells.value = [.error(message: error?.localizedDescription ?? NSLocalizedString("UnknownError", comment: ""))]
-                }
-                self?.showError(error: error, tryAgainHandler: {
-                    self?.reloadGetApi()
-                })
-            }
-        }
-    }
     func reloadGetApi() {
-        loadGetHelpHelpfulNumbers()
+        Task { await self.loadGetHelpHelpfulNumbers() }
     }
-    func loadGetMockSearchResults() {
-        //self?.searchResutlsCells.value = results.compactMap { .normal(cellViewModel: $0 as DirectorySearchResutlsCellViewModel )}
-    }
+
+    func loadGetMockSearchResults() {}
+
     func fetchMoreLinksFromStorage() {
         do {
             try fetchedResultsController.performFetch()
-        } catch let error as NSError {
-            fatalError("Error: \(error.localizedDescription)")
+        } catch {
+            assertionFailure("CoreData fetch failed: \(error)")
         }
     }
 }
+
 protocol DirectorySearchResutlsCellViewModel {
-    // MARK: - Instance Properties
     var titleText: String { get }
     var nameText: String { get }
     var staffId: Int { get }
 }
 
 protocol HelpfulNumbersCellViewModel {
-    // MARK: - Instance Properties
     var fortmatedText: String { get }
 }
+
 extension StaffResultsModel: DirectorySearchResutlsCellViewModel {
     var titleText: String {
-        return title
+        title
     }
+
     var nameText: String {
-        return fullName
+        fullName
     }
+
     var staffId: Int {
-        return staffID
+        staffID
     }
 }
 
 extension NumberModel: HelpfulNumbersCellViewModel {
     var fortmatedText: String {
         var finalText = ""
-        if let name = name {
-            finalText += name + "\n"
-        }
-        if let number = number {
-            finalText += number + "\n"
-        }
-        if let link = link {
-            finalText += link + "\n"
-        }
-        if let mail = mail {
-            finalText += mail + "\n"
-        }
+        if let name { finalText += name + "\n" }
+        if let number { finalText += number + "\n" }
+        if let link { finalText += link + "\n" }
+        if let mail { finalText += mail + "\n" }
         finalText.removeLast()
         return finalText
     }
@@ -150,19 +142,10 @@ extension NumberModel: HelpfulNumbersCellViewModel {
 extension HelpfulNumberCache: HelpfulNumbersCellViewModel {
     var fortmatedText: String {
         var finalText = ""
-        if let name = name {
-            finalText += name + "\n"
-        }
-        if let number = number {
-            finalText += number + "\n"
-        }
-        if let link = link {
-            finalText += link + "\n"
-        }
-        if let mail = mail {
-            finalText += mail + "\n"
-        }
-        // remove the extra while speace
+        if let name { finalText += name + "\n" }
+        if let number { finalText += number + "\n" }
+        if let link { finalText += link + "\n" }
+        if let mail { finalText += mail + "\n" }
         finalText.removeLast()
         return finalText
     }

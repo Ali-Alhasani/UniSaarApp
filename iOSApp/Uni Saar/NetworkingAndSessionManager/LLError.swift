@@ -6,19 +6,23 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
-import Foundation
 import Alamofire
-//our own custom class error handler, to show more friendly error networking/server messages
-class LLError: NSObject, Error {
-    var status: Bool
-    var message: String
+import Foundation
+
+/// our own custom class error handler, to show more friendly error networking/server messages
+final class LLError: NSObject, Error {
+    let status: Bool
+    let message: String
     init(status: Bool?, message: String) {
         self.status = status ?? true
         self.message = message
     }
 }
+
 extension LLError: LocalizedError {
-    var errorDescription: String? { return message }
+    var errorDescription: String? {
+        message
+    }
 }
 
 public enum MyError: Error {
@@ -29,93 +33,94 @@ extension MyError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .customError:
-            //toDo: add this generalAPIError message later inside string file
-            return NSLocalizedString("generalAPIError", comment: "My error")
+            NSLocalizedString("generalAPIError", comment: "My error")
         }
     }
 }
 
-//case invalidURL(url: URLConvertible)
-//case parameterEncodingFailed(reason: ParameterEncodingFailureReason)
-//case multipartEncodingFailed(reason: MultipartEncodingFailureReason)
-//case responseValidationFailed(reason: ResponseValidationFailureReason)
-//case responseSerializationFailed(reason: ResponseSerializationFailureReason)
-extension AFError {
-    public var myCustomErrorReasons: String {
-        if case .parameterEncodingFailed(let reason) = self {
+/// case invalidURL(url: URLConvertible)
+/// case parameterEncodingFailed(reason: ParameterEncodingFailureReason)
+/// case multipartEncodingFailed(reason: MultipartEncodingFailureReason)
+/// case responseValidationFailed(reason: ResponseValidationFailureReason)
+/// case responseSerializationFailed(reason: ResponseSerializationFailureReason)
+public extension AFError {
+    var myCustomErrorReasons: String {
+        if case let .parameterEncodingFailed(reason) = self {
             switch reason {
             case .missingURL:
                 return "parameter Encoding Failed, missing URL"
             case .jsonEncodingFailed:
                 return "parameter Encoding Failed, json Encoding Failed"
-            case .propertyListEncodingFailed:
-                 return "parameter Encoding Failed, property List Encoding Failed"
+            default:
+                return "parameter Encoding Failed"
             }
-            //return "parameter Encoding Failed"
-        } else if case .multipartEncodingFailed(let reason) = self {
-             switch reason {
-             case .bodyPartURLInvalid(let url):
-                 return "multipartEncodingFailed, bodyPartURLInvalid , \(url)"
-             case .bodyPartFilenameInvalid(let url):
-                 return "multipartEncodingFailed, bodyPartFilenameInvalid , \(url)"
-             case .bodyPartFileNotReachable(let url):
-                 return "multipartEncodingFailed, bodyPartFileNotReachable , \(url)"
-             case .bodyPartFileNotReachableWithError(let atURL, _):
-                  return "multipartEncodingFailed, bodyPartFileNotReachableWithError , \(atURL)"
-             case .bodyPartFileIsDirectory(let url):
+            // return "parameter Encoding Failed"
+        } else if case let .multipartEncodingFailed(reason) = self {
+            switch reason {
+            case let .bodyPartURLInvalid(url):
+                return "multipartEncodingFailed, bodyPartURLInvalid , \(url)"
+            case let .bodyPartFilenameInvalid(url):
+                return "multipartEncodingFailed, bodyPartFilenameInvalid , \(url)"
+            case let .bodyPartFileNotReachable(url):
+                return "multipartEncodingFailed, bodyPartFileNotReachable , \(url)"
+            case let .bodyPartFileNotReachableWithError(atURL, _):
+                return "multipartEncodingFailed, bodyPartFileNotReachableWithError , \(atURL)"
+            case let .bodyPartFileIsDirectory(url):
                 return "multipartEncodingFailed, bodyPartFileIsDirectory , \(url)"
-             case .bodyPartFileSizeNotAvailable(let url):
-                 return "multipartEncodingFailed, bodyPartFileSizeNotAvailable , \(url)"
-             case .bodyPartFileSizeQueryFailedWithError(let forURL, _):
-                 return "multipartEncodingFailed, bodyPartFileSizeQueryFailedWithError , \(forURL)"
-             case .bodyPartInputStreamCreationFailed(let url):
-                 return "multipartEncodingFailed, bodyPartInputStreamCreationFailed , \(url)"
-             case .outputStreamCreationFailed(let url):
-                 return "multipartEncodingFailed, outputStreamCreationFailed , \(url)"
-             case .outputStreamFileAlreadyExists(let url):
-                 return "multipartEncodingFailed, outputStreamFileAlreadyExists , \(url)"
-             case .outputStreamURLInvalid(let url):
-                 return "multipartEncodingFailed, outputStreamURLInvalid , \(url)"
-             case .outputStreamWriteFailed:
-                 return "multipartEncodingFailed, outputStreamWriteFailed"
-             case .inputStreamReadFailed:
+            case let .bodyPartFileSizeNotAvailable(url):
+                return "multipartEncodingFailed, bodyPartFileSizeNotAvailable , \(url)"
+            case let .bodyPartFileSizeQueryFailedWithError(forURL, _):
+                return "multipartEncodingFailed, bodyPartFileSizeQueryFailedWithError , \(forURL)"
+            case let .bodyPartInputStreamCreationFailed(url):
+                return "multipartEncodingFailed, bodyPartInputStreamCreationFailed , \(url)"
+            case let .outputStreamCreationFailed(url):
+                return "multipartEncodingFailed, outputStreamCreationFailed , \(url)"
+            case let .outputStreamFileAlreadyExists(url):
+                return "multipartEncodingFailed, outputStreamFileAlreadyExists , \(url)"
+            case let .outputStreamURLInvalid(url):
+                return "multipartEncodingFailed, outputStreamURLInvalid , \(url)"
+            case .outputStreamWriteFailed:
+                return "multipartEncodingFailed, outputStreamWriteFailed"
+            case .inputStreamReadFailed:
                 return "multipartEncodingFailed, inputStreamReadFailed."
             }
-            //return "multipart Encoding Failed"
-        } else if case .responseSerializationFailed(let reason) = self {
+            // return "multipart Encoding Failed"
+        } else if case let .responseSerializationFailed(reason) = self {
             switch reason {
-            case .inputDataNil:
-                return "responseSerializationFailed, inputDataNil."
             case .inputDataNilOrZeroLength:
-                 return "responseSerializationFailed, inputDataNilOrZeroLength."
+                return "responseSerializationFailed, inputDataNilOrZeroLength."
             case .inputFileNil:
                 return "responseSerializationFailed, inputFileNil."
-            case .inputFileReadFailed(let atLocation):
+            case let .inputFileReadFailed(atLocation):
                 return "responseSerializationFailed, inputFileReadFailed. , \(atLocation)"
-            case .stringSerializationFailed(let encoding):
-                 return "responseSerializationFailed, stringSerializationFailed., \(encoding.description)"
+            case let .stringSerializationFailed(encoding):
+                return "responseSerializationFailed, stringSerializationFailed., \(encoding.description)"
             case .jsonSerializationFailed:
-                  return "responseSerializationFailed, jsonSerializationFailed"
-            case .propertyListSerializationFailed:
-                  return "responseSerializationFailed, propertyListSerializationFailed"
+                return "responseSerializationFailed, jsonSerializationFailed"
+            default:
+                return "responseSerializationFailed"
             }
-           // return "response Serialization Failed"
-        } else if case .responseValidationFailed(let reason) = self {
+            // return "response Serialization Failed"
+        } else if case let .responseValidationFailed(reason) = self {
             switch reason {
             case .dataFileNil:
                 return "responseValidationFailed, dataFileNil."
-            case .dataFileReadFailed(let atLocation):
+            case let .dataFileReadFailed(atLocation):
                 return "responseValidationFailed, dataFileReadFailed. , \(atLocation)"
-            case .missingContentType(let acceptableContentTypes):
-                 return "responseValidationFailed, missingContentType. , \(acceptableContentTypes)"
-            case .unacceptableContentType(let acceptableContentTypes, _):
-                 return "responseValidationFailed, unacceptableContentType. , \(acceptableContentTypes)"
-            case .unacceptableStatusCode(let code):
+            case let .missingContentType(acceptableContentTypes):
+                return "responseValidationFailed, missingContentType. , \(acceptableContentTypes)"
+            case let .unacceptableContentType(acceptableContentTypes, _):
+                return "responseValidationFailed, unacceptableContentType. , \(acceptableContentTypes)"
+            case let .unacceptableStatusCode(code):
                 return "responseValidationFailed, unacceptableStatusCode. , \(code)"
+            case let .customValidationFailed(error):
+                return "responseValidationFailed, customValidationFailed. , \(error)"
+            default:
+                return "responseValidationFailed"
             }
-           // return "response Validation Failed"
-        } else if case .invalidURL(let url)  = self {
-           return "invalid URL , \(url)"
+            // return "response Validation Failed"
+        } else if case let .invalidURL(url) = self {
+            return "invalid URL , \(url)"
         }
         return "Unknown Error"
     }

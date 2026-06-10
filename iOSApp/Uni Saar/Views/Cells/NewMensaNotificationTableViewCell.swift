@@ -1,5 +1,5 @@
 //
-//  MensaNotificationTableViewCell.swift
+//  NewMensaNotificationTableViewCell.swift
 //  Uni Saar
 //
 //  Created by Ali Al-Hasani on 9/10/20.
@@ -9,22 +9,9 @@
 import UIKit
 
 class NewMensaNotificationTableViewCell: UITableViewCell {
-    //@IBOutlet weak var notificationTimeLabel: UILabel!
-
-    @IBOutlet weak var timePicker: UIDatePicker!
+    @IBOutlet var timePicker: UIDatePicker!
     var userSelectedTime: Date?
     weak var delegate: NotificationTimeDelegate?
-
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
-    }
 
     var notificationSelectedTime: Date? {
         didSet {
@@ -37,9 +24,9 @@ class NewMensaNotificationTableViewCell: UITableViewCell {
             timePicker.date = selectedTime
         }
     }
+
     @IBAction func timePickerAction(_ sender: UIDatePicker) {
         userSelectedTime = sender.date
-        print(sender.date)
         delegate?.tmpSelectedTime(time: sender.date)
     }
 }

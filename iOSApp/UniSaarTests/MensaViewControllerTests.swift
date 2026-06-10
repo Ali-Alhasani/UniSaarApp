@@ -6,45 +6,52 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import XCTest
 @testable import Uni_Saar
+import XCTest
 
+@MainActor
 class MensaViewControllerTests: XCTestCase {
     var viewControllerUnderTest: MensaViewController!
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    override func setUp() async throws {
         let storyboard = UIStoryboard(name: "MensaStoryboard", bundle: nil)
-        self.viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "MensaViewControllerTest") as? MensaViewController
-
-        self.viewControllerUnderTest.loadView()
-        self.viewControllerUnderTest.viewDidLoad()
-        self.viewControllerUnderTest.setupCollectionView()
+        viewControllerUnderTest = storyboard.instantiateViewController(withIdentifier: "MensaViewControllerTest") as? MensaViewController
+        viewControllerUnderTest.loadView()
+        viewControllerUnderTest.viewDidLoad()
+        viewControllerUnderTest.setupCollectionView()
     }
+
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        viewControllerUnderTest = nil
         super.tearDown()
     }
+
     func testExample() {
         // This is an example of a functional test case.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
     }
+
     func testHasACollectionView() {
         XCTAssertNotNil(viewControllerUnderTest.mensaCollectionView)
     }
+
     func testCollectionViewHasDelegate() {
         XCTAssertNotNil(viewControllerUnderTest.mensaCollectionView.delegate)
     }
+
     func testCollectionViewConfromsToTableViewDelegateProtocol() {
         XCTAssertTrue(viewControllerUnderTest.conforms(to: UICollectionViewDelegate.self))
     }
+
     func testCollectionViewHasDataSource() {
         XCTAssertNotNil(viewControllerUnderTest.mensaCollectionView.dataSource)
     }
+
     func testCollectionViewConformsToCollectionViewDataSourceProtocol() {
         XCTAssertTrue(viewControllerUnderTest.conforms(to: UICollectionViewDataSource.self))
         XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.collectionView(_:numberOfItemsInSection:))))
         XCTAssertTrue(viewControllerUnderTest.responds(to: #selector(viewControllerUnderTest.collectionView(_:cellForItemAt:))))
     }
+
     func testCollectionViewCellHasReuseIdentifier() {
         if let cell = viewControllerUnderTest.collectionView(viewControllerUnderTest.mensaCollectionView, cellForItemAt:
             IndexPath(item: 0, section: 0)) as? MensaCollectionViewCell {
@@ -55,11 +62,11 @@ class MensaViewControllerTests: XCTestCase {
     }
 
     func testCollectionViewHasCorrectLabelText() {
-        switch viewControllerUnderTest.mensaMenuViewModel.daysMenus.value[safe: 0] {
+        switch viewControllerUnderTest.mensaMenuViewModel.daysMenus[safe: 0] {
         case .normal:
             XCTAssertNotNil(viewControllerUnderTest.collectionView(viewControllerUnderTest.mensaCollectionView, cellForItemAt:
                 IndexPath(item: 0, section: 0)) as? MensaCollectionViewCell)
-        case .error(let message):
+        case let .error(message):
             let cell = viewControllerUnderTest.collectionView(viewControllerUnderTest.mensaCollectionView, cellForItemAt:
                 IndexPath(item: 0, section: 0)) as? ErrorCellCollectionViewCell
             XCTAssertEqual(cell?.text, message)
@@ -71,11 +78,11 @@ class MensaViewControllerTests: XCTestCase {
             break
         }
     }
-    // utility for finding segues
-    func hasSegueWithIdentifier(segueId: String) -> Bool {
 
+    /// utility for finding segues
+    func hasSegueWithIdentifier(segueId: String) -> Bool {
         let segues = viewControllerUnderTest.value(forKey: "storyboardSegueTemplates") as? [NSObject]
-        let filtered = segues?.filter({ $0.value(forKey: "identifier") as? String == segueId })
+        let filtered = segues?.filter { $0.value(forKey: "identifier") as? String == segueId }
 
         return (filtered?.count ?? 0 > 0)
     }
@@ -84,5 +91,4 @@ class MensaViewControllerTests: XCTestCase {
         let targetIdentifier = MensaViewController.SegueIdentifiers.toMealDetails
         XCTAssertTrue(hasSegueWithIdentifier(segueId: targetIdentifier))
     }
-
 }

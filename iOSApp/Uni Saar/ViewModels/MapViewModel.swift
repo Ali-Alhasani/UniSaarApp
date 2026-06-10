@@ -7,38 +7,35 @@
 //
 
 import Foundation
+import Observation
 import SwiftyJSON
+
+@Observable
 class MapViewModel: ParentViewModel {
     var coordinatesLastChanged = ""
-    let didUpdateCoordinates: Bindable = Bindable(JSON())
+    var updatedCoordinates: JSON?
 
-    override init(dataClient: DataClient = DataClient()) {
+    override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
     }
 
-    func loadGetMapData () {
-        showLoadingIndicator.value = true
-        dataClient.getCampusMapCoordinates(completion: {  result in
-            switch result {
-            case .success(let coordinates):
-                // only update the cache if the api update time is more recent
-                if coordinates.updateTime != "", coordinates.updateTime != self.coordinatesLastChanged {
-                    self.updateCoordinateCache(newCoordinates: coordinates.mapInfo)
-                }
-            case .failure:
-                break
+    func loadGetMapData() async {
+        do {
+            let coordinates = try await dataClient.getCampusMapCoordinates(cacheLastChanged: coordinatesLastChanged)
+            if coordinates.updateTime != "", coordinates.updateTime != coordinatesLastChanged {
+                updateCoordinateCache(newCoordinates: coordinates.mapInfo)
             }
-        }, cacheLastChanged: coordinatesLastChanged)
-
+        } catch {
+            // silently fail — map loads from local cache
+        }
     }
+
     func updateCoordinateCache(newCoordinates: JSON) {
-        DispatchQueue.main.async {
-            do {
-                try Data.saveJson(data: newCoordinates.rawData(), toFilename: "Campus_Map_Coord")
-                self.didUpdateCoordinates.value = newCoordinates
-            } catch {
-                print(error)
-            }
+        do {
+            try Data.saveJson(data: newCoordinates.rawData(), toFilename: "Campus_Map_Coord")
+            updatedCoordinates = newCoordinates
+        } catch {
+            print(error)
         }
     }
 }

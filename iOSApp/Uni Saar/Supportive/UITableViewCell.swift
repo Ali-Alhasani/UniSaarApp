@@ -8,28 +8,33 @@
 
 import Foundation
 import UIKit
-//commonly used TableViewCell configuration functions in the app
+
+/// commonly used TableViewCell configuration functions in the app
 extension UITableViewCell {
     static var nib: UINib {
-        return UINib(nibName: identifier, bundle: nil)
+        UINib(nibName: identifier, bundle: nil)
     }
+
     static var identifier: String {
-        return String(describing: self)
+        String(describing: self)
     }
-   // return default cell with message
+
     func setupEmptyCell(message: String) -> UITableViewCell {
-        self.isUserInteractionEnabled = false
-        self.textLabel?.numberOfLines = 0
-        self.textLabel?.text = message
+        isUserInteractionEnabled = false
+        var content = defaultContentConfiguration()
+        content.text = message
+        content.textProperties.numberOfLines = 0
+        contentConfiguration = content
         return self
     }
 }
 
 extension UICollectionViewCell {
     static var nib: UINib {
-        return UINib(nibName: identifier, bundle: nil)
+        UINib(nibName: identifier, bundle: nil)
     }
+
     static var identifier: String {
-        return String(describing: self)
+        String(describing: self)
     }
 }

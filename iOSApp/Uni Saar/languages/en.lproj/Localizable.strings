@@ -22,6 +22,7 @@
 
 //MARK:- MensaViewController
 "emptyMenu" = "It looks like there's no Mensa menu for today.";
+"moreComponents" = "+%d more";
 "HighlightAllergens" = "Highlight selected ingredients and dishes when they appear on menu";
 "MensaLocations" = "Mensa Locations on Campus";
 "WarnMeAbout" = "Warn me about ";

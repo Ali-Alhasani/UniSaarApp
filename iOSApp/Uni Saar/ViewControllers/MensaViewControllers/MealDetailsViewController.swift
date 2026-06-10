@@ -7,77 +7,103 @@
 //
 
 import UIKit
-import NVActivityIndicatorView
 
+@MainActor
 class MealDetailsViewController: UIViewController {
-
-    @IBOutlet weak var mealDispalyNameLabel: UILabel!
-    @IBOutlet weak var counterEntranceLabel: UILabel!
-    @IBOutlet weak var generalNoticesLabel: UILabel!
-    @IBOutlet weak var componentsLabel: UILabel!
+    @IBOutlet var mealDispalyNameLabel: UILabel!
+    @IBOutlet var counterEntranceLabel: UILabel!
+    @IBOutlet var generalNoticesLabel: UILabel!
+    @IBOutlet var componentsLabel: UILabel!
     @IBOutlet var priceTagNamesLabel: UILabel!
     @IBOutlet var pricesLabel: UILabel!
-    @IBOutlet weak var colorView: UIView!
+    @IBOutlet var colorView: UIView!
     var mealItemViewModel: MensaMealCellViewModel?
     var meal = MealDetailsViewModel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        self.title = mealItemViewModel?.counterDisplayName
-        bindViewModel()
-        colorView.setAsCircle(cornerRadius: colorView.frame.height/2)
-        colorView.backgroundColor = mealItemViewModel?.counterColor
+        title = mealItemViewModel?.counterDisplayName
+        colorView.setAsCircle(cornerRadius: colorView.frame.height / 2)
+        colorView.backgroundColor = mealItemViewModel.map { AppStyle.mensaCounterColor($0.colorModel) }
+
+        setupInitialState()
     }
 
-    func bindViewModel() {
+    /// NATIVE iOS 26 API: The framework automatically tracks any @Observable referenced inside here.
+    /// It automatically invalidates and refreshes the view when properties change.
+    override func updateProperties() {
+        updateUI()
+    }
+
+    private func setupInitialState() {
+        // Equivalent to old bindViewModel loader logic
         if mealItemViewModel != nil {
-              self.showLoadingActivity()
-        }
-        meal.mealDetails.bind { [weak self] meal in
-            self?.mealDispalyNameLabel.text = meal.mealName
-            self?.counterEntranceLabel.text = meal.mealCounterDescription
-            self?.generalNoticesLabel.attributedText = meal.generalNoticesText
-            self?.componentsLabel.attributedText = meal.mealComponetsText
-            self?.priceTagNamesLabel.text = meal.priceTagNamesText
-            self?.pricesLabel.text = meal.priceValuesText
-            self?.requestReview()
-        }
-        meal.onShowError = { [weak self] alert in
-            self?.presentSingleButtonDialog(alert: alert)
-        }
-        if let mealID = mealItemViewModel?.mensaMealsModel.mealID {
-            meal.noticesText = mealItemViewModel?.noticesList
-            meal.loadGetMealDetails(mealId: mealID)
+            showLoadingActivity()
         }
 
-        meal.showLoadingIndicator.bind {  [weak self] visible in
-            if let `self` = self {
-                visible ? self.showLoadingActivity() : self.hideLoadingActivity()
+        if let mealID = mealItemViewModel?.mensaMealsModel.mealID {
+            meal.noticesText = mealItemViewModel?.noticesList
+            Task { [weak self] in
+                await self?.meal.loadGetMealDetails(mealId: mealID)
+            }
+        }
+    }
+
+    private func updateUI() {
+        // Automatically handles showLoadingIndicator changes
+        if meal.showLoadingIndicator { showLoadingActivity() } else { hideLoadingActivity() }
+
+        // Defer the mutation to break out of the synchronous update cycle — avoids exclusivity crash
+        if let alert = meal.currentAlert {
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                meal.currentAlert = nil
+                presentSingleButtonDialog(alert: alert)
             }
         }
 
-        //meal.loadGetMockMenu()
+        guard meal.mealDetails.mealDetailsModel != nil else { return }
+
+        mealDispalyNameLabel.text = meal.mealDetails.mealName
+        counterEntranceLabel.text = meal.mealDetails.mealCounterDescription
+        generalNoticesLabel.setAttributedText(makeGeneralNoticesText(from: meal.mealDetails.generalNoticeItems))
+        componentsLabel.setAttributedText(makeMealComponentsText(from: meal.mealDetails.mealComponentItems))
+        priceTagNamesLabel.text = meal.mealDetails.priceTagNamesText
+        pricesLabel.text = meal.mealDetails.priceValuesText
+
+        requestReview()
     }
 
     func requestReview() {
         AppStoreReviewManager.requestReviewIfAppropriate(presentedView: self)
     }
-
-//    func showActivityLoad() {
-//        DispatchQueue.main.async {
-//            self.startAnimating(CGSize(width: 50, height: 50), message: NSLocalizedString("Removing MDM Profile", comment: ""), type: .ballClipRotateMultiple,
-//                                fadeInAnimation: nil)
-//        }
-//    }
-    /*
-     // MARK: - Navigation
-
-     // In a storyboard-based application, you will often want to do a little preparation before navigation
-     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-     // Get the new view controller using segue.destination.
-     // Pass the selected object to the new view controller.
-     }
-     */
-
 }
-extension MealDetailsViewController: SingleButtonDialogPresenter { }
+
+extension MealDetailsViewController: SingleButtonDialogPresenter {}
+
+private extension MealDetailsViewController {
+    func makeGeneralNoticesText(from items: [NoticeItem]) -> AttributedString {
+        guard !items.isEmpty else { return AttributedString() }
+        let newline = AttributedString(AppStyle.newLine, attributes: AppStyle.regularContainer)
+        return items.reduce(into: AttributedString()) { result, item in
+            if !result.characters.isEmpty { result += newline }
+            let bullet = item.isWarning ? AppStyle.triangle : AppStyle.square
+            result += AttributedString(bullet + item.text,
+                                       attributes: item.isWarning ? AppStyle.warningContainer : AppStyle.regularContainer)
+        }
+    }
+
+    func makeMealComponentsText(from items: [MealComponentItem]) -> AttributedString {
+        guard !items.isEmpty else { return AttributedString() }
+        let newline = AttributedString(AppStyle.newLine, attributes: AppStyle.regularContainer)
+        return items.reduce(into: AttributedString()) { result, item in
+            if !result.characters.isEmpty { result += newline }
+            result += AttributedString(AppStyle.square + item.name, attributes: AppStyle.regularContainer)
+            for notice in item.notices {
+                let bullet = notice.isWarning ? AppStyle.newLineTabFLAG : AppStyle.BULLET
+                result += AttributedString(bullet + notice.text,
+                                           attributes: notice.isWarning ? AppStyle.warningContainer : AppStyle.regularContainer)
+            }
+        }
+    }
+}
