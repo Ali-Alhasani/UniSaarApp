@@ -37,7 +37,7 @@ class MensaLocation(StrEnum):
 
 _MENSA_SOURCE_IDX: dict[MensaLocation, int] = {
     MensaLocation.MENSB: 0,
-    MensaLocation.MENSAGARTEN: 1,
-    MensaLocation.B4R1STA: 2,
+    MensaLocation.B4R1STA: 1,
+    MensaLocation.MENSAGARTEN: 2,
     MensaLocation.MENSHOM: 0,
 }

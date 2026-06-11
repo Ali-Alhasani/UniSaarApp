@@ -82,7 +82,7 @@ _MENSA_MENU = {
 
 _MEAL_MAP = {
     "10202601010000": {
-        "id": 10202601010000,
+        "id": "10202601010000",
         "mealName": "Spaghetti",
         "description": "Pasta counter",
         "color": {"r": 0, "g": 0, "b": 0},

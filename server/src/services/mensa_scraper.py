@@ -284,7 +284,7 @@ class MensaScraper(BaseScraper):
                     date_str,
                 )
                 day_date = date.today()
-                formatted_date = date_str
+                formatted_date = format_mensa_date(day_date, lang)
 
             meals: list[MensaMeal] = []
             counters = day_data.get("counters", [])

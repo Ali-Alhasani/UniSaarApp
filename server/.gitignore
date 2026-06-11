@@ -24,3 +24,5 @@ venv/
 
 # Pre-commit
 .pre-commit-cache/
+.DS_Store
+.idea/

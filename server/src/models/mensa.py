@@ -1,6 +1,11 @@
 from __future__ import annotations
 
-from pydantic import BaseModel, ConfigDict, Field
+from typing import Annotated
+
+from pydantic import BaseModel, ConfigDict, Field, PlainSerializer
+
+# int stored internally; serialized as string in JSON for iOS SwiftyJSON compatibility.
+IntAsStr = Annotated[int, PlainSerializer(str, return_type=str, when_used="json")]
 
 
 class MensaColor(BaseModel):
@@ -37,7 +42,7 @@ class MensaMeal(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    id: int
+    id: IntAsStr
     meal_name: str = Field(alias="mealName")
     counter_name: str = Field(alias="counterName")
     opening_hours: str = Field(alias="openingHours")
@@ -67,7 +72,7 @@ class MensaMealDetail(BaseModel):
 
     model_config = ConfigDict(populate_by_name=True)
 
-    id: int
+    id: IntAsStr
     meal_name: str = Field(alias="mealName")
     description: str
     color: MensaColor = Field(default_factory=MensaColor)

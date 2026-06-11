@@ -3,6 +3,7 @@ from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import Response
 from loguru import logger
 from slowapi.errors import RateLimitExceeded
@@ -14,8 +15,11 @@ from src.api.health import router as health_router
 from src.api.mensa import router as mensa_router
 from src.api.more import router as more_router
 from src.api.news import router as news_router
+from src.core.enums import Language
+from src.core.locale import MEAL_NOT_FOUND
 from src.core.logging import setup_logging
 from src.core.rate_limits import limiter
+from src.core.routes import Route
 
 
 @asynccontextmanager
@@ -45,6 +49,24 @@ async def rate_limit_exceeded_handler(
     return Response(
         status_code=429, content="Too many requests.", media_type="text/plain"
     )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_error_handler(
+    request: Request, exc: RequestValidationError
+) -> Response:
+    if request.url.path.endswith(Route.MENSA_MEAL_DETAIL):
+        lang_str = request.query_params.get("language", "en")
+        try:
+            lang = Language(lang_str)
+        except ValueError:
+            lang = Language.EN
+        return Response(
+            status_code=404,
+            content=MEAL_NOT_FOUND[lang],
+            media_type="text/plain",
+        )
+    return Response(status_code=422, content="Invalid request.", media_type="text/plain")
 
 
 @app.exception_handler(HTTPException)

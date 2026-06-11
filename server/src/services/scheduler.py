@@ -192,6 +192,7 @@ async def _run_mensa_job(cache: CacheClient) -> None:
             for campus in MENSA_CAMPUS_LOCATIONS:
                 for lang in SUPPORTED_LANGUAGES:
                     await cache.set_async(cache_keys.mensa_menu(campus, lang), None)
+                    await cache.set_async(cache_keys.mensa_meal(campus, lang), None)
         raise
     await cache.set_async(cache_keys.scheduler_last_run("mensa"), _now_iso())
 
