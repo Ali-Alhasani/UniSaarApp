@@ -1,21 +1,19 @@
 from __future__ import annotations
 
-from src.core.enums import Language, MensaLocation
+from src.core.enums import CampusLocation, Language, MensaLocation
 
-NEWSFEED_LANGUAGES: list[Language] = [Language.DE, Language.EN, Language.FR]
-MENSA_LANGUAGES: list[Language] = [Language.DE, Language.EN, Language.FR]
-MENSA_LOCATIONS: list[MensaLocation] = [
-    MensaLocation.SB,
-    MensaLocation.HOM,
-    MensaLocation.MENSAGARTEN,
-]
-# Campus locations exposed to iOS clients via /mensa/filters.
-# MENSAGARTEN is scraped internally but not surfaced as a separate picker entry.
-MENSA_CAMPUS_LOCATIONS: list[MensaLocation] = [MensaLocation.SB, MensaLocation.HOM]
-# Maps location shortcodes to display city names.
-CAMPUS_CITY_NAMES: dict[MensaLocation, str] = {
-    MensaLocation.SB: "Saarbrücken",
-    MensaLocation.HOM: "Homburg",
+SUPPORTED_LANGUAGES: list[Language] = [Language.DE, Language.EN, Language.FR]
+
+# All individual mensaar API sources — used by the scraper.
+MENSA_LOCATIONS: list[MensaLocation] = list(MensaLocation)
+
+# Campus-level locations exposed to iOS clients.
+MENSA_CAMPUS_LOCATIONS: list[CampusLocation] = list(CampusLocation)
+
+# Maps campus to display city name.
+CAMPUS_CITY_NAMES: dict[CampusLocation, str] = {
+    CampusLocation.SB: "Saarbrücken",
+    CampusLocation.HOM: "Homburg",
 }
 
 NEWS_URLS: dict[Language, str] = {

@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
-from src.core.constants import MENSA_LANGUAGES, MENSA_LOCATIONS
+from src.core.constants import MENSA_CAMPUS_LOCATIONS, SUPPORTED_LANGUAGES
 from src.models.mensa import MensaMenu
 from src.services.scheduler import (
     _initialize,
@@ -21,7 +21,9 @@ from src.services.scheduler import (
 from src.storage.cache import CacheClient
 
 _ALL_MENSA_KEYS = [
-    f"mensa:{loc}:{lang}" for loc in MENSA_LOCATIONS for lang in MENSA_LANGUAGES
+    f"mensa:{loc}:{lang}"
+    for loc in MENSA_CAMPUS_LOCATIONS
+    for lang in SUPPORTED_LANGUAGES
 ]
 
 
@@ -40,7 +42,7 @@ def _mock_news_scraper(feed: MagicMock) -> AsyncMock:
     return scraper
 
 
-def _mock_mensa_scraper(feed: MagicMock | None = None) -> AsyncMock:  # noqa: ARG001
+def _mock_mensa_scraper() -> AsyncMock:
     scraper = AsyncMock()
     scraper.__aenter__ = AsyncMock(return_value=scraper)
     scraper.__aexit__ = AsyncMock(return_value=False)
@@ -144,7 +146,7 @@ async def test_news_job_failure_preserves_existing_cache(tmp_path: Path) -> None
 
 async def test_mensa_job_writes_all_location_language_keys(tmp_path: Path) -> None:
     cache = CacheClient(cache_dir=str(tmp_path))
-    scraper = _mock_mensa_scraper(_mock_feed({"days": []}))
+    scraper = _mock_mensa_scraper()
     with (
         patch("src.services.scheduler.MensaScraper", return_value=scraper),
         patch("src.services.scheduler.MensaInfoService") as MockInfo,
@@ -358,7 +360,7 @@ async def test_run_all_jobs_once_continues_after_single_job_failure(
     failing_news.__aexit__ = AsyncMock(return_value=False)
     failing_news.fetch_news.side_effect = Exception("news down")
 
-    working_mensa = _mock_mensa_scraper(_mock_feed({"days": []}))
+    working_mensa = _mock_mensa_scraper()
 
     with (
         patch("src.services.scheduler.NewsAndEventsScraper", return_value=failing_news),
@@ -388,7 +390,7 @@ async def test_initialize_writes_ready_status_after_successful_startup(
     cache = CacheClient(cache_dir=str(tmp_path))
     scheduler = AsyncIOScheduler()
     scraper = _mock_news_scraper(_mock_feed())
-    working_mensa = _mock_mensa_scraper(_mock_feed())
+    working_mensa = _mock_mensa_scraper()
     with (
         patch("src.services.scheduler.NewsAndEventsScraper", return_value=scraper),
         patch("src.services.scheduler.MensaScraper", return_value=working_mensa),

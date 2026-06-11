@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
-from datetime import UTC, datetime
+from datetime import UTC, date, datetime
+
+from loguru import logger
 
 from src.core.config import settings
 from src.core.constants import (
@@ -11,6 +13,7 @@ from src.core.constants import (
     MENSA_MENU_URL,
 )
 from src.core.enums import Language, MensaLocation
+from src.core.meal_id import generate_meal_id
 from src.models.mensa import (
     MensaColor,
     MensaComponent,
@@ -86,7 +89,7 @@ class MensaScraper(BaseScraper):
         """Normalize a string field from the mensa API.
 
         Reverses UTF-8-as-Latin-1 double-encoding present in some API strings.
-        E.g. "\u00c3\u00a9" (two Latin-1 code points) re-decodes as UTF-8 to "e\u0301".
+        E.g. "Ã©" (two Latin-1 code points) re-decodes as UTF-8 to "é".
         Correctly stored German umlauts are preserved: their single Latin-1
         bytes (0xfc for u with umlaut, etc.) are not valid standalone UTF-8,
         so the except branch returns them unchanged.
@@ -121,8 +124,22 @@ class MensaScraper(BaseScraper):
         counter_desc: str,
         opening_hours: str,
         color: MensaColor,
-        meal_id: int,
-    ) -> MensaMeal:
+        location: MensaLocation,
+        day: date,
+        counter_idx: int,
+        meal_idx: int,
+    ) -> MensaMeal | None:
+        try:
+            meal_id = generate_meal_id(location, day, counter_idx, meal_idx)
+        except ValueError:
+            logger.warning(
+                "mensa:{} — skipping meal at counter={} meal={} (ID out of range)",
+                location,
+                counter_idx,
+                meal_idx,
+            )
+            return None
+
         raw_notices = meal_data.get("notices", [])
         all_notices: set[str] = set(
             raw_notices if isinstance(raw_notices, list) else []
@@ -221,14 +238,12 @@ class MensaScraper(BaseScraper):
             )
             for n_id, info in self._notices.items()
         ]
-        campus_ids = set(MENSA_CAMPUS_LOCATIONS)
         locations = [
             MensaFilterLocation(
-                location_id=loc.location_id,
-                name=CAMPUS_CITY_NAMES.get(MensaLocation(loc.location_id), loc.name),
+                location_id=campus.value,
+                name=CAMPUS_CITY_NAMES[campus],
             )
-            for loc in self._filter_locations
-            if loc.location_id in campus_ids
+            for campus in MENSA_CAMPUS_LOCATIONS
         ]
         return MensaFilters(locations=locations, notices=notices)
 
@@ -236,7 +251,6 @@ class MensaScraper(BaseScraper):
         self,
         location: MensaLocation,
         lang: Language = Language.DE,
-        starting_meal_id: int = 0,
     ) -> MensaMenu:
         await self._fetch_base_data(lang)
         self._meal_details = {}
@@ -248,7 +262,6 @@ class MensaScraper(BaseScraper):
         raw = await self.fetch(url)
         data: dict[str, object] = json.loads(raw)
 
-        meal_id = starting_meal_id
         days: list[MensaDay] = []
 
         raw_days = data.get("days", [])
@@ -261,16 +274,24 @@ class MensaScraper(BaseScraper):
             date_str = str(day_data.get("date", ""))
             try:
                 day_dt = datetime.fromisoformat(date_str).astimezone(UTC)
-                formatted_date = format_mensa_date(day_dt.date(), lang)
+                day_date = day_dt.date()
+                formatted_date = format_mensa_date(day_date, lang)
             except ValueError:
-                formatted_date = date_str
+                logger.warning(
+                    "mensa:{}:{} — unparseable date {!r}, falling back to today",
+                    location,
+                    lang,
+                    date_str,
+                )
+                day_date = date.today()
+                formatted_date = format_mensa_date(day_date, lang)
 
             meals: list[MensaMeal] = []
             counters = day_data.get("counters", [])
             if not isinstance(counters, list):
                 counters = []
 
-            for counter in counters:
+            for counter_idx, counter in enumerate(counters):
                 if not isinstance(counter, dict):
                     continue
                 counter_name = self._clean(str(counter.get("displayName", "")))
@@ -289,20 +310,22 @@ class MensaScraper(BaseScraper):
                 raw_meals = counter.get("meals", [])
                 if not isinstance(raw_meals, list):
                     raw_meals = []
-                for meal_data in raw_meals:
+                for meal_idx, meal_data in enumerate(raw_meals):
                     if not isinstance(meal_data, dict):
                         continue
-                    meals.append(
-                        self._parse_meal(
-                            meal_data,
-                            counter_name,
-                            counter_desc,
-                            opening_hours,
-                            color,
-                            meal_id,
-                        )
+                    meal = self._parse_meal(
+                        meal_data,
+                        counter_name,
+                        counter_desc,
+                        opening_hours,
+                        color,
+                        location,
+                        day_date,
+                        counter_idx,
+                        meal_idx,
                     )
-                    meal_id += 1
+                    if meal is not None:
+                        meals.append(meal)
 
             days.append(MensaDay(date=formatted_date, meals=meals))
 

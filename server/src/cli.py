@@ -25,7 +25,10 @@ import diskcache
 from loguru import logger
 
 from src.core.config import settings
-from src.core.constants import MENSA_LANGUAGES, MENSA_LOCATIONS, NEWSFEED_LANGUAGES
+from src.core.constants import (
+    MENSA_CAMPUS_LOCATIONS,
+    SUPPORTED_LANGUAGES,
+)
 from src.storage import cache_keys
 
 # ---------------------------------------------------------------------------
@@ -42,25 +45,25 @@ _SCHEDULER_KEYS = [
 
 _DATA_KEYS: list[str] = (
     [cache_keys.campus_map()]
-    + [cache_keys.news(lang) for lang in NEWSFEED_LANGUAGES]
-    + [cache_keys.events(lang) for lang in NEWSFEED_LANGUAGES]
-    + [cache_keys.helpful_numbers(lang) for lang in NEWSFEED_LANGUAGES]
-    + [cache_keys.more(lang) for lang in NEWSFEED_LANGUAGES]
+    + [cache_keys.news(lang) for lang in SUPPORTED_LANGUAGES]
+    + [cache_keys.events(lang) for lang in SUPPORTED_LANGUAGES]
+    + [cache_keys.helpful_numbers(lang) for lang in SUPPORTED_LANGUAGES]
+    + [cache_keys.more(lang) for lang in SUPPORTED_LANGUAGES]
     + [
-        cache_keys.mensa_menu(loc, lang)
-        for loc in MENSA_LOCATIONS
-        for lang in MENSA_LANGUAGES
+        cache_keys.mensa_menu(campus, lang)
+        for campus in MENSA_CAMPUS_LOCATIONS
+        for lang in SUPPORTED_LANGUAGES
     ]
     + [
-        cache_keys.mensa_meal(loc, lang)
-        for loc in MENSA_LOCATIONS
-        for lang in MENSA_LANGUAGES
+        cache_keys.mensa_meal(campus, lang)
+        for campus in MENSA_CAMPUS_LOCATIONS
+        for lang in SUPPORTED_LANGUAGES
     ]
-    + [cache_keys.mensa_filters(lang) for lang in MENSA_LANGUAGES]
+    + [cache_keys.mensa_filters(lang) for lang in SUPPORTED_LANGUAGES]
     + [
-        cache_keys.mensa_info(loc, lang)
-        for loc in MENSA_LOCATIONS
-        for lang in MENSA_LANGUAGES
+        cache_keys.mensa_info(campus, lang)
+        for campus in MENSA_CAMPUS_LOCATIONS
+        for lang in SUPPORTED_LANGUAGES
     ]
 )
 
@@ -69,32 +72,32 @@ ALL_EXPECTED_KEYS = _SCHEDULER_KEYS + _DATA_KEYS
 # Keys that belong to each job — used by `clear --job`
 _JOB_KEYS: dict[str, list[str]] = {
     "news": (
-        [cache_keys.news(lang) for lang in NEWSFEED_LANGUAGES]
-        + [cache_keys.events(lang) for lang in NEWSFEED_LANGUAGES]
+        [cache_keys.news(lang) for lang in SUPPORTED_LANGUAGES]
+        + [cache_keys.events(lang) for lang in SUPPORTED_LANGUAGES]
         + [cache_keys.scheduler_last_run("news")]
     ),
     "mensa": (
         [
-            cache_keys.mensa_menu(loc, lang)
-            for loc in MENSA_LOCATIONS
-            for lang in MENSA_LANGUAGES
+            cache_keys.mensa_menu(campus, lang)
+            for campus in MENSA_CAMPUS_LOCATIONS
+            for lang in SUPPORTED_LANGUAGES
         ]
         + [
-            cache_keys.mensa_meal(loc, lang)
-            for loc in MENSA_LOCATIONS
-            for lang in MENSA_LANGUAGES
+            cache_keys.mensa_meal(campus, lang)
+            for campus in MENSA_CAMPUS_LOCATIONS
+            for lang in SUPPORTED_LANGUAGES
         ]
-        + [cache_keys.mensa_filters(lang) for lang in MENSA_LANGUAGES]
+        + [cache_keys.mensa_filters(lang) for lang in SUPPORTED_LANGUAGES]
         + [
-            cache_keys.mensa_info(loc, lang)
-            for loc in MENSA_LOCATIONS
-            for lang in MENSA_LANGUAGES
+            cache_keys.mensa_info(campus, lang)
+            for campus in MENSA_CAMPUS_LOCATIONS
+            for lang in SUPPORTED_LANGUAGES
         ]
         + [cache_keys.scheduler_last_run("mensa")]
     ),
     "helpful-numbers": (
-        [cache_keys.helpful_numbers(lang) for lang in NEWSFEED_LANGUAGES]
-        + [cache_keys.more(lang) for lang in NEWSFEED_LANGUAGES]
+        [cache_keys.helpful_numbers(lang) for lang in SUPPORTED_LANGUAGES]
+        + [cache_keys.more(lang) for lang in SUPPORTED_LANGUAGES]
         + [cache_keys.scheduler_last_run("helpful_numbers")]
     ),
     "map": [cache_keys.campus_map(), cache_keys.scheduler_last_run("map")],
@@ -200,31 +203,33 @@ def cmd_validate(_args: argparse.Namespace) -> None:
     from src.models.news import NewsFeed
 
     key_model_map: dict[str, Any] = {
-        **{cache_keys.news(lang): NewsFeed for lang in NEWSFEED_LANGUAGES},
-        **{cache_keys.events(lang): EventFeed for lang in NEWSFEED_LANGUAGES},
+        **{cache_keys.news(lang): NewsFeed for lang in SUPPORTED_LANGUAGES},
+        **{cache_keys.events(lang): EventFeed for lang in SUPPORTED_LANGUAGES},
         **{
             cache_keys.helpful_numbers(lang): HelpfulNumbersResponse
-            for lang in NEWSFEED_LANGUAGES
+            for lang in SUPPORTED_LANGUAGES
         },
-        **{cache_keys.more(lang): MoreLinksResponse for lang in NEWSFEED_LANGUAGES},
+        **{cache_keys.more(lang): MoreLinksResponse for lang in SUPPORTED_LANGUAGES},
         **{
-            cache_keys.mensa_menu(loc, lang): MensaMenu
-            for loc in MENSA_LOCATIONS
-            for lang in MENSA_LANGUAGES
+            cache_keys.mensa_menu(campus, lang): MensaMenu
+            for campus in MENSA_CAMPUS_LOCATIONS
+            for lang in SUPPORTED_LANGUAGES
         },
-        **{cache_keys.mensa_filters(lang): MensaFilters for lang in MENSA_LANGUAGES},
         **{
-            cache_keys.mensa_info(loc, lang): MensaInfo
-            for loc in MENSA_LOCATIONS
-            for lang in MENSA_LANGUAGES
+            cache_keys.mensa_filters(lang): MensaFilters for lang in SUPPORTED_LANGUAGES
+        },
+        **{
+            cache_keys.mensa_info(campus, lang): MensaInfo
+            for campus in MENSA_CAMPUS_LOCATIONS
+            for lang in SUPPORTED_LANGUAGES
         },
         cache_keys.campus_map(): MapResponse,
     }
 
     meal_keys = {
-        cache_keys.mensa_meal(loc, lang)
-        for loc in MENSA_LOCATIONS
-        for lang in MENSA_LANGUAGES
+        cache_keys.mensa_meal(campus, lang)
+        for campus in MENSA_CAMPUS_LOCATIONS
+        for lang in SUPPORTED_LANGUAGES
     }
 
     cache = _open_cache()

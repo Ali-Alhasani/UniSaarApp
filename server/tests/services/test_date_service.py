@@ -12,11 +12,11 @@ from src.services.date_service import format_mensa_date, mensa_target_date
     "now, expected",
     [
         (datetime(2020, 1, 6, 9, 0), date(2020, 1, 6)),  # Monday morning → today
-        (datetime(2020, 1, 6, 14, 0), date(2020, 1, 7)),  # Monday 14:00 → tomorrow
+        (datetime(2020, 1, 6, 14, 0), date(2020, 1, 6)),  # Monday 14:00 → today
         (datetime(2020, 1, 9, 9, 0), date(2020, 1, 9)),  # Thursday morning → today
-        (datetime(2020, 1, 9, 14, 0), date(2020, 1, 10)),  # Thursday 14:00 → Friday
+        (datetime(2020, 1, 9, 14, 0), date(2020, 1, 9)),  # Thursday 14:00 → today
         (datetime(2020, 1, 10, 9, 0), date(2020, 1, 10)),  # Friday morning → today
-        (datetime(2020, 1, 10, 14, 0), date(2020, 1, 13)),  # Friday 14:00 → Monday
+        (datetime(2020, 1, 10, 14, 0), date(2020, 1, 10)),  # Friday 14:00 → today
         (datetime(2020, 1, 11, 12, 0), date(2020, 1, 13)),  # Saturday → Monday
         (datetime(2020, 1, 12, 12, 0), date(2020, 1, 13)),  # Sunday → Monday
     ],

@@ -38,9 +38,8 @@ _WEEKDAY_NAMES: dict[Language, list[str]] = {
 def mensa_target_date(now: datetime) -> date:
     """Return the date whose menu to display for a given datetime.
 
-    - Mon–Fri before 14:00: today
-    - Mon–Thu at/after 14:00: tomorrow
-    - Fri at/after 14:00, Sat, Sun: next Monday
+    - Mon–Fri: today
+    - Sat, Sun: next Monday
     """
     current = now.date()
     weekday = current.weekday()  # 0 = Mon … 6 = Sun
@@ -48,10 +47,6 @@ def mensa_target_date(now: datetime) -> date:
     if weekday == 5:  # Saturday → Monday
         return current + timedelta(days=2)
     if weekday == 6:  # Sunday → Monday
-        return current + timedelta(days=1)
-    if now.hour >= 14:
-        if weekday == 4:  # Friday after 14:00 → Monday
-            return current + timedelta(days=3)
         return current + timedelta(days=1)
     return current
 

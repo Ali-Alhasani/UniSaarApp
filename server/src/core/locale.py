@@ -37,9 +37,14 @@ CACHE_NOT_READY: dict[Language, str] = {
     ),
 }
 MEAL_NOT_FOUND: dict[Language, str] = {
-    Language.DE: "Mahlzeitdetails nicht gefunden.",
-    Language.EN: "Meal details not found.",
-    Language.FR: "Détails du repas introuvables.",
+    Language.DE: (
+        "Mahlzeitdetails nicht gefunden."
+        " Bitte aktualisiere dein Menü und versuche es erneut."
+    ),
+    Language.EN: "Meal details not found. Please refresh your feed and try again.",
+    Language.FR: (
+        "Détails du repas introuvables. Veuillez actualiser votre menu et réessayer."
+    ),
 }
 DIRECTORY_QUERY_TOO_SHORT: dict[Language, str] = {
     Language.DE: "Die Suchanfrage muss mindestens 3 Zeichen lang sein.",

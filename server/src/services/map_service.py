@@ -7,13 +7,13 @@ from pathlib import Path
 from loguru import logger
 
 from src.core.constants import CAMPUS_CITY_NAMES
-from src.core.enums import MensaLocation
+from src.core.enums import CampusLocation
 from src.models.map import MapEntry, MapResponse
 
 
 def _campus_city(raw: str) -> str:
     try:
-        return CAMPUS_CITY_NAMES[MensaLocation(raw)]
+        return CAMPUS_CITY_NAMES[CampusLocation(raw)]
     except (KeyError, ValueError):
         return raw
 
@@ -52,7 +52,7 @@ class MapService:
                             website=str(item.get("website", "")),
                         )
                     )
-                except Exception:
-                    logger.warning("Skipping malformed map entry: {}", item)
+                except Exception as exc:
+                    logger.warning("Skipping malformed map entry {}: {}", item, exc)
         update_time = datetime.now(UTC).strftime("%Y-%m-%dT%H:%M:%SZ")
         return MapResponse(map_info=entries, update_time=update_time)
