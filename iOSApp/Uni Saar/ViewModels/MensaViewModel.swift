@@ -44,19 +44,13 @@ class MensaMenuViewModel: ParentViewModel {
         }
     }
 
-    func realodGetApi() {
-        Task { [weak self] in await self?.loadGetMensaMenu() }
-    }
-
     func loadGetMockMenu() {
         daysMenus = MensaMenuModel.menuDemoData.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
     }
 
-    func isMenuUpdated() {
-        guard case let .normal(viewModel) = daysMenus.first else { return }
-        if viewModel.dateValue != getDateFormater(date: Date()) {
-            Task { [weak self] in await self?.loadGetMensaMenu() }
-        }
+    func isMenuOutdated() -> Bool {
+        guard case let .normal(viewModel) = daysMenus.first else { return false }
+        return viewModel.dateValue != getDateFormater(date: Date())
     }
 
     func getDateFormater(date: Date) -> String {

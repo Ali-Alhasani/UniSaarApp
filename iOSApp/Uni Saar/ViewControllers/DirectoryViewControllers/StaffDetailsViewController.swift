@@ -25,8 +25,12 @@ class StaffDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigateButton.isHidden = true
-        staff.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        setupViewModel()
         setupInitialDataLoad()
+    }
+
+    private func setupViewModel() {
+        staff.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
     }
 
     /// NATIVE iOS 26 API: The framework automatically tracks any @Observable referenced inside here.

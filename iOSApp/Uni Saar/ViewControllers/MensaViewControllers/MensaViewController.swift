@@ -79,7 +79,7 @@ class MensaViewController: UIViewController {
     }
 
     func isMenuUpdated() {
-        mensaMenuViewModel.isMenuUpdated()
+        if mensaMenuViewModel.isMenuOutdated() { load() }
     }
 
     func initialSelection() {

@@ -12,17 +12,15 @@ import XCTest
 @MainActor
 final class AlertControllerTest: XCTestCase {
     func testAlert() {
-        var handlerCalled = false
+        var retried = false
 
         let alert = SingleButtonAlert(
-            message: "",
-            action: AlertAction(handler: {
-                handlerCalled = true
-            }, tryAgainHandler: nil)
+            message: "test error",
+            action: AlertAction(tryAgainHandler: { retried = true })
         )
 
-        alert.action.handler?()
+        alert.action.tryAgainHandler?()
 
-        XCTAssertTrue(handlerCalled, "Alert action handler should be called")
+        XCTAssertTrue(retried, "Try again handler should be called")
     }
 }

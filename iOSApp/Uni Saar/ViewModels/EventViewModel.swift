@@ -69,9 +69,13 @@ class EventViewModel: ParentViewModel {
         return events.count
     }
 
+    static let eventDateFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "yyyy'-'MM'-'dd'"
+        return f
+    }()
+
     func convertDate(strDate: String) -> Date? {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy'-'MM'-'dd'"
-        return dateFormatter.date(from: strDate)
+        EventViewModel.eventDateFormatter.date(from: strDate)
     }
 }

@@ -23,8 +23,12 @@ class HelpfulContactsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        directoryViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        setupViewModel()
         refershLoad()
+    }
+
+    private func setupViewModel() {
+        directoryViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
     }
 
     override func updateProperties() {
