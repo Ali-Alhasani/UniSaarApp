@@ -32,7 +32,7 @@ class DirectoryViewController: UIViewController {
         setupSearchBar()
         setupTableView()
         observeKeyboardEvents()
-        directoryViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        setupViewModel()
         refershLoad()
     }
 
@@ -43,6 +43,12 @@ class DirectoryViewController: UIViewController {
     private func updateUI() {
         if directoryViewModel.showLoadingIndicator { directoryTableView.showingLoadingView() } else { directoryTableView.hideLoadingView() }
         directoryTableView.reloadData()
+    }
+
+    private func setupViewModel() {
+        directoryViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        directoryViewModel.onRetry = { [weak self] in self?.refershLoad() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setupSearchBar() {

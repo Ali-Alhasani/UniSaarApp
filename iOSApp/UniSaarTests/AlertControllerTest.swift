@@ -9,7 +9,8 @@
 @testable import Uni_Saar
 import XCTest
 
-class AlertControllerTest: XCTestCase {
+@MainActor
+final class AlertControllerTest: XCTestCase {
     func testAlert() {
         var handlerCalled = false
 

@@ -33,7 +33,7 @@ class EventCalanderViewController: UIViewController {
         super.viewDidLoad()
         setUpCalander()
         setupTableView()
-        eventViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        setupViewModel()
         load()
     }
 
@@ -49,6 +49,12 @@ class EventCalanderViewController: UIViewController {
     private func updateUI() {
         if eventViewModel.showLoadingIndicator { tableView.showingLoadingView() } else { tableView.hideLoadingView() }
         tableView.reloadData()
+    }
+
+    private func setupViewModel() {
+        eventViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        eventViewModel.onRetry = { [weak self] in self?.load() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setUpCalander() {

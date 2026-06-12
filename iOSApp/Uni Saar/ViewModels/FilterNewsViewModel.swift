@@ -50,14 +50,8 @@ class FilterNewsViewModel: ParentViewModel {
             onFilterListUpdated?()
         } catch {
             showLoadingIndicator = false
-            showError(error: error, tryAgainHandler: { [weak self] in
-                self?.reloadGetApi()
-            })
+            showError(error: error)
         }
-    }
-
-    func reloadGetApi() {
-        Task { await self.loadGetFilterList() }
     }
 
     func getOldSelectedCategories(newViewModel: FilterCategoriesCellViewModel) -> [FilterIntElement] {

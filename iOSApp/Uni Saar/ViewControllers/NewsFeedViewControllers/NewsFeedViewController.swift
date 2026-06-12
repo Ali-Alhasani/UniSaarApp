@@ -29,12 +29,7 @@ class NewsFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        newsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
-        newsViewModel.onInitialLoad = { [weak self] in
-            guard let self else { return }
-            newsTable.reloadData()
-            initialSelection()
-        }
+        setupViewModel()
         Task { [weak self] in await self?.newsViewModel.loadFirstPage(filterCatgroies: []) }
     }
 
@@ -50,6 +45,15 @@ class NewsFeedViewController: UIViewController {
 
     @objc private func refershLoad() {
         Task { [weak self] in await self?.newsViewModel.loadFirstPage(filterCatgroies: []) }
+    }
+
+    private func setupViewModel() {
+        newsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        newsViewModel.onInitialLoad = { [weak self] in
+            guard let self else { return }
+            newsTable.reloadData()
+            initialSelection()
+        }
     }
 
     func setupTableView() {

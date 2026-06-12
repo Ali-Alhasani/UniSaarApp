@@ -20,12 +20,18 @@ class MensaViewController: UIViewController {
     }
 
     lazy var mensaMenuViewModel: MensaMenuViewModel = .init()
+    private var loadTask: Task<Void, Never>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
-        mensaMenuViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        setupViewModel()
         load()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        loadTask?.cancel()
     }
 
     override func updateProperties() {
@@ -53,7 +59,14 @@ class MensaViewController: UIViewController {
     }
 
     @objc func load() {
-        Task { [weak self] in await self?.mensaMenuViewModel.loadGetMensaMenu() }
+        loadTask?.cancel()
+        loadTask = Task { [weak self] in await self?.mensaMenuViewModel.loadGetMensaMenu() }
+    }
+
+    private func setupViewModel() {
+        mensaMenuViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        mensaMenuViewModel.onRetry = { [weak self] in self?.load() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setupCollectionView() {

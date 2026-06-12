@@ -30,8 +30,7 @@ class FilterNewsFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        filterNewsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
-        filterNewsViewModel.onFilterListUpdated = { [weak self] in self?.filterTableView.reloadData() }
+        setupViewModel()
         Task { [weak self] in await self?.filterNewsViewModel.loadGetFilterList() }
     }
 
@@ -41,6 +40,13 @@ class FilterNewsFeedViewController: UIViewController {
 
     private func updateUI() {
         if filterNewsViewModel.showLoadingIndicator { filterTableView.showingLoadingView() } else { filterTableView.hideLoadingView() }
+    }
+
+    private func setupViewModel() {
+        filterNewsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        filterNewsViewModel.onRetry = { [weak self] in self?.refershLoad() }
+        filterNewsViewModel.onFilterListUpdated = { [weak self] in self?.filterTableView.reloadData() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setupTableView() {
