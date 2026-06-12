@@ -11,23 +11,27 @@ import XCTest
 
 @MainActor
 final class FilterNewsViewModelTests: XCTestCase {
-    func testDidUpdateFilterListOnSuccess() async {
+    func testOnFilterListUpdatedFiredOnSuccess() async {
+        var fired = false
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .success([
             NewsCategories(json: ["id": 1, "name": "News"]),
             NewsCategories(json: ["id": 2, "name": "Events"])
         ])
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
+        viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
-        XCTAssertTrue(viewModel.didUpdatefilterList)
+        XCTAssertTrue(fired)
     }
 
-    func testDidUpdateFilterListFalseOnError() async {
+    func testOnFilterListUpdatedNotFiredOnError() async {
+        var fired = false
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .failure(MyError.customError)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
+        viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
-        XCTAssertFalse(viewModel.didUpdatefilterList)
+        XCTAssertFalse(fired)
     }
 
     func testOnAlertFiredOnError() async {

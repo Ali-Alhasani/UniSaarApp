@@ -12,7 +12,7 @@ import Observation
 
 @Observable
 class FilterNewsViewModel: ParentViewModel {
-    var didUpdatefilterList: Bool = false
+    @ObservationIgnored var onFilterListUpdated: (@MainActor () -> Void)?
     var isFilterdCacheUpdated: Bool = false
     @ObservationIgnored var fetchedResultsController: NSFetchedResultsController<NewsCategoriesCache> = {
         let fetchRequest = NSFetchRequest<NewsCategoriesCache>(entityName: String(describing: NewsCategoriesCache.self))
@@ -34,8 +34,8 @@ class FilterNewsViewModel: ParentViewModel {
         showLoadingIndicator = true
         fetchNewsFilterFromStorage()
         if isFilterdCacheUpdated {
-            didUpdatefilterList = true
             showLoadingIndicator = false
+            onFilterListUpdated?()
             return
         }
         do {
@@ -47,10 +47,9 @@ class FilterNewsViewModel: ParentViewModel {
             dataClient.saveInCoreDataWith(model: viewModelList)
             fetchNewsFilterFromStorage()
             isFilterdCacheUpdated = true
-            didUpdatefilterList = true
+            onFilterListUpdated?()
         } catch {
             showLoadingIndicator = false
-            didUpdatefilterList = false
             showError(error: error, tryAgainHandler: { [weak self] in
                 self?.reloadGetApi()
             })
