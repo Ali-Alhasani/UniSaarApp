@@ -13,18 +13,8 @@ class MediatorDelegate: UIResponder {
     static var window: UIWindow?
     static var sceneDelegate: SceneDelegate?
     static func configureRootViewController(window: UIWindow?, sceneDelegate: SceneDelegate? = nil) {
-        AppSessionManager.loadWelcomeScreenStatus()
         MediatorDelegate.sceneDelegate = sceneDelegate
-        // DispatchQueue.main.async {
-        AppSessionManager.loadCampuslocation()
-        AppSessionManager.loadMensafiltersStatus()
-        AppSessionManager.loadNewsfiltersStatus()
-        AppSessionManager.loadMoreLinksStatus()
-        AppSessionManager.loadHelpfulNumberStatus()
-        // }
-        if !AppSessionManager.shared.dismissWelcomeScreen, window?.rootViewController is AppSetupFirstScreenViewController {
-            return
-        } else {
+        if AppSessionManager.shared.dismissWelcomeScreen {
             navigateToMainHomeScreen(window: window)
         }
     }

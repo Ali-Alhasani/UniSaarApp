@@ -14,16 +14,13 @@ class SetupPrivacyViewController: UIViewController {
     /// for remembering in next opening time to not open setup screen again
     func nextSessionWelcomeScreen() {
         AppSessionManager.shared.dismissWelcomeScreen = true
-        AppSessionManager.saveWelcomeScreenStatus()
     }
 
     @IBAction func acceptDataAction(_ sender: Any) {
-        AppSessionManager.shared.isEventEnabled = true
         nextScreen()
     }
 
     @IBAction func refuseShareDataAction(_ sender: Any) {
-        AppSessionManager.shared.isEventEnabled = false
         nextScreen()
     }
 
