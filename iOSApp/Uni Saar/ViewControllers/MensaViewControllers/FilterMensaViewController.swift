@@ -54,7 +54,6 @@ class FilterMensaViewController: UIViewController {
         super.viewWillDisappear(animated)
         loadTask?.cancel()
         AppSessionManager.shared.foodAlarmTime = filterMensaViewModel.selectedAlramTime
-        AppSessionManager.saveFoodAlarmStatus()
     }
 
     private func setupViewModel() {

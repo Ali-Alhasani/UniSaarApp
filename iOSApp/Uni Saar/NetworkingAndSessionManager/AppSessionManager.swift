@@ -7,125 +7,79 @@
 //
 
 import Foundation
+import Observation
 
-/// todo later
 @MainActor
+@Observable
 class AppSessionManager {
-    var dismissWelcomeScreen: Bool = false
-    var selectedCampus: Campus = .saarbruken
-    var selectedMensaLocation: Campus = .saarbruken
-    var isEventEnabled = false
-    // api last updated date
-    var mensafiltersLastChanged: String?
-    var newsFiltersLastChanged: String?
-    var morelinksLastChanged: String = "never"
-    var helpfulNumbersLastChanged: String = "never"
-    var coordinateLastChanged: String = ""
-    var isFoodAlarmEnabled: Bool = false
-    var foodAlarmTime: Date?
-    // to avoid fetchFilterListFromStorage more than one time in the run app run time
+    static let shared = AppSessionManager()
+
+    // MARK: - Persisted
+
+    var dismissWelcomeScreen: Bool {
+        didSet { defaults.set(dismissWelcomeScreen, forKey: Self.skipWelcomeScreenKey) }
+    }
+
+    var selectedCampus: Campus {
+        didSet { defaults.set(selectedCampus.rawValue, forKey: Self.selectedCampusKey) }
+    }
+
+    var selectedMensaLocation: Campus {
+        didSet { defaults.set(selectedMensaLocation.rawValue, forKey: Self.selectedMensaLocationKey) }
+    }
+
+    var mensafiltersLastChanged: String? {
+        didSet { defaults.set(mensafiltersLastChanged, forKey: Self.mensafiltersLastChangedKey) }
+    }
+
+    var newsFiltersLastChanged: String? {
+        didSet { defaults.set(newsFiltersLastChanged, forKey: Self.newsFiltersLastChangedKey) }
+    }
+
+    var morelinksLastChanged: String {
+        didSet { defaults.set(morelinksLastChanged, forKey: Self.linksLastChangedKey) }
+    }
+
+    var helpfulNumbersLastChanged: String {
+        didSet { defaults.set(helpfulNumbersLastChanged, forKey: Self.helpfulNumbersLastChangedKey) }
+    }
+
+    var isFoodAlarmEnabled: Bool {
+        didSet { defaults.set(isFoodAlarmEnabled, forKey: Self.foodAlarmStatusKey) }
+    }
+
+    var foodAlarmTime: Date? {
+        didSet { defaults.set(foodAlarmTime, forKey: Self.foodAlarmTimeKey) }
+    }
+
+    // MARK: - Session-only (reset each launch)
+
     var isMensaFiltersCacheFetched = false
-    class var shared: AppSessionManager {
-        struct Static {
-            static let instance = AppSessionManager()
-        }
-        return Static.instance
-    }
 
-    // save the status of first opening setup screens, to not show it later
-    static let skipWelcomeScreenKey = "skipWelcomeScreen"
-    static let mensafiltersLastChangedKey = "mensafiltersLastChanged"
-    static let newsFiltersLastChangedKey = "newsFiltersLastChanged"
-    static let linksLastChangedKey = "linksLastChangedKey"
-    static let helpfulNumbersLastChangedKey = "helpfulNumbersLastChanged"
-    static let foodAlarmStatusKey = "foodAlarmStatusKey"
-    static let foodAlarmTimeKey = "foodAlarmTimeKey"
-    static let selectedCampusKey = "selectedCampusKey"
-    static let selectedMensaLocationKey = "selectedMensaLocationKey"
-}
+    // MARK: - Private
 
-/// cache functions
-extension AppSessionManager {
-    class func saveWelcomeScreenStatus() {
-        let skipWelcomeScreen = AppSessionManager.shared.dismissWelcomeScreen
-        UserDefaults.standard.set(skipWelcomeScreen, forKey: skipWelcomeScreenKey)
-    }
+    @ObservationIgnored private let defaults: UserDefaults
 
-    class func loadWelcomeScreenStatus() {
-        AppSessionManager.shared.dismissWelcomeScreen = UserDefaults.standard.bool(forKey: skipWelcomeScreenKey)
-    }
+    private static let skipWelcomeScreenKey = "skipWelcomeScreen"
+    private static let selectedCampusKey = "selectedCampusKey"
+    private static let selectedMensaLocationKey = "selectedMensaLocationKey"
+    private static let mensafiltersLastChangedKey = "mensafiltersLastChanged"
+    private static let newsFiltersLastChangedKey = "newsFiltersLastChanged"
+    private static let linksLastChangedKey = "linksLastChangedKey"
+    private static let helpfulNumbersLastChangedKey = "helpfulNumbersLastChanged"
+    private static let foodAlarmStatusKey = "foodAlarmStatusKey"
+    private static let foodAlarmTimeKey = "foodAlarmTimeKey"
 
-    class func saveMensafiltersStatus() {
-        let mensafiltersLastChanged = AppSessionManager.shared.mensafiltersLastChanged
-        UserDefaults.standard.set(mensafiltersLastChanged, forKey: mensafiltersLastChangedKey)
-    }
-
-    class func loadMensafiltersStatus() {
-        guard let tempType = UserDefaults.standard.string(forKey: mensafiltersLastChangedKey) else { return }
-        AppSessionManager.shared.mensafiltersLastChanged = tempType
-    }
-
-    class func saveNewsfiltersStatus() {
-        let newsFiltersLastChanged = AppSessionManager.shared.newsFiltersLastChanged
-        UserDefaults.standard.set(newsFiltersLastChanged, forKey: newsFiltersLastChangedKey)
-    }
-
-    class func loadNewsfiltersStatus() {
-        guard let tempType = UserDefaults.standard.string(forKey: newsFiltersLastChangedKey) else { return }
-        AppSessionManager.shared.newsFiltersLastChanged = tempType
-    }
-
-    class func saveMoreLinksStatus() {
-        let morelinksLastChanged = AppSessionManager.shared.morelinksLastChanged
-        UserDefaults.standard.set(morelinksLastChanged, forKey: linksLastChangedKey)
-    }
-
-    class func loadMoreLinksStatus() {
-        guard let tempType = UserDefaults.standard.string(forKey: linksLastChangedKey) else { return }
-        AppSessionManager.shared.morelinksLastChanged = tempType
-    }
-
-    class func saveHelpfulNumberStatus() {
-        let helpfulNumbersLastChange = AppSessionManager.shared.helpfulNumbersLastChanged
-        UserDefaults.standard.set(helpfulNumbersLastChange, forKey: helpfulNumbersLastChangedKey)
-    }
-
-    class func loadHelpfulNumberStatus() {
-        guard let tempType = UserDefaults.standard.string(forKey: helpfulNumbersLastChangedKey) else { return }
-        AppSessionManager.shared.helpfulNumbersLastChanged = tempType
-    }
-
-    class func saveFoodAlarmStatus() {
-        let foodAlarmStatus = AppSessionManager.shared.isFoodAlarmEnabled
-        UserDefaults.standard.set(foodAlarmStatus, forKey: foodAlarmStatusKey)
-
-        let foodAlarmTime = AppSessionManager.shared.foodAlarmTime
-        UserDefaults.standard.set(foodAlarmTime, forKey: foodAlarmTimeKey)
-    }
-
-    class func loadFoodAlarmTime() {
-        AppSessionManager.shared.isFoodAlarmEnabled = UserDefaults.standard.bool(forKey: foodAlarmStatusKey)
-        AppSessionManager.shared.foodAlarmTime = UserDefaults.standard.object(forKey: foodAlarmTimeKey) as? Date
-    }
-
-    class func saveCampuslocation() {
-        let campuslocation = AppSessionManager.shared.selectedCampus.locationKey
-        UserDefaults.standard.set(campuslocation, forKey: selectedCampusKey)
-
-        let mensaLocation = AppSessionManager.shared.selectedMensaLocation.locationKey
-        UserDefaults.standard.set(mensaLocation, forKey: selectedMensaLocationKey)
-    }
-
-    class func loadCampuslocation() {
-        guard let campuslocation = UserDefaults.standard.string(forKey: selectedCampusKey) else { return }
-        AppSessionManager.shared.selectedCampus = Campus(rawValue: campuslocation) ?? .saarbruken
-
-        guard let mensaLocation = UserDefaults.standard.string(forKey: selectedMensaLocationKey) else { return }
-        AppSessionManager.shared.selectedMensaLocation = Campus(rawValue: mensaLocation) ?? .saarbruken
-        notifyCampusView()
-    }
-
-    class func notifyCampusView() {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+        dismissWelcomeScreen = defaults.bool(forKey: Self.skipWelcomeScreenKey)
+        selectedCampus = Campus(rawValue: defaults.string(forKey: Self.selectedCampusKey) ?? "") ?? .saarbruken
+        selectedMensaLocation = Campus(rawValue: defaults.string(forKey: Self.selectedMensaLocationKey) ?? "") ?? .saarbruken
+        mensafiltersLastChanged = defaults.string(forKey: Self.mensafiltersLastChangedKey)
+        newsFiltersLastChanged = defaults.string(forKey: Self.newsFiltersLastChangedKey)
+        morelinksLastChanged = defaults.string(forKey: Self.linksLastChangedKey) ?? "never"
+        helpfulNumbersLastChanged = defaults.string(forKey: Self.helpfulNumbersLastChangedKey) ?? "never"
+        isFoodAlarmEnabled = defaults.bool(forKey: Self.foodAlarmStatusKey)
+        foodAlarmTime = defaults.object(forKey: Self.foodAlarmTimeKey) as? Date
     }
 }

@@ -37,11 +37,9 @@ class SettingsViewController: UITableViewController {
             if indexPath.section == 0, indexPath.row == 0 {
                 cell.accessoryType = .checkmark
                 AppSessionManager.shared.selectedCampus = Campus.saarbruken
-                notifyCampusView()
             } else if indexPath.section == 0, indexPath.row == 1 {
                 cell.accessoryType = .checkmark
                 AppSessionManager.shared.selectedCampus = Campus.homburg
-                notifyCampusView()
             }
         }
     }
@@ -50,10 +48,6 @@ class SettingsViewController: UITableViewController {
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.accessoryType = .none
         }
-    }
-
-    func notifyCampusView() {
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "CampusSettingsDidUpdate"), object: nil)
     }
 
     func goToAppSettings() {

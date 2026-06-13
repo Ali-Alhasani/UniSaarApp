@@ -79,7 +79,6 @@ class AppSetupFirstScreenViewController: UIViewController {
 
     func nextSessionWelcomeScreen() {
         AppSessionManager.shared.dismissWelcomeScreen = true
-        AppSessionManager.saveWelcomeScreenStatus()
     }
 
     func cacheCampusCoorFile() {

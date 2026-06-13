@@ -31,7 +31,7 @@ class CampusViewController: UIViewController {
         selectedCampus = AppSessionManager.shared.selectedCampus
         campusCoor = CampusModel(filename: AppSessionManager.shared.selectedCampus.mapCoorFileName)
         setUpSearchBar()
-        setupNotification()
+        setupCampusObservation()
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
     }
 
@@ -80,8 +80,15 @@ class CampusViewController: UIViewController {
         }
     }
 
-    func setupNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(updateCampus), name: NSNotification.Name("CampusSettingsDidUpdate"), object: nil)
+    func setupCampusObservation() {
+        withObservationTracking {
+            _ = AppSessionManager.shared.selectedCampus
+        } onChange: { [weak self] in
+            Task { @MainActor [weak self] in
+                self?.updateCampus()
+                self?.setupCampusObservation()
+            }
+        }
     }
 
     func loadCoordinates(checkForUpdate: Bool = true) -> [MapInfoModel] {
@@ -100,13 +107,12 @@ class CampusViewController: UIViewController {
         mapItem.openInMaps(launchOptions: nil)
     }
 
-    @objc func updateCampus() {
+    func updateCampus() {
         didChangeLocationFilter(selectedCampus: AppSessionManager.shared.selectedCampus, regionNeedUpdate: true)
     }
 
     func saveLocation() {
         AppSessionManager.shared.selectedCampus = selectedCampus
-        AppSessionManager.saveCampuslocation()
     }
 
     func updateCoordinateCache(lastChangedDate: String) {
