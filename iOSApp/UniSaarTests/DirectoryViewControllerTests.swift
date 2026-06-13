@@ -82,7 +82,7 @@ class DirectoryViewControllerTests: XCTestCase {
         case .empty:
             let cell = viewControllerUnderTest.getHelpfulNumbersCell(indexPath: IndexPath(row: 0, section: 0))
             let config = cell.contentConfiguration as? UIListContentConfiguration
-            XCTAssertEqual(config?.text, NSLocalizedString("EmptyResults", comment: ""))
+            XCTAssertEqual(config?.text, String(localized: "EmptyResults"))
 
         case .none:
             break
