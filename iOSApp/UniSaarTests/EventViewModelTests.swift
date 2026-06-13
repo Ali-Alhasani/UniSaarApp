@@ -21,7 +21,7 @@ final class EventViewModelTests: XCTestCase {
 
     func testSelectedDateEventsEmptyOnError() async {
         let dataClient = MockAppDataClient()
-        dataClient.getEventsResult = .failure(MyError.customError)
+        dataClient.getEventsResult = .failure(AppError.networkFailure)
         let viewModel = EventViewModel(dataClient: dataClient)
         await viewModel.loadGetEvents(month: "12", year: "2019")
         XCTAssertTrue(viewModel.selectedDateEvents.isEmpty)
@@ -51,7 +51,7 @@ final class EventViewModelTests: XCTestCase {
 
     func testErrorEventCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getEventsResult = .failure(MyError.customError)
+        dataClient.getEventsResult = .failure(AppError.networkFailure)
         let viewModel = EventViewModel(dataClient: dataClient)
         await viewModel.loadGetEvents(month: "12", year: "2019")
         guard case .error = viewModel.eventCells.first else {

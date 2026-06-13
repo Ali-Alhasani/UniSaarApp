@@ -40,13 +40,13 @@ class APIClient {
             APIClient.printL("Error while fetching data: \(afError)", type: .error)
             if let responseData = response.data,
                let jsonMessage = String(data: responseData, encoding: .utf8), !jsonMessage.isEmpty {
-                throw LLError(status: false, message: jsonMessage)
+                throw AppError.serverMessage(jsonMessage)
             }
             if afError.isResponseSerializationError || afError.isInvalidURLError ||
                 afError.isParameterEncodingError || afError.isResponseValidationError {
-                throw MyError.customError
+                throw AppError.networkFailure
             }
-            throw afError.underlyingError ?? MyError.customError
+            throw afError.underlyingError ?? AppError.networkFailure
         }
     }
 

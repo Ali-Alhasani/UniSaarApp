@@ -16,16 +16,16 @@ final class ObservationTests: XCTestCase {
         var capturedAlert: SingleButtonAlert?
         let viewModel = NewsFeedViewModel()
         viewModel.onAlert = { capturedAlert = $0 }
-        viewModel.showError(error: MyError.customError)
+        viewModel.showError(error: AppError.networkFailure)
         XCTAssertNotNil(capturedAlert)
         XCTAssertNotNil(capturedAlert?.message)
     }
 
-    func testOnAlertFiredOnLLError() {
+    func testOnAlertFiredOnServerError() {
         var capturedAlert: SingleButtonAlert?
         let viewModel = NewsFeedViewModel()
         viewModel.onAlert = { capturedAlert = $0 }
-        viewModel.showError(error: LLError(status: false, message: "test error"))
+        viewModel.showError(error: AppError.serverMessage("test error"))
         XCTAssertNotNil(capturedAlert)
         XCTAssertNotNil(capturedAlert?.message)
     }

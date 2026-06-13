@@ -27,7 +27,7 @@ final class FilterNewsViewModelTests: XCTestCase {
     func testOnFilterListUpdatedNotFiredOnError() async {
         var fired = false
         let dataClient = MockAppDataClient()
-        dataClient.getNewsCategoriesResult = .failure(MyError.customError)
+        dataClient.getNewsCategoriesResult = .failure(AppError.networkFailure)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
         viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
@@ -37,7 +37,7 @@ final class FilterNewsViewModelTests: XCTestCase {
     func testOnAlertFiredOnError() async {
         var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
-        dataClient.getNewsCategoriesResult = .failure(MyError.customError)
+        dataClient.getNewsCategoriesResult = .failure(AppError.networkFailure)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
         viewModel.onAlert = { capturedAlert = $0 }
         await viewModel.loadGetFilterList()

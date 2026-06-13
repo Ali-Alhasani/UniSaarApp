@@ -54,7 +54,7 @@ final class DirectoryViewModelTests: XCTestCase {
 
     func testErrorDirectoryCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getSearchDirectoryResult = .failure(MyError.customError)
+        dataClient.getSearchDirectoryResult = .failure(AppError.networkFailure)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetSearchResults(searchQuery: "")
         guard case .error = viewModel.searchResutlsCells.first else {
@@ -112,7 +112,7 @@ final class DirectoryViewModelTests: XCTestCase {
 
     func testErrorHelpfulNumberCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getHelpfulNumbersResult = .failure(MyError.customError)
+        dataClient.getHelpfulNumbersResult = .failure(AppError.networkFailure)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetHelpHelpfulNumbers()
         guard case .error = viewModel.helpfulNumbersCells.first else {

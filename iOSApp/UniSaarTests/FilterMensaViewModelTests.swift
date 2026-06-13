@@ -36,7 +36,7 @@ final class FilterMensaViewModelTests: XCTestCase {
     func testOnFilterListUpdatedNotFiredOnError() async {
         var fired = false
         let dataClient = MockAppDataClient()
-        dataClient.getMensaFilterResult = .failure(MyError.customError)
+        dataClient.getMensaFilterResult = .failure(AppError.networkFailure)
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
         viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
@@ -46,7 +46,7 @@ final class FilterMensaViewModelTests: XCTestCase {
     func testOnAlertFiredOnError() async {
         var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
-        dataClient.getMensaFilterResult = .failure(MyError.customError)
+        dataClient.getMensaFilterResult = .failure(AppError.networkFailure)
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
         viewModel.onAlert = { capturedAlert = $0 }
         await viewModel.loadGetFilterList()

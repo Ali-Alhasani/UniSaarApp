@@ -180,7 +180,7 @@ extension FilterMensaViewModel {
     }
 
     func notificationAlert() {
-        showError(error: LLError(status: true, message: NSLocalizedString("enableNotification", comment: "")))
+        showAlert(message: NSLocalizedString("enableNotification", comment: ""))
     }
 
     func loadFoodAlarmStatus() {

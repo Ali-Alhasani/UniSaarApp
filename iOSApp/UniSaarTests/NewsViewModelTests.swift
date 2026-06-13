@@ -34,7 +34,7 @@ final class NewsViewModelTests: XCTestCase {
 
     func testErrorNewsCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getNewsResult = .failure(MyError.customError)
+        dataClient.getNewsResult = .failure(AppError.networkFailure)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
         await viewModel.loadFirstPage(filterCatgroies: [])
         guard case .error = viewModel.newsCells.first else { XCTFail("Expected error cell"); return }

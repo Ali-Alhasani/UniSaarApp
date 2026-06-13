@@ -35,7 +35,7 @@ final class StaffDetailsViewModelTests: XCTestCase {
     func testStaffDetailsError() async {
         var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
-        dataClient.getStaffDetailsResult = .failure(MyError.customError)
+        dataClient.getStaffDetailsResult = .failure(AppError.networkFailure)
         let viewModel = StaffDetailsViewModel(dataClient: dataClient)
         viewModel.onAlert = { capturedAlert = $0 }
         await viewModel.loadGetStaffDetails(staffId: 1)

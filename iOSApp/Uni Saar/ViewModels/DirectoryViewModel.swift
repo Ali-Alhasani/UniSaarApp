@@ -53,7 +53,7 @@ class DirectoryViewModel: ParentViewModel {
         } catch {
             showLoadingIndicator = false
             searchResutlsCells = [.error(message: error.localizedDescription)]
-            if !(error is LLError) {
+            if !(error is AppError) {
                 showError(error: error)
             }
         }
