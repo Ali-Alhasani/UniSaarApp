@@ -46,7 +46,7 @@ class APIClient {
                 afError.isParameterEncodingError || afError.isResponseValidationError {
                 throw AppError.networkFailure
             }
-            throw AppError.networkFailure
+            throw afError.underlyingError ?? AppError.networkFailure
         }
     }
 

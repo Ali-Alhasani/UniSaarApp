@@ -29,4 +29,7 @@ class ParentViewModel {
         onAlert?(SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(tryAgainHandler: onRetry)))
     }
 
+    func showAlert(message: String) {
+        onAlert?(SingleButtonAlert(message: message, action: AlertAction(tryAgainHandler: onRetry)))
+    }
 }
