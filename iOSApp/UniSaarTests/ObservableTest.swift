@@ -36,7 +36,7 @@ final class ObservationTests: XCTestCase {
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
         XCTAssertTrue(viewModel.newsCells.isEmpty)
-        await viewModel.loadGetNews(filterCatgroies: [])
+        await viewModel.loadFirstPage(filterCatgroies: [])
         XCTAssertFalse(viewModel.newsCells.isEmpty)
         guard case let .normal(cell) = viewModel.newsCells.first else {
             XCTFail("Expected normal cell from mock")
@@ -53,7 +53,7 @@ final class ObservationTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        let loadTask = Task { await viewModel.loadGetNews(filterCatgroies: []) }
+        let loadTask = Task { await viewModel.loadFirstPage(filterCatgroies: []) }
         // Yield to let the task run up to its first await (the actor-hop into MockAppDataClient)
         await Task.yield()
         XCTAssertTrue(viewModel.showLoadingIndicator, "showLoadingIndicator should be true while the load is in flight")

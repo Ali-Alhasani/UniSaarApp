@@ -49,7 +49,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         viewController.newsViewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewController.newsViewModel.loadGetNews(filterCatgroies: [])
+        await viewController.newsViewModel.loadFirstPage(filterCatgroies: [])
 
         // Force the updateProperties() cycle → updateUI() → reloadData()
         viewController.setNeedsUpdateProperties()
@@ -74,7 +74,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel(json: [:]))
         viewController.newsViewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewController.newsViewModel.loadGetNews(filterCatgroies: [])
+        await viewController.newsViewModel.loadFirstPage(filterCatgroies: [])
 
         viewController.setNeedsUpdateProperties()
         viewController.view.layoutIfNeeded()
@@ -100,7 +100,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .failure(MyError.customError)
         viewController.newsViewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewController.newsViewModel.loadGetNews(filterCatgroies: [])
+        await viewController.newsViewModel.loadFirstPage(filterCatgroies: [])
 
         viewController.setNeedsUpdateProperties()
         viewController.view.layoutIfNeeded()

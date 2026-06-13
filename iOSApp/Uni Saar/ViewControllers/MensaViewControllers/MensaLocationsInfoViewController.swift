@@ -34,7 +34,7 @@ class MensaLocationsInfoViewController: UIViewController {
                 }
                 title = mensaInfo.locationName
             } catch {
-                let okAlert = SingleButtonAlert(message: error.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: { [weak self] in
+                let okAlert = SingleButtonAlert(message: error.localizedDescription, action: AlertAction(tryAgainHandler: { [weak self] in
                     self?.loadAgain()
                 }))
                 presentSingleButtonDialog(alert: okAlert)

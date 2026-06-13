@@ -20,7 +20,7 @@ final class NewsViewModelTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewModel.loadGetNews(filterCatgroies: [])
+        await viewModel.loadFirstPage(filterCatgroies: [])
         guard case .normal = viewModel.newsCells.first else { XCTFail("Expected normal cell"); return }
     }
 
@@ -28,7 +28,7 @@ final class NewsViewModelTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel(json: [:]))
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewModel.loadGetNews(filterCatgroies: [])
+        await viewModel.loadFirstPage(filterCatgroies: [])
         guard case .empty = viewModel.newsCells.first else { XCTFail("Expected empty cell"); return }
     }
 
@@ -36,17 +36,28 @@ final class NewsViewModelTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .failure(MyError.customError)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewModel.loadGetNews(filterCatgroies: [])
+        await viewModel.loadFirstPage(filterCatgroies: [])
         guard case .error = viewModel.newsCells.first else { XCTFail("Expected error cell"); return }
     }
 
-    func testIsFreshLoadSetAfterLoad() async {
-        let testSuccessfulJSON = NewsFeedModel.newsDemoData
+    func testOnInitialLoadFiredAfterFirstPage() async {
+        var fired = false
         let dataClient = MockAppDataClient()
-        dataClient.getNewsResult = .success(testSuccessfulJSON)
+        dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewModel.loadGetNews(filterCatgroies: [])
-        XCTAssertTrue(viewModel.isFreshLoad)
+        viewModel.onInitialLoad = { fired = true }
+        await viewModel.loadFirstPage(filterCatgroies: [])
+        XCTAssertTrue(fired)
+    }
+
+    func testOnInitialLoadNotFiredOnNextPage() async {
+        var fired = false
+        let dataClient = MockAppDataClient()
+        dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
+        let viewModel = NewsFeedViewModel(dataClient: dataClient)
+        viewModel.onInitialLoad = { fired = true }
+        await viewModel.loadNextPage(filterCatgroies: [])
+        XCTAssertFalse(fired)
     }
 
     func testNewsViewModelValues() async {
@@ -54,7 +65,7 @@ final class NewsViewModelTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(news)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        await viewModel.loadGetNews(filterCatgroies: [])
+        await viewModel.loadFirstPage(filterCatgroies: [])
         guard case let .normal(cell) = viewModel.newsCells.first else { XCTFail("Expected normal cell"); return }
         XCTAssertEqual(news.newsList.first?.title, cell.titleText)
         XCTAssertEqual(news.newsList.first?.subTitle, cell.subTitleText)
@@ -69,12 +80,12 @@ final class NewsViewModelTests: XCTestCase {
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
 
         // First page replaces cells
-        await viewModel.loadGetNews(filterCatgroies: [])
+        await viewModel.loadFirstPage(filterCatgroies: [])
         let firstPageCount = viewModel.newsCells.count
         XCTAssertGreaterThan(firstPageCount, 0, "First page should produce at least one cell")
 
-        // Second page (isFirstTime: false) should append, not replace
-        await viewModel.loadGetNews(false, filterCatgroies: [])
+        // Next page should append, not replace
+        await viewModel.loadNextPage(filterCatgroies: [])
         XCTAssertGreaterThan(viewModel.newsCells.count, firstPageCount,
                              "Second page load should append items to the existing cell list")
     }
@@ -85,10 +96,10 @@ final class NewsViewModelTests: XCTestCase {
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
 
         XCTAssertEqual(viewModel.apiPageNumber, 0, "apiPageNumber should start at 0")
-        await viewModel.loadGetNews(filterCatgroies: [])
-        XCTAssertEqual(viewModel.apiPageNumber, 1, "apiPageNumber should increment to 1 after the first load")
-        await viewModel.loadGetNews(false, filterCatgroies: [])
-        XCTAssertEqual(viewModel.apiPageNumber, 2, "apiPageNumber should increment to 2 after the second load")
+        await viewModel.loadFirstPage(filterCatgroies: [])
+        XCTAssertEqual(viewModel.apiPageNumber, 1, "apiPageNumber should increment to 1 after the first page")
+        await viewModel.loadNextPage(filterCatgroies: [])
+        XCTAssertEqual(viewModel.apiPageNumber, 2, "apiPageNumber should increment to 2 after the next page")
     }
 
     func testFirstPageAlwaysReplacesCells() async {
@@ -96,11 +107,11 @@ final class NewsViewModelTests: XCTestCase {
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
 
-        await viewModel.loadGetNews(filterCatgroies: [])
+        await viewModel.loadFirstPage(filterCatgroies: [])
         let countAfterFirst = viewModel.newsCells.count
 
-        // Loading with isFirstTime: true again should reset, not accumulate
-        await viewModel.loadGetNews(true, filterCatgroies: [])
+        // Reloading the first page should replace cells, not accumulate
+        await viewModel.loadFirstPage(filterCatgroies: [])
         XCTAssertEqual(viewModel.newsCells.count, countAfterFirst,
                        "A first-page reload should replace cells rather than append to them")
     }

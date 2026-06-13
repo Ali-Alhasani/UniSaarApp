@@ -21,6 +21,7 @@ class EventCalanderViewController: UIViewController {
     }
 
     lazy var eventViewModel: EventViewModel = .init()
+    private var loadTask: Task<Void, Never>?
 
     fileprivate let formatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -32,8 +33,13 @@ class EventCalanderViewController: UIViewController {
         super.viewDidLoad()
         setUpCalander()
         setupTableView()
-        eventViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        setupViewModel()
         load()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        loadTask?.cancel()
     }
 
     override func updateProperties() {
@@ -42,18 +48,19 @@ class EventCalanderViewController: UIViewController {
 
     private func updateUI() {
         if eventViewModel.showLoadingIndicator { tableView.showingLoadingView() } else { tableView.hideLoadingView() }
-        calendar.reloadData()
         tableView.reloadData()
-        if !eventViewModel.eventCells.isEmpty, eventViewModel.selectedDateEvents.isEmpty {
-            Task { @MainActor [weak self] in
-                self?.eventViewModel.getDayEvents(day: self?.calendar.today)
-            }
-        }
+    }
+
+    private func setupViewModel() {
+        eventViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        eventViewModel.onRetry = { [weak self] in self?.load() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setUpCalander() {
         calendar.delegate = self
         calendar.dataSource = self
+        calendar.allowsMultipleSelection = false
         view.backgroundColor = UIColor.flatGray
         calendar.appearance.titleDefaultColor = UIColor.labelCustomColor
         calendar.appearance.headerTitleColor = UIColor.labelCustomColor
@@ -61,8 +68,13 @@ class EventCalanderViewController: UIViewController {
     }
 
     @objc func load() {
+        loadTask?.cancel()
         let currentCalendarDate = getCurrentDate()
-        Task { [weak self] in await self?.eventViewModel.loadGetEvents(month: currentCalendarDate.month, year: currentCalendarDate.year) }
+        loadTask = Task { [weak self] in
+            await self?.eventViewModel.loadGetEvents(month: currentCalendarDate.month, year: currentCalendarDate.year)
+            guard !Task.isCancelled else { return }
+            self?.calendar.reloadData()
+        }
     }
 
     func getCurrentDate() -> (month: String, year: String) {
@@ -102,15 +114,13 @@ class EventCalanderViewController: UIViewController {
 extension EventCalanderViewController: @preconcurrency FSCalendarDelegate, @preconcurrency FSCalendarDataSource {
     func calendarCurrentPageDidChange(_ calendar: FSCalendar) {
         load()
-        eventViewModel.selectedDateEvents = []
     }
 
     func calendar(_ calendar: FSCalendar, didSelect date: Date, at monthPosition: FSCalendarMonthPosition) {
         if monthPosition == .previous || monthPosition == .next {
             calendar.setCurrentPage(date, animated: true)
-        } else {
-            eventViewModel.getDayEvents(day: date)
         }
+        eventViewModel.getDayEvents(day: date)
     }
 
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {

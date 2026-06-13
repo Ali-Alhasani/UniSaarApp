@@ -25,8 +25,12 @@ class MealDetailsViewController: UIViewController {
         title = mealItemViewModel?.counterDisplayName
         colorView.setAsCircle(cornerRadius: colorView.frame.height / 2)
         colorView.backgroundColor = mealItemViewModel.map { AppStyle.mensaCounterColor($0.colorModel) }
-        meal.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        setupViewModel()
         setupInitialState()
+    }
+
+    private func setupViewModel() {
+        meal.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
     }
 
     /// NATIVE iOS 26 API: The framework automatically tracks any @Observable referenced inside here.

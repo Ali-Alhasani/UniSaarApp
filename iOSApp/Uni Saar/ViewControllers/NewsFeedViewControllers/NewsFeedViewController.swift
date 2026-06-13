@@ -19,12 +19,18 @@ class NewsFeedViewController: UIViewController {
     }
 
     lazy var newsViewModel: NewsFeedViewModel = .init()
+    private let paginationSpinner: UIActivityIndicatorView = {
+        let spinner = UIActivityIndicatorView(style: .medium)
+        spinner.startAnimating()
+        spinner.frame = CGRect(x: 0, y: 0, width: 0, height: 50)
+        return spinner
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        newsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
-        Task { [weak self] in await self?.newsViewModel.loadGetNews(filterCatgroies: []) }
+        setupViewModel()
+        Task { [weak self] in await self?.newsViewModel.loadFirstPage(filterCatgroies: []) }
     }
 
     override func updateProperties() {
@@ -33,22 +39,21 @@ class NewsFeedViewController: UIViewController {
 
     private func updateUI() {
         if newsViewModel.showLoadingIndicator { newsTable.showingLoadingView() } else { newsTable.hideLoadingView() }
-        if newsViewModel.isFreshLoad {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                newsViewModel.isFreshLoad = false
-                initialSelection()
-            }
-        }
+        newsTable.tableFooterView = newsViewModel.isPaginating ? paginationSpinner : nil
         newsTable.reloadData()
     }
 
     @objc private func refershLoad() {
-        load(isFirstTime: true, filterCatgroies: [])
+        Task { [weak self] in await self?.newsViewModel.loadFirstPage(filterCatgroies: []) }
     }
 
-    @objc func load(isFirstTime: Bool = true, filterCatgroies: [Int]) {
-        Task { [weak self] in await self?.newsViewModel.loadGetNews(isFirstTime, filterCatgroies: filterCatgroies) }
+    private func setupViewModel() {
+        newsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        newsViewModel.onInitialLoad = { [weak self] in
+            guard let self else { return }
+            newsTable.reloadData()
+            initialSelection()
+        }
     }
 
     func setupTableView() {
@@ -136,7 +141,7 @@ extension NewsFeedViewController {
         let currentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         if maximumOffset - currentOffset <= 25.0 {
-            load(isFirstTime: false, filterCatgroies: [])
+            Task { [weak self] in await self?.newsViewModel.loadNextPage(filterCatgroies: []) }
         }
     }
 }
@@ -145,7 +150,7 @@ extension NewsFeedViewController: SingleButtonDialogPresenter {}
 
 extension NewsFeedViewController: FilterNewsFeedViewDelegate {
     func didSelectFilterAll() {
-        load(filterCatgroies: [])
+        Task { [weak self] in await self?.newsViewModel.loadFirstPage(filterCatgroies: []) }
     }
 
     func scrollUp() {
@@ -154,6 +159,6 @@ extension NewsFeedViewController: FilterNewsFeedViewDelegate {
 
     func didSelectCustomFiltering(newsCatgroies: [Int]) {
         scrollUp()
-        load(filterCatgroies: newsCatgroies)
+        Task { [weak self] in await self?.newsViewModel.loadFirstPage(filterCatgroies: newsCatgroies) }
     }
 }

@@ -40,25 +40,17 @@ class MensaMenuViewModel: ParentViewModel {
             if daysMenus.isEmpty {
                 daysMenus = [.error(message: error.localizedDescription)]
             }
-            showError(error: error, tryAgainHandler: { [weak self] in
-                self?.realodGetApi()
-            })
+            showError(error: error)
         }
-    }
-
-    func realodGetApi() {
-        Task { await self.loadGetMensaMenu() }
     }
 
     func loadGetMockMenu() {
         daysMenus = MensaMenuModel.menuDemoData.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
     }
 
-    func isMenuUpdated() {
-        guard case let .normal(viewModel) = daysMenus.first else { return }
-        if viewModel.dateValue != getDateFormater(date: Date()) {
-            Task { await self.loadGetMensaMenu() }
-        }
+    func isMenuOutdated() -> Bool {
+        guard case let .normal(viewModel) = daysMenus.first else { return false }
+        return viewModel.dateValue != getDateFormater(date: Date())
     }
 
     func getDateFormater(date: Date) -> String {

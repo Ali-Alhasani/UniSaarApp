@@ -23,20 +23,24 @@ final class FilterMensaViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testDidUpdateFilterListOnSuccess() async {
+    func testOnFilterListUpdatedFiredOnSuccess() async {
+        var fired = false
         let dataClient = MockAppDataClient()
         dataClient.getMensaFilterResult = .success(MensaFilterModel(json: [:]))
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
+        viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
-        XCTAssertTrue(viewModel.didUpdatefilterList)
+        XCTAssertTrue(fired)
     }
 
-    func testDidUpdateFilterListFalseOnError() async {
+    func testOnFilterListUpdatedNotFiredOnError() async {
+        var fired = false
         let dataClient = MockAppDataClient()
         dataClient.getMensaFilterResult = .failure(MyError.customError)
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
+        viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
-        XCTAssertFalse(viewModel.didUpdatefilterList)
+        XCTAssertFalse(fired)
     }
 
     func testOnAlertFiredOnError() async {

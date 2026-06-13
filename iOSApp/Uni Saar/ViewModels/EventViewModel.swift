@@ -13,6 +13,7 @@ import Observation
 class EventViewModel: ParentViewModel {
     var eventCells: [TableViewCellType<NewsFeedCellViewModel>] = []
     var selectedDateEvents: [TableViewCellType<NewsFeedCellViewModel>] = []
+    @ObservationIgnored private(set) var currentSelectedDate: Date?
 
     override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
@@ -28,6 +29,9 @@ class EventViewModel: ParentViewModel {
                 return
             }
             eventCells = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+            getDayEvents(day: currentSelectedDate ?? Calendar.current.startOfDay(for: Date()))
+        } catch is CancellationError {
+            showLoadingIndicator = false
         } catch {
             showLoadingIndicator = false
             eventCells = [.error(message: error.localizedDescription)]
@@ -36,6 +40,7 @@ class EventViewModel: ParentViewModel {
     }
 
     func getDayEvents(day: Date?) {
+        currentSelectedDate = day
         selectedDateEvents = eventCells.filter { item -> Bool in
             switch item {
             case let .normal(event):
@@ -64,9 +69,13 @@ class EventViewModel: ParentViewModel {
         return events.count
     }
 
-    func convertDate(strDate: String) -> Date? {
+    static let eventDateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy'-'MM'-'dd'"
-        return dateFormatter.date(from: strDate)
+        return dateFormatter
+    }()
+
+    func convertDate(strDate: String) -> Date? {
+        EventViewModel.eventDateFormatter.date(from: strDate)
     }
 }
