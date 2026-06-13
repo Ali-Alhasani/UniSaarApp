@@ -13,8 +13,7 @@ import UserNotifications
 
 @Observable
 class FilterMensaViewModel: ParentViewModel {
-    var didUpdatefilterList: Bool = false
-    var didUpdateFoodAlarmStatus: Bool = false
+    @ObservationIgnored var onFilterListUpdated: (@MainActor () -> Void)?
     var selectedAlramTime: Date? {
         didSet { AppSessionManager.shared.foodAlarmTime = selectedAlramTime }
     }
@@ -48,7 +47,7 @@ class FilterMensaViewModel: ParentViewModel {
                 AppSessionManager.shared.isMensaFiltersCacheFetched = true
             }
             showLoadingIndicator = false
-            didUpdatefilterList = true
+            onFilterListUpdated?()
             return
         }
         do {
@@ -60,19 +59,12 @@ class FilterMensaViewModel: ParentViewModel {
             dataClient.saveInCoreDataWith(model: viewModelList)
             isFilterdCacheUpdated = true
             Cache.shared.fetchMensaFilterFromStorage()
-            didUpdatefilterList = true
+            onFilterListUpdated?()
             AppSessionManager.shared.isMensaFiltersCacheFetched = true
         } catch {
             showLoadingIndicator = false
-            didUpdatefilterList = false
-            showError(error: error, tryAgainHandler: { [weak self] in
-                self?.reloadGetApi()
-            })
+            showError(error: error)
         }
-    }
-
-    func reloadGetApi() {
-        Task { await self.loadGetFilterList() }
     }
 
     func filterList(for fliter: Filter) -> [FilterElement] {
@@ -167,7 +159,6 @@ extension FilterMensaViewModel {
     }
 
     func updateSwitchButton(switchOn: Bool = false) {
-        didUpdateFoodAlarmStatus = switchOn
         isFoodAlarmEnabled = switchOn
         if switchOn {
             scheduleNotification()

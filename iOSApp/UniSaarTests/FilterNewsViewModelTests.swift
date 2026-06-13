@@ -11,30 +11,36 @@ import XCTest
 
 @MainActor
 final class FilterNewsViewModelTests: XCTestCase {
-    func testDidUpdateFilterListOnSuccess() async {
+    func testOnFilterListUpdatedFiredOnSuccess() async {
+        var fired = false
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .success([
             NewsCategories(json: ["id": 1, "name": "News"]),
             NewsCategories(json: ["id": 2, "name": "Events"])
         ])
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
+        viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
-        XCTAssertTrue(viewModel.didUpdatefilterList)
+        XCTAssertTrue(fired)
     }
 
-    func testDidUpdateFilterListFalseOnError() async {
+    func testOnFilterListUpdatedNotFiredOnError() async {
+        var fired = false
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .failure(AppError.networkFailure)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
+        viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()
-        XCTAssertFalse(viewModel.didUpdatefilterList)
+        XCTAssertFalse(fired)
     }
 
-    func testCurrentAlertOnError() async {
+    func testOnAlertFiredOnError() async {
+        var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .failure(AppError.networkFailure)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
+        viewModel.onAlert = { capturedAlert = $0 }
         await viewModel.loadGetFilterList()
-        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(capturedAlert)
     }
 }

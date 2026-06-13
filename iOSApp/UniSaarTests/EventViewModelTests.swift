@@ -11,6 +11,22 @@ import XCTest
 
 @MainActor
 final class EventViewModelTests: XCTestCase {
+    func testSelectedDateEventsEmptyWhenNotCurrentMonth() async {
+        let dataClient = MockAppDataClient()
+        dataClient.getEventsResult = .success(NewsFeedModel.newsDemoData)
+        let viewModel = EventViewModel(dataClient: dataClient)
+        await viewModel.loadGetEvents(month: "12", year: "2019")
+        XCTAssertTrue(viewModel.selectedDateEvents.isEmpty)
+    }
+
+    func testSelectedDateEventsEmptyOnError() async {
+        let dataClient = MockAppDataClient()
+        dataClient.getEventsResult = .failure(MyError.customError)
+        let viewModel = EventViewModel(dataClient: dataClient)
+        await viewModel.loadGetEvents(month: "12", year: "2019")
+        XCTAssertTrue(viewModel.selectedDateEvents.isEmpty)
+    }
+
     func testNormalEventCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getEventsResult = .success(NewsFeedModel.newsDemoData)

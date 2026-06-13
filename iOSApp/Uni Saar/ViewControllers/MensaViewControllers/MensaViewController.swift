@@ -20,11 +20,18 @@ class MensaViewController: UIViewController {
     }
 
     lazy var mensaMenuViewModel: MensaMenuViewModel = .init()
+    private var loadTask: Task<Void, Never>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        setupViewModel()
         load()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        loadTask?.cancel()
     }
 
     override func updateProperties() {
@@ -33,13 +40,6 @@ class MensaViewController: UIViewController {
 
     private func updateUI() {
         if mensaMenuViewModel.showLoadingIndicator { mensaCollectionView.showingLoadingView() } else { mensaCollectionView.hideLoadingView() }
-        if let alert = mensaMenuViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                mensaMenuViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
         mensaCollectionView.reloadData()
         pageControl.numberOfPages = mensaMenuViewModel.daysMenus.count
         if UIDevice.current.userInterfaceIdiom == .pad, !mensaMenuViewModel.daysMenus.isEmpty,
@@ -59,7 +59,14 @@ class MensaViewController: UIViewController {
     }
 
     @objc func load() {
-        Task { [weak self] in await self?.mensaMenuViewModel.loadGetMensaMenu() }
+        loadTask?.cancel()
+        loadTask = Task { [weak self] in await self?.mensaMenuViewModel.loadGetMensaMenu() }
+    }
+
+    private func setupViewModel() {
+        mensaMenuViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        mensaMenuViewModel.onRetry = { [weak self] in self?.load() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setupCollectionView() {
@@ -72,7 +79,7 @@ class MensaViewController: UIViewController {
     }
 
     func isMenuUpdated() {
-        mensaMenuViewModel.isMenuUpdated()
+        if mensaMenuViewModel.isMenuOutdated() { load() }
     }
 
     func initialSelection() {

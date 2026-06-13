@@ -25,12 +25,15 @@ class MealDetailsViewController: UIViewController {
         title = mealItemViewModel?.counterDisplayName
         colorView.setAsCircle(cornerRadius: colorView.frame.height / 2)
         colorView.backgroundColor = mealItemViewModel.map { AppStyle.mensaCounterColor($0.colorModel) }
-
+        setupViewModel()
         setupInitialState()
     }
 
+    private func setupViewModel() {
+        meal.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+    }
+
     /// NATIVE iOS 26 API: The framework automatically tracks any @Observable referenced inside here.
-    /// It automatically invalidates and refreshes the view when properties change.
     override func updateProperties() {
         updateUI()
     }
@@ -54,14 +57,6 @@ class MealDetailsViewController: UIViewController {
         if meal.showLoadingIndicator { showLoadingActivity() } else { hideLoadingActivity() }
 
         // Defer the mutation to break out of the synchronous update cycle — avoids exclusivity crash
-        if let alert = meal.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                meal.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
-
         guard meal.mealDetails.mealDetailsModel != nil else { return }
 
         mealDispalyNameLabel.text = meal.mealDetails.mealName

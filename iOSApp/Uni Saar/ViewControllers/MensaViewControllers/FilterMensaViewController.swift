@@ -28,6 +28,7 @@ class FilterMensaViewController: UIViewController {
 
     lazy var filterMensaViewModel: FilterMensaViewModel = .init()
     weak var delegate: FilterMensaViewDelegate?
+    private var loadTask: Task<Void, Never>?
 
     private func filterForSectionIndex(_ index: Int) -> FilterMensaViewModel.Filter? {
         FilterMensaViewModel.Filter(rawValue: index)
@@ -36,7 +37,8 @@ class FilterMensaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
-        Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
+        setupViewModel()
+        load()
     }
 
     override func updateProperties() {
@@ -45,20 +47,20 @@ class FilterMensaViewController: UIViewController {
 
     private func updateUI() {
         if filterMensaViewModel.showLoadingIndicator { filterTableView.showingLoadingView() } else { filterTableView.hideLoadingView() }
-        if let alert = filterMensaViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                filterMensaViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
         filterTableView.reloadData()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        loadTask?.cancel()
         AppSessionManager.shared.foodAlarmTime = filterMensaViewModel.selectedAlramTime
         AppSessionManager.saveFoodAlarmStatus()
+    }
+
+    private func setupViewModel() {
+        filterMensaViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        filterMensaViewModel.onRetry = { [weak self] in self?.load() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setupTableView() {
@@ -72,7 +74,12 @@ class FilterMensaViewController: UIViewController {
 
     @objc private func refershLoad() {
         filterMensaViewModel.isFilterdCacheUpdated = false
-        Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
+        load()
+    }
+
+    private func load() {
+        loadTask?.cancel()
+        loadTask = Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
     }
 
     @IBAction func doneButtonAction(_ sender: Any) {

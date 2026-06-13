@@ -82,14 +82,8 @@ class DirectoryViewModel: ParentViewModel {
             if AppSessionManager.shared.helpfulNumbersLastChanged == "never" {
                 helpfulNumbersCells = [.error(message: error.localizedDescription)]
             }
-            showError(error: error, tryAgainHandler: { [weak self] in
-                self?.reloadGetApi()
-            })
+            showError(error: error)
         }
-    }
-
-    func reloadGetApi() {
-        Task { await self.loadGetHelpHelpfulNumbers() }
     }
 
     func loadGetMockSearchResults() {}

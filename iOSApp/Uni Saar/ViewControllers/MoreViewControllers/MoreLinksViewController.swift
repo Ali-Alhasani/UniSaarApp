@@ -15,6 +15,7 @@ class MoreLinksViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setRefreshControl()
+        setupViewModel()
         Task { [weak self] in await self?.moreLinksViewModel.loadGetMoreLinks() }
     }
 
@@ -24,15 +25,14 @@ class MoreLinksViewController: UITableViewController {
 
     private func updateUI() {
         if moreLinksViewModel.showLoadingIndicator { tableView.showingLoadingView() } else { tableView.hideLoadingView() }
-        if let alert = moreLinksViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                moreLinksViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
         tableView.reloadData()
         requestReview()
+    }
+
+    private func setupViewModel() {
+        moreLinksViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
+        moreLinksViewModel.onRetry = { [weak self] in self?.refershLoad() }
+        // bindings only — load fires last in viewDidLoad
     }
 
     func setRefreshControl() {

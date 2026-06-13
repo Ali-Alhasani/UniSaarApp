@@ -49,14 +49,8 @@ class MoreLinksViewModel: ParentViewModel {
             if AppSessionManager.shared.morelinksLastChanged == "never" {
                 linksCells = [.error(message: error.localizedDescription)]
             }
-            showError(error: error, tryAgainHandler: { [weak self] in
-                self?.reloadGetApi()
-            })
+            showError(error: error)
         }
-    }
-
-    func reloadGetApi() {
-        Task { await self.loadGetMoreLinks() }
     }
 
     func fetchMoreLinksFromStorage() {
