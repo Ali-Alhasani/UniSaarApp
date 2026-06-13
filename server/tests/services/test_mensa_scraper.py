@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, patch
 
+import pytest
+
 from src.core.enums import MensaLocation
 from src.services.base_scraper import BaseScraper
 from src.services.mensa_scraper import MensaScraper
@@ -286,3 +288,49 @@ async def test_fetch_menu_missing_price_tiers_falls_back_to_tier_id() -> None:
     assert "s" in tags
     assert "m" in tags
     assert "g" in tags
+
+
+# --- _parse_notices edge cases ---
+
+
+@pytest.mark.parametrize(
+    "notice_ids",
+    [None, "gl", {"notice": "gl"}, 42, []],
+    ids=["none", "string", "dict", "int", "empty_list"],
+)
+def test_parse_notices_non_list_or_empty_returns_empty(notice_ids: object) -> None:
+    scraper = MensaScraper()
+    scraper._notices = {}
+    assert scraper._parse_notices(notice_ids) == []
+
+
+def test_parse_notices_known_ids_resolved_to_display_names() -> None:
+    scraper = MensaScraper()
+    scraper._notices = {
+        "gl": {"displayName": "Gluten"},
+        "we": {"displayName": "Wheat"},
+    }
+    result = scraper._parse_notices(["gl", "we"])
+    assert len(result) == 2
+    assert result[0].notice == "gl"
+    assert result[0].display_name == "Gluten"
+    assert result[1].notice == "we"
+    assert result[1].display_name == "Wheat"
+
+
+def test_parse_notices_unknown_id_falls_back_to_id_as_display_name() -> None:
+    scraper = MensaScraper()
+    scraper._notices = {}
+    result = scraper._parse_notices(["xyz"])
+    assert len(result) == 1
+    assert result[0].notice == "xyz"
+    assert result[0].display_name == "xyz"
+
+
+def test_parse_notices_non_string_elements_cast_to_str() -> None:
+    scraper = MensaScraper()
+    scraper._notices = {"42": {"displayName": "Some notice"}}
+    result = scraper._parse_notices([42])
+    assert len(result) == 1
+    assert result[0].notice == "42"
+    assert result[0].display_name == "Some notice"

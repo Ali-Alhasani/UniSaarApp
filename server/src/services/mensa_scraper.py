@@ -84,6 +84,11 @@ class MensaScraper(BaseScraper):
         )
         return MensaNotice(notice=str(notice_id), display_name=display_name)
 
+    def _parse_notices(self, notice_ids: object | None) -> list[MensaNotice]:
+        if not isinstance(notice_ids, list):
+            return []
+        return [self._notice_obj(str(n)) for n in notice_ids]
+
     @staticmethod
     def _clean(raw: str) -> str:
         """Normalize a string field from the mensa API.
@@ -140,10 +145,10 @@ class MensaScraper(BaseScraper):
             )
             return None
 
-        raw_notices = meal_data.get("notices", [])
-        all_notices: set[str] = set(
-            raw_notices if isinstance(raw_notices, list) else []
-        )
+        meal_notices = self._parse_notices(meal_data.get("notices"))
+        # Union of meal-level + component notices, used only for MensaMeal.notices
+        # so the main-screen allergen filter sees all notices across the whole meal.
+        all_notices: set[str] = {n.notice for n in meal_notices}
 
         components: list[str] = []
         rich_components: list[MensaComponent] = []
@@ -153,12 +158,8 @@ class MensaScraper(BaseScraper):
                 if not isinstance(comp, dict):
                     continue
                 comp_name = self._clean(str(comp.get("name", "")))
-                comp_notice_ids = comp.get("notices", [])
-                if isinstance(comp_notice_ids, list):
-                    all_notices.update(str(n) for n in comp_notice_ids)
-                    comp_notices = [self._notice_obj(str(n)) for n in comp_notice_ids]
-                else:
-                    comp_notices = []
+                comp_notices = self._parse_notices(comp.get("notices"))
+                all_notices.update(n.notice for n in comp_notices)
                 if comp_name:
                     rich_components.append(
                         MensaComponent(
@@ -189,7 +190,8 @@ class MensaScraper(BaseScraper):
                     for tier_id, price_str in raw_prices.items()
                 ]
 
-        general_notices = [self._notice_obj(n_id) for n_id in sorted(all_notices)]
+        # Only meal-level notices go here — component notices stay on their components.
+        general_notices = sorted(meal_notices, key=lambda n: n.notice)
         self._meal_details[meal_id] = MensaMealDetail(
             id=meal_id,
             meal_name=name,
