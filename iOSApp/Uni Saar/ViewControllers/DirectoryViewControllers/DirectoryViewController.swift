@@ -54,7 +54,7 @@ class DirectoryViewController: UIViewController {
     func setupSearchBar() {
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = NSLocalizedString("StaffSearch", comment: "")
+        searchController.searchBar.placeholder = String(localized: "StaffSearch")
         searchController.searchBar.searchTextField.backgroundColor = UIColor.appSystemBackgroundColor
         navigationItem.searchController = searchController
         definesPresentationContext = true
@@ -123,7 +123,7 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
         case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
-            return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyResults", comment: ""))
+            return defaultCell.setupEmptyCell(message: String(localized: "EmptyResults"))
         case .none:
             return defaultCell
         }
@@ -142,7 +142,7 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
         case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
-            return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyResults", comment: ""))
+            return defaultCell.setupEmptyCell(message: String(localized: "EmptyResults"))
         case .none:
             return defaultCell
         }
@@ -158,7 +158,7 @@ extension DirectoryViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if !isSearching { return NSLocalizedString("HelpfulNumbers", comment: "") }
+        if !isSearching { return String(localized: "HelpfulNumbers") }
         return ""
     }
 }

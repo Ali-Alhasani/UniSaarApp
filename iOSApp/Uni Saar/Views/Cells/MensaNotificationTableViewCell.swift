@@ -29,6 +29,6 @@ class MensaNotificationTableViewCell: UITableViewCell {
             components.minute = 15
             time = Calendar.current.date(from: components) ?? Date()
         }
-        notificationTimeLabel.text = NSLocalizedString("dailyTime", comment: "") + formatter.string(from: time)
+        notificationTimeLabel.text = String(localized: "dailyTime") + formatter.string(from: time)
     }
 }

@@ -120,7 +120,7 @@ extension NewsFeedViewController: UITableViewDelegate, UITableViewDataSource {
         case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
-            return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyNews", comment: ""))
+            return defaultCell.setupEmptyCell(message: String(localized: "EmptyNews"))
         case .none:
             return defaultCell
         }

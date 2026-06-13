@@ -62,9 +62,9 @@ enum AppStoreReviewManager {
 
     @MainActor
     static func ratingDialogHandler(_ succesHandler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
-        let alert = UIAlertController(title: NSLocalizedString("RateTitle", comment: ""), message: NSLocalizedString("EnjoyingAPP", comment: ""), preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("RateYesActionTitle", comment: ""), style: .default, handler: succesHandler))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("RateNoActionTitle", comment: ""), style: .cancel, handler: nil))
+        let alert = UIAlertController(title: String(localized: "RateTitle"), message: String(localized: "EnjoyingAPP"), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: String(localized: "RateYesActionTitle"), style: .default, handler: succesHandler))
+        alert.addAction(UIAlertAction(title: String(localized: "RateNoActionTitle"), style: .cancel, handler: nil))
         return alert
     }
 }

@@ -15,7 +15,7 @@ enum AppError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case let .serverMessage(message): message
-        case .networkFailure: NSLocalizedString("generalAPIError", comment: "")
+        case .networkFailure: String(localized: "generalAPIError")
         }
     }
 }
