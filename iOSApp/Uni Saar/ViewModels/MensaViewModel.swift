@@ -37,7 +37,9 @@ class MensaMenuViewModel: ParentViewModel {
             showLoadingIndicator = false
         } catch {
             showLoadingIndicator = false
-            daysMenus = [.error(message: error.localizedDescription)]
+            if daysMenus.isEmpty {
+                daysMenus = [.error(message: error.localizedDescription)]
+            }
             showError(error: error, tryAgainHandler: { [weak self] in
                 self?.realodGetApi()
             })
@@ -53,13 +55,8 @@ class MensaMenuViewModel: ParentViewModel {
     }
 
     func isMenuUpdated() {
-        let firstMenuDay = daysMenus.first
-        switch firstMenuDay {
-        case let .normal(viewModel):
-            if viewModel.dateValue != getDateFormater(date: Date()) {
-                Task { await self.loadGetMensaMenu() }
-            }
-        default:
+        guard case let .normal(viewModel) = daysMenus.first else { return }
+        if viewModel.dateValue != getDateFormater(date: Date()) {
             Task { await self.loadGetMensaMenu() }
         }
     }

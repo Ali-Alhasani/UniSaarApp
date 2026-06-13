@@ -23,6 +23,7 @@ class NewsFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        newsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
         Task { [weak self] in await self?.newsViewModel.loadGetNews(filterCatgroies: []) }
     }
 
@@ -37,13 +38,6 @@ class NewsFeedViewController: UIViewController {
                 guard let self else { return }
                 newsViewModel.isFreshLoad = false
                 initialSelection()
-            }
-        }
-        if let alert = newsViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                newsViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
             }
         }
         newsTable.reloadData()

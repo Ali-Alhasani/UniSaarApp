@@ -33,11 +33,13 @@ final class StaffDetailsViewModelTests: XCTestCase {
     }
 
     func testStaffDetailsError() async {
+        var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
         dataClient.getStaffDetailsResult = .failure(MyError.customError)
         let viewModel = StaffDetailsViewModel(dataClient: dataClient)
+        viewModel.onAlert = { capturedAlert = $0 }
         await viewModel.loadGetStaffDetails(staffId: 1)
         XCTAssertNil(viewModel.staffDetails.staffDetailsModel)
-        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(capturedAlert)
     }
 }

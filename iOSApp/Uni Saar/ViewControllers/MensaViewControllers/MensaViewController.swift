@@ -24,6 +24,7 @@ class MensaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
+        mensaMenuViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
         load()
     }
 
@@ -33,13 +34,6 @@ class MensaViewController: UIViewController {
 
     private func updateUI() {
         if mensaMenuViewModel.showLoadingIndicator { mensaCollectionView.showingLoadingView() } else { mensaCollectionView.hideLoadingView() }
-        if let alert = mensaMenuViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                mensaMenuViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
         mensaCollectionView.reloadData()
         pageControl.numberOfPages = mensaMenuViewModel.daysMenus.count
         if UIDevice.current.userInterfaceIdiom == .pad, !mensaMenuViewModel.daysMenus.isEmpty,

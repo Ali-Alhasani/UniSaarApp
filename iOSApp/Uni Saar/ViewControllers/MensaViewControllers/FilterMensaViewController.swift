@@ -36,6 +36,7 @@ class FilterMensaViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        filterMensaViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
         Task { [weak self] in await self?.filterMensaViewModel.loadGetFilterList() }
     }
 
@@ -45,13 +46,6 @@ class FilterMensaViewController: UIViewController {
 
     private func updateUI() {
         if filterMensaViewModel.showLoadingIndicator { filterTableView.showingLoadingView() } else { filterTableView.hideLoadingView() }
-        if let alert = filterMensaViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                filterMensaViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
-            }
-        }
         filterTableView.reloadData()
     }
 

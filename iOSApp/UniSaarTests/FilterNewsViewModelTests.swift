@@ -30,11 +30,13 @@ final class FilterNewsViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.didUpdatefilterList)
     }
 
-    func testCurrentAlertOnError() async {
+    func testOnAlertFiredOnError() async {
+        var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .failure(MyError.customError)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
+        viewModel.onAlert = { capturedAlert = $0 }
         await viewModel.loadGetFilterList()
-        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(capturedAlert)
     }
 }

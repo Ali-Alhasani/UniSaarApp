@@ -30,6 +30,7 @@ class FilterNewsFeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupTableView()
+        filterNewsViewModel.onAlert = { [weak self] alert in self?.presentSingleButtonDialog(alert: alert) }
         Task { [weak self] in await self?.filterNewsViewModel.loadGetFilterList() }
     }
 
@@ -44,13 +45,6 @@ class FilterNewsFeedViewController: UIViewController {
                 guard let self else { return }
                 filterNewsViewModel.didUpdatefilterList = false
                 filterTableView.reloadData()
-            }
-        }
-        if let alert = filterNewsViewModel.currentAlert {
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                filterNewsViewModel.currentAlert = nil
-                presentSingleButtonDialog(alert: alert)
             }
         }
     }

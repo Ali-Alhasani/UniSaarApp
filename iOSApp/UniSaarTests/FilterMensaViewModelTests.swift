@@ -39,12 +39,14 @@ final class FilterMensaViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.didUpdatefilterList)
     }
 
-    func testCurrentAlertOnError() async {
+    func testOnAlertFiredOnError() async {
+        var capturedAlert: SingleButtonAlert?
         let dataClient = MockAppDataClient()
         dataClient.getMensaFilterResult = .failure(MyError.customError)
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
+        viewModel.onAlert = { capturedAlert = $0 }
         await viewModel.loadGetFilterList()
-        XCTAssertNotNil(viewModel.currentAlert)
+        XCTAssertNotNil(capturedAlert)
     }
 
     func testSelectedAlarmTimePersistsToSession() {

@@ -56,7 +56,9 @@ class NewsFeedViewModel: ParentViewModel {
             apiPageNumber += 1
         } catch {
             showLoadingIndicator = false
-            newsCells = [.error(message: error.localizedDescription)]
+            if newsCells.isEmpty {
+                newsCells = [.error(message: error.localizedDescription)]
+            }
             showError(error: error)
         }
     }
