@@ -19,27 +19,35 @@ class AppSessionManager {
     var dismissWelcomeScreen: Bool {
         didSet { defaults.set(dismissWelcomeScreen, forKey: Self.skipWelcomeScreenKey) }
     }
+
     var selectedCampus: Campus {
         didSet { defaults.set(selectedCampus.rawValue, forKey: Self.selectedCampusKey) }
     }
+
     var selectedMensaLocation: Campus {
         didSet { defaults.set(selectedMensaLocation.rawValue, forKey: Self.selectedMensaLocationKey) }
     }
+
     var mensafiltersLastChanged: String? {
         didSet { defaults.set(mensafiltersLastChanged, forKey: Self.mensafiltersLastChangedKey) }
     }
+
     var newsFiltersLastChanged: String? {
         didSet { defaults.set(newsFiltersLastChanged, forKey: Self.newsFiltersLastChangedKey) }
     }
+
     var morelinksLastChanged: String {
         didSet { defaults.set(morelinksLastChanged, forKey: Self.linksLastChangedKey) }
     }
+
     var helpfulNumbersLastChanged: String {
         didSet { defaults.set(helpfulNumbersLastChanged, forKey: Self.helpfulNumbersLastChangedKey) }
     }
+
     var isFoodAlarmEnabled: Bool {
         didSet { defaults.set(isFoodAlarmEnabled, forKey: Self.foodAlarmStatusKey) }
     }
+
     var foodAlarmTime: Date? {
         didSet { defaults.set(foodAlarmTime, forKey: Self.foodAlarmTimeKey) }
     }
