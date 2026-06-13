@@ -71,39 +71,25 @@ class FilterList {
     private var isDispalyAllergen: Bool = true
     private var allergenList: [ChecklistItem] = []
     init() {
-        let row0Item = ChecklistItem()
-        let row1Item = ChecklistItem()
-        let row2Item = ChecklistItem()
-        let row3Item = ChecklistItem()
-        let row4Item = ChecklistItem()
-        let row5Item = ChecklistItem()
-        let row6Item = ChecklistItem()
-        let row7Item = ChecklistItem()
-        let row8Item = ChecklistItem()
-        let row9Item = ChecklistItem()
-        let row10Item = ChecklistItem()
-        let row11Item = ChecklistItem()
-        let row12Item = ChecklistItem()
-        let row13Item = ChecklistItem()
-        let row20Item = ChecklistItem()
-        row0Item.text = "Mensa/Mensacafé Saarbrücken"
-        row1Item.text = "Mensa Homburg"
-        row2Item.text = "Mensagarden"
-        row3Item.text = "Cafeteria Hochschule für Musik Saar"
-        row4Item.text = "Artificial colouring"
-        row5Item.text = "Preservatives"
-        row6Item.text = "Antioxidants"
-        row7Item.text = "Flavour enhancer"
-        row8Item.text = "Sulphurised"
-        row9Item.text = "Blackened"
-        row10Item.text = "Pork"
-        row11Item.text = "Alcohol"
-        row12Item.text = "Nuts"
-        row13Item.text = "Without pork"
-        row20Item.text = "Toggle all"
-        mensaLocationsList = [row0Item, row1Item, row2Item, row3Item]
-        emptyList = [row20Item]
-        allergenList = [row4Item, row5Item, row6Item, row7Item, row8Item, row9Item, row10Item, row11Item, row12Item, row13Item]
+        mensaLocationsList = [
+            ChecklistItem(text: "Mensa/Mensacafé Saarbrücken"),
+            ChecklistItem(text: "Mensa Homburg"),
+            ChecklistItem(text: "Mensagarden"),
+            ChecklistItem(text: "Cafeteria Hochschule für Musik Saar")
+        ]
+        emptyList = [ChecklistItem(text: "Toggle all")]
+        allergenList = [
+            ChecklistItem(text: "Artificial colouring"),
+            ChecklistItem(text: "Preservatives"),
+            ChecklistItem(text: "Antioxidants"),
+            ChecklistItem(text: "Flavour enhancer"),
+            ChecklistItem(text: "Sulphurised"),
+            ChecklistItem(text: "Blackened"),
+            ChecklistItem(text: "Pork"),
+            ChecklistItem(text: "Alcohol"),
+            ChecklistItem(text: "Nuts"),
+            ChecklistItem(text: "Without pork")
+        ]
     }
 
     func filterList(for fliter: Filter) -> [ChecklistItem] {
@@ -118,10 +104,10 @@ class FilterList {
     }
 }
 
-class ChecklistItem: NSObject {
-    @objc var text = ""
+struct ChecklistItem {
+    let text: String
     var checked = false
-    func toggleChecked() {
-        checked = !checked
+    mutating func toggleChecked() {
+        checked.toggle()
     }
 }
