@@ -34,7 +34,7 @@ final class StaffDetailsViewModelTests: XCTestCase {
 
     func testStaffDetailsError() async {
         let dataClient = MockAppDataClient()
-        dataClient.getStaffDetailsResult = .failure(MyError.customError)
+        dataClient.getStaffDetailsResult = .failure(AppError.networkFailure)
         let viewModel = StaffDetailsViewModel(dataClient: dataClient)
         await viewModel.loadGetStaffDetails(staffId: 1)
         XCTAssertNil(viewModel.staffDetails.staffDetailsModel)

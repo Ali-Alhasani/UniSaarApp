@@ -45,7 +45,7 @@ final class MensaViewModelTests: XCTestCase {
 
     func testErrorMensaCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMensaResult = .failure(MyError.customError)
+        dataClient.getMensaResult = .failure(AppError.networkFailure)
         let viewModel = MensaMenuViewModel(dataClient: dataClient)
         await viewModel.loadGetMensaMenu()
         guard case .error = viewModel.daysMenus.first else {
@@ -103,7 +103,7 @@ final class MensaViewModelTests: XCTestCase {
 
     func testErrorMealDetails() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMealResult = .failure(MyError.customError)
+        dataClient.getMealResult = .failure(AppError.networkFailure)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
         await viewModel.loadGetMealDetails(mealId: 1)
         XCTAssertNil(viewModel.mealDetails.mealDetailsModel, "Mensa meal details request should be failed and return empty model")

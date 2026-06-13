@@ -24,7 +24,7 @@ final class FilterNewsViewModelTests: XCTestCase {
 
     func testDidUpdateFilterListFalseOnError() async {
         let dataClient = MockAppDataClient()
-        dataClient.getNewsCategoriesResult = .failure(MyError.customError)
+        dataClient.getNewsCategoriesResult = .failure(AppError.networkFailure)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
         await viewModel.loadGetFilterList()
         XCTAssertFalse(viewModel.didUpdatefilterList)
@@ -32,7 +32,7 @@ final class FilterNewsViewModelTests: XCTestCase {
 
     func testCurrentAlertOnError() async {
         let dataClient = MockAppDataClient()
-        dataClient.getNewsCategoriesResult = .failure(MyError.customError)
+        dataClient.getNewsCategoriesResult = .failure(AppError.networkFailure)
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
         await viewModel.loadGetFilterList()
         XCTAssertNotNil(viewModel.currentAlert)

@@ -14,14 +14,14 @@ final class ObservationTests: XCTestCase {
     /// showError is synchronous — no async needed
     func testCurrentAlertSetOnError() {
         let viewModel = NewsFeedViewModel()
-        viewModel.showError(error: MyError.customError)
+        viewModel.showError(error: AppError.networkFailure)
         XCTAssertNotNil(viewModel.currentAlert)
         XCTAssertNotNil(viewModel.currentAlert?.message)
     }
 
-    func testCurrentAlertSetOnLLError() {
+    func testCurrentAlertSetOnServerError() {
         let viewModel = NewsFeedViewModel()
-        viewModel.showError(error: LLError(status: false, message: "test error"))
+        viewModel.showError(error: AppError.serverMessage("test error"))
         XCTAssertNotNil(viewModel.currentAlert)
         XCTAssertNotNil(viewModel.currentAlert?.message)
     }

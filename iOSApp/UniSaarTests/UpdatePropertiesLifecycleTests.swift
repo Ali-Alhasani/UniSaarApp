@@ -98,7 +98,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         viewController.setupTableView()
 
         let dataClient = MockAppDataClient()
-        dataClient.getNewsResult = .failure(MyError.customError)
+        dataClient.getNewsResult = .failure(AppError.networkFailure)
         viewController.newsViewModel = NewsFeedViewModel(dataClient: dataClient)
         await viewController.newsViewModel.loadGetNews(filterCatgroies: [])
 
@@ -225,7 +225,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         viewController.viewDidLoad()
 
         let dataClient = MockAppDataClient()
-        dataClient.getMealResult = .failure(MyError.customError)
+        dataClient.getMealResult = .failure(AppError.networkFailure)
         viewController.meal = MealDetailsViewModel(dataClient: dataClient)
         await viewController.meal.loadGetMealDetails(mealId: 1)
 
@@ -276,7 +276,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         viewController.viewDidLoad()
 
         let dataClient = MockAppDataClient()
-        dataClient.getStaffDetailsResult = .failure(MyError.customError)
+        dataClient.getStaffDetailsResult = .failure(AppError.networkFailure)
         viewController.staff = StaffDetailsViewModel(dataClient: dataClient)
         await viewController.staff.loadGetStaffDetails(staffId: 1)
 

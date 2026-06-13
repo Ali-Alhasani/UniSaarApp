@@ -33,7 +33,7 @@ final class FilterMensaViewModelTests: XCTestCase {
 
     func testDidUpdateFilterListFalseOnError() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMensaFilterResult = .failure(MyError.customError)
+        dataClient.getMensaFilterResult = .failure(AppError.networkFailure)
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
         await viewModel.loadGetFilterList()
         XCTAssertFalse(viewModel.didUpdatefilterList)
@@ -41,7 +41,7 @@ final class FilterMensaViewModelTests: XCTestCase {
 
     func testCurrentAlertOnError() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMensaFilterResult = .failure(MyError.customError)
+        dataClient.getMensaFilterResult = .failure(AppError.networkFailure)
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
         await viewModel.loadGetFilterList()
         XCTAssertNotNil(viewModel.currentAlert)

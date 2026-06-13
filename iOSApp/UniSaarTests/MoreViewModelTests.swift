@@ -50,7 +50,7 @@ final class MoreViewModelTests: XCTestCase {
 
     func testErrorMoreLinksCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMoreLinksResult = .failure(MyError.customError)
+        dataClient.getMoreLinksResult = .failure(AppError.networkFailure)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
         await viewModel.loadGetMoreLinks()
         if case .error = viewModel.linksCells.first {

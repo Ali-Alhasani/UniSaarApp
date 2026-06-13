@@ -24,7 +24,7 @@ class ParentViewModel {
         currentAlert = SingleButtonAlert(message: error?.localizedDescription, action: AlertAction(handler: nil, tryAgainHandler: tryAgainHandler))
     }
 
-    func showError(error: LLError?) {
-        currentAlert = SingleButtonAlert(message: error?.message, action: AlertAction(handler: nil, tryAgainHandler: nil))
+    func showAlert(message: String) {
+        currentAlert = SingleButtonAlert(message: message, action: AlertAction(handler: nil, tryAgainHandler: nil))
     }
 }
