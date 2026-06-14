@@ -26,7 +26,7 @@ final class FilterMensaViewModelTests: XCTestCase {
     func testOnFilterListUpdatedFiredOnSuccess() async {
         var fired = false
         let dataClient = MockAppDataClient()
-        dataClient.getMensaFilterResult = .success(MensaFilterModel(json: [:]))
+        dataClient.getMensaFilterResult = .success(MensaFilterModel())
         let viewModel = FilterMensaViewModel(dataClient: dataClient)
         viewModel.onFilterListUpdated = { fired = true }
         await viewModel.loadGetFilterList()

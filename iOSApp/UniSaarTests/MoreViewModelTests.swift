@@ -22,9 +22,13 @@ final class MoreViewModelTests: XCTestCase {
         super.tearDown()
     }
 
-    func testMoreLinksModel() {
+    func testMoreLinksModel() throws {
         let testSuccessfulJSON = MoreLinksModel.deomJSON
-        XCTAssertNotNil(MoreLinksModel(json: testSuccessfulJSON, index: 0))
+        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let wire = try JSONDecoder.unisaarDefault.decode(MoreLinksModel.Wire.self, from: data)
+        let model = MoreLinksModel(displayName: wire.displayName, url: wire.url, index: 0)
+        XCTAssertEqual(model.displayName, "Welcome Centre")
+        XCTAssertEqual(model.url, "https://www.uni-saarland.de/en/global/welcome-center.html")
     }
 
     func testNormalMoreLinksCells() async {
@@ -40,7 +44,7 @@ final class MoreViewModelTests: XCTestCase {
 
     func testEmptyMoreLinksCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getMoreLinksResult = .success(MoreModel(json: [:]))
+        dataClient.getMoreLinksResult = .success(MoreModel.empty)
         let viewModel = MoreLinksViewModel(dataClient: dataClient)
         await viewModel.loadGetMoreLinks()
         XCTAssertTrue(viewModel.linksCells.isEmpty, "More Links Cell should be empty")

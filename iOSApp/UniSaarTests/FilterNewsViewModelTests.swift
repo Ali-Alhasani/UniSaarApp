@@ -15,8 +15,8 @@ final class FilterNewsViewModelTests: XCTestCase {
         var fired = false
         let dataClient = MockAppDataClient()
         dataClient.getNewsCategoriesResult = .success([
-            NewsCategories(json: ["id": 1, "name": "News"]),
-            NewsCategories(json: ["id": 2, "name": "Events"])
+            NewsCategories(categoryID: 1, categoryName: "News"),
+            NewsCategories(categoryID: 2, categoryName: "Events")
         ])
         let viewModel = FilterNewsViewModel(dataClient: dataClient)
         viewModel.onFilterListUpdated = { fired = true }

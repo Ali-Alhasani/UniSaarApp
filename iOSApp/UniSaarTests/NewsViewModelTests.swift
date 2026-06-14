@@ -11,11 +11,6 @@ import XCTest
 
 @MainActor
 final class NewsViewModelTests: XCTestCase {
-    func testNewsModel() {
-        let testSuccessfulJSON = NewsModel.deomJSON
-        XCTAssertNotNil(NewsModel(json: testSuccessfulJSON))
-    }
-
     func testNormalNewsCells() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
@@ -26,7 +21,7 @@ final class NewsViewModelTests: XCTestCase {
 
     func testEmptyNewsCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getNewsResult = .success(NewsFeedModel(json: [:]))
+        dataClient.getNewsResult = .success(NewsFeedModel.empty)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
         await viewModel.loadFirstPage(filterCatgroies: [])
         guard case .empty = viewModel.newsCells.first else { XCTFail("Expected empty cell"); return }
