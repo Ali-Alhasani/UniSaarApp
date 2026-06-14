@@ -6,7 +6,6 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import SwiftyJSON
 @testable import Uni_Saar
 import XCTest
 
@@ -87,8 +86,7 @@ final class DirectoryViewModelTests: XCTestCase {
 
     func testHelpfulNumberModel() {
         let testSuccessfulJSON = NumberModel.deomJSON
-        let formattedJSON = JSON(testSuccessfulJSON)
-        XCTAssertNotNil(NumberModel(json: formattedJSON))
+        XCTAssertNotNil(NumberModel(json: testSuccessfulJSON))
     }
 
     func testNormalHelpfulNumberCells() async {

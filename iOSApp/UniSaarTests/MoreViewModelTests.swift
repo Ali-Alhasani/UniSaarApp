@@ -6,7 +6,6 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import SwiftyJSON
 @testable import Uni_Saar
 import XCTest
 
@@ -25,8 +24,7 @@ final class MoreViewModelTests: XCTestCase {
 
     func testMoreLinksModel() {
         let testSuccessfulJSON = MoreLinksModel.deomJSON
-        let formattedJSON = JSON(testSuccessfulJSON)
-        XCTAssertNotNil(MoreLinksModel(json: formattedJSON, index: 0))
+        XCTAssertNotNil(MoreLinksModel(json: testSuccessfulJSON, index: 0))
     }
 
     func testNormalMoreLinksCells() async {
