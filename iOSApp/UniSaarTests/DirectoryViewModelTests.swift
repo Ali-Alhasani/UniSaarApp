@@ -6,7 +6,6 @@
 //  Copyright © 2020 Ali Al-Hasani. All rights reserved.
 //
 
-import SwiftyJSON
 @testable import Uni_Saar
 import XCTest
 
@@ -25,9 +24,12 @@ final class DirectoryViewModelTests: XCTestCase {
 
     // MARK: - Staff search
 
-    func testDirectoryModel() {
+    func testDirectoryModel() throws {
         let testSuccessfulJSON = StaffModel.deomJSON
-        XCTAssertNotNil(StaffModel(json: testSuccessfulJSON))
+        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let model = try JSONDecoder.unisaarDefault.decode(StaffResultsModel.self, from: data)
+        XCTAssertEqual(model.fullName, "Ali Baylan")
+        XCTAssertEqual(model.staffID, 9091)
     }
 
     func testNormalDirectoryCells() async {
@@ -43,7 +45,7 @@ final class DirectoryViewModelTests: XCTestCase {
 
     func testEmptyDirectoryCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getSearchDirectoryResult = .success(StaffModel(json: [:]))
+        dataClient.getSearchDirectoryResult = .success(StaffModel.empty)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetSearchResults(searchQuery: "")
         guard case .empty = viewModel.searchResutlsCells.first else {
@@ -85,10 +87,12 @@ final class DirectoryViewModelTests: XCTestCase {
 
     // MARK: - Helpful numbers
 
-    func testHelpfulNumberModel() {
+    func testHelpfulNumberModel() throws {
         let testSuccessfulJSON = NumberModel.deomJSON
-        let formattedJSON = JSON(testSuccessfulJSON)
-        XCTAssertNotNil(NumberModel(json: formattedJSON))
+        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let model = try JSONDecoder.unisaarDefault.decode(NumberModel.self, from: data)
+        XCTAssertEqual(model.name, "Student office")
+        XCTAssertEqual(model.number, "0681 302-5491")
     }
 
     func testNormalHelpfulNumberCells() async {
@@ -104,7 +108,7 @@ final class DirectoryViewModelTests: XCTestCase {
 
     func testEmptyHelpfulCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getHelpfulNumbersResult = .success(HelpfulNumbersModel(json: [:]))
+        dataClient.getHelpfulNumbersResult = .success(HelpfulNumbersModel.empty)
         let viewModel = DirectoryViewModel(dataClient: dataClient)
         await viewModel.loadGetHelpHelpfulNumbers()
         XCTAssertTrue(viewModel.helpfulNumbersCells.isEmpty, "Helpful Numbers Cell should be empty")

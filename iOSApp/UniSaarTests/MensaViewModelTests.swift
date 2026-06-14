@@ -11,14 +11,22 @@ import XCTest
 
 @MainActor
 final class MensaViewModelTests: XCTestCase {
-    func testMensaModel() {
+    func testMensaModel() throws {
         let testSuccessfulJSON = MensaMenuModel.deomJSON
-        XCTAssertNotNil(MensaMenuModel(json: testSuccessfulJSON))
+        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let model = try JSONDecoder.unisaarDefault.decode(MensaMenuModel.self, from: data)
+        XCTAssertEqual(model.daysMenus.count, 1)
+        XCTAssertEqual(model.daysMenus.first?.countersMeals.count, 2)
     }
 
-    func testMensaTodayModel() {
+    func testMensaTodayModel() throws {
         let testSuccessfulJSON = MensaDayModel.menuDemoData
-        XCTAssertNotNil(MensaDayModel(json: testSuccessfulJSON))
+        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let model = try JSONDecoder.unisaarDefault.decode(MensaDayModel.self, from: data)
+        XCTAssertEqual(model.date, "2019-12-10")
+        XCTAssertEqual(model.countersMeals.count, 1)
+        XCTAssertEqual(model.countersMeals.first?.mealDispalyName, "Picadillo Argentinisches Hackfleischgericht")
+        XCTAssertEqual(model.countersMeals.first?.color.red, 217)
     }
 
     func testNormalMensaCells() async {
@@ -85,7 +93,7 @@ final class MensaViewModelTests: XCTestCase {
         dataClient.getMealResult = .success(MealDetailsModel.mealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
         await viewModel.loadGetMealDetails(mealId: 1)
-        guard MealDetailsModel.mealDemoData === viewModel.mealDetails.mealDetailsModel else {
+        guard MealDetailsModel.mealDemoData == viewModel.mealDetails.mealDetailsModel else {
             XCTFail("mensa meal should have values")
             return
         }
@@ -96,7 +104,7 @@ final class MensaViewModelTests: XCTestCase {
         dataClient.getMealResult = .success(MealDetailsModel.emptyMealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
         await viewModel.loadGetMealDetails(mealId: 1)
-        if MealDetailsModel.emptyMealDemoData !== viewModel.mealDetails.mealDetailsModel {
+        if MealDetailsModel.emptyMealDemoData != viewModel.mealDetails.mealDetailsModel {
             XCTFail("mensa meal details should reflect the returned empty model")
         }
     }

@@ -40,7 +40,7 @@ final class EventViewModelTests: XCTestCase {
 
     func testEmptyEventCells() async {
         let dataClient = MockAppDataClient()
-        dataClient.getEventsResult = .success(NewsFeedModel(json: [:]))
+        dataClient.getEventsResult = .success(NewsFeedModel.empty)
         let viewModel = EventViewModel(dataClient: dataClient)
         await viewModel.loadGetEvents(month: "12", year: "2019")
         guard case .empty = viewModel.eventCells.first else {

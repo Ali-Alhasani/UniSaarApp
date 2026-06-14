@@ -8,12 +8,11 @@
 
 import Foundation
 import Observation
-import SwiftyJSON
 
 @Observable
 class MapViewModel: ParentViewModel {
     var coordinatesLastChanged = ""
-    var updatedCoordinates: JSON?
+    var updatedCoordinates: CampusCoordinatesModel?
 
     override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)
@@ -21,21 +20,17 @@ class MapViewModel: ParentViewModel {
 
     func loadGetMapData() async {
         do {
-            let coordinates = try await dataClient.getCampusMapCoordinates(cacheLastChanged: coordinatesLastChanged)
-            if coordinates.updateTime != "", coordinates.updateTime != coordinatesLastChanged {
-                updateCoordinateCache(newCoordinates: coordinates.mapInfo)
-            }
+            let remote = try await dataClient.getCampusMapCoordinates(cacheLastChanged: coordinatesLastChanged)
+            let serverTime = remote.model.updateTime
+            guard !serverTime.isEmpty, serverTime != coordinatesLastChanged else { return }
+            persistCoordinateCache(model: remote.model, rawData: remote.rawData)
         } catch {
             // silently fail — map loads from local cache
         }
     }
 
-    func updateCoordinateCache(newCoordinates: JSON) {
-        do {
-            try Data.saveJson(data: newCoordinates.rawData(), toFilename: "Campus_Map_Coord")
-            updatedCoordinates = newCoordinates
-        } catch {
-            print(error)
-        }
+    private func persistCoordinateCache(model: CampusCoordinatesModel, rawData: Data) {
+        Data.saveJson(data: rawData, toFilename: "Campus_Map_Coord")
+        updatedCoordinates = model
     }
 }

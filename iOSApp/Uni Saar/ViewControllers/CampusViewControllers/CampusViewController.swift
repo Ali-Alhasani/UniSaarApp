@@ -127,9 +127,8 @@ class CampusViewController: UIViewController {
     }
 
     private func updateUI() {
-        guard let mapVM = mapViewModel, let updatedCoor = mapVM.updatedCoordinates else { return }
-        let campusCoordinatesModel = CampusCoordinatesModel(json: updatedCoor)
-        campusDelegate?.didUpdateCoordinatesCache(coordinates: campusCoordinatesModel.mapInfo)
+        guard let mapVM = mapViewModel, let updatedCoordinates = mapVM.updatedCoordinates else { return }
+        campusDelegate?.didUpdateCoordinatesCache(coordinates: updatedCoordinates.mapInfo)
         mapViewModel = nil
     }
 

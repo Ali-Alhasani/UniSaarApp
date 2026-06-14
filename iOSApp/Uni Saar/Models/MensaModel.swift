@@ -7,31 +7,52 @@
 //
 
 import Foundation
-import SwiftyJSON
 
-final class MensaMenuModel: Sendable {
+struct MensaMenuModel: Codable, Equatable {
     let daysMenus: [MensaDayModel]
     let filtersLastChanged: String
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        let days = jsonFromated["days"].arrayValue
-        daysMenus = days.map { MensaDayModel(json: $0.dictionaryValue) }
-        filtersLastChanged = jsonFromated["filtersLastChanged"].stringValue
-    }
 }
 
-final class MensaDayModel: Sendable {
+extension MensaMenuModel {
+    enum CodingKeys: String, CodingKey {
+        case daysMenus = "days"
+        case filtersLastChanged
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            daysMenus: container.value(.daysMenus, default: []),
+            filtersLastChanged: container.value(.filtersLastChanged, default: "")
+        )
+    }
+
+    static let empty = MensaMenuModel(daysMenus: [], filtersLastChanged: "")
+}
+
+struct MensaDayModel: Codable, Equatable {
     let date: String
     let countersMeals: [MensaMealsModel]
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        date = jsonFromated["date"].stringValue
-        let counters = jsonFromated["meals"].arrayValue
-        countersMeals = counters.map { MensaMealsModel(json: $0.dictionaryValue) }
-    }
 }
 
-final class MensaMealsModel: Sendable {
+extension MensaDayModel {
+    enum CodingKeys: String, CodingKey {
+        case date
+        case countersMeals = "meals"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            date: container.value(.date, default: ""),
+            countersMeals: container.value(.countersMeals, default: [])
+        )
+    }
+
+    static let empty = MensaDayModel(date: "", countersMeals: [])
+}
+
+struct MensaMealsModel: Codable, Equatable {
     let mealID: Int
     let counterName: String
     let mealDispalyName: String
@@ -40,98 +61,179 @@ final class MensaMealsModel: Sendable {
     let color: MensaColorModel
     let meals: [String]
     let notices: [String]
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        mealID = jsonFromated["id"].intValue
-        mealDispalyName = jsonFromated["mealName"].stringValue
-        counterName = jsonFromated["counterName"].stringValue
-        description = jsonFromated["description"].stringValue
-        openiningHours = jsonFromated["openingHours"].stringValue
-        color = MensaColorModel(json: jsonFromated["color"].dictionaryValue)
-        meals = jsonFromated["components"].arrayObject as? [String] ?? []
-        notices = jsonFromated["notices"].arrayObject as? [String] ?? []
+}
+
+extension MensaMealsModel {
+    enum CodingKeys: String, CodingKey {
+        case mealID = "id"
+        case counterName
+        case mealDispalyName = "mealName"
+        case description
+        case openiningHours = "openingHours"
+        case color
+        case meals = "components"
+        case notices
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            mealID: container.intValue(.mealID),
+            counterName: container.value(.counterName, default: ""),
+            mealDispalyName: container.value(.mealDispalyName, default: ""),
+            description: container.value(.description, default: ""),
+            openiningHours: container.value(.openiningHours, default: ""),
+            color: container.value(.color, default: .zero),
+            meals: container.value(.meals, default: []),
+            notices: container.value(.notices, default: [])
+        )
     }
 }
 
-final class MensaColorModel: Sendable {
+struct MensaColorModel: Codable, Equatable {
     let red: Float
     let green: Float
     let blue: Float
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        red = jsonFromated["r"].floatValue
-        green = jsonFromated["g"].floatValue
-        blue = jsonFromated["b"].floatValue
+
+    static let zero = MensaColorModel(red: 0, green: 0, blue: 0)
+}
+
+extension MensaColorModel {
+    enum CodingKeys: String, CodingKey {
+        case red = "r"
+        case green = "g"
+        case blue = "b"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            red: container.value(.red, default: Float(0)),
+            green: container.value(.green, default: Float(0)),
+            blue: container.value(.blue, default: Float(0))
+        )
     }
 }
 
-final class MealDetailsModel: Sendable {
+struct MealDetailsModel: Codable, Equatable {
     let mealID: Int
     let mealName: String
     let generalNotices: [MealNotices]
     let counterDescription: String
     let mealComponets: [MealComponents]
     let prices: [MealPrice]
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        mealID = jsonFromated["id"].intValue
-        mealName = jsonFromated["mealName"].stringValue
-        counterDescription = jsonFromated["description"].stringValue
-        generalNotices = jsonFromated["generalNotices"].arrayValue.map { MealNotices(json: $0.dictionaryValue) }
-        prices = jsonFromated["prices"].arrayValue.map { MealPrice(json: $0.dictionaryValue) }
-        mealComponets = jsonFromated["mealComponents"].arrayValue.map { MealComponents(json: $0.dictionaryValue) }
+}
+
+extension MealDetailsModel {
+    enum CodingKeys: String, CodingKey {
+        case mealID = "id"
+        case mealName
+        case generalNotices
+        case counterDescription = "description"
+        case mealComponets = "mealComponents"
+        case prices
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            mealID: container.intValue(.mealID),
+            mealName: container.value(.mealName, default: ""),
+            generalNotices: container.value(.generalNotices, default: []),
+            counterDescription: container.value(.counterDescription, default: ""),
+            mealComponets: container.value(.mealComponets, default: []),
+            prices: container.value(.prices, default: [])
+        )
     }
 }
 
-final class MealComponents: Sendable {
+struct MealComponents: Codable, Equatable {
     let componentName: String
     let componentNotices: [MealNotices]
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        componentName = jsonFromated["componentName"].stringValue
-        let notices = jsonFromated["notices"].arrayValue
-        componentNotices = notices.map { MealNotices(json: $0.dictionaryValue) }
+}
+
+extension MealComponents {
+    enum CodingKeys: String, CodingKey {
+        case componentName
+        case componentNotices = "notices"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            componentName: container.value(.componentName, default: ""),
+            componentNotices: container.value(.componentNotices, default: [])
+        )
     }
 }
 
-final class MealNotices: Sendable {
+struct MealNotices: Codable, Equatable {
     let noticeTag: String
     let noticeDispalyName: String
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        noticeTag = jsonFromated["notice"].stringValue
-        noticeDispalyName = jsonFromated["displayName"].stringValue
+}
+
+extension MealNotices {
+    enum CodingKeys: String, CodingKey {
+        case noticeTag = "notice"
+        case noticeDispalyName = "displayName"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            noticeTag: container.value(.noticeTag, default: ""),
+            noticeDispalyName: container.value(.noticeDispalyName, default: "")
+        )
     }
 }
 
-final class MealPrice: Sendable {
+struct MealPrice: Codable, Equatable {
     let priceTagName: String
     let price: String
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        priceTagName = jsonFromated["priceTag"].stringValue
-        price = jsonFromated["price"].stringValue
+}
+
+extension MealPrice {
+    enum CodingKeys: String, CodingKey {
+        case priceTagName = "priceTag"
+        case price
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            priceTagName: container.value(.priceTagName, default: ""),
+            price: container.value(.price, default: "")
+        )
     }
 }
 
-final class MensaInfo: Sendable {
+struct MensaInfo: Codable, Equatable {
     let locationName: String
     let description: String
     let imageLink: String
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        locationName = jsonFromated["name"].stringValue
-        description = jsonFromated["description"].stringValue
-        imageLink = jsonFromated["imageLink"].stringValue
+}
+
+extension MensaInfo {
+    enum CodingKeys: String, CodingKey {
+        case locationName = "name"
+        case description
+        case imageLink
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            locationName: container.value(.locationName, default: ""),
+            description: container.value(.description, default: ""),
+            imageLink: container.value(.imageLink, default: "")
+        )
     }
 }
 
 // MARK: MensaMenuModel demo data
 
 extension MensaMenuModel {
-    /// note maybe we should return the notices code in order to do the filtering?!
-    /// one array for meals name and the other for notices??!
-    nonisolated(unsafe) static let deomJSON = ["days": [
+    nonisolated(unsafe) static let deomJSON: [String: Any] = ["days": [
         ["date": "today", "meals":
             [
                 [
@@ -143,161 +245,102 @@ extension MensaMenuModel {
                     ], "notices": []
                 ], ["counterName": "Vegetarian Meal", "mealName": "PastaBoccolotti", "description": "description",
                     "openingHours": "11:30-14:15", "color": ["r": 21, "g": 135, "b": 207], "components":
-                        ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"]], ["counterName": "Free Flow", "mealName": "Feuriges Gemüse-Fischcurry mit Ingwerreis", "description": "description", "openingHours": "11:30-14:15",
-                                                                                                                                     "color": ["r": 245, "g": 204, "b": 43], "components":
-                                                                                                                                         ["Kartoffelgratin", "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "Salatbuffet"]], ["counterName": "Free Flow", "mealName": "Kartoffelgratin", "description": "description", "openingHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "components":
-                    ["Bunter Blattsalat", "Balsamico-Dressing"]], ["counterName": "Free Flow", "mealName": "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "description": "description",
-                                                                   "openingHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "components":
-                                                                       [:]], ["counterName": "Free Flow", "mealName": "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "description": "description",
-                                                                              "openingHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "components":
-                                                                                  ["Pommes Frites"]], ["counterName": "Free Flow", "mealName": "Salatbuffet", "description": "description", "openingHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "components":
-                    ["Tomatensalat", "Weisskraut", "Gurken", "Zwiebel Ringe", "Karotten", "Gemischter Paprika",
-                     "Mais", "Peperoni", "Lollo Biondo", "Radicchio", "Klare Salatsoße"]]
+                        ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"]]
             ]]
     ]]
-    static let menuDemoData = MensaMenuModel(json: ["days": [
-        ["date": "today", "counters":
+}
+
+extension MensaDayModel {
+    nonisolated(unsafe) static let menuDemoData: [String: Any] = [
+        "date": "2019-12-10",
+        "meals": [
             [
-                [
-                    "countersName": "Complete Meal", "mealDispalyName": "Picadillo Argentinisches Hackfleischgericht",
-                    "openiningHours": "11:30-14:15",
-                    "color": ["r": 217, "g": 38, "b": 26],
-                    "meals": [
-                        "Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"
-                    ], "notices": []
-                ], ["countersName": "Vegetarian Meal", "mealDispalyName": "PastaBoccolotti", "description": "description",
-                    "openiningHours": "11:30-14:15", "color": ["r": 21, "g": 135, "b": 207], "meals":
-                        ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"]], ["countersName": "Free Flow", "mealDispalyName": "Feuriges Gemüse-Fischcurry mit Ingwerreis", "description": "description", "openiningHours": "11:30-14:15",
-                                                                                                                                     "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                                                                         ["Kartoffelgratin", "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "Salatbuffet"]], ["countersName": "Free Flow", "mealDispalyName": "Kartoffelgratin", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Bunter Blattsalat", "Balsamico-Dressing"]], ["countersName": "Free Flow", "mealDispalyName": "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "description": "description",
-                                                                   "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                       [:]], ["countersName": "Free Flow", "mealDispalyName": "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "description": "description",
-                                                                              "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                  ["Pommes Frites"]], ["countersName": "Free Flow", "mealDispalyName": "Salatbuffet", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Tomatensalat", "Weisskraut", "Gurken", "Zwiebel Ringe", "Karotten", "Gemischter Paprika",
-                     "Mais", "Peperoni", "Lollo Bianco", "Radicchio", "Klare Salatsoße"]]
-            ]], ["date": "2019-12-10", "counters":
-            [
-                [
-                    "countersName": "Complete Meal", "mealDispalyName": "Picadillo Argentinisches Hackfleischgericht",
-                    "openiningHours": "11:30-14:15",
-                    "color": ["r": 217, "g": 38, "b": 26],
-                    "meals": [
-                        "Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"
-                    ], "notices": []
-                ], ["countersName": "Vegetarian Meal", "mealDispalyName": "PastaBoccolotti", "description": "description",
-                    "openiningHours": "11:30-14:15", "color": ["r": 21, "g": 135, "b": 207], "meals":
-                        ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"]], ["countersName": "Free Flow", "mealDispalyName": "Feuriges Gemüse-Fischcurry mit Ingwerreis", "description": "description", "openiningHours": "11:30-14:15",
-                                                                                                                                     "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                                                                         ["Kartoffelgratin", "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "Salatbuffet"]], ["countersName": "Free Flow", "mealDispalyName": "Kartoffelgratin", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Bunter Blattsalat", "Balsamico-Dressing"]], ["countersName": "Free Flow", "mealDispalyName": "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "description": "description",
-                                                                   "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                       [:]], ["countersName": "Free Flow", "mealDispalyName": "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "description": "description",
-                                                                              "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                  ["Pommes Frites"]], ["countersName": "Free Flow", "mealDispalyName": "Salatbuffet", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Tomatensalat", "Weisskraut", "Gurken", "Zwiebel Ringe", "Karotten", "Gemischter Paprika",
-                     "Mais", "Peperoni", "Lollo Bianco", "Radicchio", "Klare Salatsoße"]]
-            ]], ["date": "2019-12-11", "counters":
-            [
-                [
-                    "countersName": "Complete Meal", "mealDispalyName": "Picadillo Argentinisches Hackfleischgericht",
-                    "openiningHours": "11:30-14:15",
-                    "color": ["r": 217, "g": 38, "b": 26],
-                    "meals": [
-                        "Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"
-                    ], "notices": []
-                ], ["countersName": "Vegetarian Meal", "mealDispalyName": "PastaBoccolotti", "description": "description",
-                    "openiningHours": "11:30-14:15", "color": ["r": 21, "g": 135, "b": 207], "meals":
-                        ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"]], ["countersName": "Free Flow", "mealDispalyName": "Feuriges Gemüse-Fischcurry mit Ingwerreis", "description": "description", "openiningHours": "11:30-14:15",
-                                                                                                                                     "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                                                                         ["Kartoffelgratin", "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "Salatbuffet"]], ["countersName": "Free Flow", "mealDispalyName": "Kartoffelgratin", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Bunter Blattsalat", "Balsamico-Dressing"]], ["countersName": "Free Flow", "mealDispalyName": "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "description": "description",
-                                                                   "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                       [:]], ["countersName": "Free Flow", "mealDispalyName": "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "description": "description",
-                                                                              "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                  ["Pommes Frites"]], ["countersName": "Free Flow", "mealDispalyName": "Salatbuffet", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Tomatensalat", "Weisskraut", "Gurken", "Zwiebel Ringe", "Karotten", "Gemischter Paprika",
-                     "Mais", "Peperoni", "Lollo Bianco", "Radicchio", "Klare Salatsoße"]]
-            ]], ["date": "2019-12-12", "counters":
-            [
-                [
-                    "countersName": "Complete Meal", "mealDispalyName": "Picadillo Argentinisches Hackfleischgericht",
-                    "openiningHours": "11:30-14:15",
-                    "color": ["r": 217, "g": 38, "b": 26],
-                    "meals": [
-                        "Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"
-                    ], "notices": []
-                ], ["countersName": "Vegetarian Meal", "mealDispalyName": "PastaBoccolotti", "description": "description",
-                    "openiningHours": "11:30-14:15", "color": ["r": 21, "g": 135, "b": 207], "meals":
-                        ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"]], ["countersName": "Free Flow", "mealDispalyName": "Feuriges Gemüse-Fischcurry mit Ingwerreis", "description": "description", "openiningHours": "11:30-14:15",
-                                                                                                                                     "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                                                                         ["Kartoffelgratin", "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "Salatbuffet"]], ["countersName": "Free Flow", "mealDispalyName": "Kartoffelgratin", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Bunter Blattsalat", "Balsamico-Dressing"]], ["countersName": "Free Flow", "mealDispalyName": "Hähnchenbrust mit Cassis-Soße und Herzoginkartoffeln", "description": "description",
-                                                                   "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                       [:]], ["countersName": "Free Flow", "mealDispalyName": "Gebratenes Fleischwürstchen mit süssem Meerrettichsenf", "description": "description",
-                                                                              "openiningHours": "11:30-14:15", "color": ["r": 245, "g": 204, "b": 43], "meals":
-                                                                                  ["Pommes Frites"]], ["countersName": "Free Flow", "mealDispalyName": "Salatbuffet", "description": "description", "openiningHours": "11:30-14:15", "color":
-                    ["r": 245, "g": 204, "b": 43], "meals":
-                    ["Tomatensalat", "Weisskraut", "Gurken", "Zwiebel Ringe", "Karotten", "Gemischter Paprika",
-                     "Mais", "Peperoni", "Lollo Bianco", "Radicchio", "Klare Salatsoße"]]
-            ]]
-    ]])
-    static let emptyMenuDemoData = MensaMenuModel(json: [:])
+                "id": 0, "counterName": "Complete Meal",
+                "mealName": "Picadillo Argentinisches Hackfleischgericht",
+                "description": "description", "openingHours": "11:30-14:15",
+                "color": ["r": 217, "g": 38, "b": 26],
+                "components": ["Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"],
+                "notices": [String]()
+            ] as [String: Any]
+        ]
+    ]
 }
 
 // MARK: MensaMenuModel demo data
 
-extension MensaDayModel {
-    nonisolated(unsafe) static let menuDemoData: [String: Any] = ["date": "2019-12-10", "counters":
-        [
-            "mealDispalyName": "Picadillo Argentinisches Hackfleischgericht", "description": "description", "openiningHours": "11:30-14:15",
-            "color": ["r": 217, "g": 38, "b": 26],
-            "meals": [
-                ["name": "Fussili"], ["name": "Pusztasalat"], ["name": "Tomatensuppe"], ["name": "Stracciatella-Bananen-Sahnequark"]
-            ]
-        ]]
+extension MensaMenuModel {
+    static let menuDemoData = MensaMenuModel(
+        daysMenus: [
+            MensaDayModel(date: "today", countersMeals: [
+                MensaMealsModel(mealID: 0, counterName: "Complete Meal", mealDispalyName: "Picadillo Argentinisches Hackfleischgericht",
+                                description: "", openiningHours: "11:30-14:15",
+                                color: MensaColorModel(red: 217, green: 38, blue: 26),
+                                meals: ["Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"], notices: []),
+                MensaMealsModel(mealID: 0, counterName: "Vegetarian Meal", mealDispalyName: "PastaBoccolotti",
+                                description: "description", openiningHours: "11:30-14:15",
+                                color: MensaColorModel(red: 21, green: 135, blue: 207),
+                                meals: ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"], notices: [])
+            ]),
+            MensaDayModel(date: "2019-12-10", countersMeals: [
+                MensaMealsModel(mealID: 0, counterName: "Complete Meal", mealDispalyName: "Picadillo Argentinisches Hackfleischgericht",
+                                description: "", openiningHours: "11:30-14:15",
+                                color: MensaColorModel(red: 217, green: 38, blue: 26),
+                                meals: ["Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"], notices: [])
+            ])
+        ],
+        filtersLastChanged: ""
+    )
+    static let emptyMenuDemoData = MensaMenuModel.empty
 }
 
 // MARK: MensaMealsModel demo data
 
 extension MensaMealsModel {
-    static let mensaDemoData = [MensaMealsModel(json:
-        ["mealDispalyName": "Picadillo Argentinisches Hackfleischgericht", "description": "description", "openiningHours": "11:30-14:15", "color":
-            ["r": 217, "g": 38, "b": 26], "meals":
-            [
-                ["name": "Fussili"], ["name": "Pusztasalat"], ["name": "Tomatensuppe"], ["name": "Stracciatella-Bananen-Sahnequark"]
-            ]]), MensaMealsModel(json:
-        ["mealDispalyName": "PastaBoccolotti", "description": "description", "openiningHours": "11:30-14:15", "color": ["r": 21, "g": 135, "b": 207], "meals":
-            [
-                ["name": "Tomaten-Zucchini-Bechamelsoße"], ["name": "Endiviensalat"], ["name": "Weiße Salatsoße"], ["name": "Klare Salatsoße"], ["name": "Fruchtjoghurt"]
-            ]])]
+    static let mensaDemoData = [
+        MensaMealsModel(mealID: 0, counterName: "", mealDispalyName: "Picadillo Argentinisches Hackfleischgericht",
+                        description: "description", openiningHours: "11:30-14:15",
+                        color: MensaColorModel(red: 217, green: 38, blue: 26),
+                        meals: [], notices: []),
+        MensaMealsModel(mealID: 0, counterName: "", mealDispalyName: "PastaBoccolotti",
+                        description: "description", openiningHours: "11:30-14:15",
+                        color: MensaColorModel(red: 21, green: 135, blue: 207),
+                        meals: [], notices: [])
+    ]
 }
 
 extension MealDetailsModel {
-    static let mealDemoData = MealDetailsModel(json:
-        ["mealName": "Fischfilet im Backteig", "description": "Entrance A and B (to the left)", "generalNotices": [
-            ["notice": "ba", "displayName": "raising agent"], ["notice": "fnf", "displayName": "fish from sustainable fishing"], ["notice": "fi", "displayName": "Fish"]
-        ], "prices": [["priceTag": "Studenten", "price": "3,10"], ["priceTag": "Bedienstete", "price": "5,25"], ["priceTag": "Gäste", "price": "7,30"]], "mealComponets":
-            [["componentName": "Remouladensoße", "notices": [
-                ["notice": "ba", "displayName": "raising agent"], ["notice": "fnf", "displayName": "fish from sustainable fishing"], ["notice": "fi", "displayName": "Fish"]
-            ]],
-            ["componentName": "Petersilienkartoffel (Kartoffeln aus biologischem Anbau)", "notices": [
-            ]],
-            ["componentName": "Karottensalat", "notices": [
-                ["notice": "fs", "displayName": "artificial colouring"], ["notice": "ei", "displayName": "Chicken Egg"], ["notice": "la", "displayName": "Milk and lactose"],
-                ["notice": "snf", "displayName": "Mustard"]
-            ]],
-            ["componentName": "Obst", "notices": [
-            ]]]])
-    static let emptyMealDemoData = MealDetailsModel(json: [:])
+    static let mealDemoData = MealDetailsModel(
+        mealID: 0,
+        mealName: "Fischfilet im Backteig",
+        generalNotices: [
+            MealNotices(noticeTag: "ba", noticeDispalyName: "raising agent"),
+            MealNotices(noticeTag: "fnf", noticeDispalyName: "fish from sustainable fishing"),
+            MealNotices(noticeTag: "fi", noticeDispalyName: "Fish")
+        ],
+        counterDescription: "Entrance A and B (to the left)",
+        mealComponets: [
+            MealComponents(componentName: "Remouladensoße", componentNotices: [
+                MealNotices(noticeTag: "ba", noticeDispalyName: "raising agent"),
+                MealNotices(noticeTag: "fnf", noticeDispalyName: "fish from sustainable fishing"),
+                MealNotices(noticeTag: "fi", noticeDispalyName: "Fish")
+            ]),
+            MealComponents(componentName: "Petersilienkartoffel (Kartoffeln aus biologischem Anbau)", componentNotices: []),
+            MealComponents(componentName: "Karottensalat", componentNotices: [
+                MealNotices(noticeTag: "fs", noticeDispalyName: "artificial colouring"),
+                MealNotices(noticeTag: "ei", noticeDispalyName: "Chicken Egg"),
+                MealNotices(noticeTag: "la", noticeDispalyName: "Milk and lactose"),
+                MealNotices(noticeTag: "snf", noticeDispalyName: "Mustard")
+            ]),
+            MealComponents(componentName: "Obst", componentNotices: [])
+        ],
+        prices: [
+            MealPrice(priceTagName: "Studenten", price: "3,10"),
+            MealPrice(priceTagName: "Bedienstete", price: "5,25"),
+            MealPrice(priceTagName: "Gäste", price: "7,30")
+        ]
+    )
+    static let emptyMealDemoData = MealDetailsModel(
+        mealID: 0, mealName: "", generalNotices: [],
+        counterDescription: "", mealComponets: [], prices: []
+    )
 }

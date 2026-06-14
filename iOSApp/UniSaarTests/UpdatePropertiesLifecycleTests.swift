@@ -72,7 +72,7 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         viewController.setupTableView()
 
         let dataClient = MockAppDataClient()
-        dataClient.getNewsResult = .success(NewsFeedModel(json: [:]))
+        dataClient.getNewsResult = .success(NewsFeedModel.empty)
         viewController.newsViewModel = NewsFeedViewModel(dataClient: dataClient)
         await viewController.newsViewModel.loadFirstPage(filterCatgroies: [])
 
@@ -251,9 +251,12 @@ final class UpdatePropertiesLifecycleTests: XCTestCase {
         viewController.viewDidLoad()
 
         let dataClient = MockAppDataClient()
-        dataClient.getStaffDetailsResult = .success(StaffDetailsModel(json: [
-            "firstname": "Ali", "lastname": "Al-Hasani", "title": "Dr.", "mail": "ali@uni-saar.de"
-        ]))
+        let dict: [String: Any] = ["firstname": "Ali", "lastname": "Al-Hasani", "title": "Dr.", "mail": "ali@uni-saar.de"]
+        let staffDetails = try JSONDecoder.unisaarDefault.decode(
+            StaffDetailsModel.self,
+            from: JSONSerialization.data(withJSONObject: dict)
+        )
+        dataClient.getStaffDetailsResult = .success(staffDetails)
         // Replace the default ViewModel with one backed by mock data
         viewController.staff = StaffDetailsViewModel(dataClient: dataClient)
         await viewController.staff.loadGetStaffDetails(staffId: 1)

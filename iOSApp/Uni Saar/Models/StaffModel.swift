@@ -7,33 +7,56 @@
 //
 
 import Foundation
-import SwiftyJSON
 
-final class StaffModel: Sendable {
+struct StaffModel: Codable, Equatable {
     let staffResults: [StaffResultsModel]
     let staffItemCount: Int
     let hasNextPage: Bool
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        staffResults = jsonFromated["results"].arrayValue.map { StaffResultsModel(json: $0.dictionaryValue) }
-        staffItemCount = jsonFromated["itemCount"].intValue
-        hasNextPage = jsonFromated["hasNextPage"].boolValue
-    }
 }
 
-final class StaffResultsModel: Sendable {
+extension StaffModel {
+    enum CodingKeys: String, CodingKey {
+        case staffResults = "results"
+        case staffItemCount = "itemCount"
+        case hasNextPage
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            staffResults: container.value(.staffResults, default: []),
+            staffItemCount: container.value(.staffItemCount, default: 0),
+            hasNextPage: container.value(.hasNextPage, default: false)
+        )
+    }
+
+    static let empty = StaffModel(staffResults: [], staffItemCount: 0, hasNextPage: false)
+}
+
+struct StaffResultsModel: Codable, Equatable, Hashable {
     let title: String
     let fullName: String
     let staffID: Int
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        title = jsonFromated["title"].stringValue
-        staffID = jsonFromated["pid"].intValue
-        fullName = jsonFromated["name"].stringValue
+}
+
+extension StaffResultsModel {
+    enum CodingKeys: String, CodingKey {
+        case title
+        case fullName = "name"
+        case staffID = "pid"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            title: container.value(.title, default: ""),
+            fullName: container.value(.fullName, default: ""),
+            staffID: container.value(.staffID, default: 0)
+        )
     }
 }
 
-final class StaffDetailsModel: Sendable {
+struct StaffDetailsModel: Codable, Equatable {
     let email: String?
     let phoneNumber: String?
     let websiteURL: String?
@@ -50,33 +73,54 @@ final class StaffDetailsModel: Sendable {
     let remarks: String?
     let image: String?
     let officeHour: String?
+}
 
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        firstName = jsonFromated["firstname"].string
-        lastName = jsonFromated["lastname"].string
-        title = jsonFromated["title"].string
-        email = jsonFromated["mail"].string
-        phoneNumber = jsonFromated["phone"].string
-        gender = jsonFromated["gender"].string
-        websiteURL = jsonFromated["webpage"].string
-        office = jsonFromated["office"].string
-        building = jsonFromated["building"].string
-        street = jsonFromated["street"].string
-        postalCode = jsonFromated["postalCode"].string
-        city = jsonFromated["city"].string
-        fax = jsonFromated["fax"].string
-        remarks = jsonFromated["remark"].string
-        image = jsonFromated["imageLink"].string
-        officeHour = jsonFromated["officeHour"].string
+extension StaffDetailsModel {
+    enum CodingKeys: String, CodingKey {
+        case email = "mail"
+        case phoneNumber = "phone"
+        case websiteURL = "webpage"
+        case gender, title
+        case firstName = "firstname"
+        case lastName = "lastname"
+        case office, building, street, postalCode, city, fax
+        case remarks = "remark"
+        case image = "imageLink"
+        case officeHour
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            email: container.optionalValue(.email),
+            phoneNumber: container.optionalValue(.phoneNumber),
+            websiteURL: container.optionalValue(.websiteURL),
+            gender: container.optionalValue(.gender),
+            title: container.optionalValue(.title),
+            firstName: container.optionalValue(.firstName),
+            lastName: container.optionalValue(.lastName),
+            office: container.optionalValue(.office),
+            building: container.optionalValue(.building),
+            street: container.optionalValue(.street),
+            postalCode: container.optionalValue(.postalCode),
+            city: container.optionalValue(.city),
+            fax: container.optionalValue(.fax),
+            remarks: container.optionalValue(.remarks),
+            image: container.optionalValue(.image),
+            officeHour: container.optionalValue(.officeHour)
+        )
     }
 }
 
 extension StaffModel {
-    // nonisolated(unsafe) is required when the type is not Sendable (e.g. [String: Any] — because Any isn't Sendable).
-    // Sendable types (like StaffModel) don't need it; Swift verifies safety on its own.
     nonisolated(unsafe) static let deomJSON: [String: Any] = ["name": "Ali Baylan", "title": "", "pid": 9091]
-    static let staffDemoData = StaffModel(json: ["itemCount": 3, "results": [["name": "Ali Baylan", "title": "", "pid": 9091],
-                                                                             ["name": "Galina Baron", "title": "", "pid": 16776],
-                                                                             ["name": "Paanteha Kamali-Moghadam", "title": "M. Sc", "pid": 14477]]])
+    static let staffDemoData = StaffModel(
+        staffResults: [
+            StaffResultsModel(title: "", fullName: "Ali Baylan", staffID: 9091),
+            StaffResultsModel(title: "", fullName: "Galina Baron", staffID: 16776),
+            StaffResultsModel(title: "M. Sc", fullName: "Paanteha Kamali-Moghadam", staffID: 14477)
+        ],
+        staffItemCount: 3,
+        hasNextPage: false
+    )
 }
