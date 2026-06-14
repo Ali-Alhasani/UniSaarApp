@@ -29,7 +29,6 @@ extension JSONEncoder {
 }
 
 extension KeyedDecodingContainer {
-    /// Returns fallback on missing, null, or type mismatch — mirrors SwiftyJSON leniency.
     func value<T: Decodable>(_ key: Key, default fallback: T) -> T {
         (try? decodeIfPresent(T.self, forKey: key)) ?? fallback
     }

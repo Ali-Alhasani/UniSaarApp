@@ -11,9 +11,12 @@ import XCTest
 
 @MainActor
 final class MensaViewModelTests: XCTestCase {
-    func testMensaModel() {
+    func testMensaModel() throws {
         let testSuccessfulJSON = MensaMenuModel.deomJSON
-        XCTAssertNotNil(MensaMenuModel(json: testSuccessfulJSON))
+        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let model = try JSONDecoder.unisaarDefault.decode(MensaMenuModel.self, from: data)
+        XCTAssertEqual(model.daysMenus.count, 1)
+        XCTAssertEqual(model.daysMenus.first?.countersMeals.count, 2)
     }
 
     func testMensaTodayModel() throws {
