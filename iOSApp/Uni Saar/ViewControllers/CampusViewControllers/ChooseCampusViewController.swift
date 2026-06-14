@@ -68,7 +68,7 @@ extension ChooseCampusViewController: UITableViewDelegate, UITableViewDataSource
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        NSLocalizedString("ChooseCampus", comment: "")
+        String(localized: "ChooseCampus")
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

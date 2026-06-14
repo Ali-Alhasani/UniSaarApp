@@ -80,7 +80,7 @@ class FilterMensaViewModel: ParentViewModel {
         case .empty:
             []
         case .foodAlram:
-            [FilterElement(filterName: NSLocalizedString("EnableFoodAlarm", comment: ""),
+            [FilterElement(filterName: String(localized: "EnableFoodAlarm"),
                            filterID: "1", isSelected: isFoodAlarmEnabled), FilterElement(filterName: "", filterID: "2",
                                                                                          isSelected: false)]
         }
@@ -107,8 +107,8 @@ extension FilterMensaViewModel {
     func scheduleNotification() {
         let center = UNUserNotificationCenter.current()
         let content = UNMutableNotificationContent()
-        content.title = NSLocalizedString("TodayMensa", comment: "")
-        content.body = NSLocalizedString("NotificationBody", comment: "")
+        content.title = String(localized: "TodayMensa")
+        content.body = String(localized: "NotificationBody")
         content.categoryIdentifier = "alarm"
         content.sound = UNNotificationSound.default
 
@@ -180,7 +180,7 @@ extension FilterMensaViewModel {
     }
 
     func notificationAlert() {
-        showAlert(message: NSLocalizedString("enableNotification", comment: ""))
+        showAlert(message: String(localized: "enableNotification"))
     }
 
     func loadFoodAlarmStatus() {

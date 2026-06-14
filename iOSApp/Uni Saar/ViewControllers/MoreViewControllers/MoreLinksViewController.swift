@@ -96,7 +96,7 @@ extension MoreLinksViewController {
             case let .error(message):
                 return defaultCell.setupEmptyCell(message: message)
             case .empty:
-                return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyLinks", comment: ""))
+                return defaultCell.setupEmptyCell(message: String(localized: "EmptyLinks"))
             case .none:
                 return defaultCell
             }
@@ -116,9 +116,9 @@ extension MoreLinksViewController {
                 break
             }
         } else {
-            if moreLinksViewModel.extraCells[safe: indexPath.row] == NSLocalizedString("AppSettings", comment: "") {
+            if moreLinksViewModel.extraCells[safe: indexPath.row] == String(localized: "AppSettings") {
                 performSegue(withIdentifier: SegueIdentifiers.toSettings, sender: self)
-            } else if moreLinksViewModel.extraCells[safe: indexPath.row] == NSLocalizedString("AboutApp", comment: "") {
+            } else if moreLinksViewModel.extraCells[safe: indexPath.row] == String(localized: "AboutApp") {
                 performSegue(withIdentifier: SegueIdentifiers.toAboutApp, sender: self)
             }
         }

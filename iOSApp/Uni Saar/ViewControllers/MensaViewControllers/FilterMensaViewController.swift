@@ -207,13 +207,13 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
         if let priority = filterForSectionIndex(section) {
             switch priority {
             case .location:
-                title = NSLocalizedString("MensaLocations", comment: "")
+                title = String(localized: "MensaLocations")
             case .empty:
-                title = NSLocalizedString("WarnMeAbout", comment: "")
+                title = String(localized: "WarnMeAbout")
             case .allergenList:
                 break
             case .foodAlram:
-                title = NSLocalizedString("MensaNotifications", comment: "")
+                title = String(localized: "MensaNotifications")
             }
         }
         return title
@@ -226,7 +226,7 @@ extension FilterMensaViewController: UITableViewDelegate, UITableViewDataSource 
             case .location:
                 break
             case .empty:
-                title = NSLocalizedString("HighlightAllergens", comment: "")
+                title = String(localized: "HighlightAllergens")
             case .allergenList:
                 break
             case .foodAlram:

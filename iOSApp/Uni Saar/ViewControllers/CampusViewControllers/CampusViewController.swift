@@ -67,7 +67,7 @@ class CampusViewController: UIViewController {
             campusDelegate = buildingSearchTable
         }
         searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = NSLocalizedString("BuildingsSearch", comment: "")
+        searchController.searchBar.placeholder = String(localized: "BuildingsSearch")
         searchController.searchBar.searchTextField.backgroundColor = .systemBackground
         navigationItem.searchController = searchController
         activateSearchBar()

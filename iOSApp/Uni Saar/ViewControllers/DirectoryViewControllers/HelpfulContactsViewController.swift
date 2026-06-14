@@ -77,14 +77,14 @@ extension HelpfulContactsViewController: UITableViewDelegate, UITableViewDataSou
         case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
-            return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyResults", comment: ""))
+            return defaultCell.setupEmptyCell(message: String(localized: "EmptyResults"))
         case .none:
             return defaultCell
         }
     }
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        NSLocalizedString("HelpfulNumbers", comment: "")
+        String(localized: "HelpfulNumbers")
     }
 }
 

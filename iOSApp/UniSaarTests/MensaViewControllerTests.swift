@@ -73,7 +73,7 @@ class MensaViewControllerTests: XCTestCase {
         case .empty:
             let cell = viewControllerUnderTest.collectionView(viewControllerUnderTest.mensaCollectionView, cellForItemAt:
                 IndexPath(item: 0, section: 0)) as? ErrorCellCollectionViewCell
-            XCTAssertEqual(cell?.text, NSLocalizedString("emptyMenu", comment: "no menu"))
+            XCTAssertEqual(cell?.text, String(localized: "emptyMenu"))
         case .none:
             break
         }

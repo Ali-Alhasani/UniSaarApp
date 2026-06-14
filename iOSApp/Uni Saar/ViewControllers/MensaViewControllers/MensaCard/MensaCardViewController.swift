@@ -42,8 +42,8 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
     @IBAction func scanCardAction() {
         guard NFCTagReaderSession.readingAvailable else {
             let alertController = UIAlertController(
-                title: NSLocalizedString("NFC Scanning Not Supported", comment: ""),
-                message: NSLocalizedString("This device doesn't support NFC tag scanning.", comment: ""),
+                title: String(localized: "NFC Scanning Not Supported"),
+                message: String(localized: "This device doesn't support NFC tag scanning."),
                 preferredStyle: .alert
             )
             alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -52,7 +52,7 @@ class MainViewController: UIViewController, NFCTagReaderSessionDelegate {
         }
 
         session = NFCTagReaderSession(pollingOption: .iso14443, delegate: self)
-        session?.alertMessage = NSLocalizedString("Please hold your Student/Mensa card near the NFC sensor.", comment: "")
+        session?.alertMessage = String(localized: "Please hold your Student/Mensa card near the NFC sensor.")
         session?.begin()
     }
 
