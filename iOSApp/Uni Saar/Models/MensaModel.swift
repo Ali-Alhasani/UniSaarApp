@@ -260,3 +260,82 @@ extension MensaDayModel {
             ]
         ]]
 }
+
+// MARK: MensaMenuModel demo data
+
+extension MensaMenuModel {
+    static let menuDemoData = MensaMenuModel(
+        daysMenus: [
+            MensaDayModel(date: "today", countersMeals: [
+                MensaMealsModel(mealID: 0, counterName: "Complete Meal", mealDispalyName: "Picadillo Argentinisches Hackfleischgericht",
+                                description: "", openiningHours: "11:30-14:15",
+                                color: MensaColorModel(red: 217, green: 38, blue: 26),
+                                meals: ["Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"], notices: []),
+                MensaMealsModel(mealID: 0, counterName: "Vegetarian Meal", mealDispalyName: "PastaBoccolotti",
+                                description: "description", openiningHours: "11:30-14:15",
+                                color: MensaColorModel(red: 21, green: 135, blue: 207),
+                                meals: ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"], notices: [])
+            ]),
+            MensaDayModel(date: "2019-12-10", countersMeals: [
+                MensaMealsModel(mealID: 0, counterName: "Complete Meal", mealDispalyName: "Picadillo Argentinisches Hackfleischgericht",
+                                description: "", openiningHours: "11:30-14:15",
+                                color: MensaColorModel(red: 217, green: 38, blue: 26),
+                                meals: ["Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"], notices: [])
+            ])
+        ],
+        filtersLastChanged: ""
+    )
+    static let emptyMenuDemoData = MensaMenuModel.empty
+}
+
+// MARK: MensaMealsModel demo data
+
+extension MensaMealsModel {
+    static let mensaDemoData = [
+        MensaMealsModel(mealID: 0, counterName: "", mealDispalyName: "Picadillo Argentinisches Hackfleischgericht",
+                        description: "description", openiningHours: "11:30-14:15",
+                        color: MensaColorModel(red: 217, green: 38, blue: 26),
+                        meals: [], notices: []),
+        MensaMealsModel(mealID: 0, counterName: "", mealDispalyName: "PastaBoccolotti",
+                        description: "description", openiningHours: "11:30-14:15",
+                        color: MensaColorModel(red: 21, green: 135, blue: 207),
+                        meals: [], notices: [])
+    ]
+}
+
+extension MealDetailsModel {
+    static let mealDemoData = MealDetailsModel(
+        mealID: 0,
+        mealName: "Fischfilet im Backteig",
+        generalNotices: [
+            MealNotices(noticeTag: "ba", noticeDispalyName: "raising agent"),
+            MealNotices(noticeTag: "fnf", noticeDispalyName: "fish from sustainable fishing"),
+            MealNotices(noticeTag: "fi", noticeDispalyName: "Fish")
+        ],
+        counterDescription: "Entrance A and B (to the left)",
+        mealComponets: [
+            MealComponents(componentName: "Remouladensoße", componentNotices: [
+                MealNotices(noticeTag: "ba", noticeDispalyName: "raising agent"),
+                MealNotices(noticeTag: "fnf", noticeDispalyName: "fish from sustainable fishing"),
+                MealNotices(noticeTag: "fi", noticeDispalyName: "Fish")
+            ]),
+            MealComponents(componentName: "Petersilienkartoffel (Kartoffeln aus biologischem Anbau)", componentNotices: []),
+            MealComponents(componentName: "Karottensalat", componentNotices: [
+                MealNotices(noticeTag: "fs", noticeDispalyName: "artificial colouring"),
+                MealNotices(noticeTag: "ei", noticeDispalyName: "Chicken Egg"),
+                MealNotices(noticeTag: "la", noticeDispalyName: "Milk and lactose"),
+                MealNotices(noticeTag: "snf", noticeDispalyName: "Mustard")
+            ]),
+            MealComponents(componentName: "Obst", componentNotices: [])
+        ],
+        prices: [
+            MealPrice(priceTagName: "Studenten", price: "3,10"),
+            MealPrice(priceTagName: "Bedienstete", price: "5,25"),
+            MealPrice(priceTagName: "Gäste", price: "7,30")
+        ]
+    )
+    static let emptyMealDemoData = MealDetailsModel(
+        mealID: 0, mealName: "", generalNotices: [],
+        counterDescription: "", mealComponets: [], prices: []
+    )
+}

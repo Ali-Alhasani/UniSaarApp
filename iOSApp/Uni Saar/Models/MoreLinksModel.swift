@@ -78,3 +78,15 @@ extension MoreLinksModel {
         "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
     ]
 }
+
+extension MoreModel {
+    static let demoData = MoreModel(
+        linksLastChanged: "2020-01-20 17:42:14",
+        links: [
+            MoreLinksModel(displayName: "Welcome Centre", url: "https://www.uni-saarland.de/en/global/welcome-center.html", index: 0),
+            MoreLinksModel(displayName: "AStA", url: "https://asta.uni-saarland.de/en/", index: 1),
+            MoreLinksModel(displayName: "Busfahrplan", url: "https://www.saarfahrplan.de", index: 2),
+            MoreLinksModel(displayName: "Hochschulsport", url: "https://www.uni-saarland.de/en/institution/sports.html", index: 3)
+        ]
+    )
+}

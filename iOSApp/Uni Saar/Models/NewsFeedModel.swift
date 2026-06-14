@@ -135,3 +135,27 @@ extension NewsModel {
         "category": ["categoryName"]
     ]
 }
+
+// MARK: NewsFeedModel demo data
+
+extension NewsFeedModel {
+    static let newsDemoData = NewsFeedModel(
+        newsItemCount: 5,
+        categoriesLastChanged: "",
+        hasNextPage: false,
+        newsList: [
+            NewsModel(annoucementDate: "12/05/2019", title: "Echt jetzt? – Eine öffentliche Vortragsreihe über die Realität", newsID: 100,
+                      subTitle: "Ihr Thema ist dieses Mal nichts Geringeres als die Realität: Eine Physik-Professorin und ein Physik-Professor der Universität des Saarlandes organisieren auch in diesem Wintersemester eine interdisziplinäre öffentliche Vortragsreihe im Filmhaus Saarbrücken.",
+                      categoryName: [:], imageURLString: "", newslink: nil, isEvent: false),
+            NewsModel(annoucementDate: "12/04/2019", title: "Probestudium Physik für Schülerinnen und Schüler beschäftigt sich mit Quantenwelten", newsID: 100,
+                      subTitle: "Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein \"Probestudium Physik\".",
+                      categoryName: [:], imageURLString: "", newslink: nil, isEvent: false),
+            NewsModel(annoucementDate: "11/30/2019", title: "Neue Webseiten für die Universität des Saarlandes", newsID: 100,
+                      subTitle: "Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein \"Probestudium Physik\".",
+                      categoryName: [:], imageURLString: "https://www.uni-saarland.de/fileadmin/upload/_processed_/6/d/csm_Ezziddin_Samer_2_b69ceceaca.jpg", newslink: nil, isEvent: false),
+            NewsModel(annoucementDate: "11/30/2019", title: "Neue Webseiten für die Universität des Saarlandes", newsID: 100,
+                      subTitle: "Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik der Universität des Saarlandes wieder ein \"Probestudium Physik\".",
+                      categoryName: [:], imageURLString: "https://www.uni-saarland.de/fileadmin/upload/_processed_/6/d/csm_Ezziddin_Samer_2_b69ceceaca.jpg", newslink: nil, isEvent: false)
+        ]
+    )
+}
