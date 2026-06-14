@@ -108,83 +108,88 @@ struct RemoteCampusCoordinates {
     )
 }
 
+enum MockError: Error {
+    case notConfigured
+}
+
 /// Used for testing only
-final class MockAppDataClient: AppDataClient, @unchecked Sendable {
-    var getNewsResult: Result<NewsFeedModel, Error>?
+@MainActor
+final class MockAppDataClient: AppDataClient {
+    var getNewsResult: Result<NewsFeedModel, Error> = .failure(MockError.notConfigured)
     func getNews(pageNumber: Int, numberOfItems: Int, filter: [Int]) async throws -> NewsFeedModel {
-        switch getNewsResult! {
+        switch getNewsResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getMensaResult: Result<MensaMenuModel, Error>?
+    var getMensaResult: Result<MensaMenuModel, Error> = .failure(MockError.notConfigured)
     func getMensaMenu(locationKey: String) async throws -> MensaMenuModel {
-        switch getMensaResult! {
+        switch getMensaResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getMealResult: Result<MealDetailsModel, Error>?
+    var getMealResult: Result<MealDetailsModel, Error> = .failure(MockError.notConfigured)
     func getMealDetails(mealId: Int) async throws -> MealDetailsModel {
-        switch getMealResult! {
+        switch getMealResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getSearchDirectoryResult: Result<StaffModel, Error>?
+    var getSearchDirectoryResult: Result<StaffModel, Error> = .failure(MockError.notConfigured)
     func getSearchDirectory(pageNumber: Int, numberOfItems: Int, query: String) async throws -> StaffModel {
-        switch getSearchDirectoryResult! {
+        switch getSearchDirectoryResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getHelpfulNumbersResult: Result<HelpfulNumbersModel, Error>?
+    var getHelpfulNumbersResult: Result<HelpfulNumbersModel, Error> = .failure(MockError.notConfigured)
     func getDirectoryHelpfulNumbers(cacheLastChanged: String) async throws -> HelpfulNumbersModel {
-        switch getHelpfulNumbersResult! {
+        switch getHelpfulNumbersResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getMoreLinksResult: Result<MoreModel, Error>?
+    var getMoreLinksResult: Result<MoreModel, Error> = .failure(MockError.notConfigured)
     func getMoreLinks(cacheLastChanged: String) async throws -> MoreModel {
-        switch getMoreLinksResult! {
+        switch getMoreLinksResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getEventsResult: Result<NewsFeedModel, Error>?
+    var getEventsResult: Result<NewsFeedModel, Error> = .failure(MockError.notConfigured)
     func getEvents(month: String, year: String) async throws -> NewsFeedModel {
-        switch getEventsResult! {
+        switch getEventsResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getStaffDetailsResult: Result<StaffDetailsModel, Error>?
+    var getStaffDetailsResult: Result<StaffDetailsModel, Error> = .failure(MockError.notConfigured)
     func getStaffDetails(staffId: Int) async throws -> StaffDetailsModel {
-        switch getStaffDetailsResult! {
+        switch getStaffDetailsResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getNewsCategoriesResult: Result<[NewsCategories], Error>?
+    var getNewsCategoriesResult: Result<[NewsCategories], Error> = .failure(MockError.notConfigured)
     func getNewsCategories() async throws -> [NewsCategories] {
-        switch getNewsCategoriesResult! {
+        switch getNewsCategoriesResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
     }
 
-    var getMensaFilterResult: Result<MensaFilterModel, Error>?
+    var getMensaFilterResult: Result<MensaFilterModel, Error> = .failure(MockError.notConfigured)
     func getMensaFilter() async throws -> MensaFilterModel {
-        switch getMensaFilterResult! {
+        switch getMensaFilterResult {
         case let .success(data): return data
         case let .failure(error): throw error
         }
