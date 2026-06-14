@@ -65,50 +65,6 @@ extension Notices {
     }
 }
 
-/// this just mock model to gives us a  clear perspective on the API design, by getting into the mindset of being a client of the API before it exists.
-class FilterList {
-    enum Filter: Int, CaseIterable {
-        case location, dispalyAllergen, allergenList
-    }
-
-    private var mensaLocationsList: [ChecklistItem] = []
-    private var emptyList: [ChecklistItem] = []
-    private var isDispalyAllergen: Bool = true
-    private var allergenList: [ChecklistItem] = []
-    init() {
-        mensaLocationsList = [
-            ChecklistItem(text: "Mensa/Mensacafé Saarbrücken"),
-            ChecklistItem(text: "Mensa Homburg"),
-            ChecklistItem(text: "Mensagarden"),
-            ChecklistItem(text: "Cafeteria Hochschule für Musik Saar")
-        ]
-        emptyList = [ChecklistItem(text: "Toggle all")]
-        allergenList = [
-            ChecklistItem(text: "Artificial colouring"),
-            ChecklistItem(text: "Preservatives"),
-            ChecklistItem(text: "Antioxidants"),
-            ChecklistItem(text: "Flavour enhancer"),
-            ChecklistItem(text: "Sulphurised"),
-            ChecklistItem(text: "Blackened"),
-            ChecklistItem(text: "Pork"),
-            ChecklistItem(text: "Alcohol"),
-            ChecklistItem(text: "Nuts"),
-            ChecklistItem(text: "Without pork")
-        ]
-    }
-
-    func filterList(for fliter: Filter) -> [ChecklistItem] {
-        switch fliter {
-        case .location:
-            mensaLocationsList
-        case .dispalyAllergen:
-            emptyList
-        case .allergenList:
-            allergenList
-        }
-    }
-}
-
 struct ChecklistItem {
     let text: String
     var checked = false

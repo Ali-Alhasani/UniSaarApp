@@ -25,8 +25,7 @@ final class DirectoryViewModelTests: XCTestCase {
     // MARK: - Staff search
 
     func testDirectoryModel() throws {
-        let testSuccessfulJSON = StaffModel.deomJSON
-        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let data = StaffModel.deomJSON
         let model = try JSONDecoder.unisaarDefault.decode(StaffResultsModel.self, from: data)
         XCTAssertEqual(model.fullName, "Ali Baylan")
         XCTAssertEqual(model.staffID, 9091)
@@ -88,8 +87,7 @@ final class DirectoryViewModelTests: XCTestCase {
     // MARK: - Helpful numbers
 
     func testHelpfulNumberModel() throws {
-        let testSuccessfulJSON = NumberModel.deomJSON
-        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let data = NumberModel.deomJSON
         let model = try JSONDecoder.unisaarDefault.decode(NumberModel.self, from: data)
         XCTAssertEqual(model.name, "Student office")
         XCTAssertEqual(model.number, "0681 302-5491")

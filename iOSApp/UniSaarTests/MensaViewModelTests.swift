@@ -12,16 +12,14 @@ import XCTest
 @MainActor
 final class MensaViewModelTests: XCTestCase {
     func testMensaModel() throws {
-        let testSuccessfulJSON = MensaMenuModel.deomJSON
-        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let data = MensaMenuModel.deomJSON
         let model = try JSONDecoder.unisaarDefault.decode(MensaMenuModel.self, from: data)
         XCTAssertEqual(model.daysMenus.count, 1)
         XCTAssertEqual(model.daysMenus.first?.countersMeals.count, 2)
     }
 
     func testMensaTodayModel() throws {
-        let testSuccessfulJSON = MensaDayModel.menuDemoData
-        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let data = MensaDayModel.menuDemoData
         let model = try JSONDecoder.unisaarDefault.decode(MensaDayModel.self, from: data)
         XCTAssertEqual(model.date, "2019-12-10")
         XCTAssertEqual(model.countersMeals.count, 1)

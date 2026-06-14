@@ -49,12 +49,7 @@ extension NumberModel {
 }
 
 extension NumberModel {
-    nonisolated(unsafe) static let deomJSON: [String: Any] = [
-        "name": "Student office",
-        "number": "0681 302-5491",
-        "link": "https://www.uni-saarland.de/studium/beratung/studierendensekretariat.html",
-        "mail": "anmeldung@univw.uni-saarland.de"
-    ]
+    static let deomJSON = Data(#"{"name":"Student office","number":"0681 302-5491","link":"https://www.uni-saarland.de/studium/beratung/studierendensekretariat.html","mail":"anmeldung@univw.uni-saarland.de"}"#.utf8)
 }
 
 extension HelpfulNumbersModel {

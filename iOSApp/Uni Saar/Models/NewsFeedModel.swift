@@ -123,17 +123,7 @@ extension NewsCategories {
 }
 
 extension NewsModel {
-    nonisolated(unsafe) static let deomJSON: [String: Any] = [
-        "date": "12/05/2019",
-        "title": "Echt jetzt? – Eine öffentliche Vortragsreihe über die Realität",
-        "id": 100,
-        "description": """
-        Ihr Thema ist dieses Mal nichts Geringeres als die Realität: Eine Physik-Professorin und ein Physik-Professor der Universität des Saarlandes
-        organisieren auch in diesem Wintersemester eine interdisziplinäre öffentliche Vortragsreihe im Filmhaus Saarbrücken.
-        """,
-        "imageURL": "",
-        "category": ["categoryName"]
-    ]
+    static let deomJSON = Data(#"{"date":"12/05/2019","title":"Echt jetzt? – Eine öffentliche Vortragsreihe über die Realität","id":100,"description":"\nIhr Thema ist dieses Mal nichts Geringeres als die Realität: Eine Physik-Professorin und ein Physik-Professor der Universität des Saarlandes\norganisieren auch in diesem Wintersemester eine interdisziplinäre öffentliche Vortragsreihe im Filmhaus Saarbrücken.\n","imageURL":"","category":["categoryName"]}"#.utf8)
 }
 
 // MARK: NewsFeedModel demo data

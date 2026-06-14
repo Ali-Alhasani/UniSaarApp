@@ -113,7 +113,7 @@ extension StaffDetailsModel {
 }
 
 extension StaffModel {
-    nonisolated(unsafe) static let deomJSON: [String: Any] = ["name": "Ali Baylan", "title": "", "pid": 9091]
+    static let deomJSON = Data(#"{"name":"Ali Baylan","title":"","pid":9091}"#.utf8)
     static let staffDemoData = StaffModel(
         staffResults: [
             StaffResultsModel(title: "", fullName: "Ali Baylan", staffID: 9091),
