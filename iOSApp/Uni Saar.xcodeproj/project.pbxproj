@@ -143,6 +143,8 @@
 		F1A2B3C4D5E6F7A8B9C0D1F3 /* StaffDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F4 /* StaffDetailsViewModelTests.swift */; };
 		F1A2B3C4D5E6F7A8B9C0D1F5 /* FilterNewsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F6 /* FilterNewsViewModelTests.swift */; };
 		F1A2B3C4D5E6F7A8B9C0D1F7 /* FilterMensaViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */; };
+		A1B2C3D4E5F6A1B2C3D4E501 /* JSONCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */; };
+		A1B2C3D4E5F6A1B2C3D4E503 /* NewsModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -344,6 +346,8 @@
 		F1A2B3C4D5E6F7A8B9C0D1F4 /* StaffDetailsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffDetailsViewModelTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F6 /* FilterNewsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterNewsViewModelTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMensaViewModelTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCodingTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModelDecodingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -588,6 +592,8 @@
 				F1A2B3C4D5E6F7A8B9C0D1F4 /* StaffDetailsViewModelTests.swift */,
 				F1A2B3C4D5E6F7A8B9C0D1F6 /* FilterNewsViewModelTests.swift */,
 				F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */,
+				A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */,
+				A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */,
 			);
 			path = UniSaarTests;
 			sourceTree = "<group>";
@@ -1004,6 +1010,8 @@
 				F1A2B3C4D5E6F7A8B9C0D1F3 /* StaffDetailsViewModelTests.swift in Sources */,
 				F1A2B3C4D5E6F7A8B9C0D1F5 /* FilterNewsViewModelTests.swift in Sources */,
 				F1A2B3C4D5E6F7A8B9C0D1F7 /* FilterMensaViewModelTests.swift in Sources */,
+				A1B2C3D4E5F6A1B2C3D4E501 /* JSONCodingTests.swift in Sources */,
+				A1B2C3D4E5F6A1B2C3D4E503 /* NewsModelDecodingTests.swift in Sources */,
 				6B281897239D943F008389D6 /* NewsViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
