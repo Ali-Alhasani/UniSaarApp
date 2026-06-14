@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import SwiftyJSON
 
 /**
  Extension to save/load a JSON object by filename. (".json" extension is assumed and automatically added.)

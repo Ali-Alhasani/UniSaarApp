@@ -11,6 +11,7 @@
 		5211AF3423C7B738006D1F9A /* CampusMapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AF3223C7B738006D1F9A /* CampusMapOverlayView.swift */; };
 		5211AF3623C7B76A006D1F9A /* Campus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AF3523C7B76A006D1F9A /* Campus.swift */; };
 		5211AF3923C7B89B006D1F9A /* CampusSaarCoor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5211AF3723C7B89B006D1F9A /* CampusSaarCoor.plist */; };
+		6249F397A3B545B6BFE8C9D5 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13827DFF9597449691747EE6 /* AppEnvironment.swift */; };
 		6B00FECF256EACB5002F85CA /* AppStoreReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */; };
 		6B06D6FC239C47F800A0F02F /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FB239C47F800A0F02F /* UIViewController.swift */; };
 		6B06D6FF239C4AD700A0F02F /* MensaMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B06D6FD239C4AD700A0F02F /* MensaMenuTableViewCell.swift */; };
@@ -50,6 +51,7 @@
 		6B2818A2239DCF4E008389D6 /* SingleButtonAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A1239DCF4E008389D6 /* SingleButtonAlert.swift */; };
 		6B2818A4239DE51B008389D6 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A3239DE51B008389D6 /* TableViewDataSource.swift */; };
 		6B2818A6239EBEA6008389D6 /* MensaViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */; };
+		6B2818A7239EBEA6008389D6 /* LegacyJSONShim.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A8239EBEA6008389D7 /* LegacyJSONShim.swift */; };
 		6B2818A9239EDF87008389D6 /* NewsReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A8239EDF87008389D6 /* NewsReaderViewController.swift */; };
 		6B2818AB239EF699008389D6 /* MealDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818AA239EF699008389D6 /* MealDetailsViewController.swift */; };
 		6B2818AD239EFAFA008389D6 /* MealDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818AC239EFAFA008389D6 /* MealDetailsViewModel.swift */; };
@@ -76,7 +78,6 @@
 		6B8E446C250A260D0045260E /* MensaNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E446A250A260D0045260E /* MensaNotificationTableViewCell.swift */; };
 		6B8E446E250A68D80045260E /* MensaNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E4470250A68D80045260E /* MensaNotificationTableViewCell.xib */; };
 		6B908BE324D576C2000EE5AF /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B908BE224D576C2000EE5AF /* UIApplication.swift */; };
-		6249F397A3B545B6BFE8C9D5 /* AppEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13827DFF9597449691747EE6 /* AppEnvironment.swift */; };
 		6B9541082590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B9541062590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib */; };
 		6B9541162590C6DC00B67DA9 /* NewMensaNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */; };
 		6BA48E1723C8A102009D32F8 /* DirectoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA48E1623C8A102009D32F8 /* DirectoryViewModel.swift */; };
@@ -87,7 +88,6 @@
 		6BA48E2123C8FE17009D32F8 /* DirectoryViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA48E2023C8FE17009D32F8 /* DirectoryViewModelTests.swift */; };
 		6BA5771023DF479400D24F74 /* MoreViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5770F23DF479400D24F74 /* MoreViewModelTests.swift */; };
 		6BA5771223DF4AEA00D24F74 /* ObservableTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771123DF4AEA00D24F74 /* ObservableTest.swift */; };
-		6BA5778123DF4AEA00D24F74 /* UpdatePropertiesLifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5778023DF4AEA00D24F74 /* UpdatePropertiesLifecycleTests.swift */; };
 		6BA5771423DF4BA100D24F74 /* AlertControllerTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771323DF4BA100D24F74 /* AlertControllerTest.swift */; };
 		6BA5771623DF4FCC00D24F74 /* NewsFeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771523DF4FCC00D24F74 /* NewsFeedViewControllerTests.swift */; };
 		6BA5771823DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771723DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift */; };
@@ -96,6 +96,7 @@
 		6BA5771E23DF5ACA00D24F74 /* MensaViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771D23DF5ACA00D24F74 /* MensaViewControllerTests.swift */; };
 		6BA5772023DF5DA300D24F74 /* FilterMensaViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5771F23DF5DA300D24F74 /* FilterMensaViewControllerTests.swift */; };
 		6BA5772223DF60A500D24F74 /* MoreLinksViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5772123DF60A500D24F74 /* MoreLinksViewControllerTests.swift */; };
+		6BA5778123DF4AEA00D24F74 /* UpdatePropertiesLifecycleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA5778023DF4AEA00D24F74 /* UpdatePropertiesLifecycleTests.swift */; };
 		6BA670EA239BDCD400857DB7 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA670E9239BDCD400857DB7 /* UITableViewCell.swift */; };
 		6BA670EC239BDF8800857DB7 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA670EB239BDF8800857DB7 /* Array.swift */; };
 		6BA670EE239BE7CC00857DB7 /* UIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA670ED239BE7CC00857DB7 /* UIView.swift */; };
@@ -104,7 +105,6 @@
 		6BACBA6A239B1C80003A532B /* StaffModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACBA67239B1C80003A532B /* StaffModel.swift */; };
 		6BACBA6E239B20F7003A532B /* MoreLinksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACBA6D239B20F7003A532B /* MoreLinksModel.swift */; };
 		6BBC9D6E23AA4ADD009CD435 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */; };
-		A1B2C3D4E5F60001A1B2C3D4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60002A1B2C3D4 /* UILabel.swift */; };
 		6BBC9D7023AA4E07009CD435 /* AppSetupFirstScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */; };
 		6BBC9D7223AA5D52009CD435 /* SetupPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */; };
 		6BC6F41D256834BB00D701AA /* MensaCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC6F418256834BB00D701AA /* MensaCardViewController.swift */; };
@@ -133,6 +133,7 @@
 		6BFB587023D8BA0100B69C4A /* MoreLinksViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFB586F23D8BA0100B69C4A /* MoreLinksViewModel.swift */; };
 		6BFB587323D8F4D700B69C4A /* CampusHomCoor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6BFB587223D8F4D700B69C4A /* CampusHomCoor.plist */; };
 		6BFB587523D9022D00B69C4A /* RememberingTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFB587423D9022D00B69C4A /* RememberingTabBarController.swift */; };
+		A1B2C3D4E5F60001A1B2C3D4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60002A1B2C3D4 /* UILabel.swift */; };
 		CC01CC01CC01CC01CC01CC01 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BB01BB01BB01BB01BB01BB01 /* Alamofire */; };
 		CC02CC02CC02CC02CC02CC02 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = BB02BB02BB02BB02BB02BB02 /* AlamofireImage */; };
 		CC03CC03CC03CC03CC03CC03 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = BB03BB03BB03BB03BB03BB03 /* SwiftyJSON */; };
@@ -162,6 +163,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		13827DFF9597449691747EE6 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		5211AF3123C7B738006D1F9A /* CampusMapOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CampusMapOverlay.swift; sourceTree = "<group>"; };
 		5211AF3223C7B738006D1F9A /* CampusMapOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CampusMapOverlayView.swift; sourceTree = "<group>"; };
 		5211AF3523C7B76A006D1F9A /* Campus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 		6B2818A1239DCF4E008389D6 /* SingleButtonAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonAlert.swift; sourceTree = "<group>"; };
 		6B2818A3239DE51B008389D6 /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaViewModelTests.swift; sourceTree = "<group>"; };
+		6B2818A8239EBEA6008389D7 /* LegacyJSONShim.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyJSONShim.swift; sourceTree = "<group>"; };
 		6B2818A8239EDF87008389D6 /* NewsReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsReaderViewController.swift; sourceTree = "<group>"; };
 		6B2818AA239EF699008389D6 /* MealDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailsViewController.swift; sourceTree = "<group>"; };
 		6B2818AC239EFAFA008389D6 /* MealDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -243,7 +246,6 @@
 		6B8E4474250A68E20045260E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
 		6B8E4476250A68E50045260E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
 		6B908BE224D576C2000EE5AF /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
-		13827DFF9597449691747EE6 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
 		6B9541072590C3CC00B67DA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/NewMensaNotificationTableViewCell.xib; sourceTree = "<group>"; };
 		6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMensaNotificationTableViewCell.swift; sourceTree = "<group>"; };
 		6B95411B2590D9AE00B67DA9 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/NewMensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
@@ -256,7 +258,6 @@
 		6BA48E2023C8FE17009D32F8 /* DirectoryViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryViewModelTests.swift; sourceTree = "<group>"; };
 		6BA5770F23DF479400D24F74 /* MoreViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreViewModelTests.swift; sourceTree = "<group>"; };
 		6BA5771123DF4AEA00D24F74 /* ObservableTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservableTest.swift; sourceTree = "<group>"; };
-		6BA5778023DF4AEA00D24F74 /* UpdatePropertiesLifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePropertiesLifecycleTests.swift; sourceTree = "<group>"; };
 		6BA5771323DF4BA100D24F74 /* AlertControllerTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertControllerTest.swift; sourceTree = "<group>"; };
 		6BA5771523DF4FCC00D24F74 /* NewsFeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedViewControllerTests.swift; sourceTree = "<group>"; };
 		6BA5771723DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterNewsFeedViewControllerTests.swift; sourceTree = "<group>"; };
@@ -265,6 +266,7 @@
 		6BA5771D23DF5ACA00D24F74 /* MensaViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaViewControllerTests.swift; sourceTree = "<group>"; };
 		6BA5771F23DF5DA300D24F74 /* FilterMensaViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMensaViewControllerTests.swift; sourceTree = "<group>"; };
 		6BA5772123DF60A500D24F74 /* MoreLinksViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLinksViewControllerTests.swift; sourceTree = "<group>"; };
+		6BA5778023DF4AEA00D24F74 /* UpdatePropertiesLifecycleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdatePropertiesLifecycleTests.swift; sourceTree = "<group>"; };
 		6BA670E9239BDCD400857DB7 /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		6BA670EB239BDF8800857DB7 /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		6BA670ED239BE7CC00857DB7 /* UIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIView.swift; sourceTree = "<group>"; };
@@ -273,7 +275,6 @@
 		6BACBA67239B1C80003A532B /* StaffModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StaffModel.swift; sourceTree = "<group>"; };
 		6BACBA6D239B20F7003A532B /* MoreLinksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLinksModel.swift; sourceTree = "<group>"; };
 		6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F60002A1B2C3D4 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupFirstScreenViewController.swift; sourceTree = "<group>"; };
 		6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPrivacyViewController.swift; sourceTree = "<group>"; };
 		6BC6F418256834BB00D701AA /* MensaCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MensaCardViewController.swift; sourceTree = "<group>"; };
@@ -282,8 +283,8 @@
 		6BCDAF6023AC14D100DDB464 /* FilterNoticesListCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterNoticesListCache+CoreDataProperties.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterNoticesListCache+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		6BCDAF6123AC14D100DDB464 /* FilterNoticesListCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterNoticesListCache+CoreDataClass.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterNoticesListCache+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		6BCDAF6623AC16F100DDB464 /* DataClientCacheExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataClientCacheExtension.swift; sourceTree = "<group>"; };
-		6BCDAF6923AC16F200DDB464 /* CacheClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheClient.swift; sourceTree = "<group>"; };
 		6BCDAF6823AC19AD00DDB464 /* FilterLocationsCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterLocationsCache+CoreDataClass.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterLocationsCache+CoreDataClass.swift"; sourceTree = "<absolute>"; };
+		6BCDAF6923AC16F200DDB464 /* CacheClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheClient.swift; sourceTree = "<group>"; };
 		6BCDAF6923AC19AD00DDB464 /* FilterLocationsCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterLocationsCache+CoreDataProperties.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterLocationsCache+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		6BDA791823D933D4002E363C /* HelpfulNumberCache+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HelpfulNumberCache+CoreDataClass.swift"; sourceTree = "<group>"; };
 		6BDA791923D933D4002E363C /* HelpfulNumberCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "HelpfulNumberCache+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -337,6 +338,7 @@
 		6BFBF2E924A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAppStoryboard.strings; sourceTree = "<group>"; };
 		6BFBF2EA24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6BFBF2EB24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; indentWidth = 5; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A1B2C3D4E5F60002A1B2C3D4 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensionTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F2 /* EventViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModelTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F4 /* StaffDetailsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffDetailsViewModelTests.swift; sourceTree = "<group>"; };
@@ -568,6 +570,7 @@
 				6B6E1E2C239B4A0A00563B9D /* Info.plist */,
 				6B281896239D943F008389D6 /* NewsViewModelTests.swift */,
 				6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */,
+				6B2818A8239EBEA6008389D7 /* LegacyJSONShim.swift */,
 				6BA48E2023C8FE17009D32F8 /* DirectoryViewModelTests.swift */,
 				6BA5770F23DF479400D24F74 /* MoreViewModelTests.swift */,
 				6BA5771123DF4AEA00D24F74 /* ObservableTest.swift */,
@@ -984,6 +987,7 @@
 				6BA48E2123C8FE17009D32F8 /* DirectoryViewModelTests.swift in Sources */,
 				6BA5771023DF479400D24F74 /* MoreViewModelTests.swift in Sources */,
 				6B2818A6239EBEA6008389D6 /* MensaViewModelTests.swift in Sources */,
+				6B2818A7239EBEA6008389D6 /* LegacyJSONShim.swift in Sources */,
 				6BA5771E23DF5ACA00D24F74 /* MensaViewControllerTests.swift in Sources */,
 				6BA5771A23DF567100D24F74 /* EventCalanderViewControllerTests.swift in Sources */,
 				6BA5771823DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift in Sources */,
