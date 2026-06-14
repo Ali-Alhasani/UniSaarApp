@@ -145,7 +145,7 @@ extension MensaViewController: UICollectionViewDelegate, UICollectionViewDataSou
             else {
                 return UICollectionViewCell()
             }
-            cell.text = NSLocalizedString("emptyMenu", comment: "no menu")
+            cell.text = String(localized: "emptyMenu")
             return cell
         case .none:
             break

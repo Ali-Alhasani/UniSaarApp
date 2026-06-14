@@ -155,7 +155,7 @@ extension EventCalanderViewController: UITableViewDelegate, UITableViewDataSourc
         case let .error(message):
             return defaultCell.setupEmptyCell(message: message)
         case .empty:
-            return defaultCell.setupEmptyCell(message: NSLocalizedString("EmptyEvents", comment: ""))
+            return defaultCell.setupEmptyCell(message: String(localized: "EmptyEvents"))
         case .none:
             return UITableViewCell()
         }

@@ -20,7 +20,7 @@ class MoreLinksViewModel: ParentViewModel {
                                           sectionNameKeyPath: nil, cacheName: nil)
     }()
 
-    let extraCells = [NSLocalizedString("AboutApp", comment: ""), NSLocalizedString("AppSettings", comment: "")]
+    let extraCells = [String(localized: "AboutApp"), String(localized: "AppSettings")]
 
     override init(dataClient: any AppDataClient = DataClient()) {
         super.init(dataClient: dataClient)

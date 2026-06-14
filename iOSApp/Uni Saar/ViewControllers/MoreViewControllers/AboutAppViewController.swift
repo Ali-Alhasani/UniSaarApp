@@ -28,8 +28,8 @@ class AboutAppViewController: UIViewController {
      */
 
     func setupGitHubLink() {
-        let fullString = NSLocalizedString("GitHubLinkText", comment: "")
-        let gitHubLinkRange = (fullString as NSString).range(of: NSLocalizedString("GitHub", comment: ""))
+        let fullString = String(localized: "GitHubLinkText")
+        let gitHubLinkRange = (fullString as NSString).range(of: String(localized: "GitHub"))
         let attributedStr = NSMutableAttributedString(string: fullString)
         attributedStr.addAttribute(.link, value: "gitHubLink", range: gitHubLinkRange)
         gitHubText.delegate = self

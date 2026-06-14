@@ -122,7 +122,7 @@ extension MensaMealsModel: MensaMealCellViewModel {
 
     @MainActor var noticesText: String {
         if noticesList.count > 0 {
-            AppStyle.warningTriangle + NSLocalizedString("contains", comment: "") + noticesList.compactMap(\.name).joined(separator: ", ")
+            AppStyle.warningTriangle + String(localized: "contains") + noticesList.compactMap(\.name).joined(separator: ", ")
         } else {
             ""
         }

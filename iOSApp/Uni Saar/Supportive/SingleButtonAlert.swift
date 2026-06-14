@@ -10,28 +10,28 @@ import Foundation
 import UIKit
 
 struct AlertAction {
-    let buttonTitle: String = NSLocalizedString("AlertOkActionTitle", comment: "")
-    let tryAgainButtonTitle: String = NSLocalizedString("tryAgain", comment: "")
+    let buttonTitle: String = .init(localized: "AlertOkActionTitle")
+    let tryAgainButtonTitle: String = .init(localized: "tryAgain")
     let tryAgainHandler: (@MainActor () -> Void)?
 }
 
 struct SingleButtonAlert {
-    let title: String = NSLocalizedString("AlertTitle", comment: "")
+    let title: String = .init(localized: "AlertTitle")
     let message: String?
     let action: AlertAction
 }
 
 extension UIViewController {
     func errorAlert(_ errorMessage: String) -> UIAlertController {
-        let alert = UIAlertController(title: NSLocalizedString("AlertTitle", comment: ""), message: errorMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("AlertOkActionTitle", comment: ""), style: .default, handler: nil))
+        let alert = UIAlertController(title: String(localized: "AlertTitle"), message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: String(localized: "AlertOkActionTitle"), style: .default, handler: nil))
         return alert
     }
 
     func succesAlertWithHandler(_ errorMessage: String, _ handler: @escaping (UIAlertAction) -> Void) -> UIAlertController {
-        let alert = UIAlertController(title: NSLocalizedString("AlertTitle", comment: ""), message: errorMessage, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("AlertOkActionTitle", comment: ""), style: .default, handler: handler))
-        alert.addAction(UIAlertAction(title: NSLocalizedString("AlertCancelActionTitle", comment: ""), style: .cancel, handler: nil))
+        let alert = UIAlertController(title: String(localized: "AlertTitle"), message: errorMessage, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: String(localized: "AlertOkActionTitle"), style: .default, handler: handler))
+        alert.addAction(UIAlertAction(title: String(localized: "AlertCancelActionTitle"), style: .cancel, handler: nil))
         return alert
     }
 }

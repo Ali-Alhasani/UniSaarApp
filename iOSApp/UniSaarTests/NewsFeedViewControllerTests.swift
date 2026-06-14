@@ -75,7 +75,7 @@ class NewsFeedViewControllerTests: XCTestCase {
         case .empty:
             let cell = viewControllerUnderTest.tableView(viewControllerUnderTest.newsTable, cellForRowAt: IndexPath(row: 0, section: 0))
             let config = cell.contentConfiguration as? UIListContentConfiguration
-            XCTAssertEqual(config?.text, NSLocalizedString("EmptyNews", comment: ""))
+            XCTAssertEqual(config?.text, String(localized: "EmptyNews"))
 
         case .none:
             break
