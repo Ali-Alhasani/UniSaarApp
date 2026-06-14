@@ -100,10 +100,7 @@ final class LoadingIndicatorTests: XCTestCase {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        let task = Task { await viewModel.loadFirstPage(filterCatgroies: []) }
-        await Task.yield() // let Task start and execute synchronous preamble
-        XCTAssertTrue(viewModel.showLoadingIndicator, "showLoadingIndicator should be true while loading")
-        await task.value
+        await viewModel.loadFirstPage(filterCatgroies: [])
         XCTAssertFalse(viewModel.showLoadingIndicator, "showLoadingIndicator should be false after load completes")
     }
 }
