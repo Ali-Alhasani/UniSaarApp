@@ -85,7 +85,7 @@ final class MensaViewModelTests: XCTestCase {
         dataClient.getMealResult = .success(MealDetailsModel.mealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
         await viewModel.loadGetMealDetails(mealId: 1)
-        guard MealDetailsModel.mealDemoData === viewModel.mealDetails.mealDetailsModel else {
+        guard MealDetailsModel.mealDemoData == viewModel.mealDetails.mealDetailsModel else {
             XCTFail("mensa meal should have values")
             return
         }
@@ -96,7 +96,7 @@ final class MensaViewModelTests: XCTestCase {
         dataClient.getMealResult = .success(MealDetailsModel.emptyMealDemoData)
         let viewModel = MealDetailsViewModel(dataClient: dataClient)
         await viewModel.loadGetMealDetails(mealId: 1)
-        if MealDetailsModel.emptyMealDemoData !== viewModel.mealDetails.mealDetailsModel {
+        if MealDetailsModel.emptyMealDemoData != viewModel.mealDetails.mealDetailsModel {
             XCTFail("mensa meal details should reflect the returned empty model")
         }
     }
