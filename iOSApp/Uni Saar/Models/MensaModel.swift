@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MensaMenuModel: Codable, Sendable, Equatable {
+struct MensaMenuModel: Codable, Equatable {
     let daysMenus: [MensaDayModel]
     let filtersLastChanged: String
 }
@@ -22,7 +22,7 @@ extension MensaMenuModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            daysMenus:          container.value(.daysMenus,          default: []),
+            daysMenus: container.value(.daysMenus, default: []),
             filtersLastChanged: container.value(.filtersLastChanged, default: "")
         )
     }
@@ -30,7 +30,7 @@ extension MensaMenuModel {
     static let empty = MensaMenuModel(daysMenus: [], filtersLastChanged: "")
 }
 
-struct MensaDayModel: Codable, Sendable, Equatable {
+struct MensaDayModel: Codable, Equatable {
     let date: String
     let countersMeals: [MensaMealsModel]
 }
@@ -44,7 +44,7 @@ extension MensaDayModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            date:         container.value(.date,         default: ""),
+            date: container.value(.date, default: ""),
             countersMeals: container.value(.countersMeals, default: [])
         )
     }
@@ -52,7 +52,7 @@ extension MensaDayModel {
     static let empty = MensaDayModel(date: "", countersMeals: [])
 }
 
-struct MensaMealsModel: Codable, Sendable, Equatable {
+struct MensaMealsModel: Codable, Equatable {
     let mealID: Int
     let counterName: String
     let mealDispalyName: String
@@ -78,19 +78,19 @@ extension MensaMealsModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            mealID:          container.value(.mealID,          default: 0),
-            counterName:     container.value(.counterName,     default: ""),
+            mealID: container.value(.mealID, default: 0),
+            counterName: container.value(.counterName, default: ""),
             mealDispalyName: container.value(.mealDispalyName, default: ""),
-            description:     container.value(.description,     default: ""),
-            openiningHours:  container.value(.openiningHours,  default: ""),
-            color:           container.value(.color,           default: .zero),
-            meals:           container.value(.meals,           default: []),
-            notices:         container.value(.notices,         default: [])
+            description: container.value(.description, default: ""),
+            openiningHours: container.value(.openiningHours, default: ""),
+            color: container.value(.color, default: .zero),
+            meals: container.value(.meals, default: []),
+            notices: container.value(.notices, default: [])
         )
     }
 }
 
-struct MensaColorModel: Codable, Sendable, Equatable {
+struct MensaColorModel: Codable, Equatable {
     let red: Float
     let green: Float
     let blue: Float
@@ -108,14 +108,14 @@ extension MensaColorModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            red:   container.value(.red,   default: Float(0)),
+            red: container.value(.red, default: Float(0)),
             green: container.value(.green, default: Float(0)),
-            blue:  container.value(.blue,  default: Float(0))
+            blue: container.value(.blue, default: Float(0))
         )
     }
 }
 
-struct MealDetailsModel: Codable, Sendable, Equatable {
+struct MealDetailsModel: Codable, Equatable {
     let mealID: Int
     let mealName: String
     let generalNotices: [MealNotices]
@@ -137,17 +137,17 @@ extension MealDetailsModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            mealID:             container.value(.mealID,             default: 0),
-            mealName:           container.value(.mealName,           default: ""),
-            generalNotices:     container.value(.generalNotices,     default: []),
+            mealID: container.value(.mealID, default: 0),
+            mealName: container.value(.mealName, default: ""),
+            generalNotices: container.value(.generalNotices, default: []),
             counterDescription: container.value(.counterDescription, default: ""),
-            mealComponets:      container.value(.mealComponets,      default: []),
-            prices:             container.value(.prices,             default: [])
+            mealComponets: container.value(.mealComponets, default: []),
+            prices: container.value(.prices, default: [])
         )
     }
 }
 
-struct MealComponents: Codable, Sendable, Equatable {
+struct MealComponents: Codable, Equatable {
     let componentName: String
     let componentNotices: [MealNotices]
 }
@@ -161,13 +161,13 @@ extension MealComponents {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            componentName:    container.value(.componentName,    default: ""),
+            componentName: container.value(.componentName, default: ""),
             componentNotices: container.value(.componentNotices, default: [])
         )
     }
 }
 
-struct MealNotices: Codable, Sendable, Equatable {
+struct MealNotices: Codable, Equatable {
     let noticeTag: String
     let noticeDispalyName: String
 }
@@ -181,13 +181,13 @@ extension MealNotices {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            noticeTag:         container.value(.noticeTag,         default: ""),
+            noticeTag: container.value(.noticeTag, default: ""),
             noticeDispalyName: container.value(.noticeDispalyName, default: "")
         )
     }
 }
 
-struct MealPrice: Codable, Sendable, Equatable {
+struct MealPrice: Codable, Equatable {
     let priceTagName: String
     let price: String
 }
@@ -202,12 +202,12 @@ extension MealPrice {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
             priceTagName: container.value(.priceTagName, default: ""),
-            price:        container.value(.price,        default: "")
+            price: container.value(.price, default: "")
         )
     }
 }
 
-struct MensaInfo: Codable, Sendable, Equatable {
+struct MensaInfo: Codable, Equatable {
     let locationName: String
     let description: String
     let imageLink: String
@@ -224,8 +224,8 @@ extension MensaInfo {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
             locationName: container.value(.locationName, default: ""),
-            description:  container.value(.description,  default: ""),
-            imageLink:    container.value(.imageLink,    default: "")
+            description: container.value(.description, default: ""),
+            imageLink: container.value(.imageLink, default: "")
         )
     }
 }

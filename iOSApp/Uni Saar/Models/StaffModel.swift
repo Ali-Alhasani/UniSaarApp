@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct StaffModel: Codable, Sendable, Equatable {
+struct StaffModel: Codable, Equatable {
     let staffResults: [StaffResultsModel]
     let staffItemCount: Int
     let hasNextPage: Bool
@@ -24,16 +24,16 @@ extension StaffModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            staffResults:   container.value(.staffResults,   default: []),
+            staffResults: container.value(.staffResults, default: []),
             staffItemCount: container.value(.staffItemCount, default: 0),
-            hasNextPage:    container.value(.hasNextPage,    default: false)
+            hasNextPage: container.value(.hasNextPage, default: false)
         )
     }
 
     static let empty = StaffModel(staffResults: [], staffItemCount: 0, hasNextPage: false)
 }
 
-struct StaffResultsModel: Codable, Sendable, Equatable, Hashable {
+struct StaffResultsModel: Codable, Equatable, Hashable {
     let title: String
     let fullName: String
     let staffID: Int
@@ -49,14 +49,14 @@ extension StaffResultsModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            title:    container.value(.title,    default: ""),
+            title: container.value(.title, default: ""),
             fullName: container.value(.fullName, default: ""),
-            staffID:  container.value(.staffID,  default: 0)
+            staffID: container.value(.staffID, default: 0)
         )
     }
 }
 
-struct StaffDetailsModel: Codable, Sendable, Equatable {
+struct StaffDetailsModel: Codable, Equatable {
     let email: String?
     let phoneNumber: String?
     let websiteURL: String?
@@ -92,22 +92,22 @@ extension StaffDetailsModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            email:       container.optionalValue(.email),
+            email: container.optionalValue(.email),
             phoneNumber: container.optionalValue(.phoneNumber),
-            websiteURL:  container.optionalValue(.websiteURL),
-            gender:      container.optionalValue(.gender),
-            title:       container.optionalValue(.title),
-            firstName:   container.optionalValue(.firstName),
-            lastName:    container.optionalValue(.lastName),
-            office:      container.optionalValue(.office),
-            building:    container.optionalValue(.building),
-            street:      container.optionalValue(.street),
-            postalCode:  container.optionalValue(.postalCode),
-            city:        container.optionalValue(.city),
-            fax:         container.optionalValue(.fax),
-            remarks:     container.optionalValue(.remarks),
-            image:       container.optionalValue(.image),
-            officeHour:  container.optionalValue(.officeHour)
+            websiteURL: container.optionalValue(.websiteURL),
+            gender: container.optionalValue(.gender),
+            title: container.optionalValue(.title),
+            firstName: container.optionalValue(.firstName),
+            lastName: container.optionalValue(.lastName),
+            office: container.optionalValue(.office),
+            building: container.optionalValue(.building),
+            street: container.optionalValue(.street),
+            postalCode: container.optionalValue(.postalCode),
+            city: container.optionalValue(.city),
+            fax: container.optionalValue(.fax),
+            remarks: container.optionalValue(.remarks),
+            image: container.optionalValue(.image),
+            officeHour: container.optionalValue(.officeHour)
         )
     }
 }

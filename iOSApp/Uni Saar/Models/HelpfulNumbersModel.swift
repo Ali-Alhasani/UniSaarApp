@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct HelpfulNumbersModel: Codable, Sendable, Equatable {
+struct HelpfulNumbersModel: Codable, Equatable {
     let numbersLastChanged: String
     let numbers: [NumberModel]
 }
@@ -19,14 +19,14 @@ extension HelpfulNumbersModel {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
             numbersLastChanged: container.value(.numbersLastChanged, default: ""),
-            numbers:            container.value(.numbers,            default: [])
+            numbers: container.value(.numbers, default: [])
         )
     }
 
     static let empty = HelpfulNumbersModel(numbersLastChanged: "", numbers: [])
 }
 
-struct NumberModel: Codable, Sendable, Equatable, Hashable {
+struct NumberModel: Codable, Equatable, Hashable {
     let name: String?
     let number: String?
     let link: String?
@@ -38,10 +38,10 @@ extension NumberModel {
         enum CodingKeys: String, CodingKey { case name, number, link, mail }
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            name:   container.optionalValue(.name),
+            name: container.optionalValue(.name),
             number: container.optionalValue(.number),
-            link:   container.optionalValue(.link),
-            mail:   container.optionalValue(.mail)
+            link: container.optionalValue(.link),
+            mail: container.optionalValue(.mail)
         )
     }
 
@@ -61,7 +61,11 @@ extension HelpfulNumbersModel {
     static let helpfulNumbersDemoData = HelpfulNumbersModel(
         numbersLastChanged: "2020-01-26 22:54:42.457799",
         numbers: [
-            NumberModel(name: "Student office", number: "0681 302-5491", link: "https://www.uni-saarland.de/studium/beratung/studierendensekretariat.html", mail: "anmeldung@univw.uni-saarland.de"),
+            NumberModel(
+                name: "Student office", number: "0681 302-5491",
+                link: "https://www.uni-saarland.de/studium/beratung/studierendensekretariat.html",
+                mail: "anmeldung@univw.uni-saarland.de"
+            ),
             NumberModel(name: "IT Help Desk", number: "0681/302 - 2222", link: nil, mail: "support@hiz-saarland.de"),
             NumberModel(name: "AStA", number: "+49 681 302 2900", link: "https://asta.uni-saarland.de/en", mail: nil),
             NumberModel(name: "Library", number: "+49 681 302 3076", link: nil, mail: nil)

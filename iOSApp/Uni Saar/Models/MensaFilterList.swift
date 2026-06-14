@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MensaFilterModel: Codable, Sendable, Equatable {
+struct MensaFilterModel: Codable, Equatable {
     let locations: [Locations]
     let notices: [Notices]
 }
@@ -19,7 +19,7 @@ extension MensaFilterModel {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
             locations: container.value(.locations, default: []),
-            notices:   container.value(.notices,   default: [])
+            notices: container.value(.notices, default: [])
         )
     }
 
@@ -29,7 +29,7 @@ extension MensaFilterModel {
     }
 }
 
-struct Locations: Codable, Sendable, Equatable, Hashable {
+struct Locations: Codable, Equatable, Hashable {
     let locationID: String
     let name: String
 }
@@ -40,12 +40,12 @@ extension Locations {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
             locationID: container.value(.locationID, default: ""),
-            name:       container.value(.name,       default: "")
+            name: container.value(.name, default: "")
         )
     }
 }
 
-struct Notices: Codable, Sendable, Equatable, Hashable {
+struct Notices: Codable, Equatable, Hashable {
     let noticeID: String
     let name: String
     let isAllergen: Bool
@@ -57,10 +57,10 @@ extension Notices {
         enum CodingKeys: String, CodingKey { case noticeID, name, isAllergen, isNegated }
         let container = try decoder.container(keyedBy: CodingKeys.self)
         try self.init(
-            noticeID:   container.value(.noticeID,   default: ""),
-            name:       container.value(.name,       default: ""),
+            noticeID: container.value(.noticeID, default: ""),
+            name: container.value(.name, default: ""),
             isAllergen: container.value(.isAllergen, default: false),
-            isNegated:  container.value(.isNegated,  default: false)
+            isNegated: container.value(.isNegated, default: false)
         )
     }
 }

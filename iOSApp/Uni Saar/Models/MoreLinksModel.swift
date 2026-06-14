@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MoreModel: Codable, Sendable, Equatable {
+struct MoreModel: Codable, Equatable {
     let linksLastChanged: String
     let links: [MoreLinksModel]
 }
@@ -38,14 +38,14 @@ extension MoreModel {
     static let empty = MoreModel(linksLastChanged: "", links: [])
 }
 
-struct MoreLinksModel: Sendable, Equatable, Hashable {
+struct MoreLinksModel: Equatable, Hashable {
     let displayName: String
     let url: String
     let index: Int
 }
 
 extension MoreLinksModel {
-    struct Wire: Codable, Sendable {
+    struct Wire: Codable {
         let displayName: String
         let url: String
     }
@@ -59,9 +59,9 @@ extension MoreLinksModel.Wire {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.init(
-            displayName: try container.value(.displayName, default: ""),
-            url:         try container.value(.url,         default: "")
+        try self.init(
+            displayName: container.value(.displayName, default: ""),
+            url: container.value(.url, default: "")
         )
     }
 
