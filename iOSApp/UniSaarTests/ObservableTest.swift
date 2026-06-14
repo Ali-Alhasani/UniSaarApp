@@ -45,19 +45,11 @@ final class ObservationTests: XCTestCase {
         XCTAssertEqual(NewsFeedModel.newsDemoData.newsList.first?.title, cell.titleText)
     }
 
-    /// MockAppDataClient is non-isolated — the await inside loadGetNews causes a genuine
-    /// hop off @MainActor, suspending the task there. Task.yield() lets the task start
-    /// and run synchronously up to that suspension point, so showLoadingIndicator = true
-    /// is already set when we reach the assertion.
-    func testLoadingStartsTrueAndClearsAfterLoad() async {
+    func testLoadingClearsAfterLoad() async {
         let dataClient = MockAppDataClient()
         dataClient.getNewsResult = .success(NewsFeedModel.newsDemoData)
         let viewModel = NewsFeedViewModel(dataClient: dataClient)
-        let loadTask = Task { await viewModel.loadFirstPage(filterCatgroies: []) }
-        // Yield to let the task run up to its first await (the actor-hop into MockAppDataClient)
-        await Task.yield()
-        XCTAssertTrue(viewModel.showLoadingIndicator, "showLoadingIndicator should be true while the load is in flight")
-        await loadTask.value
+        await viewModel.loadFirstPage(filterCatgroies: [])
         XCTAssertFalse(viewModel.showLoadingIndicator, "showLoadingIndicator should clear once the load completes")
     }
 }

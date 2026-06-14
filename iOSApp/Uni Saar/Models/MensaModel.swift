@@ -251,14 +251,19 @@ extension MensaMenuModel {
 }
 
 extension MensaDayModel {
-    nonisolated(unsafe) static let menuDemoData: [String: Any] = ["date": "2019-12-10", "counters":
-        [
-            "mealDispalyName": "Picadillo Argentinisches Hackfleischgericht", "description": "description", "openiningHours": "11:30-14:15",
-            "color": ["r": 217, "g": 38, "b": 26],
-            "meals": [
-                ["name": "Fussili"], ["name": "Pusztasalat"], ["name": "Tomatensuppe"], ["name": "Stracciatella-Bananen-Sahnequark"]
-            ]
-        ]]
+    nonisolated(unsafe) static let menuDemoData: [String: Any] = [
+        "date": "2019-12-10",
+        "meals": [
+            [
+                "id": 0, "counterName": "Complete Meal",
+                "mealName": "Picadillo Argentinisches Hackfleischgericht",
+                "description": "description", "openingHours": "11:30-14:15",
+                "color": ["r": 217, "g": 38, "b": 26],
+                "components": ["Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"],
+                "notices": [String]()
+            ] as [String: Any]
+        ]
+    ]
 }
 
 // MARK: MensaMenuModel demo data

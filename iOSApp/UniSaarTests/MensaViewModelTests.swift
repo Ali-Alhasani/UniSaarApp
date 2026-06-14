@@ -16,9 +16,14 @@ final class MensaViewModelTests: XCTestCase {
         XCTAssertNotNil(MensaMenuModel(json: testSuccessfulJSON))
     }
 
-    func testMensaTodayModel() {
+    func testMensaTodayModel() throws {
         let testSuccessfulJSON = MensaDayModel.menuDemoData
-        XCTAssertNotNil(MensaDayModel(json: testSuccessfulJSON))
+        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let model = try JSONDecoder.unisaarDefault.decode(MensaDayModel.self, from: data)
+        XCTAssertEqual(model.date, "2019-12-10")
+        XCTAssertEqual(model.countersMeals.count, 1)
+        XCTAssertEqual(model.countersMeals.first?.mealDispalyName, "Picadillo Argentinisches Hackfleischgericht")
+        XCTAssertEqual(model.countersMeals.first?.color.red, 217)
     }
 
     func testNormalMensaCells() async {
