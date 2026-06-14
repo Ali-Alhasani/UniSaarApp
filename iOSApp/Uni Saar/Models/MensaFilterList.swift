@@ -7,15 +7,20 @@
 //
 
 import Foundation
-import SwiftyJSON
 
-final class MensaFilterModel: Sendable {
+struct MensaFilterModel: Codable, Sendable, Equatable {
     let locations: [Locations]
     let notices: [Notices]
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        locations = jsonFromated["locations"].arrayValue.map { Locations(json: $0.dictionaryValue) }
-        notices = jsonFromated["notices"].arrayValue.map { Notices(json: $0.dictionaryValue) }
+}
+
+extension MensaFilterModel {
+    init(from decoder: Decoder) throws {
+        enum CodingKeys: String, CodingKey { case locations, notices }
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            locations: container.value(.locations, default: []),
+            notices:   container.value(.notices,   default: [])
+        )
     }
 
     init() {
@@ -24,39 +29,39 @@ final class MensaFilterModel: Sendable {
     }
 }
 
-final class Locations: Sendable {
+struct Locations: Codable, Sendable, Equatable, Hashable {
     let locationID: String
     let name: String
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        locationID = jsonFromated["locationID"].stringValue
-        name = jsonFromated["name"].stringValue
-    }
+}
 
-    init(locationID: String, name: String) {
-        self.locationID = locationID
-        self.name = name
+extension Locations {
+    init(from decoder: Decoder) throws {
+        enum CodingKeys: String, CodingKey { case locationID, name }
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            locationID: container.value(.locationID, default: ""),
+            name:       container.value(.name,       default: "")
+        )
     }
 }
 
-final class Notices: Sendable {
+struct Notices: Codable, Sendable, Equatable, Hashable {
     let noticeID: String
     let name: String
     let isAllergen: Bool
     let isNegated: Bool
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        noticeID = jsonFromated["noticeID"].stringValue
-        name = jsonFromated["name"].stringValue
-        isAllergen = jsonFromated["isAllergen"].boolValue
-        isNegated = jsonFromated["isNegated"].boolValue
-    }
+}
 
-    init(noticeID: String, name: String, isAllergen: Bool, isNegated: Bool) {
-        self.noticeID = noticeID
-        self.name = name
-        self.isAllergen = isAllergen
-        self.isNegated = isNegated
+extension Notices {
+    init(from decoder: Decoder) throws {
+        enum CodingKeys: String, CodingKey { case noticeID, name, isAllergen, isNegated }
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            noticeID:   container.value(.noticeID,   default: ""),
+            name:       container.value(.name,       default: ""),
+            isAllergen: container.value(.isAllergen, default: false),
+            isNegated:  container.value(.isNegated,  default: false)
+        )
     }
 }
 

@@ -7,66 +7,65 @@
 //
 
 import Foundation
-import SwiftyJSON
 
-public func dataFromFile(_ filename: String) -> Data? {
-    let bundle = Bundle(for: CampusCoordinatesModel.self)
-    if let path = bundle.path(forResource: filename, ofType: "json") {
-        return (try? Data(contentsOf: URL(fileURLWithPath: path)))
-    }
-    return nil
-}
-
-final class CampusCoordinatesModel {
+struct CampusCoordinatesModel: Codable, Sendable, Equatable {
+    let updateTime: String
     let mapInfo: [MapInfoModel]
-    let updateTime: String
+}
+
+extension CampusCoordinatesModel {
+    enum CodingKeys: String, CodingKey { case updateTime, mapInfo }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        try self.init(
+            updateTime: container.value(.updateTime, default: ""),
+            mapInfo:    container.value(.mapInfo,    default: [])
+        )
+    }
+
     init(data: Data) {
-        do {
-            let json = try JSON(data: data)
-            let root = json["mapInfo"].arrayValue
-            updateTime = json["updateTime"].stringValue
-            mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue) }
-        } catch {
-            updateTime = ""
-            mapInfo = []
-        }
-    }
-
-    init(json: JSON) {
-        let root = json["mapInfo"].arrayValue
-        updateTime = json["updateTime"].stringValue
-        mapInfo = root.map { MapInfoModel(json: $0.dictionaryValue) }
+        self = (try? JSONDecoder.unisaarDefault.decode(Self.self, from: data)) ?? CampusCoordinatesModel(updateTime: "", mapInfo: [])
     }
 }
 
-final class CoordinatesCacheModel {
-    let mapInfo: JSON
-    let updateTime: String
-    init(json: JSON) {
-        mapInfo = json
-        updateTime = json["updateTime"].stringValue
-    }
-}
-
-final class MapInfoModel {
+struct MapInfoModel: Sendable, Equatable, Hashable {
     let campus: Campus?
     let name: String
     let function: String
     let longitude: String
     let latitude: String
-    init(json: [String: Any]) {
-        let formattedJson = JSON(json)
-        name = formattedJson["name"].stringValue
-        function = formattedJson["function"].stringValue
-        longitude = formattedJson["longitude"].stringValue
-        latitude = formattedJson["latitude"].stringValue
-        let campusString = formattedJson["campus"].stringValue
-        if campusString == "saar" {
-            campus = Campus.saarbruken
-        } else if campusString == "hom" {
-            campus = Campus.homburg
-        } else {
-            campus = nil
+}
+
+extension MapInfoModel: Codable {
+    enum CodingKeys: String, CodingKey {
+        case campus, name, function, longitude, latitude
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let campusString: String = try container.value(.campus, default: "")
+        switch campusString {
+        case "saar": campus = .saarbruken
+        case "hom":  campus = .homburg
+        default:     campus = nil
         }
+        name      = try container.value(.name,      default: "")
+        function  = try container.value(.function,  default: "")
+        longitude = try container.value(.longitude, default: "")
+        latitude  = try container.value(.latitude,  default: "")
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        switch campus {
+        case .saarbruken: try container.encode("saar", forKey: .campus)
+        case .homburg:    try container.encode("hom",  forKey: .campus)
+        case .none:       try container.encode("",     forKey: .campus)
+        }
+        try container.encode(name,      forKey: .name)
+        try container.encode(function,  forKey: .function)
+        try container.encode(longitude, forKey: .longitude)
+        try container.encode(latitude,  forKey: .latitude)
     }
 }

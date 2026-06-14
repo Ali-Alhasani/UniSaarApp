@@ -7,59 +7,74 @@
 //
 
 import Foundation
-import SwiftyJSON
 
-final class MoreModel: Sendable {
+struct MoreModel: Codable, Sendable, Equatable {
     let linksLastChanged: String
     let links: [MoreLinksModel]
-
-    init(json: [String: Any]) {
-        let jsonFromated = JSON(json)
-        linksLastChanged = jsonFromated["linksLastChanged"].stringValue
-        let arrayLinks = jsonFromated["links"].arrayValue
-        var tempLinks: [MoreLinksModel] = []
-        for (index, link) in arrayLinks.enumerated() {
-            tempLinks.append(MoreLinksModel(json: link, index: index))
-        }
-        links = tempLinks
-    }
-}
-
-final class MoreLinksModel: Sendable {
-    let displayName: String
-    let url: String
-    let index: Int
-    init(json: JSON, index: Int) {
-        let jsonFromated = JSON(json)
-        displayName = jsonFromated["name"].stringValue
-        url = jsonFromated["link"].stringValue
-        self.index = index
-    }
 }
 
 extension MoreModel {
-    static let demoData = MoreModel(json: ["linksLastChanged": "2020-01-20 17:42:14",
-                                           "language": "de", "links": [
-                                               [
-                                                   "name": "Welcome Centre",
-                                                   "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
-                                               ],
-                                               [
-                                                   "name": "AStA",
-                                                   "link": "https://asta.uni-saarland.de/en/"
-                                               ],
-                                               [
-                                                   "name": "Busfahrplan",
-                                                   "link": "https://www.saarfahrplan.de"
-                                               ],
-                                               [
-                                                   "name": "Hochschulsport",
-                                                   "link": "https://www.uni-saarland.de/en/institution/sports.html"
-                                               ]
-                                           ]])
+    enum CodingKeys: String, CodingKey { case linksLastChanged, links }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        let lastChanged: String = try container.value(.linksLastChanged, default: "")
+        let wireLinks: [MoreLinksModel.Wire] = try container.value(.links, default: [])
+        self.init(
+            linksLastChanged: lastChanged,
+            links: wireLinks.enumerated().map { index, wire in
+                MoreLinksModel(displayName: wire.displayName, url: wire.url, index: index)
+            }
+        )
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(linksLastChanged, forKey: .linksLastChanged)
+        let wireLinks = links.map { MoreLinksModel.Wire(displayName: $0.displayName, url: $0.url) }
+        try container.encode(wireLinks, forKey: .links)
+    }
+
+    static let empty = MoreModel(linksLastChanged: "", links: [])
+}
+
+struct MoreLinksModel: Sendable, Equatable, Hashable {
+    let displayName: String
+    let url: String
+    let index: Int
 }
 
 extension MoreLinksModel {
-    static let deomJSON = ["name": "Welcome Centre",
-                           "link": "https://www.uni-saarland.de/en/global/welcome-center.html"]
+    struct Wire: Codable, Sendable {
+        let displayName: String
+        let url: String
+    }
+}
+
+extension MoreLinksModel.Wire {
+    enum CodingKeys: String, CodingKey {
+        case displayName = "name"
+        case url = "link"
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            displayName: try container.value(.displayName, default: ""),
+            url:         try container.value(.url,         default: "")
+        )
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(displayName, forKey: .displayName)
+        try container.encode(url, forKey: .url)
+    }
+}
+
+extension MoreLinksModel {
+    static let deomJSON: [String: Any] = [
+        "name": "Welcome Centre",
+        "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
+    ]
 }
