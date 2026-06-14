@@ -25,7 +25,7 @@ extension NewsFeedModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             newsItemCount: container.value(.newsItemCount, default: 0),
             categoriesLastChanged: container.value(.categoriesLastChanged, default: ""),
             hasNextPage: container.value(.hasNextPage, default: false),
@@ -63,7 +63,7 @@ extension NewsModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         let (date, event) = try Self.resolveDate(container)
-        try self.init(
+        self.init(
             annoucementDate: date,
             title: container.value(.title, default: ""),
             newsID: container.value(.newsID, default: 0),
@@ -115,7 +115,7 @@ extension NewsCategories {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             categoryID: container.value(.categoryID, default: 0),
             categoryName: container.value(.categoryName, default: "")
         )

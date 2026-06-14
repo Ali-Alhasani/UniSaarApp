@@ -18,8 +18,8 @@ extension MoreModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let lastChanged: String = try container.value(.linksLastChanged, default: "")
-        let wireLinks: [MoreLinksModel.Wire] = try container.value(.links, default: [])
+        let lastChanged: String = container.value(.linksLastChanged, default: "")
+        let wireLinks: [MoreLinksModel.Wire] = container.value(.links, default: [])
         self.init(
             linksLastChanged: lastChanged,
             links: wireLinks.enumerated().map { index, wire in
@@ -59,7 +59,7 @@ extension MoreLinksModel.Wire {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             displayName: container.value(.displayName, default: ""),
             url: container.value(.url, default: "")
         )
@@ -73,7 +73,7 @@ extension MoreLinksModel.Wire {
 }
 
 extension MoreLinksModel {
-    static let deomJSON: [String: Any] = [
+    nonisolated(unsafe) static let deomJSON: [String: Any] = [
         "name": "Welcome Centre",
         "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
     ]

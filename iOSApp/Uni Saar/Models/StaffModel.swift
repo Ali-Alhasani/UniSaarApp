@@ -23,7 +23,7 @@ extension StaffModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             staffResults: container.value(.staffResults, default: []),
             staffItemCount: container.value(.staffItemCount, default: 0),
             hasNextPage: container.value(.hasNextPage, default: false)
@@ -48,7 +48,7 @@ extension StaffResultsModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             title: container.value(.title, default: ""),
             fullName: container.value(.fullName, default: ""),
             staffID: container.value(.staffID, default: 0)
@@ -91,7 +91,7 @@ extension StaffDetailsModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             email: container.optionalValue(.email),
             phoneNumber: container.optionalValue(.phoneNumber),
             websiteURL: container.optionalValue(.websiteURL),

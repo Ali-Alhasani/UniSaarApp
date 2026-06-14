@@ -17,7 +17,7 @@ extension MensaFilterModel {
     init(from decoder: Decoder) throws {
         enum CodingKeys: String, CodingKey { case locations, notices }
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             locations: container.value(.locations, default: []),
             notices: container.value(.notices, default: [])
         )
@@ -38,7 +38,7 @@ extension Locations {
     init(from decoder: Decoder) throws {
         enum CodingKeys: String, CodingKey { case locationID, name }
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             locationID: container.value(.locationID, default: ""),
             name: container.value(.name, default: "")
         )
@@ -56,7 +56,7 @@ extension Notices {
     init(from decoder: Decoder) throws {
         enum CodingKeys: String, CodingKey { case noticeID, name, isAllergen, isNegated }
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             noticeID: container.value(.noticeID, default: ""),
             name: container.value(.name, default: ""),
             isAllergen: container.value(.isAllergen, default: false),

@@ -21,7 +21,7 @@ extension MensaMenuModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             daysMenus: container.value(.daysMenus, default: []),
             filtersLastChanged: container.value(.filtersLastChanged, default: "")
         )
@@ -43,7 +43,7 @@ extension MensaDayModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             date: container.value(.date, default: ""),
             countersMeals: container.value(.countersMeals, default: [])
         )
@@ -77,8 +77,8 @@ extension MensaMealsModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
-            mealID: container.value(.mealID, default: 0),
+        self.init(
+            mealID: container.intValue(.mealID),
             counterName: container.value(.counterName, default: ""),
             mealDispalyName: container.value(.mealDispalyName, default: ""),
             description: container.value(.description, default: ""),
@@ -107,7 +107,7 @@ extension MensaColorModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             red: container.value(.red, default: Float(0)),
             green: container.value(.green, default: Float(0)),
             blue: container.value(.blue, default: Float(0))
@@ -136,8 +136,8 @@ extension MealDetailsModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
-            mealID: container.value(.mealID, default: 0),
+        self.init(
+            mealID: container.intValue(.mealID),
             mealName: container.value(.mealName, default: ""),
             generalNotices: container.value(.generalNotices, default: []),
             counterDescription: container.value(.counterDescription, default: ""),
@@ -160,7 +160,7 @@ extension MealComponents {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             componentName: container.value(.componentName, default: ""),
             componentNotices: container.value(.componentNotices, default: [])
         )
@@ -180,7 +180,7 @@ extension MealNotices {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             noticeTag: container.value(.noticeTag, default: ""),
             noticeDispalyName: container.value(.noticeDispalyName, default: "")
         )
@@ -200,7 +200,7 @@ extension MealPrice {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             priceTagName: container.value(.priceTagName, default: ""),
             price: container.value(.price, default: "")
         )
@@ -222,7 +222,7 @@ extension MensaInfo {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             locationName: container.value(.locationName, default: ""),
             description: container.value(.description, default: ""),
             imageLink: container.value(.imageLink, default: "")

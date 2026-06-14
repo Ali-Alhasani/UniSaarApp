@@ -46,6 +46,26 @@ extension NumberModel { init(json: [String: Any]) {
 extension NumberModel { init(json: JSON) {
     self = legacyDecode(json.dictionaryObject ?? [:], as: Self.self, fallback: .empty)
 } }
+extension NewsCategories { init(json: [String: Any]) {
+    self = legacyDecode(json, as: Self.self, fallback: NewsCategories(categoryID: 0, categoryName: ""))
+} }
+extension MensaFilterModel { init(json: [String: Any]) {
+    self = legacyDecode(json, as: Self.self, fallback: MensaFilterModel(locations: [], notices: []))
+} }
+extension StaffDetailsModel {
+    init(json: [String: Any]) {
+        self = legacyDecode(json, as: Self.self, fallback: StaffDetailsModel(
+            email: nil, phoneNumber: nil, websiteURL: nil, gender: nil, title: nil,
+            firstName: nil, lastName: nil, office: nil, building: nil, street: nil,
+            postalCode: nil, city: nil, fax: nil, remarks: nil, image: nil, officeHour: nil
+        ))
+    }
+
+    init(json: [String: String]) {
+        self.init(json: json as [String: Any])
+    }
+}
+
 extension MoreLinksModel {
     init(json: [String: Any], index: Int) {
         let wire = legacyDecode(json, as: Wire.self, fallback: Wire(displayName: "", url: ""))

@@ -17,7 +17,7 @@ extension HelpfulNumbersModel {
     init(from decoder: Decoder) throws {
         enum CodingKeys: String, CodingKey { case numbersLastChanged, numbers }
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             numbersLastChanged: container.value(.numbersLastChanged, default: ""),
             numbers: container.value(.numbers, default: [])
         )
@@ -37,7 +37,7 @@ extension NumberModel {
     init(from decoder: Decoder) throws {
         enum CodingKeys: String, CodingKey { case name, number, link, mail }
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             name: container.optionalValue(.name),
             number: container.optionalValue(.number),
             link: container.optionalValue(.link),

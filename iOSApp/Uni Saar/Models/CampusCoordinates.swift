@@ -18,7 +18,7 @@ extension CampusCoordinatesModel {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        try self.init(
+        self.init(
             updateTime: container.value(.updateTime, default: ""),
             mapInfo: container.value(.mapInfo, default: [])
         )
@@ -44,16 +44,16 @@ extension MapInfoModel: Codable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        let campusString: String = try container.value(.campus, default: "")
+        let campusString: String = container.value(.campus, default: "")
         switch campusString {
         case "saar": campus = .saarbruken
         case "hom": campus = .homburg
         default: campus = nil
         }
-        name = try container.value(.name, default: "")
-        function = try container.value(.function, default: "")
-        longitude = try container.value(.longitude, default: "")
-        latitude = try container.value(.latitude, default: "")
+        name = container.value(.name, default: "")
+        function = container.value(.function, default: "")
+        longitude = container.value(.longitude, default: "")
+        latitude = container.value(.latitude, default: "")
     }
 
     func encode(to encoder: Encoder) throws {
