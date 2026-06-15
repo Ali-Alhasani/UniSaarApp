@@ -8,12 +8,11 @@
 
 import UIKit
 
-private nonisolated(unsafe) var loadingOverlayKey: UInt8 = 0
-
 extension UIViewController {
+    private static var loadingOverlayKey: UInt8 = 0
     private var loadingOverlay: UIView? {
-        get { objc_getAssociatedObject(self, &loadingOverlayKey) as? UIView }
-        set { objc_setAssociatedObject(self, &loadingOverlayKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        get { objc_getAssociatedObject(self, &UIViewController.loadingOverlayKey) as? UIView }
+        set { objc_setAssociatedObject(self, &UIViewController.loadingOverlayKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
 
     func showLoadingActivity(message: String? = nil) {

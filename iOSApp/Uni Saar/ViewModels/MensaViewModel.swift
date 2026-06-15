@@ -48,15 +48,19 @@ class MensaMenuViewModel: ParentViewModel {
         daysMenus = MensaMenuModel.menuDemoData.daysMenus.compactMap { .normal(cellViewModel: MensaDayMenuViewModel(mensaDayModel: $0)) }
     }
 
-    func isMenuOutdated() -> Bool {
-        guard case let .normal(viewModel) = daysMenus.first else { return false }
-        return viewModel.dateValue != getDateFormater(date: Date())
-    }
-
-    func getDateFormater(date: Date) -> String {
+    private static let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "d.MM."
-        return formatter.string(from: date)
+        return formatter
+    }()
+
+    func isMenuOutdated() -> Bool {
+        guard case let .normal(viewModel) = daysMenus.first else { return false }
+        return viewModel.dateValue != dateString(from: Date())
+    }
+
+    func dateString(from date: Date) -> String {
+        MensaMenuViewModel.dateFormatter.string(from: date)
     }
 }
 

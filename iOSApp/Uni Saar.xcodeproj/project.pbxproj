@@ -47,9 +47,7 @@
 		6B214323239BC2D800E8958F /* NewsFeedTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B214321239BC2D800E8958F /* NewsFeedTableViewCell.xib */; };
 		6B214327239BD3F400E8958F /* NewsFeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B214326239BD3F400E8958F /* NewsFeedViewModel.swift */; };
 		6B281897239D943F008389D6 /* NewsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B281896239D943F008389D6 /* NewsViewModelTests.swift */; };
-		6B28189B239DAED7008389D6 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B28189A239DAED7008389D6 /* Result.swift */; };
 		6B2818A2239DCF4E008389D6 /* SingleButtonAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A1239DCF4E008389D6 /* SingleButtonAlert.swift */; };
-		6B2818A4239DE51B008389D6 /* TableViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A3239DE51B008389D6 /* TableViewDataSource.swift */; };
 		6B2818A6239EBEA6008389D6 /* MensaViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */; };
 
 		6B2818A9239EDF87008389D6 /* NewsReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A8239EDF87008389D6 /* NewsReaderViewController.swift */; };
@@ -75,8 +73,6 @@
 		6B7CFE0823AAE5B0002613D3 /* FilterMensaViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B7CFE0723AAE5B0002613D3 /* FilterMensaViewModel.swift */; };
 		6B80BDD924AE104100553484 /* HelpfulContactsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B80BDD824AE104100553484 /* HelpfulContactsViewController.swift */; };
 		6B8DBCB225222BD50019BA4D /* NVActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8DBCB125222BD50019BA4D /* NVActivityIndicator.swift */; };
-		6B8E446C250A260D0045260E /* MensaNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8E446A250A260D0045260E /* MensaNotificationTableViewCell.swift */; };
-		6B8E446E250A68D80045260E /* MensaNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B8E4470250A68D80045260E /* MensaNotificationTableViewCell.xib */; };
 		6B908BE324D576C2000EE5AF /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B908BE224D576C2000EE5AF /* UIApplication.swift */; };
 		6B9541082590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6B9541062590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib */; };
 		6B9541162590C6DC00B67DA9 /* NewMensaNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */; };
@@ -106,7 +102,6 @@
 		6BACBA6E239B20F7003A532B /* MoreLinksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BACBA6D239B20F7003A532B /* MoreLinksModel.swift */; };
 		6BBC9D6E23AA4ADD009CD435 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */; };
 		6BBC9D7023AA4E07009CD435 /* AppSetupFirstScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */; };
-		6BBC9D7223AA5D52009CD435 /* SetupPrivacyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */; };
 		6BC6F41D256834BB00D701AA /* MensaCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC6F418256834BB00D701AA /* MensaCardViewController.swift */; };
 		6BCDAF5423AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5223AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld */; };
 		6BCDAF5F23AC13BD00DDB464 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5E23AC13BD00DDB464 /* CoreDataStack.swift */; };
@@ -145,6 +140,9 @@
 		F1A2B3C4D5E6F7A8B9C0D1F7 /* FilterMensaViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */; };
 		A1B2C3D4E5F6A1B2C3D4E501 /* JSONCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */; };
 		A1B2C3D4E5F6A1B2C3D4E503 /* NewsModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */; };
+		0025410F034B4454871ADEA5 /* MoreModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */; };
+		BA87402A20764721AF97E5E7 /* MensaModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */; };
+		AF117DA7350547798120D27C /* DirectoryModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,9 +206,7 @@
 		6B214321239BC2D800E8958F /* NewsFeedTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NewsFeedTableViewCell.xib; sourceTree = "<group>"; };
 		6B214326239BD3F400E8958F /* NewsFeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedViewModel.swift; sourceTree = "<group>"; };
 		6B281896239D943F008389D6 /* NewsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModelTests.swift; sourceTree = "<group>"; };
-		6B28189A239DAED7008389D6 /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		6B2818A1239DCF4E008389D6 /* SingleButtonAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonAlert.swift; sourceTree = "<group>"; };
-		6B2818A3239DE51B008389D6 /* TableViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewDataSource.swift; sourceTree = "<group>"; };
 		6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaViewModelTests.swift; sourceTree = "<group>"; };
 
 		6B2818A8239EDF87008389D6 /* NewsReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsReaderViewController.swift; sourceTree = "<group>"; };
@@ -242,11 +238,6 @@
 		6B8DBCB125222BD50019BA4D /* NVActivityIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NVActivityIndicator.swift; sourceTree = "<group>"; };
 		6B8DBCD925222D580019BA4D /* NVActivityIndicatorView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NVActivityIndicatorView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B8DBCE225222D7C0019BA4D /* NVActivityIndicatorView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = NVActivityIndicatorView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B8E446A250A260D0045260E /* MensaNotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaNotificationTableViewCell.swift; sourceTree = "<group>"; };
-		6B8E446F250A68D80045260E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MensaNotificationTableViewCell.xib; sourceTree = "<group>"; };
-		6B8E4472250A68E20045260E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/MensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
-		6B8E4474250A68E20045260E /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/MensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
-		6B8E4476250A68E50045260E /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/MensaNotificationTableViewCell.strings; sourceTree = "<group>"; };
 		6B908BE224D576C2000EE5AF /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		6B9541072590C3CC00B67DA9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/NewMensaNotificationTableViewCell.xib; sourceTree = "<group>"; };
 		6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMensaNotificationTableViewCell.swift; sourceTree = "<group>"; };
@@ -278,7 +269,6 @@
 		6BACBA6D239B20F7003A532B /* MoreLinksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreLinksModel.swift; sourceTree = "<group>"; };
 		6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupFirstScreenViewController.swift; sourceTree = "<group>"; };
-		6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetupPrivacyViewController.swift; sourceTree = "<group>"; };
 		6BC6F418256834BB00D701AA /* MensaCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MensaCardViewController.swift; sourceTree = "<group>"; };
 		6BCDAF5323AC11F800DDB464 /* FilterListCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FilterListCoreData.xcdatamodel; sourceTree = "<group>"; };
 		6BCDAF5E23AC13BD00DDB464 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
@@ -348,6 +338,9 @@
 		F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMensaViewModelTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCodingTests.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModelDecodingTests.swift; sourceTree = "<group>"; };
+		EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreModelDecodingTests.swift; sourceTree = "<group>"; };
+		277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaModelDecodingTests.swift; sourceTree = "<group>"; };
+		A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryModelDecodingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,7 +454,6 @@
 				6B0F26232396D21D002E587E /* AppSessionManager.swift */,
 				6B0F26262396D2FD002E587E /* URLRouter.swift */,
 				6B0F262A2396D855002E587E /* LLError.swift */,
-				6B28189A239DAED7008389D6 /* Result.swift */,
 				6B00FECE256EACB5002F85CA /* AppStoreReviewManager.swift */,
 			);
 			path = NetworkingAndSessionManager;
@@ -472,7 +464,6 @@
 			children = (
 				6B0F26282396D83C002E587E /* Enums.swift */,
 				6B214319239BB0A300E8958F /* TableView.swift */,
-				6B2818A3239DE51B008389D6 /* TableViewDataSource.swift */,
 				6BA670E9239BDCD400857DB7 /* UITableViewCell.swift */,
 				6BA670EB239BDF8800857DB7 /* Array.swift */,
 				6BA670ED239BE7CC00857DB7 /* UIView.swift */,
@@ -520,8 +511,6 @@
 				6B4302EF23D92A9B00D21877 /* HelpfulNumbersTableViewCell.xib */,
 				6B9541152590C6DB00B67DA9 /* NewMensaNotificationTableViewCell.swift */,
 				6B9541062590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib */,
-				6B8E446A250A260D0045260E /* MensaNotificationTableViewCell.swift */,
-				6B8E4470250A68D80045260E /* MensaNotificationTableViewCell.xib */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -594,6 +583,9 @@
 				F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */,
 				A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */,
 				A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */,
+				EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */,
+				277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */,
+				A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */,
 			);
 			path = UniSaarTests;
 			sourceTree = "<group>";
@@ -648,7 +640,6 @@
 			isa = PBXGroup;
 			children = (
 				6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */,
-				6BBC9D7123AA5D52009CD435 /* SetupPrivacyViewController.swift */,
 			);
 			path = SteupViewControllers;
 			sourceTree = "<group>";
@@ -857,7 +848,6 @@
 				6B06D700239C4AD700A0F02F /* MensaMenuTableViewCell.xib in Resources */,
 				6B0F25E32396974F002E587E /* LaunchScreen.storyboard in Resources */,
 				6B9541082590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib in Resources */,
-				6B8E446E250A68D80045260E /* MensaNotificationTableViewCell.xib in Resources */,
 				5211AF3923C7B89B006D1F9A /* CampusSaarCoor.plist in Resources */,
 				6BFB584423D64F2E00B69C4A /* MensaStoryboard.storyboard in Resources */,
 				6BFB586023D64F6600B69C4A /* SetupAppStoryboard.storyboard in Resources */,
@@ -912,7 +902,6 @@
 				6B10440E23D094850081BABF /* CampusCoordinates.swift in Sources */,
 				6B0F262B2396D855002E587E /* LLError.swift in Sources */,
 				6B21431A239BB0A300E8958F /* TableView.swift in Sources */,
-				6B28189B239DAED7008389D6 /* Result.swift in Sources */,
 				6B21431C239BB0BA00E8958F /* AppStyle.swift in Sources */,
 				5211AF3623C7B76A006D1F9A /* Campus.swift in Sources */,
 				6BF1CA1823A3F27600A514CB /* FilterNewsFeedViewController.swift in Sources */,
@@ -934,7 +923,6 @@
 				6BACBA6A239B1C80003A532B /* StaffModel.swift in Sources */,
 				6BF1CA1D23A3F2D700A514CB /* SettingsViewController.swift in Sources */,
 				6B06D6FC239C47F800A0F02F /* UIViewController.swift in Sources */,
-				6B8E446C250A260D0045260E /* MensaNotificationTableViewCell.swift in Sources */,
 				6B0F261C2396A417002E587E /* DirectoryViewController.swift in Sources */,
 				6B908BE324D576C2000EE5AF /* UIApplication.swift in Sources */,
 				6249F397A3B545B6BFE8C9D5 /* AppEnvironment.swift in Sources */,
@@ -962,7 +950,6 @@
 				6B0F26162396A184002E587E /* NewsFeedViewController.swift in Sources */,
 				6BF1CA1A23A3F2A600A514CB /* EventCalanderViewController.swift in Sources */,
 				6B2818AD239EFAFA008389D6 /* MealDetailsViewModel.swift in Sources */,
-				6B2818A4239DE51B008389D6 /* TableViewDataSource.swift in Sources */,
 				6BFB587023D8BA0100B69C4A /* MoreLinksViewModel.swift in Sources */,
 				6B2818B5239F10CE008389D6 /* UICollectionView.swift in Sources */,
 				6B2818A9239EDF87008389D6 /* NewsReaderViewController.swift in Sources */,
@@ -978,7 +965,6 @@
 				6B0F26202396D1E2002E587E /* APIClient.swift in Sources */,
 				6B4091CB24DC2F310049C851 /* NotificationTimeViewController.swift in Sources */,
 				6B214322239BC2D800E8958F /* NewsFeedTableViewCell.swift in Sources */,
-				6BBC9D7223AA5D52009CD435 /* SetupPrivacyViewController.swift in Sources */,
 				6BACBA68239B1C80003A532B /* NewsFeedModel.swift in Sources */,
 				6B80BDD924AE104100553484 /* HelpfulContactsViewController.swift in Sources */,
 				6B06D702239C4F5500A0F02F /* MensaViewModel.swift in Sources */,
@@ -1012,6 +998,9 @@
 				F1A2B3C4D5E6F7A8B9C0D1F7 /* FilterMensaViewModelTests.swift in Sources */,
 				A1B2C3D4E5F6A1B2C3D4E501 /* JSONCodingTests.swift in Sources */,
 				A1B2C3D4E5F6A1B2C3D4E503 /* NewsModelDecodingTests.swift in Sources */,
+				0025410F034B4454871ADEA5 /* MoreModelDecodingTests.swift in Sources */,
+				BA87402A20764721AF97E5E7 /* MensaModelDecodingTests.swift in Sources */,
+				AF117DA7350547798120D27C /* DirectoryModelDecodingTests.swift in Sources */,
 				6B281897239D943F008389D6 /* NewsViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1059,17 +1048,6 @@
 				6BFBF2EA24A946F2005C6FE8 /* fr */,
 			);
 			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-		6B8E4470250A68D80045260E /* MensaNotificationTableViewCell.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6B8E446F250A68D80045260E /* Base */,
-				6B8E4472250A68E20045260E /* en */,
-				6B8E4474250A68E20045260E /* fr */,
-				6B8E4476250A68E50045260E /* de */,
-			);
-			name = MensaNotificationTableViewCell.xib;
 			sourceTree = "<group>";
 		};
 		6B9541062590C3CC00B67DA9 /* NewMensaNotificationTableViewCell.xib */ = {

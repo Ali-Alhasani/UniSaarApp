@@ -233,37 +233,11 @@ extension MensaInfo {
 // MARK: MensaMenuModel demo data
 
 extension MensaMenuModel {
-    nonisolated(unsafe) static let deomJSON: [String: Any] = ["days": [
-        ["date": "today", "meals":
-            [
-                [
-                    "counterName": "Complete Meal", "mealName": "Picadillo Argentinisches Hackfleischgericht",
-                    "openingHours": "11:30-14:15",
-                    "color": ["r": 217, "g": 38, "b": 26],
-                    "components": [
-                        "Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"
-                    ], "notices": []
-                ], ["counterName": "Vegetarian Meal", "mealName": "PastaBoccolotti", "description": "description",
-                    "openingHours": "11:30-14:15", "color": ["r": 21, "g": 135, "b": 207], "components":
-                        ["Tomaten-Zucchini-Bechamelsoße", "Endiviensalat", "Weiße Salatsoße", "Klare Salatsoße", "Fruchtjoghurt"]]
-            ]]
-    ]]
+    static let deomJSON = Data(#"{"days":[{"date":"today","meals":[{"counterName":"Complete Meal","mealName":"Picadillo Argentinisches Hackfleischgericht","openingHours":"11:30-14:15","color":{"r":217,"g":38,"b":26},"components":["Fussili","Pusztasalat","Tomatensuppe","Stracciatella-Bananen-Sahnequark"],"notices":[]},{"counterName":"Vegetarian Meal","mealName":"PastaBoccolotti","description":"description","openingHours":"11:30-14:15","color":{"r":21,"g":135,"b":207},"components":["Tomaten-Zucchini-Bechamelsoße","Endiviensalat","Weiße Salatsoße","Klare Salatsoße","Fruchtjoghurt"]}]}]}"#.utf8)
 }
 
 extension MensaDayModel {
-    nonisolated(unsafe) static let menuDemoData: [String: Any] = [
-        "date": "2019-12-10",
-        "meals": [
-            [
-                "id": 0, "counterName": "Complete Meal",
-                "mealName": "Picadillo Argentinisches Hackfleischgericht",
-                "description": "description", "openingHours": "11:30-14:15",
-                "color": ["r": 217, "g": 38, "b": 26],
-                "components": ["Fussili", "Pusztasalat", "Tomatensuppe", "Stracciatella-Bananen-Sahnequark"],
-                "notices": [String]()
-            ] as [String: Any]
-        ]
-    ]
+    static let menuDemoData = Data(#"{"date":"2019-12-10","meals":[{"id":0,"counterName":"Complete Meal","mealName":"Picadillo Argentinisches Hackfleischgericht","description":"description","openingHours":"11:30-14:15","color":{"r":217,"g":38,"b":26},"components":["Fussili","Pusztasalat","Tomatensuppe","Stracciatella-Bananen-Sahnequark"],"notices":[]}]}"#.utf8)
 }
 
 // MARK: MensaMenuModel demo data

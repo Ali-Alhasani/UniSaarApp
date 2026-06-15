@@ -18,7 +18,7 @@ enum LogType {
     func printCase() -> String {
         switch self {
         case .all:
-            "Unknown :: "
+            "ALL :: "
         case .error:
             "ERROR :: "
         case .note:
@@ -26,7 +26,7 @@ enum LogType {
         case .none:
             ""
         case .testCase:
-            "TEST"
+            "TEST :: "
         }
     }
 }

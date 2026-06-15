@@ -23,8 +23,7 @@ final class MoreViewModelTests: XCTestCase {
     }
 
     func testMoreLinksModel() throws {
-        let testSuccessfulJSON = MoreLinksModel.deomJSON
-        let data = try JSONSerialization.data(withJSONObject: testSuccessfulJSON)
+        let data = MoreLinksModel.deomJSON
         let wire = try JSONDecoder.unisaarDefault.decode(MoreLinksModel.Wire.self, from: data)
         let model = MoreLinksModel(displayName: wire.displayName, url: wire.url, index: 0)
         XCTAssertEqual(model.displayName, "Welcome Centre")

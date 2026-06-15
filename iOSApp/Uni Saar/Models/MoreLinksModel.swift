@@ -73,10 +73,7 @@ extension MoreLinksModel.Wire {
 }
 
 extension MoreLinksModel {
-    nonisolated(unsafe) static let deomJSON: [String: Any] = [
-        "name": "Welcome Centre",
-        "link": "https://www.uni-saarland.de/en/global/welcome-center.html"
-    ]
+    static let deomJSON = Data(#"{"name":"Welcome Centre","link":"https://www.uni-saarland.de/en/global/welcome-center.html"}"#.utf8)
 }
 
 extension MoreModel {
