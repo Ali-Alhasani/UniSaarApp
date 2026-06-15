@@ -39,11 +39,6 @@ class MealDetailsViewController: UIViewController {
     }
 
     private func setupInitialState() {
-        // Equivalent to old bindViewModel loader logic
-        if mealItemViewModel != nil {
-            showLoadingActivity()
-        }
-
         if let mealID = mealItemViewModel?.mensaMealsModel.mealID {
             meal.noticesText = mealItemViewModel?.noticesList
             Task { [weak self] in
