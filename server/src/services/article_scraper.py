@@ -87,7 +87,10 @@ class _Sanitizer(_StdParser):
 
         if tag == "img":
             src = attr.get("src", "") or ""
-            if not src or src.startswith("data:"):
+            # Security fix: normalize src to lowercase and strip whitespace
+            # to prevent XSS bypass via case/whitespace in URI schemes.
+            src_normalized = src.strip().lower()
+            if not src or src_normalized.startswith(("data:", "javascript:", "vbscript:")):
                 self._skip_depth = 1
                 return
             if src.startswith("/"):
@@ -101,7 +104,10 @@ class _Sanitizer(_StdParser):
 
         if tag == "a":
             href = attr.get("href", "") or ""
-            if href.startswith("javascript:") or href.startswith("data:"):
+            # Security fix: normalize href to lowercase and strip whitespace
+            # to prevent XSS bypass via case/whitespace in URI schemes.
+            href_normalized = href.strip().lower()
+            if href_normalized.startswith(("javascript:", "data:", "vbscript:")):
                 self._skip_depth = 1
                 return
             if href.startswith("/"):
