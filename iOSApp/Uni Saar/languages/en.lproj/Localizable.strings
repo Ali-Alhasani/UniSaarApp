@@ -71,3 +71,45 @@
 
 
 "tryAgain" = "Try Again";
+
+//MARK:- Screen titles (migrated from storyboard strings)
+"NewsFeedTitle" = "News Feed";
+"EventsTitle" = "Events";
+"FilterFeedTitle" = "Filter Feed";
+"FilterMensaTitle" = "Filter Mensa";
+"MensaBalanceTitle" = "Mensa Balance";
+"SettingsTitle" = "Settings";
+"TabNews" = "News Feed";
+"TabDirectory" = "Directory";
+"TabMore" = "More";
+"TabCampus" = "Campus";
+"TabMensa" = "Mensa";
+
+//MARK:- Directory
+"DirectorySearchTip" = "Tip: a basic search requires at least three characters of a person's name";
+"StaffAddress" = "Address";
+"StaffContact" = "Contact";
+
+//MARK:- Mensa card / balance
+"MensaCurrentBalance" = "Current Balance";
+"MensaLastTransaction" = "Last Transaction";
+"MensaScanDate" = "Scan Date";
+"MensaCardID" = "Card ID";
+"MensaNoCardScanned" = "No Card Scanned";
+"ScanCard" = "Scan Card";
+
+//MARK:- Meal details
+"MealComponents" = "Components";
+"MealPrices" = "Prices";
+"MealGeneralNotices" = "General Notices";
+
+//MARK:- Notifications
+"PickNotificationTime" = "Pick the notification time";
+
+//MARK:- More / About
+"UsefulLinks" = "Useful Links";
+"DevelopmentTeam" = "Development Team";
+"iOSTeamLabel" = "iOS, iPadOS and macOS design and implementation:";
+"ServerTeamLabel" = "Server Team:";
+"LearnMoreLabel" = "Learn more about us";
+"FindUsLabel" = "Get to know more about us by searching \"Cool guys\" in the directory";
