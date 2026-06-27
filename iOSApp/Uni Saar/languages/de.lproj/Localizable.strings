@@ -66,3 +66,45 @@
 "No, thanks" = "Nein, danke";
 
 "tryAgain" = "Versuchen Sie es erneut";
+
+//MARK:- Screen titles (migrated from storyboard strings)
+"NewsFeedTitle" = "Neuigkeiten";
+"EventsTitle" = "Veranstaltungen";
+"FilterFeedTitle" = "Filtern";
+"FilterMensaTitle" = "Mensa filtern";
+"MensaBalanceTitle" = "Mensa-Guthaben";
+"SettingsTitle" = "Einstellungen";
+"TabNews" = "Neuigkeiten";
+"TabDirectory" = "Personen";
+"TabMore" = "Mehr";
+"TabCampus" = "Campus";
+"TabMensa" = "Mensa";
+
+//MARK:- Directory
+"DirectorySearchTip" = "Tipp: Bitte geben Sie mindestens die ersten drei Buchstaben des Namens ein, den Sie suchen.";
+"StaffAddress" = "Adresse";
+"StaffContact" = "Kontakt";
+
+//MARK:- Mensa card / balance
+"MensaCurrentBalance" = "Aktuelles Guthaben";
+"MensaLastTransaction" = "Letzte Transaktion";
+"MensaScanDate" = "Scan Date";
+"MensaCardID" = "Karten-ID";
+"MensaNoCardScanned" = "Noch keine Karte eingelesen";
+"ScanCard" = "Karte einlesen";
+
+//MARK:- Meal details
+"MealComponents" = "Bestandteile";
+"MealPrices" = "Preise";
+"MealGeneralNotices" = "Allgemeine Hinweise";
+
+//MARK:- Notifications
+"PickNotificationTime" = "Wähle die Benachrichtigungsuhrzeit";
+
+//MARK:- More / About
+"UsefulLinks" = "Nützliche Links";
+"DevelopmentTeam" = "Entwicklungsteam";
+"iOSTeamLabel" = "iOS, iPadOS und macOS Entwurf und Implementierung:";
+"ServerTeamLabel" = "Server Team:";
+"LearnMoreLabel" = "Finde mehr über uns heraus";
+"FindUsLabel" = "Lerne mehr über uns, indem du cool guys im Personen Tab suchst";
