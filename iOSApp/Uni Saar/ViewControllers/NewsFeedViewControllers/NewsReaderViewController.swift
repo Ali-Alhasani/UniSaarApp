@@ -26,7 +26,7 @@ class NewsReaderViewController: UIViewController {
 
     func load() {
         activityIndicator.startAnimating()
-        if let urlRequest = getNewsItemURL() {
+        if let urlRequest = newsItemViewModel?.newsItemURL {
             webView.load(urlRequest)
         }
     }
@@ -38,22 +38,6 @@ class NewsReaderViewController: UIViewController {
         webView.backgroundColor = .clear
         webView.allowsBackForwardNavigationGestures = true
         webView.configuration.userContentController.add(self, name: "ics")
-    }
-
-    func getNewsItemURL() -> URLRequest? {
-        let baseSiteURl = URLRouter.Constants.baseURLPath
-        if let newsId = newsItemViewModel?.newsItem.newsID {
-            var fullPath = baseSiteURl
-            if newsItemViewModel?.isEvent ?? false {
-                fullPath += "/events/details?id=\(newsId)"
-            } else {
-                fullPath += "/news/details?id=\(newsId)"
-            }
-            if let url = URL(string: fullPath) {
-                return URLRequest(url: url)
-            }
-        }
-        return nil
     }
 
     @objc private func reloadWebView() {

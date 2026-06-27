@@ -107,6 +107,13 @@ protocol NewsFeedCellViewModel {
     var isEvent: Bool { get }
 }
 
+extension NewsFeedCellViewModel {
+    var newsItemURL: URLRequest? {
+        let route: URLRouter = isEvent ? .eventDetail(newsItem.newsID) : .newsDetail(newsItem.newsID)
+        return try? route.asURLRequest()
+    }
+}
+
 extension NewsModel: NewsFeedCellViewModel {
     var newsItem: NewsModel {
         self

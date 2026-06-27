@@ -102,7 +102,8 @@ class CampusViewController: UIViewController {
 
     @objc func getDirections() {
         guard let selectedPin else { return }
-        let mapItem = MKMapItem(placemark: MKPlacemark(coordinate: selectedPin.coordinate))
+        let location = CLLocation(latitude: selectedPin.coordinate.latitude, longitude: selectedPin.coordinate.longitude)
+        let mapItem = MKMapItem(location: location, address: nil)
         mapItem.name = selectedPin.title
         mapItem.openInMaps(launchOptions: nil)
     }

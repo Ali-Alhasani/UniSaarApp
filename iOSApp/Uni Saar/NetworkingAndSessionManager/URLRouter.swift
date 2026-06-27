@@ -27,6 +27,8 @@ public enum URLRouter: URLRequestConvertible {
     case events(String, String)
     case helpfulNumbers(String)
     case mapCoordinate(String)
+    case newsDetail(Int)
+    case eventDetail(Int)
     var method: HTTPMethod {
         .get
     }
@@ -61,6 +63,10 @@ public enum URLRouter: URLRequestConvertible {
             "directory/helpfulNumbers"
         case .mapCoordinate:
             "map/"
+        case .newsDetail:
+            "news/details"
+        case .eventDetail:
+            "events/details"
         }
     }
 
@@ -90,6 +96,10 @@ public enum URLRouter: URLRequestConvertible {
             ["language": language, "lastUpdated": lastUpdate]
         case let .mapCoordinate(lastUpdate):
             ["lastUpdated": lastUpdate]
+        case let .newsDetail(newsID):
+            ["id": newsID]
+        case let .eventDetail(eventID):
+            ["id": eventID]
         }
     }
 
