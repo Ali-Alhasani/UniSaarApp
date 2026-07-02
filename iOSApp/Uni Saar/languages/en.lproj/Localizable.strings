@@ -76,6 +76,7 @@
 "NewsFeedTitle" = "News Feed";
 "EventsTitle" = "Events";
 "FilterFeedTitle" = "Filter Feed";
+"FilterDoneButton" = "Done";
 "FilterMensaTitle" = "Filter Mensa";
 "MensaBalanceTitle" = "Mensa Balance";
 "SettingsTitle" = "Settings";

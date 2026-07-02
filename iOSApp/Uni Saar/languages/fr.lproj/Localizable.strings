@@ -75,6 +75,7 @@
 "NewsFeedTitle" = "Actualités";
 "EventsTitle" = "Événements";
 "FilterFeedTitle" = "Filtrer";
+"FilterDoneButton" = "Terminé";
 "FilterMensaTitle" = "Filtres Mensa";
 "MensaBalanceTitle" = "Solde de la carte de Mensa";
 "SettingsTitle" = "Paramètres";
