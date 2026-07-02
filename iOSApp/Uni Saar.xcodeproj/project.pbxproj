@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0025410F034B4454871ADEA5 /* MoreModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */; };
+		165E1E8A2FF1729100B2C59F /* Nuke in Frameworks */ = {isa = PBXBuildFile; productRef = 165E1E892FF1729100B2C59F /* Nuke */; };
+		165E1E8C2FF1729100B2C59F /* NukeExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 165E1E8B2FF1729100B2C59F /* NukeExtensions */; };
+		165E1E8E2FF1729100B2C59F /* NukeUI in Frameworks */ = {isa = PBXBuildFile; productRef = 165E1E8D2FF1729100B2C59F /* NukeUI */; };
+		16F32EF22FF119670007350D /* NewsItemRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F32EEE2FF119670007350D /* NewsItemRow.swift */; };
+		16F32EF32FF119670007350D /* NewsFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F32EED2FF119670007350D /* NewsFeedView.swift */; };
+		226718083B014CB1B9809B98 /* MensaNfcController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507D3BEFE8F4EB09D1D98BE /* MensaNfcController.swift */; };
 		5211AF3323C7B738006D1F9A /* CampusMapOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AF3123C7B738006D1F9A /* CampusMapOverlay.swift */; };
 		5211AF3423C7B738006D1F9A /* CampusMapOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AF3223C7B738006D1F9A /* CampusMapOverlayView.swift */; };
 		5211AF3623C7B76A006D1F9A /* Campus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5211AF3523C7B76A006D1F9A /* Campus.swift */; };
@@ -49,7 +56,6 @@
 		6B281897239D943F008389D6 /* NewsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B281896239D943F008389D6 /* NewsViewModelTests.swift */; };
 		6B2818A2239DCF4E008389D6 /* SingleButtonAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A1239DCF4E008389D6 /* SingleButtonAlert.swift */; };
 		6B2818A6239EBEA6008389D6 /* MensaViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */; };
-
 		6B2818A9239EDF87008389D6 /* NewsReaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818A8239EDF87008389D6 /* NewsReaderViewController.swift */; };
 		6B2818AB239EF699008389D6 /* MealDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818AA239EF699008389D6 /* MealDetailsViewController.swift */; };
 		6B2818AD239EFAFA008389D6 /* MealDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B2818AC239EFAFA008389D6 /* MealDetailsViewModel.swift */; };
@@ -103,7 +109,6 @@
 		6BBC9D6E23AA4ADD009CD435 /* UIButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */; };
 		6BBC9D7023AA4E07009CD435 /* AppSetupFirstScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */; };
 		6BC6F41D256834BB00D701AA /* MensaCardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC6F418256834BB00D701AA /* MensaCardViewController.swift */; };
-		226718083B014CB1B9809B98 /* MensaNfcController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7507D3BEFE8F4EB09D1D98BE /* MensaNfcController.swift */; };
 		6BCDAF5423AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5223AC11F800DDB464 /* AppCacheCoreData.xcdatamodeld */; };
 		6BCDAF5F23AC13BD00DDB464 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF5E23AC13BD00DDB464 /* CoreDataStack.swift */; };
 		6BCDAF6723AC16F100DDB464 /* DataClientCacheExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCDAF6623AC16F100DDB464 /* DataClientCacheExtension.swift */; };
@@ -130,20 +135,22 @@
 		6BFB587323D8F4D700B69C4A /* CampusHomCoor.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6BFB587223D8F4D700B69C4A /* CampusHomCoor.plist */; };
 		6BFB587523D9022D00B69C4A /* RememberingTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BFB587423D9022D00B69C4A /* RememberingTabBarController.swift */; };
 		A1B2C3D4E5F60001A1B2C3D4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F60002A1B2C3D4 /* UILabel.swift */; };
+		A1B2C3D4E5F6A1B2C3D4E501 /* JSONCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */; };
+		A1B2C3D4E5F6A1B2C3D4E503 /* NewsModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */; };
+		AA0100000000000000000002 /* NewsReaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0100000000000000000001 /* NewsReaderView.swift */; };
+		AA0200000000000000000002 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000000001 /* SafariView.swift */; };
+		AA0400000000000000000002 /* SingleButtonAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0400000000000000000001 /* SingleButtonAlertModifier.swift */; };
+		AA0300000000000000000002 /* FilterFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0300000000000000000001 /* FilterFeedView.swift */; };
+		AF117DA7350547798120D27C /* DirectoryModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */; };
+		BA87402A20764721AF97E5E7 /* MensaModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */; };
 		CC01CC01CC01CC01CC01CC01 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BB01BB01BB01BB01BB01BB01 /* Alamofire */; };
 		CC02CC02CC02CC02CC02CC02 /* AlamofireImage in Frameworks */ = {isa = PBXBuildFile; productRef = BB02BB02BB02BB02BB02BB02 /* AlamofireImage */; };
-
 		CC04CC04CC04CC04CC04CC04 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = BB04BB04BB04BB04BB04BB04 /* FSCalendar */; };
 		F1A2B3C4D5E6F7A8B9C0D1E3 /* ViewExtensionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */; };
 		F1A2B3C4D5E6F7A8B9C0D1F1 /* EventViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F2 /* EventViewModelTests.swift */; };
 		F1A2B3C4D5E6F7A8B9C0D1F3 /* StaffDetailsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F4 /* StaffDetailsViewModelTests.swift */; };
 		F1A2B3C4D5E6F7A8B9C0D1F5 /* FilterNewsViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F6 /* FilterNewsViewModelTests.swift */; };
 		F1A2B3C4D5E6F7A8B9C0D1F7 /* FilterMensaViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */; };
-		A1B2C3D4E5F6A1B2C3D4E501 /* JSONCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */; };
-		A1B2C3D4E5F6A1B2C3D4E503 /* NewsModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */; };
-		0025410F034B4454871ADEA5 /* MoreModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */; };
-		BA87402A20764721AF97E5E7 /* MensaModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */; };
-		AF117DA7350547798120D27C /* DirectoryModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,6 +172,9 @@
 
 /* Begin PBXFileReference section */
 		13827DFF9597449691747EE6 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppEnvironment.swift; sourceTree = "<group>"; };
+		16F32EED2FF119670007350D /* NewsFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFeedView.swift; sourceTree = "<group>"; };
+		16F32EEE2FF119670007350D /* NewsItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsItemRow.swift; sourceTree = "<group>"; };
+		277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaModelDecodingTests.swift; sourceTree = "<group>"; };
 		5211AF3123C7B738006D1F9A /* CampusMapOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CampusMapOverlay.swift; sourceTree = "<group>"; };
 		5211AF3223C7B738006D1F9A /* CampusMapOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CampusMapOverlayView.swift; sourceTree = "<group>"; };
 		5211AF3523C7B76A006D1F9A /* Campus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Campus.swift; sourceTree = "<group>"; };
@@ -209,7 +219,6 @@
 		6B281896239D943F008389D6 /* NewsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewModelTests.swift; sourceTree = "<group>"; };
 		6B2818A1239DCF4E008389D6 /* SingleButtonAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonAlert.swift; sourceTree = "<group>"; };
 		6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaViewModelTests.swift; sourceTree = "<group>"; };
-
 		6B2818A8239EDF87008389D6 /* NewsReaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsReaderViewController.swift; sourceTree = "<group>"; };
 		6B2818AA239EF699008389D6 /* MealDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailsViewController.swift; sourceTree = "<group>"; };
 		6B2818AC239EFAFA008389D6 /* MealDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -271,7 +280,6 @@
 		6BBC9D6D23AA4ADD009CD435 /* UIButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIButton.swift; sourceTree = "<group>"; };
 		6BBC9D6F23AA4E07009CD435 /* AppSetupFirstScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSetupFirstScreenViewController.swift; sourceTree = "<group>"; };
 		6BC6F418256834BB00D701AA /* MensaCardViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MensaCardViewController.swift; sourceTree = "<group>"; };
-		7507D3BEFE8F4EB09D1D98BE /* MensaNfcController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaNfcController.swift; sourceTree = "<group>"; };
 		6BCDAF5323AC11F800DDB464 /* FilterListCoreData.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FilterListCoreData.xcdatamodel; sourceTree = "<group>"; };
 		6BCDAF5E23AC13BD00DDB464 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		6BCDAF6023AC14D100DDB464 /* FilterNoticesListCache+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "FilterNoticesListCache+CoreDataProperties.swift"; path = "/Users/ali-hassany/project02/UniSaarApp/Uni Saar/CoreData/FilterNoticesListCache+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
@@ -332,17 +340,21 @@
 		6BFBF2E924A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/SetupAppStoryboard.strings; sourceTree = "<group>"; };
 		6BFBF2EA24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		6BFBF2EB24A946F2005C6FE8 /* fr */ = {isa = PBXFileReference; indentWidth = 5; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		7507D3BEFE8F4EB09D1D98BE /* MensaNfcController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaNfcController.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F60002A1B2C3D4 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCodingTests.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModelDecodingTests.swift; sourceTree = "<group>"; };
+		A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryModelDecodingTests.swift; sourceTree = "<group>"; };
+		AA0100000000000000000001 /* NewsReaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsReaderView.swift; sourceTree = "<group>"; };
+		AA0200000000000000000001 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
+		AA0400000000000000000001 /* SingleButtonAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonAlertModifier.swift; sourceTree = "<group>"; };
+		AA0300000000000000000001 /* FilterFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterFeedView.swift; sourceTree = "<group>"; };
+		EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreModelDecodingTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensionTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F2 /* EventViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModelTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F4 /* StaffDetailsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaffDetailsViewModelTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F6 /* FilterNewsViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterNewsViewModelTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F8 /* FilterMensaViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterMensaViewModelTests.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F6A1B2C3D4E500 /* JSONCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONCodingTests.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F6A1B2C3D4E502 /* NewsModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsModelDecodingTests.swift; sourceTree = "<group>"; };
-		EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreModelDecodingTests.swift; sourceTree = "<group>"; };
-		277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MensaModelDecodingTests.swift; sourceTree = "<group>"; };
-		A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectoryModelDecodingTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -352,8 +364,10 @@
 			files = (
 				CC01CC01CC01CC01CC01CC01 /* Alamofire in Frameworks */,
 				CC02CC02CC02CC02CC02CC02 /* AlamofireImage in Frameworks */,
-
 				CC04CC04CC04CC04CC04CC04 /* FSCalendar in Frameworks */,
+				165E1E8E2FF1729100B2C59F /* NukeUI in Frameworks */,
+				165E1E8A2FF1729100B2C59F /* Nuke in Frameworks */,
+				165E1E8C2FF1729100B2C59F /* NukeExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +388,35 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		16F32EEF2FF119670007350D /* News */ = {
+			isa = PBXGroup;
+			children = (
+				16F32EED2FF119670007350D /* NewsFeedView.swift */,
+				16F32EEE2FF119670007350D /* NewsItemRow.swift */,
+				AA0100000000000000000001 /* NewsReaderView.swift */,
+				AA0300000000000000000001 /* FilterFeedView.swift */,
+			);
+			path = News;
+			sourceTree = "<group>";
+		};
+		16F32EF02FF119670007350D /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				AA0200000000000000000001 /* SafariView.swift */,
+				AA0400000000000000000001 /* SingleButtonAlertModifier.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		16F32EF12FF119670007350D /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+				16F32EEF2FF119670007350D /* News */,
+				16F32EF02FF119670007350D /* Shared */,
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		54E769F81E828DF6FC8E20F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -429,6 +472,7 @@
 		6B0F26132396A15D002E587E /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				16F32EF12FF119670007350D /* SwiftUI */,
 				6B214325239BC2F700E8958F /* Storyboards */,
 				6B214324239BC2DE00E8958F /* Cells */,
 			);
@@ -565,7 +609,6 @@
 				6B6E1E2C239B4A0A00563B9D /* Info.plist */,
 				6B281896239D943F008389D6 /* NewsViewModelTests.swift */,
 				6B2818A5239EBEA6008389D6 /* MensaViewModelTests.swift */,
-
 				6BA48E2023C8FE17009D32F8 /* DirectoryViewModelTests.swift */,
 				6BA5770F23DF479400D24F74 /* MoreViewModelTests.swift */,
 				6BA5771123DF4AEA00D24F74 /* ObservableTest.swift */,
@@ -743,8 +786,10 @@
 			packageProductDependencies = (
 				BB01BB01BB01BB01BB01BB01 /* Alamofire */,
 				BB02BB02BB02BB02BB02BB02 /* AlamofireImage */,
-
 				BB04BB04BB04BB04BB04BB04 /* FSCalendar */,
+				165E1E892FF1729100B2C59F /* Nuke */,
+				165E1E8B2FF1729100B2C59F /* NukeExtensions */,
+				165E1E8D2FF1729100B2C59F /* NukeUI */,
 			);
 			productName = "Uni Saar";
 			productReference = 6B0F25D32396974E002E587E /* Uni Saar.app */;
@@ -824,8 +869,8 @@
 			packageReferences = (
 				AA01AA01AA01AA01AA01AA01 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				AA02AA02AA02AA02AA02AA02 /* XCRemoteSwiftPackageReference "AlamofireImage" */,
-
 				AA04AA04AA04AA04AA04AA04 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				165E1E882FF1729100B2C59F /* XCRemoteSwiftPackageReference "Nuke" */,
 			);
 			productRefGroup = 6B0F25D42396974E002E587E /* Products */;
 			projectDirPath = "";
@@ -920,6 +965,12 @@
 				6B63C16423AD68C400A2E090 /* FilterNewsViewModel.swift in Sources */,
 				6BA670EA239BDCD400857DB7 /* UITableViewCell.swift in Sources */,
 				6BCDAF6723AC16F100DDB464 /* DataClientCacheExtension.swift in Sources */,
+				16F32EF22FF119670007350D /* NewsItemRow.swift in Sources */,
+				16F32EF32FF119670007350D /* NewsFeedView.swift in Sources */,
+				AA0100000000000000000002 /* NewsReaderView.swift in Sources */,
+				AA0200000000000000000002 /* SafariView.swift in Sources */,
+				AA0400000000000000000002 /* SingleButtonAlertModifier.swift in Sources */,
+				AA0300000000000000000002 /* FilterFeedView.swift in Sources */,
 				6BCDAF6823AC16F200DDB464 /* CacheClient.swift in Sources */,
 				6B10440C23D079650081BABF /* BuildingSearchTableViewController.swift in Sources */,
 				6BF1CA1323A1DB5C00A514CB /* FilterUISwitchTableViewCell.swift in Sources */,
@@ -983,7 +1034,6 @@
 				6BA48E2123C8FE17009D32F8 /* DirectoryViewModelTests.swift in Sources */,
 				6BA5771023DF479400D24F74 /* MoreViewModelTests.swift in Sources */,
 				6B2818A6239EBEA6008389D6 /* MensaViewModelTests.swift in Sources */,
-
 				6BA5771E23DF5ACA00D24F74 /* MensaViewControllerTests.swift in Sources */,
 				6BA5771A23DF567100D24F74 /* EventCalanderViewControllerTests.swift in Sources */,
 				6BA5771823DF522C00D24F74 /* FilterNewsFeedViewControllerTests.swift in Sources */,
@@ -1579,6 +1629,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		165E1E882FF1729100B2C59F /* XCRemoteSwiftPackageReference "Nuke" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kean/Nuke";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 13.0.6;
+			};
+		};
 		AA01AA01AA01AA01AA01AA01 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire";
@@ -1595,7 +1653,6 @@
 				minimumVersion = 4.3.0;
 			};
 		};
-
 		AA04AA04AA04AA04AA04AA04 /* XCRemoteSwiftPackageReference "FSCalendar" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/WenchaoD/FSCalendar";
@@ -1607,6 +1664,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		165E1E892FF1729100B2C59F /* Nuke */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 165E1E882FF1729100B2C59F /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = Nuke;
+		};
+		165E1E8B2FF1729100B2C59F /* NukeExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 165E1E882FF1729100B2C59F /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeExtensions;
+		};
+		165E1E8D2FF1729100B2C59F /* NukeUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 165E1E882FF1729100B2C59F /* XCRemoteSwiftPackageReference "Nuke" */;
+			productName = NukeUI;
+		};
 		BB01BB01BB01BB01BB01BB01 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA01AA01AA01AA01AA01AA01 /* XCRemoteSwiftPackageReference "Alamofire" */;
@@ -1617,7 +1689,6 @@
 			package = AA02AA02AA02AA02AA02AA02 /* XCRemoteSwiftPackageReference "AlamofireImage" */;
 			productName = AlamofireImage;
 		};
-
 		BB04BB04BB04BB04BB04BB04 /* FSCalendar */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA04AA04AA04AA04AA04AA04 /* XCRemoteSwiftPackageReference "FSCalendar" */;

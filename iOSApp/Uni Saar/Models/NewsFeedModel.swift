@@ -39,7 +39,7 @@ extension NewsFeedModel {
     )
 }
 
-struct NewsModel: Codable, Equatable {
+struct NewsModel: Codable, Equatable, Hashable {
     let annoucementDate: String
     let title: String
     let newsID: Int
