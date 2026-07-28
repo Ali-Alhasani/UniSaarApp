@@ -70,6 +70,9 @@
 //MARK:- Screen titles (migrated from storyboard strings)
 "NewsFeedTitle" = "Neuigkeiten";
 "EventsTitle" = "Veranstaltungen";
+"EventsCount" = "%d Veranstaltungen";
+"PreviousMonth" = "Vorheriger Monat";
+"NextMonth" = "Nächster Monat";
 "FilterFeedTitle" = "Filtern";
 "FilterDoneButton" = "Fertig";
 "FilterMensaTitle" = "Mensa filtern";

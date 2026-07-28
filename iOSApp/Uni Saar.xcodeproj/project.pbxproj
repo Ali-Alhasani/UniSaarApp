@@ -142,6 +142,8 @@
 		AA0200000000000000000002 /* SafariView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0200000000000000000001 /* SafariView.swift */; };
 		AA0400000000000000000002 /* SingleButtonAlertModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0400000000000000000001 /* SingleButtonAlertModifier.swift */; };
 		AA0300000000000000000002 /* FilterFeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0300000000000000000001 /* FilterFeedView.swift */; };
+		AA0500000000000000000002 /* MonthCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0500000000000000000001 /* MonthCalendarView.swift */; };
+		AA0600000000000000000002 /* EventCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0600000000000000000001 /* EventCalendarView.swift */; };
 		AF117DA7350547798120D27C /* DirectoryModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A39FBDBBC98C4547B2ED2CD6 /* DirectoryModelDecodingTests.swift */; };
 		BA87402A20764721AF97E5E7 /* MensaModelDecodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 277A2F21EC3F416DAADD4B49 /* MensaModelDecodingTests.swift */; };
 		CC01CC01CC01CC01CC01CC01 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = BB01BB01BB01BB01BB01BB01 /* Alamofire */; };
@@ -351,6 +353,8 @@
 		AA0200000000000000000001 /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SafariView.swift; sourceTree = "<group>"; };
 		AA0400000000000000000001 /* SingleButtonAlertModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleButtonAlertModifier.swift; sourceTree = "<group>"; };
 		AA0300000000000000000001 /* FilterFeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterFeedView.swift; sourceTree = "<group>"; };
+		AA0500000000000000000001 /* MonthCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthCalendarView.swift; sourceTree = "<group>"; };
+		AA0600000000000000000001 /* EventCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCalendarView.swift; sourceTree = "<group>"; };
 		EC5E6BD39A4A4298A2E5B25E /* MoreModelDecodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreModelDecodingTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1E2 /* ViewExtensionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewExtensionTests.swift; sourceTree = "<group>"; };
 		F1A2B3C4D5E6F7A8B9C0D1F2 /* EventViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModelTests.swift; sourceTree = "<group>"; };
@@ -397,6 +401,8 @@
 				16F32EEE2FF119670007350D /* NewsItemRow.swift */,
 				AA0100000000000000000001 /* NewsReaderView.swift */,
 				AA0300000000000000000001 /* FilterFeedView.swift */,
+				AA0500000000000000000001 /* MonthCalendarView.swift */,
+				AA0600000000000000000001 /* EventCalendarView.swift */,
 			);
 			path = News;
 			sourceTree = "<group>";
@@ -406,7 +412,6 @@
 			children = (
 				AA0200000000000000000001 /* SafariView.swift */,
 				AA0400000000000000000001 /* SingleButtonAlertModifier.swift */,
-				AA0700000000000000000001 /* CardButtonStyle.swift */,
 				16319AE53017BCF800A52B56 /* FeedStateHelper.swift */,
 			);
 			path = Shared;
@@ -975,6 +980,8 @@
 				AA0200000000000000000002 /* SafariView.swift in Sources */,
 				AA0400000000000000000002 /* SingleButtonAlertModifier.swift in Sources */,
 				AA0300000000000000000002 /* FilterFeedView.swift in Sources */,
+				AA0500000000000000000002 /* MonthCalendarView.swift in Sources */,
+				AA0600000000000000000002 /* EventCalendarView.swift in Sources */,
 				6BCDAF6823AC16F200DDB464 /* CacheClient.swift in Sources */,
 				6B10440C23D079650081BABF /* BuildingSearchTableViewController.swift in Sources */,
 				6BF1CA1323A1DB5C00A514CB /* FilterUISwitchTableViewCell.swift in Sources */,
