@@ -25,7 +25,7 @@ class RememberingTabBarController: UITabBarController, UITabBarControllerDelegat
         }
     }
 
-    /// Replaces the storyboard's UIKit news tab (index 0) with the SwiftUI feed,
+    /// Replaces the storyboard's placeholder news tab (index 0) with the SwiftUI feed,
     /// keeping the original tab bar item. Part of the incremental SwiftUI migration.
     private func installSwiftUINewsFeed() {
         guard var controllers = viewControllers, let newsTab = controllers.first else { return }
