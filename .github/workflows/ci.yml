@@ -26,19 +26,29 @@ jobs:
           path: |
             ~/Library/Caches/Homebrew/downloads
             /usr/local/Cellar/swiftlint
-            /usr/local/Cellar/swiftformat
-          key: ${{ runner.os }}-brew-${{ hashFiles('.swiftlint.yml', '.swiftformat') }}
+          key: ${{ runner.os }}-brew-${{ hashFiles('.swiftlint.yml') }}
           restore-keys: |
             ${{ runner.os }}-brew-
 
-      - name: Install SwiftLint & SwiftFormat
-        run: brew install swiftlint swiftformat
+      - name: Install SwiftLint
+        run: brew install swiftlint
+
+      # Pinned to a fixed release instead of `brew install swiftformat`, whose
+      # unversioned formula silently upgraded from 0.61.1 to 0.62.1 and broke
+      # CI with new default rules the codebase wasn't formatted against.
+      - name: Install SwiftFormat 0.61.1
+        run: |
+          curl -L -o swiftformat.zip "https://github.com/nicklockwood/SwiftFormat/releases/download/0.61.1/swiftformat.zip"
+          unzip -o swiftformat.zip -d /usr/local/bin
+          chmod +x /usr/local/bin/swiftformat
+          echo "/usr/local/bin" >> "$GITHUB_PATH"
+          /usr/local/bin/swiftformat --version
 
       - name: SwiftLint
         run: swiftlint lint --strict --reporter github-actions-logging
 
       - name: SwiftFormat lint
-        run: swiftformat --lint iOSApp
+        run: /usr/local/bin/swiftformat --lint iOSApp
 
   build-and-test:
     name: Build & Test
