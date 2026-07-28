@@ -44,7 +44,7 @@ struct NewsModel: Codable, Equatable, Hashable {
     let title: String
     let newsID: Int
     let subTitle: String?
-    let categoryName: [String: String]
+    let categories: [NewsCategories]
     let imageURLString: String?
     let newslink: String?
     let isEvent: Bool
@@ -52,10 +52,9 @@ struct NewsModel: Codable, Equatable, Hashable {
 
 extension NewsModel {
     enum CodingKeys: String, CodingKey {
-        case happeningDate, publishedDate, title
+        case happeningDate, publishedDate, title, categories
         case newsID = "id"
         case subTitle = "description"
-        case categoryName = "categories"
         case imageURLString = "imageURL"
         case newslink = "link"
     }
@@ -68,7 +67,7 @@ extension NewsModel {
             title: container.value(.title, default: ""),
             newsID: container.value(.newsID, default: 0),
             subTitle: container.optionalValue(.subTitle),
-            categoryName: container.value(.categoryName, default: [:]),
+            categories: container.value(.categories, default: []),
             imageURLString: container.optionalValue(.imageURLString),
             newslink: container.optionalValue(.newslink),
             isEvent: event
@@ -90,14 +89,14 @@ extension NewsModel {
         try container.encode(title, forKey: .title)
         try container.encode(newsID, forKey: .newsID)
         try container.encodeIfPresent(subTitle, forKey: .subTitle)
-        try container.encode(categoryName, forKey: .categoryName)
+        try container.encode(categories, forKey: .categories)
         try container.encodeIfPresent(imageURLString, forKey: .imageURLString)
         try container.encodeIfPresent(newslink, forKey: .newslink)
     }
 
     static let empty = NewsModel(
         annoucementDate: "", title: "", newsID: 0,
-        subTitle: nil, categoryName: [:],
+        subTitle: nil, categories: [],
         imageURLString: nil, newslink: nil, isEvent: false
     )
 }
@@ -139,21 +138,21 @@ extension NewsFeedModel {
                 title: "Echt jetzt? – Eine öffentliche Vortragsreihe über die Realität",
                 newsID: 100,
                 subTitle: "Ihr Thema ist dieses Mal nichts Geringeres als die Realität.",
-                categoryName: [:], imageURLString: "", newslink: nil, isEvent: false
+                categories: [], imageURLString: "", newslink: nil, isEvent: false
             ),
             NewsModel(
                 annoucementDate: "12/04/2019",
                 title: "Probestudium Physik für Schülerinnen und Schüler beschäftigt sich mit Quantenwelten",
                 newsID: 100,
                 subTitle: "Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik wieder ein \"Probestudium Physik\".",
-                categoryName: [:], imageURLString: "", newslink: nil, isEvent: false
+                categories: [], imageURLString: "", newslink: nil, isEvent: false
             ),
             NewsModel(
                 annoucementDate: "11/30/2019",
                 title: "Neue Webseiten für die Universität des Saarlandes",
                 newsID: 100,
                 subTitle: "Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik wieder ein \"Probestudium Physik\".",
-                categoryName: [:],
+                categories: [],
                 imageURLString: "https://www.uni-saarland.de/fileadmin/upload/_processed_/6/d/csm_Ezziddin_Samer_2_b69ceceaca.jpg",
                 newslink: nil, isEvent: false
             ),
@@ -162,7 +161,7 @@ extension NewsFeedModel {
                 title: "Neue Webseiten für die Universität des Saarlandes",
                 newsID: 100,
                 subTitle: "Im Januar und Februar 2020 veranstaltet die Fachrichtung Physik wieder ein \"Probestudium Physik\".",
-                categoryName: [:],
+                categories: [],
                 imageURLString: "https://www.uni-saarland.de/fileadmin/upload/_processed_/6/d/csm_Ezziddin_Samer_2_b69ceceaca.jpg",
                 newslink: nil, isEvent: false
             )

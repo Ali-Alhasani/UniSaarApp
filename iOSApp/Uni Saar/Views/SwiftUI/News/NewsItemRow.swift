@@ -3,7 +3,7 @@ import NukeUI
 import SwiftUI
 
 struct NewsItemRow: View {
-    let viewModel: any NewsFeedCellViewModel
+    let viewModel: NewsFeedCellViewModel
 
     @State private var imageWidth: CGFloat = 0
 
@@ -25,8 +25,8 @@ struct NewsItemRow: View {
                     .lineLimit(3 ... 6)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .contentShape(.rect)
+        .padding()
+        .background(Color(uiColor: .systemBackground), in: .rect(corners: .concentric(minimum: 14)))
     }
 
     private func newsImage(url: URL) -> some View {
@@ -35,9 +35,8 @@ struct NewsItemRow: View {
                 .animation(.easeInOut(duration: 0.25), value: state.image != nil)
         }
         .processors(imageProcessors)
-        .frame(maxWidth: .infinity)
-        // Concentric with the card's shape, so the inner radius tracks the card's automatically
-        .clipShape(ConcentricRectangle(corners: .concentric, isUniform: true))
+        .clipShape(.rect(corners: .concentric(minimum: 14)))
+        .padding(8)
         .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { imageWidth = $0 }
     }
 
@@ -61,7 +60,8 @@ struct NewsItemRow: View {
     /// Box that reserves space while the image loads or on failure, so the row height
     /// doesn't jump once the real image settles to its own ratio.
     private func placeholder(@ViewBuilder content: () -> some View) -> some View {
-        Color(.systemGray5)
+        Rectangle()
+            .fill(.quaternary)
             .aspectRatio(5 / 3, contentMode: .fit)
             .overlay(content())
     }
@@ -75,9 +75,15 @@ struct NewsItemRow: View {
 
 #Preview {
     List {
-        NewsItemRow(viewModel: NewsFeedModel.newsDemoData.newsList[0])
-        NewsItemRow(viewModel: NewsFeedModel.newsDemoData.newsList[1])
-        NewsItemRow(viewModel: NewsFeedModel.newsDemoData.newsList[2])
+        NewsItemRow(viewModel: NewsFeedCellViewModel(
+            newsItem: NewsFeedModel.newsDemoData.newsList[0]
+        ))
+        NewsItemRow(viewModel: NewsFeedCellViewModel(
+            newsItem: NewsFeedModel.newsDemoData.newsList[1]
+        ))
+        NewsItemRow(viewModel: NewsFeedCellViewModel(
+            newsItem: NewsFeedModel.newsDemoData.newsList[2]
+        ))
     }
     .listStyle(.plain)
 }

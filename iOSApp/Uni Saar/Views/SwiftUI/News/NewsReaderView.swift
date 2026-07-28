@@ -1,88 +1,53 @@
 import SwiftUI
 import WebKit
 
-/// Full-screen reader for a news item or event. Loads the detail page in the
-/// native SwiftUI `WebView`
 struct NewsReaderView: View {
-    let viewModel: any NewsFeedCellViewModel
-
-    @State private var page: WebPage
-    @State private var navigationDecider: ExternalLinkNavigationDecider
-
+    let viewModel: NewsFeedCellViewModel
+    @State private var page = WebPage()
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+    @Environment(\.pixelLength) var onePixel
 
-    init(viewModel: any NewsFeedCellViewModel) {
-        self.viewModel = viewModel
-        // The decider must be injected at `WebPage` construction
-        let decider = ExternalLinkNavigationDecider()
-        decider.articleHost = viewModel.newsItemURL?.url?.host()
-        _navigationDecider = State(initialValue: decider)
-        _page = State(initialValue: WebPage(navigationDecider: decider))
+    private var displayTitle: String {
+        page.title.isEmpty ? viewModel.titleText : page.title
     }
 
     var body: some View {
         WebView(page)
-            // TODO: `WebView` renders edge-to-edge and ignores the safe area.
-            .webViewBackForwardNavigationGestures(.enabled)
-            .overlay {
-                if page.isLoading {
-                    ProgressView()
-                        .controlSize(.large)
-                }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationTitle(viewModel.titleText)
+            .scrollDisabled(true)
+            .padding(.top, onePixel)
+            .overlay { overlayContent }
+            .navigationTitle(displayTitle)
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(item: $navigationDecider.pendingSafariLink) { link in
-                SafariView(url: link.url)
-            }
-            .task {
-                guard let request = viewModel.newsItemURL else { return }
-                page.load(request)
+            .task(id: viewModel.newsItemURL) {
+                reload()
             }
             .onChange(of: dynamicTypeSize) {
                 // Web content uses its own CSS, so reflow it on Dynamic Type changes.
                 page.reload()
             }
     }
-}
 
-/// Routes calendar downloads and links that leave the article to an in-app Safari
-@MainActor
-@Observable
-final class ExternalLinkNavigationDecider: WebPage.NavigationDeciding {
-    struct SafariLink: Identifiable {
-        let id = UUID()
-        let url: URL
+    @ViewBuilder
+    private var overlayContent: some View {
+        if viewModel.newsItemURL == nil {
+            ContentUnavailableView(
+                "No article link available",
+                systemImage: "link.badge.plus"
+            )
+        } else if page.isLoading {
+            ProgressView(value: page.estimatedProgress)
+                .progressViewStyle(.circular)
+        }
     }
 
-    @ObservationIgnored var articleHost: String?
-
-    var pendingSafariLink: SafariLink?
-
-    func decidePolicy(
-        for action: WebPage.NavigationAction,
-        preferences: inout WebPage.NavigationPreferences
-    ) async -> WKNavigationActionPolicy {
-        guard let url = action.request.url else { return .allow }
-
-        if url.absoluteString.contains("/iCal?") {
-            pendingSafariLink = SafariLink(url: url)
-            return .cancel
-        }
-
-        // A tapped link that leaves the article's host opens in Safari
-        if action.navigationType == .linkActivated, let host = url.host(), host != articleHost {
-            pendingSafariLink = SafariLink(url: url)
-            return .cancel
-        }
-
-        return .allow
+    private func reload() {
+        guard let url = viewModel.newsItemURL else { return }
+        page.load(url)
     }
 }
 
 #Preview {
     NavigationStack {
-        NewsReaderView(viewModel: NewsFeedModel.newsDemoData.newsList[0])
+        NewsReaderView(viewModel: NewsFeedCellViewModel(newsItem: NewsFeedModel.newsDemoData.newsList[0]))
     }
 }

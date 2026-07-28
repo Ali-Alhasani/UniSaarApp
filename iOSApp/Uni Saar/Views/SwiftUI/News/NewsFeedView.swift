@@ -5,31 +5,14 @@ struct NewsFeedView: View {
     @State private var filterViewModel = FilterNewsViewModel()
     @State private var showFilter = false
     @State private var activeAlert: SingleButtonAlert?
-    @ScaledMetric private var cardPadding: CGFloat = 12
 
     var body: some View {
         content
             .navigationTitle(String(localized: "NewsFeedTitle"))
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    // TODO: Enable once `EventCalendarView` is ported; disabled for now
-                    Button {} label: {
-                        Image(systemName: "calendar")
-                    }
-                    .disabled(true)
-                }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        filterViewModel.isFilterdCacheUpdated = newsViewModel.isFilterdCacheUpdated
-                        showFilter = true
-                    } label: {
-                        Image(systemName: "line.3.horizontal.decrease.circle")
-                    }
-                }
-            }
+            .toolbar { toolbarContent }
             .navigationDestination(for: NewsModel.self) { model in
-                NewsReaderView(viewModel: model)
+                NewsReaderView(viewModel: NewsFeedCellViewModel(newsItem: model))
             }
             .sheet(isPresented: $showFilter) {
                 FilterFeedView(viewModel: filterViewModel) { excluded in
@@ -40,9 +23,28 @@ struct NewsFeedView: View {
             .singleButtonAlert($activeAlert)
             .task {
                 newsViewModel.onAlert = { activeAlert = $0 }
-                newsViewModel.onRetry = { Task { await newsViewModel.loadFirstPage(filterCatgroies: []) } }
-                await newsViewModel.loadFirstPage(filterCatgroies: [])
+                newsViewModel.onRetry = { Task { await newsViewModel.loadFirstPage() } }
+                await newsViewModel.loadFirstPage()
             }
+    }
+
+    @ToolbarContentBuilder
+    private var toolbarContent: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            NavigationLink {
+                EventCalendarView()
+            } label: {
+                Image(systemName: "calendar")
+            }
+        }
+        ToolbarItem(placement: .topBarTrailing) {
+            Button {
+                filterViewModel.isFilterdCacheUpdated = newsViewModel.isFilterdCacheUpdated
+                showFilter = true
+            } label: {
+                Image(systemName: "line.3.horizontal.decrease.circle")
+            }
+        }
     }
 
     @ViewBuilder
@@ -53,24 +55,23 @@ struct NewsFeedView: View {
         } else {
             ScrollView {
                 LazyVStack(spacing: 12) {
-                    ForEach(newsViewModel.newsCells.indices, id: \.self) { index in
-                        cell(at: index)
+                    ForEach(newsViewModel.newsCells) { card in
+                        cardType(for: card)
                     }
                     paginationFooter
                 }
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
             }
+            .contentMargins(16.0, for: .scrollContent)
             .background(Color(.systemGroupedBackground))
             .refreshable {
-                await newsViewModel.loadFirstPage(filterCatgroies: [])
+                await newsViewModel.loadFirstPage()
             }
         }
     }
 
     @ViewBuilder
-    private func cell(at index: Int) -> some View {
-        switch newsViewModel.newsCells[index] {
+    private func cardType(for cardType: FeedItemState<NewsFeedCellViewModel>) -> some View {
+        switch cardType {
         case let .normal(viewModel):
             card(for: viewModel)
         case .empty:
@@ -80,18 +81,11 @@ struct NewsFeedView: View {
         }
     }
 
-    private func card(for viewModel: any NewsFeedCellViewModel) -> some View {
-        // nested content (the image) derives a concentric inner radius from it automatically — no second hardcoded radius.
-        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
-        return NavigationLink(value: viewModel.newsItem) {
+    private func card(for viewModel: NewsFeedCellViewModel) -> some View {
+        NavigationLink(value: viewModel.newsItem) {
             NewsItemRow(viewModel: viewModel)
-                .padding(cardPadding)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color(.systemBackground), in: shape)
-                .containerShape(shape)
         }
-        .contentShape(shape)
-        .buttonStyle(CardButtonStyle())
+        .buttonStyle(.plain)
     }
 
     private func statusMessage(_ text: String) -> some View {
@@ -108,7 +102,6 @@ struct NewsFeedView: View {
                 .frame(maxWidth: .infinity)
                 .padding()
         } else if hasNewsItems {
-            // at the list end: coming on screen pulls the next page.
             Color.clear
                 .frame(height: 1)
                 .onAppear {
@@ -119,17 +112,13 @@ struct NewsFeedView: View {
 
     /// True only when real news cards are present, so error placeholder rows don't trip pagination.
     private var hasNewsItems: Bool {
-        newsViewModel.newsCells.contains { if case .normal = $0 { true } else { false } }
-    }
-}
-
-/// row press dims only the card instead of flashing the full-width selection
-/// a plain List row would show.
-private struct CardButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .opacity(configuration.isPressed ? 0.7 : 1)
-            .animation(.easeOut(duration: 0.15), value: configuration.isPressed)
+        newsViewModel.newsCells.contains {
+            if case .normal = $0 {
+                true
+            } else {
+                false
+            }
+        }
     }
 }
 
