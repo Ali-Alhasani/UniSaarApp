@@ -11,8 +11,8 @@ import Observation
 
 @Observable
 class EventViewModel: ParentViewModel {
-    var eventCells: [TableViewCellType<NewsFeedCellViewModel>] = []
-    var selectedDateEvents: [TableViewCellType<NewsFeedCellViewModel>] = []
+    var eventCells: [FeedItemState<NewsFeedCellViewModel>] = []
+    var selectedDateEvents: [FeedItemState<NewsFeedCellViewModel>] = []
     @ObservationIgnored private(set) var currentSelectedDate: Date?
 
     override init(dataClient: any AppDataClient = DataClient()) {
@@ -28,7 +28,7 @@ class EventViewModel: ParentViewModel {
                 eventCells = [.empty]
                 return
             }
-            eventCells = events.newsList.compactMap { .normal(cellViewModel: $0 as NewsFeedCellViewModel) }
+            eventCells = events.newsList.compactMap { .normal(cardViewModel: NewsFeedCellViewModel(newsItem: $0)) }
             getDayEvents(day: currentSelectedDate ?? Calendar.current.startOfDay(for: Date()))
         } catch is CancellationError {
             showLoadingIndicator = false

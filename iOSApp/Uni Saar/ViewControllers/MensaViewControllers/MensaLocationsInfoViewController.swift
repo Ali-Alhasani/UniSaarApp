@@ -6,6 +6,7 @@
 //  Copyright © 2019 Ali Al-Hasani. All rights reserved.
 //
 
+import AlamofireImage
 import UIKit
 
 @MainActor

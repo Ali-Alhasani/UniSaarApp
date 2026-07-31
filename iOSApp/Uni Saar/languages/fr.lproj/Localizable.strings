@@ -74,7 +74,11 @@
 //MARK:- Screen titles (migrated from storyboard strings)
 "NewsFeedTitle" = "Actualités";
 "EventsTitle" = "Événements";
+"EventsCount" = "%d événements";
+"PreviousMonth" = "Mois précédent";
+"NextMonth" = "Mois suivant";
 "FilterFeedTitle" = "Filtrer";
+"FilterDoneButton" = "Terminé";
 "FilterMensaTitle" = "Filtres Mensa";
 "MensaBalanceTitle" = "Solde de la carte de Mensa";
 "SettingsTitle" = "Paramètres";

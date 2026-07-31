@@ -43,13 +43,12 @@
             </objects>
             <point key="canvasLocation" x="1300" y="-293"/>
         </scene>
-        <!--NewsFeedViewController-->
+        <!--View Controller-->
         <scene sceneID="bzb-eT-15y">
             <objects>
-                <viewControllerPlaceholder storyboardName="NewsStoryboard" referencedIdentifier="NewsFeedViewController" id="oR0-65-zLq" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="BwZ-UA-Yux"/>
+                <viewController id="oR0-65-zLq" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="iXg-je-0n9"/>
-                </viewControllerPlaceholder>
+                </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VnU-NS-ggX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1920" y="-333"/>
